@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- আয়-ব্যয় — rising bar (income) + falling bar (expense) + center coin. -->
-<vector xmlns:android="http://schemas.android.com/res/android"
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="26dp" android:height="26dp"
     android:viewportWidth="160" android:viewportHeight="160">
 

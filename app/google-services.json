@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "736034334486",
+    "project_id": "cashlipi",
+    "storage_bucket": "cashlipi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736034334486:android:8c1b7c178361b0724c5237",
+        "android_client_info": {
+          "package_name": "com.jrappspot.cashlipi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo3NUf6-_xPuuBbF2EYL-9DlDIio9_NqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

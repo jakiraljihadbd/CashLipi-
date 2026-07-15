@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bgColor">
+
+    <!-- ══════════════════════════════════════ -->
+    <!-- ── Header (with subtle deco circles, matches auth screens) ── -->
+    <!-- ══════════════════════════════════════ -->
+    <FrameLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_generic">
+
+        <!-- Deco circles for a touch of branding -->
+        <View android:layout_width="140dp" android:layout_height="140dp"
+            android:background="@drawable/bg_login_circle_top"
+            android:layout_gravity="top|end"
+            android:translationX="40dp" android:translationY="-50dp" android:alpha="0.16"/>
+        <View android:layout_width="90dp" android:layout_height="90dp"
+            android:background="@drawable/bg_login_circle_bottom"
+            android:layout_gravity="bottom|start"
+            android:translationX="-30dp" android:translationY="20dp" android:alpha="0.14"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="18dp" android:paddingBottom="24dp" android:paddingHorizontal="20dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical">
+
+                <FrameLayout android:layout_width="38dp" android:layout_height="38dp"
+                    android:layout_marginEnd="10dp">
+                    <View android:layout_width="38dp" android:layout_height="38dp"
+                        android:background="@drawable/shape_circle_solid"
+                        android:alpha="0.18"/>
+                    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                        android:text="👤" android:textSize="18sp" android:gravity="center"/>
+                </FrameLayout>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="প্রোফাইল"
+                    android:textSize="21sp" android:textStyle="bold" android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="আপনার অ্যাকাউন্ট, নিরাপত্তা ও তথ্য এক জায়গায় পরিচালনা করুন"
+                android:textSize="12.5sp" android:textColor="#E5E9FF"
+                android:alpha="0.92"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="3dp"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- ── Profile Photo Card ── -->
+            <!-- ══════════════════════════════════════ -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-26dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="22dp" app:cardElevation="2dp"
+                app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="24dp"
+                    android:gravity="center">
+
+                    <!-- Photo frame -->
+                    <FrameLayout android:layout_width="106dp" android:layout_height="106dp"
+                        android:layout_marginBottom="14dp">
+
+                        <!-- Gradient ring -->
+                        <View
+                            android:layout_width="106dp" android:layout_height="106dp"
+                            android:background="@drawable/bg_profile_photo_ring"/>
+
+                        <!-- Initials avatar (দেখা যাবে যতক্ষণ না কোনো ছবি সেট করা হয়) -->
+                        <TextView
+                            android:id="@+id/tvProfileInitials"
+                            android:layout_width="98dp" android:layout_height="98dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/bg_profile_initials"
+                            android:gravity="center"
+                            android:text="MR"
+                            android:textSize="34sp" android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            android:visibility="gone"/>
+
+                        <!-- Photo circle -->
+                        <ImageView
+                            android:id="@+id/ivProfilePhoto"
+                            android:layout_width="98dp" android:layout_height="98dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/bg_profile_photo_circle"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:scaleType="centerCrop"
+                            android:clipToOutline="true"/>
+
+                        <!-- Camera badge -->
+                        <LinearLayout
+                            android:id="@+id/btnChangePhoto"
+                            android:layout_width="32dp" android:layout_height="32dp"
+                            android:background="@drawable/bg_profile_camera_badge"
+                            android:gravity="center"
+                            android:layout_gravity="bottom|end"
+                            android:clickable="true" android:focusable="true">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:src="@drawable/emoji_camera" android:scaleType="centerInside"/>
+                        </LinearLayout>
+                    </FrameLayout>
+
+                    <!-- Display name -->
+                    <TextView android:id="@+id/tvDisplayName"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="ব্যবহারকারী"
+                        android:textSize="19sp" android:textStyle="bold"
+                        android:textColor="@color/textPrimary"
+                        android:gravity="center"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Google email badge -->
+                    <TextView android:id="@+id/tvGoogleBadge"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="✅ Google সংযুক্ত "
+                        android:textSize="11sp" android:textStyle="bold" android:textColor="@color/incomeColor"
+                        android:background="@drawable/bg_profile_google_badge"
+                        android:paddingHorizontal="12dp" android:paddingVertical="5dp"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- ── Sign-in Options Card ── -->
+            <!-- ══════════════════════════════════════ -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="12dp"
+                app:cardCornerRadius="18dp" app:cardElevation="1dp"
+                app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="18dp">
+
+                    <!-- Section header with icon badge -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:layout_marginBottom="14dp">
+                        <FrameLayout android:layout_width="34dp" android:layout_height="34dp"
+                            android:layout_marginEnd="10dp">
+                            <View android:layout_width="34dp" android:layout_height="34dp"
+                                android:background="@drawable/shape_circle_solid"
+                                android:backgroundTint="@color/profileBadgeIndigoBg"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                                android:text="🔐" android:textSize="15sp" android:gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="সাইন-ইন অপশন"
+                                android:textSize="14.5sp" android:textStyle="bold"
+                                android:textColor="@color/textPrimary"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="ডিভাইস জুড়ে ডেটা সিঙ্ক রাখতে সাইন-ইন করুন"
+                                android:textSize="11sp" android:textColor="@color/textSecondary"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- ▸ নম্বর/ইমেইল দিয়ে সাইন-ইন ▸ -->
+                    <TextView android:id="@+id/tvPhoneSectionLabel"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="📱 নম্বর / ইমেইল"
+                        android:textSize="12sp" android:textStyle="bold"
+                        android:textColor="@color/textSecondary"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Signed-in state -->
+                    <LinearLayout android:id="@+id/layoutPhoneSignedIn"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="vertical" android:visibility="gone"
+                        android:layout_marginBottom="14dp">
+
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:orientation="horizontal" android:gravity="center_vertical"
+                            android:background="@drawable/bg_profile_google_info_box"
+                            android:padding="12dp" android:layout_marginBottom="10dp">
+
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="📱"
+                                android:textSize="20sp"
+                                android:layout_marginEnd="12dp"/>
+
+                            <TextView android:id="@+id/tvSignedInIdentity"
+                                android:layout_width="0dp" android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textSize="13sp" android:textStyle="bold"
+                                android:textColor="@color/textPrimary"/>
+
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="সংযুক্ত"
+                                android:textSize="10sp" android:textColor="@color/incomeColor"/>
+                        </LinearLayout>
+
+                        <Button android:id="@+id/btnPhoneEmailSignOut"
+                            android:layout_width="match_parent" android:layout_height="46dp"
+                            app:cornerRadius="12dp"
+                            app:backgroundTint="@color/expenseLight"
+                            android:text="সাইন আউট"
+                            android:textStyle="bold" android:textSize="13sp"
+                            android:textColor="@color/expenseColor"/>
+                    </LinearLayout>
+
+                    <!-- Sign-in state -->
+                    <LinearLayout android:id="@+id/layoutPhoneSignIn"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="vertical" android:layout_marginBottom="14dp">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="মোবাইল নম্বর অথবা ইমেইল ও পাসওয়ার্ড দিয়ে সাইন ইন করুন"
+                            android:textSize="12sp" android:textColor="@color/textSecondary"
+                            android:layout_marginBottom="12dp"/>
+
+                        <Button android:id="@+id/btnPhoneEmailSignIn"
+                            android:layout_width="match_parent" android:layout_height="50dp"
+                            app:cornerRadius="14dp"
+                            app:backgroundTint="@color/profileAccent"
+                            android:text="📱 নম্বর / ইমেইল দিয়ে সাইন ইন"
+                            android:textStyle="bold" android:textSize="14sp"
+                            android:textColor="@color/profileAccentText"/>
+                    </LinearLayout>
+
+                    <View android:id="@+id/dividerSignInMethods"
+                        android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/profileGoogleInfoBorder"
+                        android:layout_marginBottom="14dp"/>
+
+                    <!-- ▸ Google দিয়ে সাইন-ইন ▸ -->
+                    <TextView android:id="@+id/tvGoogleSectionLabel"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="🔵 Google অ্যাকাউন্ট"
+                        android:textSize="12sp" android:textStyle="bold"
+                        android:textColor="@color/textSecondary"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Signed-in state -->
+                    <LinearLayout android:id="@+id/layoutGoogleSignedIn"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="vertical" android:visibility="gone">
+
+                        <!-- Google account info row -->
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:orientation="horizontal" android:gravity="center_vertical"
+                            android:background="@drawable/bg_profile_google_info_box"
+                            android:padding="12dp" android:layout_marginBottom="12dp">
+
+                            <ImageView android:id="@+id/ivGooglePhoto"
+                                android:layout_width="44dp" android:layout_height="44dp"
+                                android:background="@drawable/bg_profile_photo_circle"
+                                android:src="@android:drawable/ic_menu_myplaces"
+                                android:scaleType="centerCrop"
+                                android:clipToOutline="true"
+                                android:layout_marginEnd="12dp"/>
+
+                            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                                android:layout_weight="1" android:orientation="vertical">
+                                <TextView android:id="@+id/tvGoogleName"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:textSize="14sp" android:textStyle="bold"
+                                    android:textColor="@color/textPrimary"
+                                    android:layout_marginBottom="2dp"/>
+                                <TextView android:id="@+id/tvGoogleEmail"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:textSize="11sp" android:textColor="@color/textSecondary"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <Button android:id="@+id/btnGoogleSignOut"
+                            android:layout_width="match_parent" android:layout_height="46dp"
+                            app:cornerRadius="12dp"
+                            app:backgroundTint="@color/expenseLight"
+                            android:text="সাইন আউট"
+                            android:textStyle="bold" android:textSize="13sp"
+                            android:textColor="@color/expenseColor"/>
+                    </LinearLayout>
+
+                    <!-- Sign-in state -->
+                    <LinearLayout android:id="@+id/layoutGoogleSignIn"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Google দিয়ে সাইন ইন করুন — প্রোফাইল ছবি ও নাম স্বয়ংক্রিয়ভাবে আসবে"
+                            android:textSize="12sp" android:textColor="@color/textSecondary"
+                            android:layout_marginBottom="12dp"/>
+
+                        <!-- Google sign-in button with logo -->
+                        <LinearLayout android:id="@+id/btnGoogleSignIn"
+                            android:layout_width="match_parent" android:layout_height="50dp"
+                            android:orientation="horizontal" android:gravity="center"
+                            android:background="@drawable/bg_login_btn_google"
+                            android:clickable="true" android:focusable="true">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_google_logo"
+                                android:layout_marginEnd="10dp"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Google দিয়ে সাইন ইন"
+                                android:textSize="14sp" android:textStyle="bold"
+                                android:textColor="@color/primaryTextDark"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Compact secondary linked-account row — মোবাইল/ইমেইল প্রাইমারি সাইন-ইন
+                         থাকা অবস্থায় Google-ও connected (Auto Sync-এর জন্য) থাকলে বড় আলাদা
+                         "অপশন" না দেখিয়ে এখানে ছোট এক লাইনে দেখানো হয়, সাথে disconnect লিংক। -->
+                    <LinearLayout android:id="@+id/layoutGoogleSecondaryInfo"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:background="@drawable/bg_profile_google_info_box"
+                        android:padding="10dp" android:layout_marginTop="12dp"
+                        android:visibility="gone">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="🔵" android:textSize="16sp"
+                            android:layout_marginEnd="10dp"/>
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Google সংযুক্ত (Auto Sync)"
+                                android:textSize="10sp" android:textColor="@color/textSecondary"/>
+                            <TextView android:id="@+id/tvGoogleSecondaryEmail"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:textSize="12sp" android:textStyle="bold"
+                                android:textColor="@color/textPrimary"/>
+                        </LinearLayout>
+
+                        <TextView android:id="@+id/btnGoogleSecondaryDisconnect"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="সংযোগ বিচ্ছিন্ন"
+                            android:textSize="11sp" android:textStyle="bold"
+                            android:textColor="@color/expenseColor"
+                            android:padding="6dp"
+                            android:clickable="true" android:focusable="true"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- ── Profile Edit Card ── -->
+            <!-- ══════════════════════════════════════ -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="12dp"
+                app:cardCornerRadius="18dp" app:cardElevation="1dp"
+                app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="18dp">
+
+                    <!-- Section header with icon badge (ট্যাপ করলে ফর্ম খুলবে/বন্ধ হবে) -->
+                    <LinearLayout android:id="@+id/headerEditProfile"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:clickable="true" android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+                        <FrameLayout android:layout_width="34dp" android:layout_height="34dp"
+                            android:layout_marginEnd="10dp">
+                            <View android:layout_width="34dp" android:layout_height="34dp"
+                                android:background="@drawable/shape_circle_solid"
+                                android:backgroundTint="@color/profileBadgeVioletBg"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                                android:text="✏️" android:textSize="14sp" android:gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="প্রোফাইল সম্পাদনা"
+                                android:textSize="14.5sp" android:textStyle="bold"
+                                android:textColor="@color/textPrimary"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="নাম, ইউজারনেম ও যোগাযোগের তথ্য আপডেট করুন"
+                                android:textSize="11sp" android:textColor="@color/textSecondary"/>
+                        </LinearLayout>
+                        <TextView android:id="@+id/tvEditProfileChevron"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="✏️ এডিট করুন  ▾"
+                            android:textSize="12sp" android:textStyle="bold"
+                            android:textColor="@color/profileAccent"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/bodyEditProfile"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="14dp"
+                        android:visibility="gone">
+
+                    <!-- Name -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AppTextInput"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint="নাম"
+                        android:layout_marginBottom="12dp"
+                        app:boxStrokeColor="@color/profileAccent"
+                        app:hintTextColor="@color/profileAccent">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etProfileName"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/textPrimary"
+                            android:inputType="textPersonName|textCapWords"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Username -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AppTextInput"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint="ইউজারনেম"
+                        android:layout_marginBottom="12dp"
+                        app:boxStrokeColor="@color/profileAccent"
+                        app:hintTextColor="@color/profileAccent">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etUsername"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/textPrimary"
+                            android:inputType="text"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Phone Number -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AppTextInput"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint="মোবাইল নম্বর"
+                        android:layout_marginBottom="12dp"
+                        app:boxStrokeColor="@color/profileAccent"
+                        app:hintTextColor="@color/profileAccent">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPhoneNumber"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/textPrimary"
+                            android:inputType="phone"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Email -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AppTextInput"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint="ইমেইল (Gmail)"
+                        android:layout_marginBottom="14dp"
+                        app:boxStrokeColor="@color/profileAccent"
+                        app:hintTextColor="@color/profileAccent">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEmail"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/textPrimary"
+                            android:inputType="textEmailAddress"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button android:id="@+id/btnSaveName"
+                        android:layout_width="match_parent" android:layout_height="50dp"
+                        app:cornerRadius="14dp"
+                        app:backgroundTint="@color/profileAccent"
+                        android:text="💾 প্রোফাইল সেভ করুন"
+                        android:textStyle="bold" android:textSize="15sp"
+                        android:textColor="@color/profileAccentText"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- ── Change Password Card ── -->
+            <!-- ══════════════════════════════════════ -->
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="12dp"
+                app:cardCornerRadius="18dp" app:cardElevation="1dp"
+                app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="18dp">
+
+                    <LinearLayout android:id="@+id/headerChangePassword"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:clickable="true" android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <FrameLayout android:layout_width="34dp" android:layout_height="34dp"
+                            android:layout_marginEnd="10dp">
+                            <View android:layout_width="34dp" android:layout_height="34dp"
+                                android:background="@drawable/shape_circle_solid"
+                                android:backgroundTint="@color/profileBadgeAmberBg"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                                android:text="🔑" android:textSize="14sp" android:gravity="center"/>
+                        </FrameLayout>
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="পাসওয়ার্ড পরিবর্তন"
+                                android:textSize="14.5sp" android:textStyle="bold"
+                                android:textColor="@color/textPrimary"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="নিরাপত্তার জন্য নিয়মিত পাসওয়ার্ড পরিবর্তন করুন"
+                                android:textSize="11sp" android:textColor="@color/textSecondary"/>
+                        </LinearLayout>
+
+                        <TextView android:id="@+id/tvChangePasswordChevron"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="🔑 পরিবর্তন  ▾"
+                            android:textSize="12sp" android:textStyle="bold"
+                            android:textColor="@color/profileAccent"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/bodyChangePassword"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="14dp"
+                        android:visibility="gone">
+
+                    <TextView android:id="@+id/tvTogglePasswordVisibility"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="👁  দেখান"
+                        android:textSize="12sp" android:textColor="@color/textSecondary"
+                        android:clickable="true" android:focusable="true"
+                        android:padding="4dp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <!-- Old password -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AppTextInput"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint="পুরাতন পাসওয়ার্ড"
+                        android:layout_marginBottom="12dp"
+                        app:boxStrokeColor="@color/profileAccent"
+                        app:hintTextColor="@color/profileAccent">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etOldPassword"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/textPrimary"
+                            android:inputType="textPassword"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- New password -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AppTextInput"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint="নতুন পাসওয়ার্ড"
+                        android:layout_marginBottom="12dp"
+                        app:boxStrokeColor="@color/profileAccent"
+                        app:hintTextColor="@color/profileAccent">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNewPassword"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/textPrimary"
+                            android:inputType="textPassword"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Confirm password -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AppTextInput"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint="পাসওয়ার্ড নিশ্চিত করুন"
+                        android:layout_marginBottom="14dp"
+                        app:boxStrokeColor="@color/profileAccent"
+                        app:hintTextColor="@color/profileAccent">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etConfirmPassword"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/textPrimary"
+                            android:inputType="textPassword"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button android:id="@+id/btnChangePassword"
+                        android:layout_width="match_parent" android:layout_height="50dp"
+                        app:cornerRadius="14dp"
+                        app:backgroundTint="@color/profileAccent"
+                        android:text="🔑 পাসওয়ার্ড পরিবর্তন করুন"
+                        android:textStyle="bold" android:textSize="15sp"
+                        android:textColor="@color/profileAccentText"/>
+
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="* শুধুমাত্র নম্বর/ইমেইল দিয়ে সাইন-ইন করা অ্যাকাউন্টের জন্য প্রযোজ্য"
+                        android:textSize="10sp" android:textColor="@color/textSecondary"
+                        android:layout_marginTop="8dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- ── Auto Sync (Google Drive) Card ── -->
+            <!-- ══════════════════════════════════════ -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="12dp"
+                app:cardCornerRadius="18dp" app:cardElevation="1dp"
+                app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="18dp">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:layout_marginBottom="8dp">
+
+                        <FrameLayout android:layout_width="34dp" android:layout_height="34dp"
+                            android:layout_marginEnd="10dp">
+                            <View android:layout_width="34dp" android:layout_height="34dp"
+                                android:background="@drawable/shape_circle_solid"
+                                android:backgroundTint="@color/profileBadgeAmberBg"/>
+                            <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+                                android:text="☁️" android:textSize="14sp" android:gravity="center"/>
+                        </FrameLayout>
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Auto Sync (Google Drive)"
+                                android:textSize="14.5sp" android:textStyle="bold"
+                                android:textColor="@color/textPrimary"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="আপনার Gmail-এর Drive-এ স্বয়ংক্রিয় ব্যাকআপ"
+                                android:textSize="11sp" android:textColor="@color/textSecondary"/>
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/swAutoSync"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"/>
+                    </LinearLayout>
+
+                    <TextView android:id="@+id/tvAutoSyncStatus"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="🟢 চালু আছে — প্রতিটি পরিবর্তন সাথে সাথে Drive-এ সেভ হবে"
+                        android:textSize="11sp" android:textColor="@color/textSecondary"
+                        android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

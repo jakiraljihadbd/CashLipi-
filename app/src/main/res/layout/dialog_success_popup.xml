@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<FrameLayout
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_success_popup_card"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="28dp"
+        android:paddingBottom="20dp"
+        android:gravity="center_horizontal">
+
+        <!-- আইকন + কনফেটি এরিয়া -->
+        <FrameLayout
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:clipChildren="false">
+
+            <!-- কনফেটি (সাজসজ্জা) -->
+            <ImageView android:layout_width="8dp" android:layout_height="8dp"
+                android:layout_gravity="top|start" android:layout_marginStart="6dp" android:layout_marginTop="8dp"
+                android:rotation="20" android:src="@drawable/ic_confetti_piece" android:tint="#F59E0B" android:contentDescription="@null"/>
+            <ImageView android:layout_width="10dp" android:layout_height="4dp"
+                android:layout_gravity="top|end" android:layout_marginEnd="10dp" android:layout_marginTop="4dp"
+                android:rotation="-30" android:src="@drawable/ic_confetti_piece" android:tint="#10B981" android:contentDescription="@null"/>
+            <ImageView android:layout_width="6dp" android:layout_height="6dp"
+                android:layout_gravity="start|center_vertical" android:layout_marginStart="2dp"
+                android:rotation="45" android:src="@drawable/ic_confetti_piece" android:tint="#3B82F6" android:contentDescription="@null"/>
+            <ImageView android:layout_width="10dp" android:layout_height="4dp"
+                android:layout_gravity="end|center_vertical"
+                android:rotation="15" android:src="@drawable/ic_confetti_piece" android:tint="#EC4899" android:contentDescription="@null"/>
+            <ImageView android:layout_width="8dp" android:layout_height="8dp"
+                android:layout_gravity="bottom|start" android:layout_marginStart="14dp" android:layout_marginBottom="6dp"
+                android:rotation="-15" android:src="@drawable/ic_confetti_piece" android:tint="#F59E0B" android:contentDescription="@null"/>
+            <ImageView android:layout_width="10dp" android:layout_height="4dp"
+                android:layout_gravity="bottom|end" android:layout_marginEnd="12dp" android:layout_marginBottom="10dp"
+                android:rotation="30" android:src="@drawable/ic_confetti_piece" android:tint="#10B981" android:contentDescription="@null"/>
+
+            <!-- মূল রঙিন সার্কেল (কালার প্রোগ্রামে সেট হয়) -->
+            <FrameLayout
+                android:id="@+id/successIconCircle"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_circle_dynamic">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_checkmark_plain"
+                    android:contentDescription="@null"/>
+            </FrameLayout>
+
+        </FrameLayout>
+
+        <!-- টাইটেল (কালার প্রোগ্রামে সেট হয়) -->
+        <TextView
+            android:id="@+id/tvSuccessTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="সফল হয়েছে!"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <!-- মেসেজ -->
+        <TextView
+            android:id="@+id/tvSuccessMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="আপনার তালিকা সফলভাবে আপডেট হয়েছে।"
+            android:textColor="@color/textPrimary"
+            android:textSize="13sp"
+            android:lineSpacingExtra="2dp"
+            android:gravity="center"/>
+
+        <!-- সাব-টেক্সট (অ্যাপের নাম) -->
+        <TextView
+            android:id="@+id/tvSuccessSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="CashLipi ক্যাশলিপি"
+            android:textColor="@color/textSecondary"
+            android:textSize="12sp"
+            android:gravity="center"/>
+
+        <!-- বাটন সারি -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/btnAddAgain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_btn_dynamic_fill"
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:text="আবার যোগ করুন"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <TextView
+                android:id="@+id/btnViewList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_btn_dark_fill"
+                android:paddingTop="11dp"
+                android:paddingBottom="11dp"
+                android:text="তালিকা দেখুন"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- বন্ধ বাটন (কার্ডের উপরে ওভারলে) -->
+    <ImageView
+        android:id="@+id/btnCloseSuccessPopup"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="10dp"
+        android:padding="5dp"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@null"/>
+
+</FrameLayout>
+
+</FrameLayout>

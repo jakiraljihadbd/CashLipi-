@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CashLipi ক্যাশলিপি</string>
+    <string name="app_slogan">المعاملات اليومية</string>
+    <string name="app_author">Jakir Al Jihad</string>
+
+    <!-- Dashboard -->
+    <string name="current_balance">الرصيد الحالي</string>
+    <string name="total_income">إجمالي الدخل</string>
+    <string name="total_expense">إجمالي المصروف</string>
+    <string name="total_dena">مستحق الدفع</string>
+    <string name="total_pabona">مستحق القبض</string>
+    <string name="total_savings">المدخرات</string>
+    <string name="quick_actions"> إجراءات سريعة</string>
+    <string name="recent_transactions"> المعاملات الأخيرة</string>
+    <string name="view_all">عرض الكل →</string>
+    <string name="see_analysis"> عرض التفاصيل</string>
+
+    <!-- Menu Items -->
+    <string name="menu_add_savings"> إضافة مدخرات</string>
+    <string name="menu_analysis"> التحليل</string>
+    <string name="menu_calculator"> الآلة الحاسبة</string>
+    <string name="menu_notes"> الملاحظات</string>
+    <string name="menu_accounting"> دفتر الحسابات</string>
+    <string name="menu_ai_chat"> دردشة الذكاء الاصطناعي</string>
+    <string name="menu_trash"> المهملات</string>
+    <string name="menu_backup"> النسخ الاحتياطي</string>
+    <string name="menu_categories"> الفئات</string>
+    <string name="menu_about">ℹ️ حول</string>
+    <string name="more">المزيد</string>
+
+    <!-- Bottom Nav -->
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_income">الدخل</string>
+    <string name="nav_expense">المصروف</string>
+    <string name="nav_ledger">الحساب</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <!-- Income -->
+    <string name="add_income"> إضافة دخل</string>
+    <string name="income_subtitle">أدخل مصدر الدخل والمبلغ</string>
+    <string name="income_source"> مصدر الدخل</string>
+    <string name="income_source_hint">اختر أو اكتب المصدر</string>
+    <string name="income_list"> قائمة الدخل</string>
+    <string name="income_saved"> تم حفظ الدخل!</string>
+    <string name="recent_income"> الدخل الأخير (5)</string>
+    <string name="all_income_list">عرض كل الدخل →</string>
+    <string name="save_income"> حفظ الدخل</string>
+    <string name="add_to_category"> إضافة إلى الفئة</string>
+
+    <!-- Expense -->
+    <string name="add_expense"> إضافة مصروف</string>
+    <string name="expense_subtitle">أدخل تفاصيل المصروف</string>
+    <string name="expense_category"> نوع المصروف</string>
+    <string name="expense_category_hint">اختر أو اكتب الفئة</string>
+    <string name="expense_list"> قائمة المصروف</string>
+    <string name="expense_saved"> تم حفظ المصروف!</string>
+    <string name="recent_expense"> المصروف الأخير (5)</string>
+    <string name="all_expense_list">عرض كل المصروف →</string>
+    <string name="save_expense"> حفظ المصروف</string>
+
+    <!-- Ledger -->
+    <string name="add_ledger"> إضافة مستحق</string>
+    <string name="ledger_subtitle">أدخل تفاصيل المعاملة</string>
+    <string name="ledger_type_dena"> مستحق الدفع (سأدفع)</string>
+    <string name="ledger_type_pabona"> مستحق القبض (سأستلم)</string>
+    <string name="ledger_person"> الاسم</string>
+    <string name="ledger_person_hint">شخص المعاملة</string>
+    <string name="ledger_category_hint">سبب المعاملة</string>
+    <string name="ledger_list"> قائمة الحساب</string>
+    <string name="ledger_saved"> تم حفظ المعاملة!</string>
+    <string name="recent_ledger"> المعاملات الأخيرة</string>
+    <string name="all_ledger_list">عرض كل الحساب →</string>
+    <string name="save_ledger"> حفظ المعاملة</string>
+    <string name="mark_as_paid"> تم الدفع</string>
+    <string name="mark_as_unpaid">↩️ غير مدفوع</string>
+    <string name="paid_label">مدفوع</string>
+    <string name="unpaid_label">غير مدفوع</string>
+    <string name="due_date"> تاريخ الاستحقاق</string>
+
+    <!-- Savings -->
+    <string name="add_savings"> إضافة مدخرات</string>
+    <string name="savings_subtitle">أدخل تفاصيل المدخرات</string>
+    <string name="savings_method"> طريقة الادخار</string>
+    <string name="savings_method_hint">اختر الطريقة</string>
+    <string name="savings_bank_name_hint">مثل: بنك الراجحي</string>
+    <string name="savings_list"> قائمة المدخرات</string>
+    <string name="savings_saved"> تم حفظ المدخرات!</string>
+    <string name="recent_savings"> المدخرات الأخيرة (5)</string>
+    <string name="all_savings_list">عرض كل المدخرات →</string>
+    <string name="save_savings"> حفظ المدخرات</string>
+
+    <!-- Savings Methods -->
+    <string name="method_bank"> البنك</string>
+    <string name="method_bkash"> bKash</string>
+    <string name="method_nagad"> Nagad</string>
+    <string name="method_rocket"> Rocket</string>
+    <string name="method_cash"> نقدي</string>
+    <string name="method_other"> أخرى</string>
+
+    <!-- Form Common -->
+    <string name="amount_label"> المبلغ (৳)</string>
+    <string name="amount_hint">أدخل المبلغ</string>
+    <string name="date_label"> التاريخ</string>
+    <string name="time_label"> الوقت</string>
+    <string name="note_label"> ملاحظة (اختياري)</string>
+    <string name="note_hint">اكتب التفاصيل...</string>
+    <string name="date_hint">اترك فارغاً = اليوم</string>
+    <string name="time_hint">اترك فارغاً = الآن</string>
+    <string name="hint_select_or_type">اختر من القائمة أو اكتب جديداً</string>
+    <string name="quick_amounts">مبالغ سريعة</string>
+
+    <!-- Actions -->
+    <string name="save">حفظ</string>
+    <string name="cancel">إلغاء</string>
+    <string name="edit"> تعديل</string>
+    <string name="delete"> حذف</string>
+    <string name="restore">↩️ استعادة</string>
+    <string name="back">← رجوع</string>
+    <string name="close"> إغلاق</string>
+    <string name="confirm">تأكيد</string>
+
+    <!-- Delete Dialog -->
+    <string name="delete_title">حذف؟</string>
+    <string name="delete_message">سيذهب هذا العنصر إلى المهملات. سيُحذف تلقائياً بعد 30 يوماً.</string>
+    <string name="delete_confirm">نعم، احذف</string>
+    <string name="delete_cancel">لا، احتفظ</string>
+
+    <!-- Empty State -->
+    <string name="no_data">لا توجد بيانات</string>
+    <string name="no_income">لا يوجد دخل</string>
+    <string name="no_expense">لا يوجد مصروف</string>
+    <string name="no_ledger">لا توجد حسابات</string>
+    <string name="no_savings">لا توجد مدخرات</string>
+    <string name="no_notes">لا توجد ملاحظات</string>
+    <string name="no_trash">المهملات فارغة</string>
+    <string name="add_first">أضف أول إدخال ↑</string>
+
+    <!-- Filter -->
+    <string name="filter_all">الكل</string>
+    <string name="filter_today">اليوم</string>
+    <string name="filter_week">الأسبوع</string>
+    <string name="filter_month">الشهر</string>
+    <string name="filter_year">السنة</string>
+    <string name="search_hint"> بحث...</string>
+    <string name="sort_newest">الأحدث أولاً</string>
+    <string name="sort_oldest">الأقدم أولاً</string>
+    <string name="sort_highest">أعلى مبلغ</string>
+    <string name="sort_lowest">أدنى مبلغ</string>
+    <string name="filter_dena_only">مستحق الدفع فقط</string>
+    <string name="filter_pabona_only">مستحق القبض فقط</string>
+    <string name="filter_paid">مدفوع</string>
+    <string name="filter_unpaid">غير مدفوع</string>
+
+    <!-- Analysis -->
+    <string name="analysis_title"> التحليل</string>
+    <string name="monthly_summary">الملخص الشهري</string>
+    <string name="income_vs_expense">الدخل مقابل المصروف</string>
+    <string name="expense_by_category">المصروف حسب الفئة</string>
+    <string name="savings_trend">اتجاه المدخرات</string>
+    <string name="health_score">درجة الصحة المالية</string>
+    <string name="select_month">اختر الشهر</string>
+
+    <!-- Notes -->
+    <string name="notes_title"> الملاحظات</string>
+    <string name="add_note">إضافة ملاحظة</string>
+    <string name="note_title_hint">أدخل العنوان...</string>
+    <string name="note_content_hint">اكتب المحتوى...</string>
+    <string name="note_saved"> تم حفظ الملاحظة</string>
+    <string name="pin_note"> تثبيت</string>
+    <string name="unpin_note"> إلغاء التثبيت</string>
+    <string name="note_color">اختر اللون</string>
+
+    <!-- Calculator -->
+    <string name="calculator_title"> الآلة الحاسبة</string>
+    <string name="calc_use_as_amount">استخدام هذا المبلغ</string>
+
+    <!-- Settings -->
+    <string name="settings_title"> الإعدادات</string>
+    <string name="profile_section"> الملف الشخصي</string>
+    <string name="your_name">اسمك</string>
+    <string name="name_hint">أدخل الاسم...</string>
+    <string name="save_name"> حفظ الاسم</string>
+    <string name="name_saved"> تم حفظ الاسم!</string>
+    <string name="dark_mode"> الوضع المظلم</string>
+    <string name="custom_keyboard">لوحة مفاتيح مخصصة</string>
+    <string name="custom_keyboard_desc">لوحة الآلة الحاسبة (إيقاف = لوحة النظام)</string>
+    <string name="advanced_features">⚙️ الميزات المتقدمة</string>
+    <string name="data_section"> إدارة البيانات</string>
+    <string name="backup_restore">النسخ الاحتياطي والاستعادة</string>
+    <string name="clear_all_data">مسح كل البيانات</string>
+    <string name="clear_confirm_title">مسح كل البيانات؟</string>
+    <string name="clear_confirm_msg">لا يمكن التراجع عن هذا الإجراء! سيُحذف كل الدخل والمصروف والحساب والمدخرات.</string>
+    <string name="clear_yes">نعم، امسح الكل</string>
+    <string name="clear_no">لا، احتفظ</string>
+    <string name="app_info_section">ℹ️ معلومات التطبيق</string>
+    <string name="app_version_label">الإصدار</string>
+    <string name="app_version_value">1.0.0</string>
+    <string name="developer_label">المطور</string>
+    <string name="developer_value">Jakir Al Jihad</string>
+    <string name="categories_settings"> الفئات الدائمة</string>
+    <string name="trash_settings"> إدارة المهملات</string>
+    <string name="about_app">ℹ️ حول التطبيق</string>
+    <string name="ai_chat_settings"> مساعد الذكاء الاصطناعي</string>
+
+    <!-- Backup -->
+    <string name="backup_title"> النسخ الاحتياطي</string>
+    <string name="export_json"> إنشاء نسخة JSON</string>
+    <string name="import_json"> الاستعادة من JSON</string>
+    <string name="backup_success"> تم النسخ الاحتياطي بنجاح!</string>
+    <string name="restore_success"> تمت الاستعادة بنجاح!</string>
+    <string name="backup_error"> فشل النسخ الاحتياطي</string>
+    <string name="select_file">اختر ملفاً</string>
+
+    <!-- Trash -->
+    <string name="trash_title"> إدارة المهملات</string>
+    <string name="empty_trash">إفراغ المهملات</string>
+    <string name="permanent_delete">حذف نهائي</string>
+    <string name="trash_info">سيُحذف العناصر تلقائياً بعد 30 يوماً</string>
+    <string name="empty_trash_confirm">حذف جميع عناصر المهملات نهائياً؟</string>
+
+    <!-- Categories -->
+    <string name="categories_title"> الفئات الدائمة</string>
+    <string name="income_categories"> فئات الدخل</string>
+    <string name="expense_categories"> فئات المصروف</string>
+    <string name="add_category">إضافة</string>
+    <string name="new_category_hint">اكتب فئة جديدة...</string>
+    <string name="category_added"> تمت إضافة الفئة</string>
+    <string name="category_deleted"> تم حذف الفئة</string>
+
+    <!-- AI Chat -->
+    <string name="ai_chat_title"> مساعد الذكاء الاصطناعي</string>
+    <string name="ai_hint">اكتب سؤالك...</string>
+    <string name="ai_send">إرسال</string>
+    <string name="ai_thinking">يفكر...</string>
+    <string name="ai_error"> فشل في الحصول على إجابة</string>
+    <string name="ai_no_internet">لا يوجد اتصال بالإنترنت</string>
+
+    <!-- Accounting -->
+    <string name="accounting_title"> دفتر الحسابات</string>
+    <string name="net_position">الموقف الصافي</string>
+
+    <!-- About -->
+    <string name="about_title">ℹ️ حول CashLipi ক্যাশলিপি</string>
+    <string name="about_desc">CashLipi ক্যাশলিপি تطبيق متكامل لتتبع الشؤون المالية الشخصية. تتبع الدخل والمصروف والحساب والمدخرات بسهولة. يعمل دون اتصال بالإنترنت — بياناتك على هاتفك فقط.</string>
+    <string name="developer_contact"> 01300168630</string>
+
+    <!-- Validation -->
+    <string name="err_amount_empty">أدخل المبلغ</string>
+    <string name="err_amount_invalid">أدخل مبلغاً صحيحاً</string>
+    <string name="err_source_empty">أدخل مصدر الدخل</string>
+    <string name="err_category_empty">أدخل نوع المصروف</string>
+    <string name="err_person_empty">أدخل الاسم</string>
+    <string name="err_method_empty">اختر الطريقة</string>
+    <string name="err_title_empty">أدخل العنوان</string>
+    <string name="err_content_empty">أدخل المحتوى</string>
+    <string name="err_generic">حدث خطأ ما. يرجى المحاولة مجدداً.</string>
+
+    <!-- Greetings -->
+    <string name="greeting_morning">صباح الخير </string>
+    <string name="greeting_noon">نهار سعيد </string>
+    <string name="greeting_evening">مساء الخير </string>
+    <string name="greeting_night">تصبح على خير </string>
+
+    <!-- Health Score Labels -->
+    <string name="health_excellent">صحة مالية ممتازة! </string>
+    <string name="health_good">وضع جيد </string>
+    <string name="health_average">هناك مجال للتحسين </string>
+    <string name="health_poor">مطلوب اتخاذ إجراء عاجل </string>
+
+    <!-- Tutorial / Splash -->
+    <string name="welcome_title">مرحباً!</string>
+    <string name="welcome_subtitle">CashLipi ক্যাশলিপি — Jakir Al Jihad</string>
+    <string name="offline_badge"> بدون إنترنت</string>
+    <string name="secure_badge"> آمن</string>
+    <string name="fast_badge"> سريع</string>
+    <string name="bangla_badge">🇧🇩 بنغالي</string>
+    <string name="get_started"> ابدأ الآن</string>
+
+    <!-- Summary Labels -->
+    <string name="taka_sign">৳</string>
+    <string name="income_icon"></string>
+    <string name="expense_icon"></string>
+    <string name="dena_icon"></string>
+    <string name="pabona_icon"></string>
+    <string name="savings_icon"></string>
+
+    <!-- Language -->
+    <string name="language_section">اللغة</string>
+    <string name="select_language">لغة التطبيق</string>
+    <string name="lang_bangla">বাংলা</string>
+    <string name="lang_english">English</string>
+    <string name="lang_hindi">हिन्दी</string>
+    <string name="lang_arabic">عربي</string>
+    <string name="language_changed">تم تغيير اللغة. إعادة التشغيل…</string>
+</resources>

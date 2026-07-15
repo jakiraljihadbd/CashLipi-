@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Gradient bg -->
+    <View android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@drawable/bg_login_gradient"/>
+
+    <!-- Top deco circle -->
+    <View android:layout_width="280dp" android:layout_height="280dp"
+        android:background="@drawable/bg_login_circle_top"
+        android:layout_gravity="top|end"
+        android:translationX="80dp" android:translationY="-80dp" android:alpha="0.18"/>
+
+    <!-- Bottom deco circle -->
+    <View android:layout_width="200dp" android:layout_height="200dp"
+        android:background="@drawable/bg_login_circle_bottom"
+        android:layout_gravity="bottom|start"
+        android:translationX="-60dp" android:translationY="60dp" android:alpha="0.12"/>
+
+    <!-- Main content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingHorizontal="28dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="24dp">
+
+        <!-- ── Logo Section ── -->
+        <LinearLayout
+            android:id="@+id/sectionLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:alpha="0">
+
+            <!-- Logo with glow ring -->
+            <FrameLayout
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginBottom="22dp">
+                <View android:layout_width="90dp" android:layout_height="90dp"
+                    android:background="@drawable/bg_login_logo_glow"/>
+                <ImageView android:layout_width="62dp" android:layout_height="62dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logo_splash"
+                    android:scaleType="centerInside"/>
+            </FrameLayout>
+
+            <!-- স্বাগতম -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="স্বাগতম" android:textSize="14sp"
+                android:textColor="#E0E7FF" android:letterSpacing="0.08"
+                android:layout_marginBottom="6dp"/>
+
+            <!-- App name -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="CashLipi ক্যাশলিপি" android:textSize="28sp"
+                android:textStyle="bold" android:textColor="#FFFFFF"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Tagline -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="আপনার প্রতিদিনের হিসাব — সহজ ও নিরাপদ"
+                android:textSize="13sp" android:textColor="#E0E7FF"
+                android:gravity="center" android:layout_marginBottom="22dp"/>
+
+            <!-- Badges -->
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text=" অফলাইন" android:textSize="11sp" android:textColor="#065F46"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_login_badge_green"
+                    android:paddingHorizontal="10dp" android:paddingVertical="5dp"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text=" নিরাপদ" android:textSize="11sp" android:textColor="#3730A3"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_login_badge_indigo"
+                    android:paddingHorizontal="10dp" android:paddingVertical="5dp"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🇧🇩 বাংলা" android:textSize="11sp" android:textColor="#92400E"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_login_badge_amber"
+                    android:paddingHorizontal="10dp" android:paddingVertical="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ── Login Section ── -->
+        <LinearLayout
+            android:id="@+id/cardLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:background="@android:color/transparent"
+            android:alpha="0">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="শুরু করুন" android:textSize="18sp"
+                    android:textStyle="bold" android:textColor="#FFFFFF"
+                    android:layout_marginBottom="4dp"/>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="সাইন ইন করুন অথবা সরাসরি ব্যবহার করুন"
+                    android:textSize="12sp" android:textColor="#CBD5E1"
+                    android:layout_marginBottom="20dp"/>
+
+                <!-- Email/Phone login button -->
+                <LinearLayout
+                    android:id="@+id/btnEmailPhoneLogin"
+                    android:layout_width="match_parent" android:layout_height="56dp"
+                    android:orientation="horizontal" android:gravity="center"
+                    android:background="@drawable/bg_login_btn_google"
+                    android:layout_marginBottom="12dp"
+                    android:clickable="true" android:focusable="true">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="✉️" android:textSize="16sp" android:layout_marginEnd="8dp"/>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Email / Phone দিয়ে লগইন বা সাইন আপ"
+                        android:textSize="13sp" android:textStyle="bold" android:textColor="#1F2937"/>
+                </LinearLayout>
+
+                <!-- Google Sign-In Button -->
+                <LinearLayout
+                    android:id="@+id/btnGoogleSignIn"
+                    android:layout_width="match_parent" android:layout_height="56dp"
+                    android:orientation="horizontal" android:gravity="center"
+                    android:background="@drawable/bg_login_btn_google"
+                    android:layout_marginBottom="12dp"
+                    android:clickable="true" android:focusable="true">
+
+                    <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                        android:src="@drawable/ic_google_logo"
+                        android:layout_marginEnd="10dp"/>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Google দিয়ে চালিয়ে যান"
+                        android:textSize="14sp" android:textStyle="bold"
+                        android:textColor="#1F2937"/>
+                </LinearLayout>
+
+                <!-- Skip Button -->
+                <LinearLayout
+                    android:id="@+id/btnSkipLogin"
+                    android:layout_width="match_parent" android:layout_height="56dp"
+                    android:orientation="horizontal" android:gravity="center"
+                    android:background="@drawable/bg_login_btn_outline"
+                    android:layout_marginBottom="18dp"
+                    android:clickable="true" android:focusable="true">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="☁️" android:textSize="15sp" android:layout_marginEnd="8dp"/>
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="এখন লগইন ছাড়াই ব্যবহার করুন"
+                        android:textSize="13sp" android:textColor="#1F2937"/>
+                </LinearLayout>
+
+                <!-- Info box -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/bg_login_info_box"
+                    android:paddingHorizontal="14dp" android:paddingVertical="11dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ℹ️  Google দিয়ে লগইন করলে ডেটা ক্লাউডে ব্যাকআপ হবে ও যেকোনো ডিভাইসে restore করা যাবে"
+                        android:textSize="11sp" android:textColor="#3730A3"
+                        android:lineSpacingExtra="2dp"/>
+                </LinearLayout>
+        </LinearLayout>
+
+        <!-- Privacy note -->
+        <TextView
+            android:id="@+id/tvPrivacyNote"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="সাইন ইন করে আপনি Privacy Policy-তে সম্মত হচ্ছেন"
+            android:textSize="10sp" android:textColor="#C7D2FE"
+            android:gravity="center" android:layout_marginTop="12dp" android:alpha="0"/>
+
+    </LinearLayout>
+
+    <!-- Loading overlay -->
+    <FrameLayout android:id="@+id/loadingOverlay"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="#80000000" android:visibility="gone"
+        android:clickable="true" android:gravity="center">
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_gravity="center" android:orientation="vertical" android:gravity="center">
+            <ProgressBar android:layout_width="48dp" android:layout_height="48dp"
+                android:indeterminateTint="#FFFFFF" android:layout_marginBottom="12dp"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="সাইন ইন হচ্ছে..." android:textSize="13sp" android:textColor="#FFFFFF"/>
+        </LinearLayout>
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

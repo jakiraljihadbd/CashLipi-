@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <gradient android:startColor="@color/expenseDeeper" android:endColor="@color/expenseDark" android:angle="135"/>
+            <corners android:radius="12dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <gradient android:startColor="@color/btnExpenseGradStart" android:endColor="@color/btnExpenseGradEnd" android:angle="135"/>
+            <corners android:radius="12dp"/>
+            <stroke android:width="0.5dp" android:color="@color/expenseDeeper"/>
+        </shape>
+    </item>
+</selector>

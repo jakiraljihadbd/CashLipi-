@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4F46E5</color>
+    <color name="colorPrimaryDark">#3730A3</color>
+    <color name="colorAccent">#F97316</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- ===== Premium Fintech Palette (Light mode values) ===== -->
+    <color name="appBg">#F0F4F8</color>
+    <color name="surfaceDark">#EE080818</color>
+    <color name="aiTipBg">#0F0A2E</color>
+    <color name="cardWhite">#FFFFFF</color>
+    <color name="primaryTextDark">#059669</color>
+    <color name="secondaryTextDark">#64748B</color>
+    <color name="hintTextLight">#94A3B8</color>
+    <color name="chipUnselectedText">#64748B</color>
+
+    <!-- Page Gradients -->
+    <color name="incomeGradStart">#059669</color>
+    <color name="incomeGradEnd">#10B981</color>
+    <color name="expenseGradStart">#DC2626</color>
+    <color name="expenseGradEnd">#EF4444</color>
+    <color name="debtGradStart">#D97706</color>
+    <color name="debtGradEnd">#F59E0B</color>
+    <color name="receivableGradStart">#2563EB</color>
+    <color name="receivableGradEnd">#3B82F6</color>
+    <color name="savingsGradStart">#7C3AED</color>
+    <color name="savingsGradEnd">#EC4899</color>
+
+    <!-- Amount Colors (Premium) -->
+    <color name="amountIncome">#10B981</color>
+    <color name="amountExpense">#EF4444</color>
+    <color name="amountDebt">#F59E0B</color>
+    <color name="amountReceivable">#3B82F6</color>
+
+    <!-- Brand accent (CashLipi orange) -->
+    <color name="brandOrange">#F97316</color>
+    <color name="brandOrangeDark">#EA580C</color>
+    <color name="brandOrangeLight">#FFEDD5</color>
+
+    <!-- Profile section accent (light mode) -->
+    <color name="profileAccent">#4F46E5</color>
+    <color name="profileAccentText">#FFFFFF</color>
+    <color name="profileBadgeIndigoBg">#EEF2FF</color>
+    <color name="profileBadgeBlueBg">#EFF6FF</color>
+    <color name="profileBadgeVioletBg">#F5F3FF</color>
+    <color name="profileBadgeAmberBg">#FFFBEB</color>
+
+    <!-- Income -->
+    <color name="incomeColor">#059669</color>
+    <color name="incomeDark">#059669</color>
+    <color name="incomeBg">#10B981</color>
+    <color name="incomeLight">#D1FAE5</color>
+
+    <!-- Expense -->
+    <color name="expenseColor">#DC2626</color>
+    <color name="expenseDark">#B91C1C</color>
+    <color name="expenseBg">#EF4444</color>
+    <color name="expenseLight">#FEE2E2</color>
+
+    <!-- Ledger -->
+    <color name="ledgerColor">#D97706</color>
+    <color name="ledgerDark">#B45309</color>
+    <color name="ledgerBg">#F59E0B</color>
+    <color name="denaColor">#F59E0B</color>
+    <color name="denaLight">#FEF3C7</color>
+    <color name="pabonaColor">#3B82F6</color>
+    <color name="pabonaLight">#DBEAFE</color>
+
+    <!-- Savings -->
+    <color name="savingsColor">#7C3AED</color>
+    <color name="savingsDark">#9D174D</color>
+    <color name="savingsBg">#FCE7F3</color>
+
+    <!-- Balance -->
+    <color name="balancePositive">#10B981</color>
+    <color name="balanceNegative">#EF4444</color>
+
+    <!-- Background -->
+    <color name="bgColor">#EDF1F7</color>
+    <color name="cardBg">#FAFBFF</color>
+    <color name="surfaceColor">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="textPrimary">#0A0F1E</color>
+    <color name="textSecondary">#3D4A5C</color>
+    <color name="textHint">#8896AA</color>
+    <color name="textOnPrimary">#FFFFFF</color>
+    <color name="textOnDark">#FFFFFF</color>
+
+    <!-- Search Bar -->
+    <color name="searchBarBg">#FFFFFF</color>
+    <color name="searchBarBorder">#C8D3E0</color>
+    <color name="searchIconTint">#6B7A8D</color>
+    <color name="searchTextColor">#0A0F1E</color>
+    <color name="searchHintColor">#8896AA</color>
+
+    <!-- Border -->
+    <color name="borderColor">#D1D9E6</color>
+    <color name="dividerColor">#F3F4F6</color>
+
+    <!-- Bottom Nav -->
+    <color name="bottomNavBg">#FFFFFF</color>
+    <color name="bottomNavSelected">#6366F1</color>
+    <color name="bottomNavUnselected">#9CA3AF</color>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         TOP HEADER + 7-ICON TOP NAV BAR (always dark, both light/dark theme)
+         Intentionally NOT overridden in values-night — the top block must
+         stay dark regardless of app theme, matching the brand header spec.
+         ═══════════════════════════════════════════════════════════════ -->
+    <color name="topHeaderBg">#0F1B2E</color>
+    <color name="topHeaderTitle">#FFFFFF</color>
+    <color name="topHeaderSubtitle">#CCFFFFFF</color>
+    <color name="topNavSelected">#00D4FF</color>
+    <color name="topNavUnselected">#8A9AAE</color>
+
+    <!-- Splash -->
+    <color name="splashBg">#150C18</color>
+    <color name="splashGradStart">#1B0F20</color>
+    <color name="splashGradEnd">#0D0710</color>
+
+    <!-- CashLipi brand (pink/gold logo) -->
+    <color name="brandPink">#E0126D</color>
+    <color name="brandPinkDeep">#B80E58</color>
+    <color name="brandGold">#FFD23F</color>
+    <color name="brandGoldSoft">#FFF7C7</color>
+
+    <!-- Status/Alert -->
+    <color name="successColor">#10B981</color>
+    <color name="warningColor">#F59E0B</color>
+    <color name="errorColor">#EF4444</color>
+    <color name="infoColor">#3B82F6</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
+
+    <!-- Dashboard gradient -->
+    <color name="dashGrad1">#4338CA</color>
+    <color name="dashGrad2">#7C3AED</color>
+
+    <!-- Calculator Keyboard -->
+    <color name="calcBg">#1A2035</color>
+    <color name="calcDisplay">#0F1729</color>
+    <color name="calcDivider">#2D3748</color>
+    <color name="calcDragHandle">#4A5568</color>
+    <color name="calcBtnBg">#243047</color>
+    <color name="calcBtnBgPressed">#2D3A56</color>
+    <color name="calcBtnOperator">#6366F1</color>
+    <color name="calcBtnOperatorPressed">#4F52C9</color>
+    <color name="calcBtnEqual">#10B981</color>
+    <color name="calcBtnEqualPressed">#059669</color>
+    <color name="calcBtnSpecial">#2D3748</color>
+    <color name="calcBtnDone">#7C3AED</color>
+    <color name="calcBtnDonePressed">#6D28D9</color>
+    <color name="calcText">#FFFFFF</color>
+    <color name="calcExpressionText">#94A3B8</color>
+    <color name="calcResultText">#10B981</color>
+    <color name="calcHintText">#4A5568</color>
+
+    <!-- Note colors -->
+    <color name="noteYellow">#FEF3C7</color>
+    <color name="noteBlue">#DBEAFE</color>
+    <color name="noteGreen">#D1FAE5</color>
+    <color name="notePink">#FCE7F3</color>
+    <color name="notePurple">#EDE9FE</color>
+
+    <!-- ===== Backup Center theme-aware tokens ===== -->
+    <color name="bkSurface">#F8FAFC</color>
+    <color name="bkCard">#FFFFFF</color>
+    <color name="bkCardAlt">#F1F5F9</color>
+    <color name="bkCardInner">#F8FAFC</color>
+    <color name="bkBorder">#E2E8F0</color>
+    <color name="bkDivider">#F1F5F9</color>
+
+    <color name="bkTextPrimary">#0F172A</color>
+    <color name="bkTextSecondary">#475569</color>
+    <color name="bkTextMuted">#94A3B8</color>
+
+    <color name="bkAccentBlue">#2F6FE4</color>
+    <color name="bkAccentGreen">#15A36B</color>
+    <color name="bkAccentRed">#E0473F</color>
+    <color name="bkAccentOrange">#D9851E</color>
+    <color name="bkAccentTelegram">#2592D6</color>
+    <color name="bkAccentGoogle">#3A7BEF</color>
+
+    <color name="bkIncomeBg">#D1FAE5</color>
+    <color name="bkIncomeBorder">#A7F3D0</color>
+    <color name="bkIncomeText">#059669</color>
+
+    <color name="bkExpenseBg">#FEE2E2</color>
+    <color name="bkExpenseBorder">#FCA5A5</color>
+    <color name="bkExpenseText">#DC2626</color>
+
+    <color name="bkDebtBg">#FEF3C7</color>
+    <color name="bkDebtBorder">#FDE68A</color>
+    <color name="bkDebtText">#D97706</color>
+
+    <color name="bkReceivableBg">#DBEAFE</color>
+    <color name="bkReceivableBorder">#BFDBFE</color>
+    <color name="bkReceivableText">#2563EB</color>
+
+    <!-- AI chat bubble (outgoing/user) -->
+    <color name="aiUserMsgGradStart">#6366F1</color>
+    <color name="aiUserMsgGradEnd">#4338CA</color>
+
+    <!-- Dashboard balance cards -->
+    <color name="balanceCardGradStart">#4F46E5</color>
+    <color name="balanceCardGradEnd">#7C3AED</color>
+    <color name="balancePremiumGradStart">#1E1B4B</color>
+    <color name="balancePremiumGradEnd">#5B21B6</color>
+
+    <!-- Black / white alpha tokens -->
+    <color name="black10">#1A000000</color>
+    <color name="black20">#33000000</color>
+    <color name="white10">#1AFFFFFF</color>
+    <color name="white18">#2EFFFFFF</color>
+    <color name="white20">#33FFFFFF</color>
+    <color name="white30">#4DFFFFFF</color>
+    <color name="white38">#61FFFFFF</color>
+
+    <!-- Primary alpha / secondary -->
+    <color name="colorPrimaryAlpha20">#336366F1</color>
+    <color name="colorPrimaryAlpha34">#576366F1</color>
+    <color name="colorPrimaryLight">#818CF8</color>
+    <color name="colorSecondary">#8B5CF6</color>
+
+    <!-- Generic dark-surface tokens -->
+    <color name="darkBg">#1E293B</color>
+    <color name="darkBgDeep">#0F172A</color>
+    <color name="darkCard">#1E293B</color>
+    <color name="darkInputBg">#1E2A3D</color>
+    <color name="darkInputBorder">#334155</color>
+    <color name="darkNavy">#0F1B2E</color>
+    <color name="darkNavyBorder">#1E3A5F</color>
+    <color name="darkSurface">#14213D</color>
+
+    <!-- Dashboard alt gradient -->
+    <color name="dashGradAltStart">#3B82F6</color>
+    <color name="dashGradAltEnd">#6366F1</color>
+
+    <!-- Debt (Dena) summary card -->
+    <color name="debtCardGradStart">#FCD34D</color>
+    <color name="debtCardGradMid">#F59E0B</color>
+    <color name="debtCardGradEnd">#D97706</color>
+    <color name="debtSummaryGradStart">#FBBF24</color>
+    <color name="debtSummaryGradEnd">#D97706</color>
+    <color name="denaActiveGradStart">#F59E0B</color>
+    <color name="denaActiveGradEnd">#D97706</color>
+
+    <!-- Dialog field -->
+    <color name="dialogFieldBg">#F8FAFC</color>
+    <color name="dialogFieldBorder">#E2E8F0</color>
+
+    <!-- Expense extras -->
+    <color name="expenseCardGradStart">#F87171</color>
+    <color name="expenseCardGradMid">#EF4444</color>
+    <color name="expenseCardGradEnd">#DC2626</color>
+    <color name="expenseDeeper">#B91C1C</color>
+    <color name="expenseStroke">#FCA5A5</color>
+    <color name="expenseSummaryGradStart">#F87171</color>
+    <color name="expenseSummaryGradEnd">#DC2626</color>
+
+    <!-- Backup format / json preview -->
+    <color name="formatBadgeBg">#EEF2FF</color>
+    <color name="formatJsonCardBg">#1A2235</color>
+
+    <!-- Google Drive -->
+    <color name="gdriveBtnGradStart">#4285F4</color>
+    <color name="gdriveBtnGradEnd">#1A73E8</color>
+    <color name="gdriveCardGradStart">#4285F4</color>
+    <color name="gdriveCardGradEnd">#1565C0</color>
+    <color name="gdriveColor">#4285F4</color>
+    <color name="gdriveGradStart">#5B9BFF</color>
+    <color name="gdriveGradEnd">#2563EB</color>
+
+    <!-- Generic menu pressed state -->
+    <color name="genericMenuPressed">#EEF2FF</color>
+
+    <!-- Glass / frosted overlays -->
+    <color name="glassCircle">#33FFFFFF</color>
+    <color name="glassFill">#26FFFFFF</color>
+    <color name="glassPill">#33FFFFFF</color>
+    <color name="glassStroke">#4DFFFFFF</color>
+    <color name="glassSummaryFill">#1AFFFFFF</color>
+    <color name="glassSummaryStroke">#33FFFFFF</color>
+    <color name="glassTranslucentBtn">#40000000</color>
+
+    <!-- Google brand -->
+    <color name="googleBlue">#4285F4</color>
+    <color name="googleGreen">#34A853</color>
+    <color name="googleRed">#EA4335</color>
+    <color name="googleYellow">#FBBC05</color>
+
+    <!-- Generic gradients -->
+    <color name="gradBluePurpleStart">#3B82F6</color>
+    <color name="gradBluePurpleEnd">#8B5CF6</color>
+    <color name="gradCircleBlueStart">#3B82F6</color>
+    <color name="gradCircleBlueEnd">#2563EB</color>
+    <color name="gradCircleGreenStart">#10B981</color>
+    <color name="gradCircleGreenEnd">#059669</color>
+    <color name="gradPurpleStart">#8B5CF6</color>
+    <color name="gradPurpleEnd">#7C3AED</color>
+
+    <!-- Add Transaction (merged income/expense entry) screen -->
+    <color name="gradCirclePinkStart">#F0388B</color>
+    <color name="gradCirclePinkEnd">#C90D66</color>
+    <color name="txnTabPillBg">#EEF2FF</color>
+    <color name="txnTabInactiveText">#94A3B8</color>
+    <color name="txnChipBlueBg">#DCEBFC</color>
+    <color name="txnChipBlueBorder">#BFDBFE</color>
+    <color name="txnCategoryRowBg">#E8F2FE</color>
+    <color name="txnPlusCircleBg">#22C55E</color>
+    <color name="txnMinusCircleBg">#F0388B</color>
+    <color name="iconCirclePrimaryStart">#6366F1</color>
+    <color name="iconCirclePrimaryEnd">#4F46E5</color>
+
+    <!-- Income extras -->
+    <color name="incomeCardGradStart">#6EE7B7</color>
+    <color name="incomeCardGradMid">#10B981</color>
+    <color name="incomeCardGradEnd">#059669</color>
+    <color name="incomeDeeper">#047857</color>
+    <color name="incomeStroke">#6EE7B7</color>
+    <color name="incomeSummaryGradStart">#6EE7B7</color>
+    <color name="incomeSummaryGradEnd">#059669</color>
+
+    <!-- Ledger extra -->
+    <color name="ledgerDeeper">#B45309</color>
+
+    <!-- Local backup method -->
+    <color name="localCardGradStart">#94A3B8</color>
+    <color name="localCardGradEnd">#475569</color>
+    <color name="localColor">#64748B</color>
+
+    <!-- Login screen -->
+    <color name="loginBadgeAmberBg">#FEF3C7</color>
+    <color name="loginBadgeGreenBg">#D1FAE5</color>
+    <color name="loginBadgeIndigoBg">#E0E7FF</color>
+    <color name="loginBtnOutlineBorder">#C7D2FE</color>
+    <color name="loginBtnOutlineFill">#FFFFFF</color>
+    <color name="loginCircleTop">#1AFFFFFF</color>
+    <color name="loginCircleBottom">#26FFFFFF</color>
+    <color name="loginGradStart">#4F46E5</color>
+    <color name="loginGradMid">#7C3AED</color>
+    <color name="loginGradEnd">#EC4899</color>
+    <color name="loginInfoBoxBg">#EEF2FF</color>
+    <color name="loginInfoBoxBorder">#C7D2FE</color>
+    <color name="loginLogoGlowFill">#33FFFFFF</color>
+    <color name="loginLogoGlowStroke">#4DFFFFFF</color>
+
+    <!-- System nav bar -->
+    <color name="navigationBarColor">#FFFFFF</color>
+
+    <!-- Note borders -->
+    <color name="noteYellowStroke">#FDE68A</color>
+    <color name="noteBlueStroke">#BFDBFE</color>
+    <color name="noteGreenStroke">#A7F3D0</color>
+    <color name="notePinkStroke">#FBCFE8</color>
+    <color name="notePurpleStroke">#DDD6FE</color>
+
+    <!-- Pabona (receivable) active tab -->
+    <color name="pabonaActiveGradStart">#3B82F6</color>
+    <color name="pabonaActiveGradEnd">#2563EB</color>
+
+    <!-- Paid / unpaid badges -->
+    <color name="paidBadgeBg">#D1FAE5</color>
+    <color name="unpaidBadgeBg">#FEE2E2</color>
+
+    <!-- Profile -->
+    <color name="profileCameraBadgeBg">#6366F1</color>
+    <color name="profileCameraBadgeBorder">#FFFFFF</color>
+    <color name="profileGoogleBadgeBg">#FFFFFF</color>
+    <color name="profileGoogleInfoBg">#EEF2FF</color>
+    <color name="profileGoogleInfoBorder">#C7D2FE</color>
+    <color name="profilePhotoBg">#E2E8F0</color>
+
+    <!-- Quick action button -->
+    <color name="quickBtnBg">#FFFFFF</color>
+
+    <!-- Receivable (Pabona) extras -->
+    <color name="receivableCardGradStart">#93C5FD</color>
+    <color name="receivableCardGradMid">#3B82F6</color>
+    <color name="receivableCardGradEnd">#2563EB</color>
+    <color name="receivableSummaryGradStart">#93C5FD</color>
+    <color name="receivableSummaryGradEnd">#2563EB</color>
+
+    <!-- Ripples -->
+    <color name="rippleDark">#1F000000</color>
+    <color name="ripplePrimary">#336366F1</color>
+    <color name="settingsRowRipple">#1F000000</color>
+    <color name="sheetRipple">#1F000000</color>
+
+    <!-- Savings extras -->
+    <color name="savingsDeeper">#8A0D45</color>
+    <color name="savingsLight">#FAD1E8</color>
+    <color name="savingsStroke">#F9A8D4</color>
+    <color name="savingsSummaryGradStart">#F472B6</color>
+    <color name="savingsSummaryGradEnd">#BE185D</color>
+
+    <!-- Status lock chips -->
+    <color name="statusLockOff">#CBD5E1</color>
+    <color name="statusLockOn">#10B981</color>
+
+    <!-- Misc translucent stroke -->
+    <color name="strokeLight">#33FFFFFF</color>
+
+    <!-- Category tag chips -->
+    <color name="tagExpenseBg">#FEE2E2</color>
+    <color name="tagIncomeBg">#D1FAE5</color>
+    <color name="tagSavingsBg">#FCE7F3</color>
+
+    <!-- Telegram brand -->
+    <color name="telegramColor">#2AABEE</color>
+    <color name="telegramGradStart">#2AABEE</color>
+    <color name="telegramGradEnd">#229ED9</color>
+    <color name="telegramBtnGradStart">#2AABEE</color>
+    <color name="telegramBtnGradEnd">#229ED9</color>
+    <color name="telegramCardGradStart">#2AABEE</color>
+    <color name="telegramCardGradEnd">#0088CC</color>
+
+    <!-- Analysis screen: category pie palette -->
+    <color name="analysisPie1">#6366F1</color>
+    <color name="analysisPie2">#F59E0B</color>
+    <color name="analysisPie3">#10B981</color>
+    <color name="analysisPie4">#EC4899</color>
+    <color name="analysisPie5">#3B82F6</color>
+    <color name="analysisPie6">#8B5CF6</color>
+    <color name="analysisPie7">#F97316</color>
+    <color name="analysisPie8">#14B8A6</color>
+    <color name="analysisPie9">#EF4444</color>
+    <color name="analysisPie10">#84CC16</color>
+    <color name="analysisPie11">#06B6D4</color>
+    <color name="analysisPie12">#A855F7</color>
+    <color name="analysisChartIncome">#10B981</color>
+    <color name="analysisChartExpense">#EF4444</color>
+    <color name="analysisChartBg">#FFFFFF</color>
+    <color name="analysisAxisLabel">#64748B</color>
+    <color name="analysisPctLabel">#FFFFFF</color>
+    <color name="analysisScoreExcellent">#10B981</color>
+    <color name="analysisScoreGood">#3B82F6</color>
+    <color name="analysisScoreAverage">#F59E0B</color>
+    <color name="analysisScorePoor">#EF4444</color>
+
+    <!-- Backup history list: status pill -->
+    <color name="backupSuccessText">#059669</color>
+    <color name="backupSuccessBg">#D1FAE5</color>
+    <color name="backupFailText">#DC2626</color>
+    <color name="backupFailBg">#FEE2E2</color>
+
+    <!-- Backup history list: format badge -->
+    <color name="backupFormatJsonBg">#E0E7FF</color>
+    <color name="backupFormatPdfBg">#FEE2E2</color>
+    <color name="backupFormatXlsxBg">#D1FAE5</color>
+
+    <!-- Create-backup screen: selected format card solid bg -->
+    <color name="formatPdfCardBg">#7F1D1D</color>
+    <color name="formatXlsxCardBg">#14532D</color>
+
+    <!-- Backup (create) screen: data/format/method card selection accents -->
+    <color name="bkCreateIncomeSel">#10B981</color>
+    <color name="bkCreateExpenseSel">#EF4444</color>
+    <color name="bkCreateDebtSel">#F59E0B</color>
+    <color name="bkCreateReceivableSel">#3B82F6</color>
+    <color name="bkFmtJsonSel">#6366F1</color>
+    <color name="bkFmtPdfSel">#EF4444</color>
+    <color name="bkFmtDocxSel">#3B82F6</color>
+    <color name="bkFmtXlsxSel">#10B981</color>
+    <color name="bkMethodTelegramSel">#2AABEE</color>
+    <color name="bkMethodGDriveSel">#4285F4</color>
+    <color name="bkMethodOtherSel">#64748B</color>
+
+    <!-- Backup PDF export heading -->
+    <color name="htmlHeading">#4F46E5</color>
+
+    <!-- Profile placeholder icon tint -->
+    <color name="profileIconTint">#94A3B8</color>
+
+    <!-- Backup Center: method card gradients -->
+    <color name="bkTelegramGradStart">#2AABEE</color>
+    <color name="bkTelegramGradEnd">#229ED9</color>
+    <color name="bkGDriveGradStart">#4285F4</color>
+    <color name="bkGDriveGradEnd">#1A73E8</color>
+    <color name="bkLocalGradStart">#64748B</color>
+    <color name="bkLocalGradEnd">#334155</color>
+    <color name="bkTelegramText">#F0F9FF</color>
+    <color name="bkGDriveText">#EFF6FF</color>
+    <color name="bkLocalText">#F1F5F9</color>
+
+    <!-- Backup Center: summary mini-card 3-stop gradients -->
+    <color name="bkIncomeGradStart">#34D399</color>
+    <color name="bkIncomeGradMid">#10B981</color>
+    <color name="bkIncomeGradEnd">#059669</color>
+    <color name="bkExpenseGradStart">#F87171</color>
+    <color name="bkExpenseGradMid">#EF4444</color>
+    <color name="bkExpenseGradEnd">#DC2626</color>
+    <color name="bkDebtGradStart">#FBBF24</color>
+    <color name="bkDebtGradMid">#F59E0B</color>
+    <color name="bkDebtGradEnd">#D97706</color>
+    <color name="bkReceivableGradStart">#60A5FA</color>
+    <color name="bkReceivableGradMid">#3B82F6</color>
+    <color name="bkReceivableGradEnd">#2563EB</color>
+
+    <!-- Backup Center: auto-backup status -->
+    <color name="bkAutoActiveText">#059669</color>
+    <color name="bkAutoInactiveText">#94A3B8</color>
+
+    <!-- ===== Premium UI Enhancement Tokens ===== -->
+    <!-- Submit button gradients (for gradient buttons) -->
+    <color name="btnIncomeGradStart">#059669</color>
+    <color name="btnIncomeGradEnd">#047857</color>
+    <color name="btnExpenseGradStart">#DC2626</color>
+    <color name="btnExpenseGradEnd">#B91C1C</color>
+    <color name="btnLedgerGradStart">#D97706</color>
+    <color name="btnLedgerGradEnd">#B45309</color>
+    <color name="btnSavingsGradStart">#7C3AED</color>
+    <color name="btnSavingsGradEnd">#6D28D9</color>
+    
+    <!-- Text on gradients (high contrast) -->
+    <color name="textOnGradient">#FFFFFF</color>
+    <color name="textOnGradientSub">#E2E8F0</color>
+    
+    <!-- Card summary label colors (visible on colored bg) -->
+    <color name="labelOnIncome">#D1FAE5</color>
+    <color name="labelOnExpense">#FEE2E2</color>
+    <color name="labelOnLedger">#FEF3C7</color>
+    <color name="labelOnPabona">#DBEAFE</color>
+    <color name="labelOnSavings">#EDE9FE</color>
+    
+    <!-- Bottom nav enhanced colors -->
+    <color name="navIncome">#059669</color>
+    <color name="navExpense">#DC2626</color>
+    <color name="navLedger">#D97706</color>
+    <color name="navSettings">#7C3AED</color>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         PREMIUM BACKUP CENTER — DEEP CONTRAST PALETTE (Section 4 spec)
+         All Backup Center colors must reference ONLY tokens below.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <color name="bkPrimary">#4F46E5</color>
+    <color name="bkPrimaryDark">#4338CA</color>
+    <color name="bkAccent">#2563EB</color>
+    <color name="bkSuccess">#16A34A</color>
+    <color name="bkWarning">#F59E0B</color>
+    <color name="bkDanger">#EF4444</color>
+    <color name="bkBg">#F5F7FB</color>
+    <color name="bkCardBg">#FFFFFF</color>
+
+    <!-- Text on light/white surfaces -->
+    <color name="bkTextPrimaryDeep">#111827</color>
+    <color name="bkTextSecondaryDeep">#4B5563</color>
+    <color name="bkHint">#6B7280</color>
+    <color name="bkBorderDeep">#D1D9E6</color>
+
+    <!-- Selected state (light, high-contrast — replaces "dark navy on dark text") -->
+    <color name="bkSelectedBg">#EEF2FF</color>
+    <color name="bkSelectedBorder">#4F46E5</color>
+    <color name="bkSelectedText">#3730A3</color>
+    <color name="bkSelectedGlow">#554F46E5</color>
+
+    <!-- Text that always sits on a SOLID, deep, colored card (icons/buttons) -->
+    <color name="bkTextOnSolid">#FFFFFF</color>
+    <color name="bkTextOnSolidSub">#EEF2FF</color>
+
+    <!-- Deep, accessible solid-card colors (dark enough that white text is always legible) -->
+    <color name="bkSolidPrimary">#4338CA</color>
+    <color name="bkSolidIncome">#047857</color>
+    <color name="bkSolidExpense">#B91C1C</color>
+    <color name="bkSolidDebt">#B45309</color>
+    <color name="bkSolidReceivable">#1D4ED8</color>
+    <color name="bkSolidTelegram">#0E7FB5</color>
+    <color name="bkSolidGDrive">#1A73E8</color>
+    <color name="bkSolidLocal">#334155</color>
+    <color name="bkSolidJson">#4338CA</color>
+    <color name="bkSolidPdf">#B91C1C</color>
+    <color name="bkSolidDocx">#1D4ED8</color>
+    <color name="bkSolidXlsx">#047857</color>
+
+    <!-- Unselected card: neutral surface, always dark-on-light text -->
+    <color name="bkUnselectedBg">#FFFFFF</color>
+    <color name="bkUnselectedBorder">#E2E8F0</color>
+    <color name="bkUnselectedIcon">#6B7280</color>
+
+    <!-- Warning / success / help message boxes — deep solid bg + white text (high contrast) -->
+    <color name="bkWarnBoxBg">#DC2626</color>
+    <color name="bkWarnBoxText">#FFFFFF</color>
+    <color name="bkWarnBoxIconBg">#33FFFFFF</color>
+    <color name="bkHelpBoxBg">#15803D</color>
+    <color name="bkHelpBoxText">#FFFFFF</color>
+    <color name="bkHelpBoxTitle">#FFFFFF</color>
+
+    <!-- Pressed / ripple states for premium 3D buttons -->
+    <color name="bkPressedOverlay">#1A000000</color>
+    <color name="bkRipple">#334F46E5</color>
+    <color name="bkTopHighlight">#40FFFFFF</color>
+    <color name="bkShadowSoft">#1A1E293B</color>
+
+    <!-- ── App Lock — fingerprint glassmorphism tokens ─────────────── -->
+    <color name="lockGlassCardBg">#33FFFFFF</color>
+    <color name="lockGlassCardStroke">#59FFFFFF</color>
+    <color name="lockPulseRing">#664F46E5</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         App Lock Setup Wizard — Material 3 (Material You) palette
+         Purple / Indigo premium security-app theme.
+         Editing these values re-themes the whole App Lock setup +
+         reset flow without touching any Java code.
+         ══════════════════════════════════════════════════════════════ -->
+    <color name="applockPrimary">#6750A4</color>
+    <color name="applockPrimaryDark">#4F3C82</color>
+    <color name="applockSecondary">#7F67BE</color>
+    <color name="applockOnPrimary">#FFFFFF</color>
+    <color name="applockPrimaryContainer">#EADDFF</color>
+    <color name="applockSurface">#FFFFFF</color>
+    <color name="applockBackground">#F7F6FC</color>
+    <color name="applockOutline">#D6D2E8</color>
+    <color name="applockOutlineSoft">#E9E6F5</color>
+    <color name="applockError">#B3261E</color>
+    <color name="applockErrorContainer">#F9DEDC</color>
+    <color name="applockSuccess">#2E7D32</color>
+    <color name="applockSuccessLight">#E8F5E9</color>
+    <color name="applockTextPrimary">#1C1B1F</color>
+    <color name="applockTextSecondary">#625B71</color>
+    <color name="applockTextHint">#938F99</color>
+    <color name="applockDotEmpty">#E4DFF5</color>
+    <color name="applockRipple">#296750A4</color>
+    <color name="applockDisabled">#E6E1F5</color>
+    <color name="applockDisabledText">#B3ABC7</color>
+
+</resources>

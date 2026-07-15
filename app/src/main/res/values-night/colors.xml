@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ════════════════════════════════════════════════════════════════
+         CashLipi ক্যাশলিপি — DARK MODE COLOR OVERRIDES
+         Only override what changes in dark mode.
+         ════════════════════════════════════════════════════════════════ -->
+
+    <!-- ── Background ───────────────────────────────────────────────── -->
+    <color name="bgColor">#080E1A</color>
+    <color name="cardBg">#131C2E</color>
+    <color name="surfaceColor">#1E293B</color>
+    <color name="surfaceDark">#1E293B</color>
+    <color name="appBg">#0D1520</color>
+    <color name="aiTipBg">#141428</color>
+    <!-- cardWhite stays white in dark mode — it is used for bottom sheets, dialogs -->
+    <color name="cardWhite">#FFFFFF</color>
+
+    <!-- ── Text ─────────────────────────────────────────────────────── -->
+    <color name="textPrimary">#F8FAFC</color>
+    <color name="textSecondary">#CBD5E1</color>
+    <color name="textHint">#64748B</color>
+    <color name="primaryTextDark">#0D1520</color>
+    <color name="secondaryTextDark">#64748B</color>
+    <color name="hintTextLight">#94A3B8</color>
+    <color name="chipUnselectedText">#CBD5E1</color>
+
+    <!-- ── Border / Divider ─────────────────────────────────────────── -->
+    <color name="borderColor">#2D3748</color>
+    <color name="dividerColor">#1E293B</color>
+
+    <!-- ── Search Bar ─────────────────────────────────────────────────── -->
+    <color name="searchBarBg">#1E293B</color>
+    <color name="searchBarBorder">#2D3748</color>
+    <color name="searchIconTint">#94A3B8</color>
+    <color name="searchTextColor">#F8FAFC</color>
+    <color name="searchHintColor">#64748B</color>
+
+    <!-- ── Navigation ───────────────────────────────────────────────── -->
+    <color name="bottomNavBg">#1E293B</color>
+    <color name="navigationBarColor">#1E293B</color>
+
+    <!-- ── Splash ────────────────────────────────────────────────────── -->
+    <color name="splashBg">#0D1520</color>
+    <color name="splashGradStart">#0D1520</color>
+    <color name="splashGradEnd">#1E3A5F</color>
+
+    <!-- ── Profile ────────────────────────────────────────────────────── -->
+    <color name="profileAccent">#818CF8</color>
+    <color name="profileAccentText">#1E1B4B</color>
+    <color name="profilePhotoBg">#1E293B</color>
+    <color name="profileGoogleInfoBg">#1E293B</color>
+    <color name="profileGoogleInfoBorder">#334155</color>
+    <color name="profileBadgeIndigoBg">#241F3D</color>
+    <color name="profileBadgeBlueBg">#152238</color>
+    <color name="profileBadgeVioletBg">#241C3A</color>
+    <color name="profileBadgeAmberBg">#2E2410</color>
+
+    <!-- ── Dialog field ──────────────────────────────────────────────── -->
+    <color name="dialogFieldBg">#1E293B</color>
+    <color name="dialogFieldBorder">#334155</color>
+
+    <!-- ── Quick button ─────────────────────────────────────────────── -->
+    <color name="quickBtnBg">#1E293B</color>
+
+    <!-- ── Calculator ────────────────────────────────────────────────── -->
+    <color name="calcBg">#0F1729</color>
+    <color name="calcDisplay">#070E1A</color>
+    <color name="calcDivider">#1E2A3A</color>
+    <color name="calcDragHandle">#374151</color>
+    <color name="calcBtnBg">#152030</color>
+    <color name="calcBtnBgPressed">#1E2A40</color>
+    <color name="calcBtnOperator">#818CF8</color>
+    <color name="calcBtnOperatorPressed">#6366F1</color>
+    <color name="calcBtnEqual">#34D399</color>
+    <color name="calcBtnEqualPressed">#10B981</color>
+    <color name="calcBtnSpecial">#1E293B</color>
+    <color name="calcBtnDone">#A78BFA</color>
+    <color name="calcBtnDonePressed">#7C3AED</color>
+    <color name="calcText">#F1F5F9</color>
+    <color name="calcExpressionText">#64748B</color>
+    <color name="calcResultText">#34D399</color>
+    <color name="calcHintText">#334155</color>
+
+    <!-- ── Backup screen (dark overrides) ─────────────────────────── -->
+    <color name="bkSurface">#0D1520</color>
+    <color name="bkCard">#1A2535</color>
+    <color name="bkCardAlt">#1A2535</color>
+    <color name="bkCardInner">#243044</color>
+    <color name="bkBorder">#334155</color>
+    <color name="bkDivider">#334155</color>
+
+    <color name="bkTextPrimary">#FFFFFF</color>
+    <color name="bkTextSecondary">#A0B0C8</color>
+    <color name="bkTextMuted">#7C8AA2</color>
+
+    <color name="bkAccentBlue">#5C9CFF</color>
+    <color name="bkAccentGreen">#3DD68C</color>
+    <color name="bkAccentRed">#F2675F</color>
+    <color name="bkAccentOrange">#F2A93B</color>
+    <color name="bkAccentTelegram">#5BB6EE</color>
+    <color name="bkAccentGoogle">#6FA3FF</color>
+
+    <!-- Summary mini-cards (dark) -->
+    <color name="bkIncomeBg">#0D4A2E</color>
+    <color name="bkIncomeBorder">#1F6E45</color>
+    <color name="bkIncomeText">#5FE3A4</color>
+
+    <color name="bkExpenseBg">#3A1715</color>
+    <color name="bkExpenseBorder">#7A312C</color>
+    <color name="bkExpenseText">#FF9C95</color>
+
+    <color name="bkDebtBg">#3A2A0F</color>
+    <color name="bkDebtBorder">#7A5A1F</color>
+    <color name="bkDebtText">#FFCB6B</color>
+
+    <color name="bkReceivableBg">#16264A</color>
+    <color name="bkReceivableBorder">#2E4E8F</color>
+    <color name="bkReceivableText">#8FB7FF</color>
+
+    <!-- ── BackupHistoryAdapter (dark) ─────────────────────────────── -->
+    <color name="backupSuccessText">#3DD68C</color>
+    <color name="backupSuccessBg">#103823</color>
+    <color name="backupFailText">#F2675F</color>
+    <color name="backupFailBg">#3A1715</color>
+
+    <!-- ── Status chips (dark) ───────────────────────────────────────── -->
+    <color name="statusLockOff">#94A3B8</color>
+
+
+    <!-- ── Drawable-night card gradient overrides ────────────────────── -->
+    <color name="incomeCardGradStart">#1B8C63</color>
+    <color name="incomeCardGradMid">#15734D</color>
+    <color name="incomeCardGradEnd">#0D5C3E</color>
+    <color name="expenseCardGradStart">#C04040</color>
+    <color name="expenseCardGradMid">#A83030</color>
+    <color name="expenseCardGradEnd">#8B2020</color>
+    <color name="debtCardGradStart">#B87828</color>
+    <color name="debtCardGradMid">#9A6018</color>
+    <color name="debtCardGradEnd">#804C08</color>
+    <color name="receivableCardGradStart">#3A6BC0</color>
+    <color name="receivableCardGradMid">#2A52A0</color>
+    <color name="receivableCardGradEnd">#1A3C80</color>
+    <!-- Profile info box dark -->
+    <color name="loginInfoBoxBg">#0F2A4A</color>
+    <color name="loginInfoBoxBorder">#1E3A5F</color>
+
+
+    <!-- ── Ledger / Debt / Savings token dark overrides ─────────────── -->
+    <color name="ledgerBg">#B45309</color>
+    <color name="denaColor">#FBBF24</color>
+    <color name="savingsBg">#4A1D6B</color>
+
+    <!-- ── App Lock — fingerprint glassmorphism tokens (dark) ───────── -->
+    <color name="lockGlassCardBg">#26FFFFFF</color>
+    <color name="lockGlassCardStroke">#40FFFFFF</color>
+    <color name="lockPulseRing">#668B5CF6</color>
+</resources>

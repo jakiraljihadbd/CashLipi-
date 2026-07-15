@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@drawable/bg_login_gradient"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="22dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+            <ImageView android:layout_width="34dp" android:layout_height="34dp"
+                android:src="@drawable/logo_splash"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="নতুন অ্যাকাউন্ট তৈরি করুন"
+                android:textSize="16sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                android:layout_marginBottom="1dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="শুরু করতে আপনার তথ্য দিন"
+                android:textSize="10sp" android:textColor="#E0E7FF"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:background="@drawable/bg_auth_card">
+
+                <!-- পুরো নাম -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="পুরো নাম"
+                    android:textSize="10sp" android:textColor="#C7D2FE"
+                    android:layout_marginBottom="2dp"/>
+
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="14dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#94A3B8"
+                    android:textSize="13sp"
+                    android:hint="আপনার পুরো নাম লিখুন"
+                    android:inputType="textPersonName"
+                    android:layout_marginBottom="7dp"/>
+
+                <!-- ইউজারনেম -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="ইউজারনেম"
+                    android:textSize="10sp" android:textColor="#C7D2FE"
+                    android:layout_marginBottom="2dp"/>
+
+                <EditText
+                    android:id="@+id/etUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="14dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#94A3B8"
+                    android:textSize="13sp"
+                    android:hint="আপনার ইউজারনেম লিখুন"
+                    android:inputType="text"
+                    android:layout_marginBottom="7dp"/>
+
+                <!-- মোবাইল নম্বর -->
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="মোবাইল নম্বর"
+                    android:textSize="10sp" android:textColor="#C7D2FE"
+                    android:layout_marginBottom="2dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="7dp">
+
+                    <LinearLayout
+                        android:id="@+id/layoutCountryCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_country_code_box"
+                        android:paddingHorizontal="8dp"
+                        android:layout_marginEnd="6dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <TextView
+                            android:id="@+id/tvCountryCode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🇧🇩 +880"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" ▾"
+                            android:textSize="11sp"
+                            android:textColor="#94A3B8"/>
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/etPhone"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_input_field"
+                        android:paddingHorizontal="14dp"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#94A3B8"
+                        android:textSize="13sp"
+                        android:hint="01XXXXXXXXX"
+                        android:inputType="phone"
+                        android:maxLength="11"/>
+                </LinearLayout>
+
+                <!-- Gmail -->
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Gmail"
+                    android:textSize="10sp" android:textColor="#C7D2FE"
+                    android:layout_marginBottom="2dp"/>
+
+                <EditText
+                    android:id="@+id/etGmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="14dp"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#94A3B8"
+                    android:textSize="13sp"
+                    android:hint="example@gmail.com"
+                    android:inputType="textEmailAddress"
+                    android:layout_marginBottom="7dp"/>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textSize="10sp" android:textColor="#C7D2FE"
+                    android:layout_marginBottom="2dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="6dp"
+                    android:layout_marginBottom="7dp">
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#94A3B8"
+                        android:textSize="13sp"
+                        android:hint="কমপক্ষে ৬ অক্ষর"
+                        android:inputType="textPassword"/>
+                    <TextView
+                        android:id="@+id/tvTogglePassword"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:gravity="center"
+                        android:text="👁"
+                        android:textSize="15sp"
+                        android:padding="2dp"
+                        android:clickable="true"
+                        android:focusable="true"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Password নিশ্চিত করুন"
+                    android:textSize="10sp" android:textColor="#C7D2FE"
+                    android:layout_marginBottom="2dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="6dp"
+                    android:layout_marginBottom="10dp">
+                    <EditText
+                        android:id="@+id/etConfirmPassword"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#94A3B8"
+                        android:textSize="13sp"
+                        android:hint="আবার Password লিখুন"
+                        android:inputType="textPassword"/>
+                    <TextView
+                        android:id="@+id/tvToggleConfirmPassword"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:gravity="center"
+                        android:text="👁"
+                        android:textSize="15sp"
+                        android:padding="2dp"
+                        android:clickable="true"
+                        android:focusable="true"/>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:text="অ্যাকাউন্ট তৈরি করুন"
+                    android:textColor="#FFFFFF"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#6366F1"/>
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:indeterminateTint="#6366F1"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="ইতিমধ্যে অ্যাকাউন্ট আছে? "
+                    android:textSize="11sp" android:textColor="#E0E7FF"/>
+
+                <TextView
+                    android:id="@+id/tvLoginLink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="লগইন করুন"
+                    android:textSize="11sp" android:textStyle="bold" android:textColor="#FFFFFF"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

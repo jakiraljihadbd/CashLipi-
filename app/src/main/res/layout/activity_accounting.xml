@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/bgColor">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_generic" android:orientation="horizontal"
+        android:gravity="center_vertical" android:paddingTop="12dp"
+        android:paddingBottom="14dp" android:paddingHorizontal="16dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text=" হিসাব বই" android:textSize="18sp"
+            android:textStyle="bold" android:textColor="@color/white"/>
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent" android:overScrollMode="never">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="12dp">
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
+                app:cardCornerRadius="16dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text=" সারসংক্ষেপ" android:textSize="14sp"
+                        android:textStyle="bold" android:textColor="@color/colorPrimary"
+                        android:layout_marginBottom="12dp"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" মোট আয়"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvAccIncome" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="৳ 0"
+                            android:textSize="14sp" android:textStyle="bold"
+                            android:textColor="@color/incomeColor"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" মোট ব্যয়"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvAccExpense" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="৳ 0"
+                            android:textSize="14sp" android:textStyle="bold"
+                            android:textColor="@color/expenseColor"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" মোট সঞ্চয়"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvAccSavings" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="৳ 0"
+                            android:textSize="14sp" android:textStyle="bold"
+                            android:textColor="@color/savingsColor"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" মোট দেনা"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvAccDena" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="৳ 0"
+                            android:textSize="14sp" android:textStyle="bold"
+                            android:textColor="@color/denaColor"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" মোট পাওনা"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvAccPabona" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="৳ 0"
+                            android:textSize="14sp" android:textStyle="bold"
+                            android:textColor="@color/pabonaColor"/>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginVertical="8dp"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" বর্তমান ব্যালেন্স"
+                            android:textSize="14sp" android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+                        <TextView android:id="@+id/tvAccBalance" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="৳ 0"
+                            android:textSize="18sp" android:textStyle="bold"
+                            android:textColor="@color/colorPrimary"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginTop="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" নেট পজিশন"
+                            android:textSize="14sp" android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+                        <TextView android:id="@+id/tvNetPosition" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="৳ 0"
+                            android:textSize="18sp" android:textStyle="bold"
+                            android:textColor="@color/colorPrimary"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
+                app:cardCornerRadius="16dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text=" এন্ট্রি গণনা" android:textSize="14sp"
+                        android:textStyle="bold" android:textColor="@color/colorPrimary"
+                        android:layout_marginBottom="12dp"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="আয়ের এন্ট্রি"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvIncomeCount" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:textSize="13sp"
+                            android:textStyle="bold" android:textColor="@color/incomeColor"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="ব্যয়ের এন্ট্রি"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvExpenseCount" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:textSize="13sp"
+                            android:textStyle="bold" android:textColor="@color/expenseColor"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="সঞ্চয়ের এন্ট্রি"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvSavingsCount" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:textSize="13sp"
+                            android:textStyle="bold" android:textColor="@color/savingsColor"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="দেনা/পাওনা এন্ট্রি"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:id="@+id/tvLedgerCount" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:textSize="13sp"
+                            android:textStyle="bold" android:textColor="@color/ledgerColor"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp" app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/colorPrimary">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text=" আর্থিক স্বাস্থ্য স্কোর" android:textSize="14sp"
+                        android:textStyle="bold" android:textColor="@color/white"
+                        android:layout_marginBottom="6dp"/>
+                    <TextView android:id="@+id/tvHealthScore" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="--/100"
+                        android:textSize="36sp" android:textStyle="bold"
+                        android:textColor="@color/white" android:layout_marginBottom="4dp"/>
+                    <TextView android:id="@+id/tvHealthLabel" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" android:text="বিশ্লেষণ করা হচ্ছে..."
+                        android:textSize="13sp" android:textColor="@color/white"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

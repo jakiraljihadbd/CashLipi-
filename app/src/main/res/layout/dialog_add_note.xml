@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:padding="16dp">
+    <com.google.android.material.textfield.TextInputLayout style="@style/AppTextInput"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:hint="শিরোনাম..." android:layout_marginBottom="10dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/etNoteTitle"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:inputType="textCapSentences"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout style="@style/AppTextInput"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:hint="বিষয়বস্তু লিখুন..." android:layout_marginBottom="14dp">
+        <com.google.android.material.textfield.TextInputEditText android:id="@+id/etNoteContent"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="4" android:gravity="top"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="রং বেছে নিন:" android:textSize="13sp"
+        android:textColor="@color/textPrimary" android:layout_marginBottom="8dp"/>
+    <RadioGroup android:id="@+id/colorGroup" android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:orientation="horizontal">
+        <RadioButton android:id="@+id/radioYellow" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="" android:checked="true"/>
+        <RadioButton android:id="@+id/radioBlue" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1" android:text=""/>
+        <RadioButton android:id="@+id/radioGreen" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1" android:text=""/>
+        <RadioButton android:id="@+id/radioPink" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1" android:text=""/>
+        <RadioButton android:id="@+id/radioPurple" android:layout_width="0dp"
+            android:layout_height="wrap_content" android:layout_weight="1" android:text=""/>
+    </RadioGroup>
+</LinearLayout>

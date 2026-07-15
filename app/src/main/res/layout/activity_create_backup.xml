@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bkSurface">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="120dp">
+
+            <!-- ── HEADER ─────────────────────────────────────────────────── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_gradient_blue_purple"
+                android:orientation="vertical"
+                android:paddingTop="52dp"
+                android:paddingBottom="24dp"
+                android:paddingHorizontal="20dp">
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Create Backup"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:paddingStart="12dp"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ডেটা, ফরম্যাট ও পদ্ধতি বেছে নিন"
+                    android:textColor="@color/bkTextSecondary"
+                    android:textSize="13sp"
+                    android:paddingStart="52dp"/>
+            </LinearLayout>
+
+            <!-- ════════════════════════════════════════════════════════════ -->
+            <!--  SECTION 1: SELECT DATA TO BACKUP                           -->
+            <!-- ════════════════════════════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/bkCard"
+                app:cardElevation="4dp">
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Data To Backup"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="14dp"/>
+
+                    <!-- All Data (full width) -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardDataAll"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardBackgroundColor="@color/bkCardInner"
+                        app:cardElevation="4dp">
+                        <LinearLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="14dp">
+                            <LinearLayout android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/circle_gradient_blue"
+                                android:gravity="center">
+                                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/emoji_package" android:scaleType="centerInside"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:paddingStart="10dp">
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="All Data (Recommended)"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvAllCount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="৳ 0"
+                                    android:textColor="@color/bkTextSecondary"
+                                    android:textSize="11sp"/>
+                            </LinearLayout>
+                            <ImageView android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_check_circle"
+                                android:tint="@color/gradCircleBlueStart"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Income + Expense row -->
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardDataIncome"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="5dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+                                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:src="@drawable/emoji_package" android:scaleType="centerInside"/>
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Income"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvIncomeCount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="৳ 0"
+                                    android:textColor="@color/bkAccentGreen"
+                                    android:textSize="11sp"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardDataExpense"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="5dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+                                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:src="@drawable/emoji_package" android:scaleType="centerInside"/>
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Expense"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvExpenseCount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="৳ 0"
+                                    android:textColor="@color/bkAccentRed"
+                                    android:textSize="11sp"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <!-- Debt + Receivable row -->
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardDataDebt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="5dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+                                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:src="@drawable/emoji_package" android:scaleType="centerInside"/>
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Debt"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvDebtCount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="৳ 0"
+                                    android:textColor="@color/bkAccentOrange"
+                                    android:textSize="11sp"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardDataReceivable"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="5dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+                                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:src="@drawable/emoji_package" android:scaleType="centerInside"/>
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Receivable"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
+                                <TextView android:id="@+id/tvReceivableCount"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="৳ 0"
+                                    android:textColor="@color/bkAccentBlue"
+                                    android:textSize="11sp"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ════════════════════════════════════════════════════════════ -->
+            <!--  SECTION 2: SELECT FORMAT                                    -->
+            <!-- ════════════════════════════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/bkCard"
+                app:cardElevation="4dp">
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Format"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="14dp"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- JSON -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardFormatJson"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardBackgroundColor="@color/formatJsonCardBg"
+                            app:cardElevation="4dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="JSON"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- PDF -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardFormatPdf"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="3dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="PDF"
+                                    android:textColor="@color/bkTextSecondary"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- DOCX -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardFormatDocx"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="3dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Word"
+                                    android:textColor="@color/bkTextSecondary"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- XLSX -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardFormatXlsx"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Excel"
+                                    android:textColor="@color/bkTextSecondary"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                    <!-- Format note -->
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ℹ️ এখন শুধু JSON ব্যাকআপ সমর্থিত। PDF/Word/Excel শীঘ্রই আসছে।"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="11sp"
+                        android:layout_marginTop="10dp"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ════════════════════════════════════════════════════════════ -->
+            <!--  SECTION 3: SELECT METHOD                                    -->
+            <!-- ════════════════════════════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/bkCard"
+                app:cardElevation="4dp">
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Method"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="14dp"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Telegram -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardMethodTelegram"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="6dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="14dp">
+                                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:src="@drawable/emoji_package" android:scaleType="centerInside"/>
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Telegram"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Google Drive -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardMethodGDrive"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="3dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="2dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="14dp">
+                                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:src="@drawable/emoji_package" android:scaleType="centerInside"/>
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Google Drive"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Local Storage -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardMethodLocal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="6dp"
+                            app:cardCornerRadius="14dp"
+                            app:cardBackgroundColor="@color/bkCardInner"
+                            app:cardElevation="6dp">
+                            <LinearLayout android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:padding="14dp">
+                                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="6dp" android:src="@drawable/emoji_package" android:scaleType="centerInside"/>
+                                <TextView android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Local Storage"
+                                    android:textColor="@color/bkTextPrimary"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- ── FLOATING START BACKUP BUTTON ──────────────────────────────────── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/bkSurface"
+        android:padding="16dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnStartBackup"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="  Start Backup"
+            android:textColor="@color/bkTextPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/transparent"
+            android:background="@drawable/btn_gradient_primary"
+            android:stateListAnimator="@null"/>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

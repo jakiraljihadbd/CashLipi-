@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_splash">
+
+    <!-- Deep radial background glow -->
+    <View
+        android:layout_width="500dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="-60dp"
+        android:background="@drawable/splash_center_glow"/>
+
+    <!-- Center content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="20dp">
+
+        <!-- ===== Logo assembly stack ===== -->
+        <FrameLayout
+            android:id="@+id/logoStack"
+            android:layout_width="236dp"
+            android:layout_height="236dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="40dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <!-- Warm glow behind logo -->
+            <ImageView
+                android:layout_width="280dp"
+                android:layout_height="280dp"
+                android:layout_gravity="center"
+                android:src="@drawable/splash_logo_bg"/>
+
+            <!-- Layer: outer ring -->
+            <ImageView
+                android:id="@+id/logoRing"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_layer_ring"
+                android:scaleType="fitCenter"/>
+
+            <!-- Layer: coin -->
+            <ImageView
+                android:id="@+id/logoCoin"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_layer_coin"
+                android:scaleType="fitCenter"/>
+
+            <!-- Layer: taka symbol -->
+            <ImageView
+                android:id="@+id/logoTaka"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_layer_taka"
+                android:scaleType="fitCenter"/>
+
+            <!-- 8 pink petals — fly in from all sides during entrance -->
+            <ImageView
+                android:id="@+id/logoPetal0"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_petal_0"
+                android:scaleType="fitCenter"/>
+
+            <ImageView
+                android:id="@+id/logoPetal1"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_petal_1"
+                android:scaleType="fitCenter"/>
+
+            <ImageView
+                android:id="@+id/logoPetal2"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_petal_2"
+                android:scaleType="fitCenter"/>
+
+            <ImageView
+                android:id="@+id/logoPetal3"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_petal_3"
+                android:scaleType="fitCenter"/>
+
+            <ImageView
+                android:id="@+id/logoPetal4"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_petal_4"
+                android:scaleType="fitCenter"/>
+
+            <ImageView
+                android:id="@+id/logoPetal5"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_petal_5"
+                android:scaleType="fitCenter"/>
+
+            <ImageView
+                android:id="@+id/logoPetal6"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_petal_6"
+                android:scaleType="fitCenter"/>
+
+            <ImageView
+                android:id="@+id/logoPetal7"
+                android:layout_width="236dp"
+                android:layout_height="236dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo_petal_7"
+                android:scaleType="fitCenter"/>
+
+        </FrameLayout>
+
+        <!-- App name -->
+        <TextView
+            android:id="@+id/splashAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CashLipi ক্যাশলিপি"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:letterSpacing="0.20"
+            android:alpha="0"
+            android:layout_marginBottom="8dp"
+            android:shadowColor="#CCE0126D"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="22"/>
+
+        <!-- Divider line -->
+        <View
+            android:id="@+id/splashDivider"
+            android:layout_width="64dp"
+            android:layout_height="2dp"
+            android:background="@drawable/splash_divider_line"
+            android:layout_marginBottom="14dp"
+            android:alpha="0"/>
+
+        <!-- Tagline -->
+        <TextView
+            android:id="@+id/splashTagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daily Account Tracker"
+            android:textSize="14sp"
+            android:textColor="#FFD23F"
+            android:letterSpacing="0.08"
+            android:alpha="0"
+            android:layout_marginBottom="10dp"
+            android:shadowColor="#80FFD23F"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="16"/>
+
+        <!-- Version badge -->
+        <TextView
+            android:id="@+id/splashVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="v 1.0"
+            android:textSize="11sp"
+            android:textColor="#CCFFFFFF"
+            android:background="@drawable/splash_version_badge"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:alpha="0"/>
+
+    </LinearLayout>
+
+    <!-- ===== Bottom section ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="48dp"
+        android:paddingHorizontal="48dp">
+
+        <!-- Loading label -->
+        <TextView
+            android:id="@+id/splashLoadingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INITIALIZING..."
+            android:textSize="9sp"
+            android:letterSpacing="0.28"
+            android:textColor="#99E0126D"
+            android:layout_marginBottom="12dp"
+            android:alpha="0"/>
+
+        <!-- Material 3 style rounded progress indicator -->
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/splashProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:max="100"
+            android:progress="0"
+            app:trackThickness="3dp"
+            app:trackCornerRadius="2dp"
+            app:indicatorColor="@color/brandGold"
+            app:trackColor="#1FE0126D"
+            android:indeterminate="false"/>
+
+        <!-- Credit -->
+        <TextView
+            android:id="@+id/splashCredit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@jakiraljihad"
+            android:textSize="11sp"
+            android:textColor="#99FFD23F"
+            android:letterSpacing="0.12"
+            android:shadowColor="#66FFD23F"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="10"
+            android:alpha="0"/>
+
+    </LinearLayout>
+
+    <!-- Bottom ambient glow bar -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/splash_bottom_glow"
+        android:layout_marginBottom="0dp"/>
+
+</FrameLayout>

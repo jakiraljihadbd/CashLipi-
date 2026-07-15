@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/cardWhite"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvDetailTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryTextDark"
+        android:layout_marginBottom="14dp"/>
+
+    <LinearLayout android:id="@+id/rowDetailAmount" style="@style/DetailRow">
+        <TextView style="@style/DetailLabel" android:text="পরিমাণ"/>
+        <TextView android:id="@+id/tvDetailAmount" style="@style/DetailValue"/>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/rowDetailCategory" style="@style/DetailRow">
+        <TextView style="@style/DetailLabel" android:text="ক্যাটাগরি"/>
+        <TextView android:id="@+id/tvDetailCategory" style="@style/DetailValue"/>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/rowDetailPerson" style="@style/DetailRow">
+        <TextView style="@style/DetailLabel" android:text="ব্যক্তি"/>
+        <TextView android:id="@+id/tvDetailPerson" style="@style/DetailValue"/>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/rowDetailDate" style="@style/DetailRow">
+        <TextView style="@style/DetailLabel" android:text="তারিখ"/>
+        <TextView android:id="@+id/tvDetailDate" style="@style/DetailValue"/>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/rowDetailTime" style="@style/DetailRow">
+        <TextView style="@style/DetailLabel" android:text="সময়"/>
+        <TextView android:id="@+id/tvDetailTime" style="@style/DetailValue"/>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/rowDetailStatus" style="@style/DetailRow">
+        <TextView style="@style/DetailLabel" android:text="স্ট্যাটাস"/>
+        <TextView android:id="@+id/tvDetailStatus" style="@style/DetailValue"/>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/rowDetailNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="8dp">
+        <TextView style="@style/DetailLabel" android:text="নোট" android:layout_marginBottom="4dp"/>
+        <TextView android:id="@+id/tvDetailNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13.5sp"
+            android:textColor="@color/primaryTextDark"/>
+    </LinearLayout>
+
+</LinearLayout>

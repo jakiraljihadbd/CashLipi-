@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    ResetPinActivity layout — "Forgot PIN" flow.
+    Matches the App Lock Material 3 wizard palette. Only the ONE saved
+    security question is ever asked (never 3), per the App Lock spec.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/applockBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="6dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/bg_applock_button_outline"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/applockPrimary"
+                android:padding="10dp"
+                android:contentDescription="পেছনে যান"/>
+
+            <TextView
+                android:id="@+id/tvStepTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:text="Reset PIN"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/applockTextPrimary"/>
+        </LinearLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:fillViewport="true">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="24dp"
+                android:paddingBottom="24dp">
+
+                <!-- ══════════════════════ STEP: VERIFY IDENTITY ══════════════════════ -->
+                <LinearLayout
+                    android:id="@+id/stepVerify"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:paddingTop="16dp">
+
+                    <FrameLayout
+                        android:layout_width="80dp" android:layout_height="80dp"
+                        android:layout_marginBottom="18dp">
+                        <View android:layout_width="80dp" android:layout_height="80dp"
+                            android:background="@drawable/bg_applock_icon_circle_solid"/>
+                        <ImageView
+                            android:layout_width="34dp" android:layout_height="34dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_applock_help"
+                            android:contentDescription="যাচাই"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Verify Identity"
+                        android:textSize="20sp" android:textStyle="bold"
+                        android:textColor="@color/applockTextPrimary"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="To reset your PIN, answer your security question."
+                        android:textSize="13sp" android:gravity="center"
+                        android:textColor="@color/applockTextSecondary"
+                        android:paddingHorizontal="12dp"
+                        android:lineSpacingExtra="3dp"
+                        android:layout_marginBottom="22dp"/>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                        app:strokeWidth="1dp" app:strokeColor="@color/applockOutlineSoft"
+                        app:cardBackgroundColor="@color/applockPrimaryContainer"
+                        android:layout_marginBottom="18dp">
+
+                        <TextView
+                            android:id="@+id/tvSavedQuestion"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:textSize="14sp" android:textStyle="bold"
+                            android:textColor="@color/applockPrimaryDark"
+                            android:text="What is your nickname?"/>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutVerifyAnswer"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint="Your Answer"
+                        app:boxCornerRadiusTopStart="16dp" app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp" app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxStrokeColor="@color/applockPrimary"
+                        app:hintTextColor="@color/applockPrimary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etVerifyAnswer"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/applockTextPrimary"
+                            android:textSize="15sp"
+                            android:inputType="text"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVerify"
+                        android:layout_width="match_parent" android:layout_height="56dp"
+                        android:layout_marginTop="24dp"
+                        android:text="Verify"
+                        android:textAllCaps="false" android:textSize="16sp" android:textStyle="bold"
+                        android:textColor="@color/applockOnPrimary"
+                        app:cornerRadius="20dp"
+                        app:backgroundTint="@color/applockPrimary"
+                        app:rippleColor="@color/applockOnPrimary"/>
+                </LinearLayout>
+
+                <!-- ══════════════════════ STEP: SET / CONFIRM NEW PIN ══════════════════════ -->
+                <LinearLayout
+                    android:id="@+id/stepPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:paddingTop="12dp">
+
+                    <FrameLayout
+                        android:layout_width="80dp" android:layout_height="80dp"
+                        android:layout_marginBottom="18dp">
+                        <View android:layout_width="80dp" android:layout_height="80dp"
+                            android:background="@drawable/bg_applock_icon_circle_solid"/>
+                        <ImageView
+                            android:layout_width="34dp" android:layout_height="34dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_applock_lock"
+                            android:contentDescription="লক"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tvPinTitle"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Create New PIN"
+                        android:textSize="20sp" android:textStyle="bold"
+                        android:textColor="@color/applockTextPrimary"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:id="@+id/tvPinSubtitle"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Enter a new 4-digit PIN."
+                        android:textSize="13sp" android:gravity="center"
+                        android:textColor="@color/applockTextSecondary"
+                        android:paddingHorizontal="12dp"
+                        android:layout_marginBottom="26dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp">
+                        <View android:id="@+id/dotPin1" android:layout_width="16dp" android:layout_height="16dp"
+                            android:layout_marginHorizontal="9dp" android:background="@drawable/shape_applock_pin_dot_empty"/>
+                        <View android:id="@+id/dotPin2" android:layout_width="16dp" android:layout_height="16dp"
+                            android:layout_marginHorizontal="9dp" android:background="@drawable/shape_applock_pin_dot_empty"/>
+                        <View android:id="@+id/dotPin3" android:layout_width="16dp" android:layout_height="16dp"
+                            android:layout_marginHorizontal="9dp" android:background="@drawable/shape_applock_pin_dot_empty"/>
+                        <View android:id="@+id/dotPin4" android:layout_width="16dp" android:layout_height="16dp"
+                            android:layout_marginHorizontal="9dp" android:background="@drawable/shape_applock_pin_dot_empty"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvPinError"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:background="@drawable/bg_applock_error_pill"
+                        android:paddingHorizontal="16dp" android:paddingVertical="8dp"
+                        android:textColor="@color/applockError" android:textSize="12sp"
+                        android:textStyle="bold" android:layout_marginBottom="6dp"
+                        android:visibility="invisible"
+                        android:text="PIN মেলেনি, আবার চেষ্টা করুন"/>
+
+                    <GridLayout
+                        android:id="@+id/keypad"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:columnCount="3" android:rowCount="4"
+                        android:layout_marginTop="8dp">
+
+                        <TextView android:id="@+id/keyPad1" style="@style/AppLockKeypadKey" android:text="1"/>
+                        <TextView android:id="@+id/keyPad2" style="@style/AppLockKeypadKey" android:text="2"/>
+                        <TextView android:id="@+id/keyPad3" style="@style/AppLockKeypadKey" android:text="3"/>
+
+                        <TextView android:id="@+id/keyPad4" style="@style/AppLockKeypadKey" android:text="4"/>
+                        <TextView android:id="@+id/keyPad5" style="@style/AppLockKeypadKey" android:text="5"/>
+                        <TextView android:id="@+id/keyPad6" style="@style/AppLockKeypadKey" android:text="6"/>
+
+                        <TextView android:id="@+id/keyPad7" style="@style/AppLockKeypadKey" android:text="7"/>
+                        <TextView android:id="@+id/keyPad8" style="@style/AppLockKeypadKey" android:text="8"/>
+                        <TextView android:id="@+id/keyPad9" style="@style/AppLockKeypadKey" android:text="9"/>
+
+                        <View android:layout_width="60dp" android:layout_height="60dp" android:layout_margin="6dp"/>
+                        <TextView android:id="@+id/keyPad0" style="@style/AppLockKeypadKey" android:text="0"/>
+                        <TextView android:id="@+id/keyBackspace" style="@style/AppLockKeypadKey"
+                            android:text="⌫" android:textSize="20sp"/>
+                    </GridLayout>
+                </LinearLayout>
+
+                <!-- ══════════════════════ STEP: DONE ══════════════════════ -->
+                <LinearLayout
+                    android:id="@+id/stepDone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    android:paddingTop="40dp">
+
+                    <FrameLayout
+                        android:layout_width="140dp" android:layout_height="140dp"
+                        android:layout_marginBottom="28dp">
+                        <View android:layout_width="140dp" android:layout_height="140dp"
+                            android:background="@drawable/bg_applock_success_circle"/>
+                        <ImageView
+                            android:layout_width="70dp" android:layout_height="70dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/applockSuccess"
+                            android:contentDescription="সফল"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="PIN Reset Successful"
+                        android:textSize="22sp" android:textStyle="bold"
+                        android:textColor="@color/applockTextPrimary"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Your new PIN is now active."
+                        android:textSize="14sp"
+                        android:textColor="@color/applockTextSecondary"
+                        android:layout_marginBottom="40dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnDone"
+                        android:layout_width="match_parent" android:layout_height="56dp"
+                        android:text="Go to Dashboard"
+                        android:textAllCaps="false" android:textSize="16sp" android:textStyle="bold"
+                        android:textColor="@color/applockOnPrimary"
+                        app:cornerRadius="20dp"
+                        app:backgroundTint="@color/applockPrimary"
+                        app:rippleColor="@color/applockOnPrimary"/>
+                </LinearLayout>
+
+            </FrameLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</FrameLayout>

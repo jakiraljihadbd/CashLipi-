@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Deep base gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#0D0B2A"
+                android:centerColor="#1A0E4A"
+                android:endColor="#2D1370"
+                android:angle="135"
+                android:type="linear"/>
+            <corners android:bottomLeftRadius="28dp" android:bottomRightRadius="28dp"/>
+        </shape>
+    </item>
+    <!-- Radial glow left -->
+    <item android:left="-60dp" android:top="-40dp" android:right="200dp" android:bottom="-40dp">
+        <shape android:shape="oval">
+            <solid android:color="#1A6366F1"/>
+        </shape>
+    </item>
+    <!-- Radial glow right -->
+    <item android:left="200dp" android:top="-30dp" android:right="-60dp" android:bottom="-50dp">
+        <shape android:shape="oval">
+            <solid android:color="#15EC4899"/>
+        </shape>
+    </item>
+    <!-- Bottom shimmer line -->
+    <item android:top="88dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#00000000"
+                android:centerColor="#2200D4FF"
+                android:endColor="#00000000"
+                android:angle="0"/>
+            <corners android:bottomLeftRadius="28dp" android:bottomRightRadius="28dp"/>
+        </shape>
+    </item>
+</layer-list>

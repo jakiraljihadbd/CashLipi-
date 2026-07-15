@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/bgColor">
+
+    <!-- Header -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_generic" android:orientation="vertical"
+        android:paddingTop="12dp" android:paddingBottom="18dp" android:paddingHorizontal="16dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text=" সেটিংস"
+                android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="12dp">
+
+            <!-- ── Profile Card (tap করলে ProfileActivity যাবে) ── -->
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
+                app:cardCornerRadius="20dp" app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout android:id="@+id/cardProfile"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:clickable="true" android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <!-- Profile photo -->
+                    <FrameLayout android:layout_width="56dp" android:layout_height="56dp"
+                        android:layout_marginEnd="14dp">
+                        <ImageView android:id="@+id/ivSettingsPhoto"
+                            android:layout_width="56dp" android:layout_height="56dp"
+                            android:background="@drawable/bg_profile_photo_circle"
+                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:scaleType="centerCrop"
+                            android:clipToOutline="true"/>
+                    </FrameLayout>
+
+                    <!-- Name + subtitle -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+
+                        <TextView android:id="@+id/tvSettingsName"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="ব্যবহারকারী"
+                            android:textSize="16sp" android:textStyle="bold"
+                            android:textColor="@color/textPrimary"
+                            android:layout_marginBottom="3dp"/>
+
+                        <TextView android:id="@+id/tvSettingsSubtitle"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="প্রোফাইল দেখুন ও সম্পাদনা করুন"
+                            android:textSize="12sp"
+                            android:textColor="@color/textSecondary"/>
+                    </LinearLayout>
+
+                    <!-- Arrow -->
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textSize="24sp" android:textColor="@color/textHint"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ── Dark Mode ── -->
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
+                app:cardCornerRadius="16dp" app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="56dp"
+                    android:orientation="horizontal" android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text=" ডার্ক মোড"
+                        android:textSize="14sp" android:textStyle="bold"
+                        android:textColor="@color/textPrimary"/>
+                    <Switch android:id="@+id/switchDarkMode"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
+                app:cardCornerRadius="16dp" app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="8dp">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text=" ডেটা ব্যবস্থাপনা"
+                        android:textSize="13sp" android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:paddingHorizontal="8dp" android:paddingVertical="6dp"/>
+
+                    <!-- অ্যাপ লক -->
+                    <LinearLayout android:id="@+id/menuAppLock"
+                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" অ্যাপ লক"
+                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
+
+                    <!-- ক্যাটাগরি -->
+                    <LinearLayout android:id="@+id/menuCategories"
+                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" স্থায়ী ক্যাটাগরি"
+                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
+
+                    <!-- ট্র্যাশ -->
+                    <LinearLayout android:id="@+id/menuTrash"
+                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" ট্র্যাশ ম্যানেজার"
+                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
+
+                    <!-- ব্যাকআপ -->
+                    <LinearLayout android:id="@+id/menuBackup"
+                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" ব্যাকআপ ও রিস্টোর"
+                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
+
+                    <!-- সব ডেটা মুছুন -->
+                    <LinearLayout android:id="@+id/menuClearData"
+                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text=" সব ডেটা মুছুন"
+                            android:textSize="13sp" android:textColor="@color/errorColor"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="›" android:textSize="20sp" android:textColor="@color/errorColor"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ── Advanced Features ── -->
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
+                app:cardCornerRadius="16dp" app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:id="@+id/menuAdvancedFeatures"
+                    android:layout_width="match_parent" android:layout_height="56dp"
+                    android:orientation="horizontal" android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:clickable="true" android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="⚙️ অ্যাডভান্স সেটিংস"
+                        android:textSize="14sp" android:textStyle="bold"
+                        android:textColor="@color/textPrimary"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="›" android:textSize="24sp" android:textColor="@color/textHint"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ── অ্যাপ তথ্য ── -->
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="16dp"
+                app:cardCornerRadius="16dp" app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="8dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="ℹ️ অ্যাপ তথ্য"
+                        android:textSize="13sp" android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                        android:paddingHorizontal="8dp" android:paddingVertical="6dp"/>
+                    <LinearLayout android:id="@+id/menuAbout"
+                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="ℹ️ অ্যাপ সম্পর্কে"
+                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="ভার্সন"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="1.0.0"
+                            android:textSize="13sp" android:textColor="@color/textHint"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="ডেভেলপার"
+                            android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Jakir Al Jihad"
+                            android:textSize="13sp" android:textColor="@color/textHint"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

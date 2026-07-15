@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- সম্পূর্ণ খালি পেজ — কোনো UI এলিমেন্ট/ডেটা/লজিক নেই, স্পেসিফিকেশন অনুযায়ী -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor" />

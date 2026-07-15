@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer halo -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#1500D4FF"/>
+        </shape>
+    </item>
+    <!-- Inner bright core -->
+    <item android:top="20dp" android:bottom="20dp" android:left="20dp" android:right="20dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="50%"
+                android:startColor="#3000D4FF"
+                android:endColor="#0000D4FF"/>
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/bgColor">
+    <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent" android:overScrollMode="never"
+        android:paddingBottom="24dp" android:clipToPadding="false">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:background="@drawable/bg_header_savings" android:orientation="vertical"
+                android:paddingTop="12dp" android:paddingBottom="22dp" android:paddingHorizontal="16dp">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                        android:text=" সঞ্চয় করুন" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white"/>
+                </LinearLayout>
+                <TextView android:id="@+id/tvCurrentBalance" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="বর্তমান ব্যালেন্স: ৳ 0"
+                    android:textSize="12sp" android:textColor="@color/white"/>
+            </LinearLayout>
+            <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp" android:layout_marginTop="14dp"
+                app:cardCornerRadius="18dp" app:cardElevation="4dp" app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text=" সঞ্চয়ের মাধ্যম" android:textSize="13sp" android:textStyle="bold"
+                        android:textColor="@color/textPrimary" android:layout_marginBottom="6dp"/>
+                    <Spinner android:id="@+id/spinnerMethod" android:layout_width="match_parent"
+                        android:layout_height="56dp" android:background="@drawable/bg_spinner_dropdown"
+                        android:paddingStart="4dp" android:paddingEnd="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:popupBackground="@color/cardBg"/>
+                    <LinearLayout android:id="@+id/bankNameRow" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:orientation="vertical"
+                        android:visibility="gone" android:layout_marginBottom="12dp">
+                        <com.google.android.material.textfield.TextInputLayout style="@style/AppTextInput"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:hint="ব্যাংকের নাম (যেমন: ডাচ বাংলা)">
+                            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etBankName"
+                                android:layout_width="match_parent" android:layout_height="wrap_content"
+                                android:inputType="textCapWords"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text=" পরিমাণ (৳)" android:textSize="13sp" android:textStyle="bold"
+                        android:textColor="@color/textPrimary" android:layout_marginBottom="6dp"/>
+                    <com.google.android.material.textfield.TextInputLayout android:id="@+id/tilAmount"
+                        style="@style/AppTextInput" android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:hint="পরিমাণ লিখুন" android:layout_marginBottom="8dp">
+                        <com.google.android.material.textfield.TextInputEditText android:id="@+id/etAmount"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" android:textSize="18sp" android:textStyle="bold"
+                            android:textColor="@color/savingsColor"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="6dp">
+                        <Button android:id="@+id/btn100" style="@style/QuickAmountBtn"
+                            android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                            android:layout_weight="1" android:text="৫" android:layout_marginEnd="4dp"/>
+                        <Button android:id="@+id/btn500" style="@style/QuickAmountBtn"
+                            android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                            android:layout_weight="1" android:text="১০" android:layout_marginEnd="4dp"/>
+                        <Button android:id="@+id/btn1000" style="@style/QuickAmountBtn"
+                            android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                            android:layout_weight="1" android:text="২০" android:layout_marginEnd="4dp"/>
+                        <Button android:id="@+id/btn2000" style="@style/QuickAmountBtn"
+                            android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                            android:layout_weight="1" android:text="৫০"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="14dp">
+                        <Button android:id="@+id/btn5000" style="@style/QuickAmountBtn"
+                            android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                            android:layout_weight="1" android:text="১০০" android:layout_marginEnd="4dp"/>
+                        <Button android:id="@+id/btn10000" style="@style/QuickAmountBtn"
+                            android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                            android:layout_weight="1" android:text="২০০" android:layout_marginEnd="4dp"/>
+                        <Button android:id="@+id/btn20000" style="@style/QuickAmountBtn"
+                            android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                            android:layout_weight="1" android:text="৫০০" android:layout_marginEnd="4dp"/>
+                        <Button android:id="@+id/btn50000" style="@style/QuickAmountBtn"
+                            android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                            android:layout_weight="1" android:text="১০০০"/>
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:layout_marginBottom="14dp">
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical" android:layout_marginEnd="6dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text=" তারিখ" android:textSize="13sp" android:textStyle="bold"
+                                android:textColor="@color/textPrimary" android:layout_marginBottom="6dp"/>
+                            <TextView android:id="@+id/tvDate" android:layout_width="match_parent"
+                                android:layout_height="48dp" android:gravity="center_vertical"
+                                android:paddingHorizontal="12dp" android:background="@drawable/bg_card_white"
+                                android:textSize="13sp" android:textColor="@color/textPrimary"
+                                android:clickable="true" android:focusable="true"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical" android:layout_marginStart="6dp">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text=" সময়" android:textSize="13sp" android:textStyle="bold"
+                                android:textColor="@color/textPrimary" android:layout_marginBottom="6dp"/>
+                            <TextView android:id="@+id/tvTime" android:layout_width="match_parent"
+                                android:layout_height="48dp" android:gravity="center_vertical"
+                                android:paddingHorizontal="12dp" android:background="@drawable/bg_card_white"
+                                android:textSize="13sp" android:textColor="@color/textPrimary"
+                                android:clickable="true" android:focusable="true"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <com.google.android.material.textfield.TextInputLayout style="@style/AppTextInput"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:hint=" নোট (ঐচ্ছিক)" android:layout_marginBottom="18dp">
+                        <com.google.android.material.textfield.TextInputEditText android:id="@+id/etNote"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:inputType="textMultiLine" android:minLines="2" android:gravity="top"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <Button android:id="@+id/btnSaveSavings" style="@style/SubmitButton.Savings"
+                        android:layout_width="match_parent" android:layout_height="@dimen/btn_height"
+                        android:text=" সঞ্চয় সংরক্ষণ করুন" android:textColor="@color/white"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp" android:layout_marginTop="14dp" android:layout_marginBottom="16dp"
+                app:cardCornerRadius="18dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="14dp">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="10dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                            android:text=" সর্বশেষ সঞ্চয় (৫টি)" android:textSize="13sp" android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+                        <TextView android:id="@+id/tvViewAllSavings" android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" android:text="সব দেখুন →"
+                            android:textSize="12sp" android:textColor="@color/savingsColor"
+                            android:clickable="true" android:focusable="true"/>
+                    </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvRecentSavings"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"/>
+                    <LinearLayout android:id="@+id/emptyState" android:layout_width="match_parent"
+                        android:layout_height="60dp" android:gravity="center" android:visibility="gone">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="কোনো সঞ্চয় নেই" android:textSize="13sp" android:textColor="@color/textSecondary"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

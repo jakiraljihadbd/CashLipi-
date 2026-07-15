@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cardWhite">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Title / Category / Source -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEditTitle"
+        style="@style/AppTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="নাম / ক্যাটাগরি">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEditTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryTextDark"
+            android:inputType="text"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Amount -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEditAmount"
+        style="@style/AppTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="পরিমাণ (৳)">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEditAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryTextDark"
+            android:inputType="numberDecimal"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Date & Time -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+
+        <LinearLayout
+            android:id="@+id/btnEditDate"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="14dp"
+            android:background="@drawable/bg_dialog_field"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text=" " android:textSize="14sp"/>
+            <TextView android:id="@+id/tvEditDate" android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:textSize="13sp" android:textStyle="bold"
+                android:textColor="@color/primaryTextDark"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnEditTime"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="14dp"
+            android:background="@drawable/bg_dialog_field"
+            android:clickable="true"
+            android:focusable="true">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text=" " android:textSize="14sp"/>
+            <TextView android:id="@+id/tvEditTime" android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:textSize="13sp" android:textStyle="bold"
+                android:textColor="@color/primaryTextDark"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Note -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/AppTextInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="নোট (ঐচ্ছিক)">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEditNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryTextDark"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:maxLines="4"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>
+</ScrollView>

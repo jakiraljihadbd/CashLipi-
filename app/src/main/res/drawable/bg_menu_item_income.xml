@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape><solid android:color="@color/incomeLight"/><corners android:radius="16dp"/>
+        <stroke android:width="1.5dp" android:color="@color/incomeColor"/></shape>
+    </item>
+    <item>
+        <shape><solid android:color="@color/incomeBg"/><corners android:radius="16dp"/>
+        <stroke android:width="1dp" android:color="@color/incomeStroke"/></shape>
+    </item>
+</selector>

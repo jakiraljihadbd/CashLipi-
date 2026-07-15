@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/bgColor">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_generic" android:orientation="horizontal"
+        android:gravity="center_vertical" android:paddingTop="12dp"
+        android:paddingBottom="14dp" android:paddingHorizontal="16dp">
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text=" ট্র্যাশ"
+            android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white"/>
+        <Button android:id="@+id/btnEmptyTrash" android:layout_width="wrap_content"
+            android:layout_height="36dp" android:text="খালি করুন"
+            android:textSize="11sp" android:textColor="@color/errorColor"
+            android:background="@drawable/bg_card_white" android:paddingHorizontal="10dp"/>
+    </LinearLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text=" আইটেম ৩০ দিন পর স্বয়ংক্রিয়ভাবে মুছে যাবে"
+        android:textSize="11sp" android:textColor="@color/textHint"
+        android:gravity="center" android:padding="8dp"/>
+    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvTrash"
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:paddingHorizontal="12dp"
+        android:paddingTop="4dp" android:clipToPadding="false" android:overScrollMode="never"/>
+    <LinearLayout android:id="@+id/emptyState" android:layout_width="match_parent"
+        android:layout_height="0dp" android:layout_weight="1"
+        android:orientation="vertical" android:gravity="center" android:visibility="gone">
+        <ImageView android:layout_width="64dp" android:layout_height="64dp" android:src="@drawable/emoji_trash" android:scaleType="centerInside" android:layout_marginBottom="12dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="ট্র্যাশ খালি" android:textSize="16sp"
+            android:textColor="@color/textSecondary" android:textStyle="bold"/>
+    </LinearLayout>
+</LinearLayout>

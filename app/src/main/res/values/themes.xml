@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/incomeColor</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/bgColor</item>
+        <item name="colorSurface">@color/cardBg</item>
+        <item name="colorOnSurface">@color/textPrimary</item>
+        <item name="android:windowBackground">@color/bgColor</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@color/bottomNavBg</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@color/splashBg</item>
+        <item name="android:statusBarColor">@color/splashBg</item>
+        <item name="android:navigationBarColor">@color/splashBg</item>
+    </style>
+
+    <!-- ══════════════════════════════
+         ৭-আইকন টপ নেভ বার — আইটেম স্টাইল
+    ══════════════════════════════ -->
+    <style name="TopNavItemStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="TopNavIconStyle">
+        <item name="android:layout_width">@dimen/top_nav_icon_size</item>
+        <item name="android:layout_height">@dimen/top_nav_icon_size</item>
+        <item name="android:tint">@color/topNavUnselected</item>
+    </style>
+
+    <style name="TopNavIndicatorStyle">
+        <item name="android:layout_width">@dimen/top_nav_indicator_width</item>
+        <item name="android:layout_height">@dimen/top_nav_indicator_height</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:background">@drawable/bg_nav_indicator</item>
+        <item name="android:visibility">invisible</item>
+    </style>
+
+    <!-- Card -->
+    <style name="AppCardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">3dp</item>
+        <item name="contentPadding">0dp</item>
+        <item name="cardBackgroundColor">@color/cardBg</item>
+    </style>
+
+    <!-- TextInput Outlined -->
+    <style name="AppTextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
+        <item name="boxStrokeWidth">1.5dp</item>
+    </style>
+
+    <!-- বড়, স্মুথ, গোলাকার ইনপুট — Add Transaction স্ক্রিনে ব্যবহৃত -->
+    <style name="AppTextInputSmooth" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">20dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusBottomStart">20dp</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
+        <item name="boxStrokeWidth">1.6dp</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="android:textColorHint">@color/textSecondary</item>
+    </style>
+
+    <!-- Submit Button base -->
+    <style name="SubmitButton" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">14dp</item>
+        <item name="android:minHeight">54dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="SubmitButton.Income">
+        <item name="backgroundTint">@color/incomeBg</item>
+    </style>
+
+    <style name="SubmitButton.Expense">
+        <item name="backgroundTint">@color/expenseBg</item>
+    </style>
+
+    <style name="SubmitButton.Ledger">
+        <item name="backgroundTint">@color/ledgerBg</item>
+    </style>
+
+    <style name="SubmitButton.Savings">
+        <item name="backgroundTint">@color/savingsGradStart</item>
+    </style>
+
+    <style name="SubmitButton.Primary">
+        <item name="backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <!-- Outlined Button -->
+    <style name="OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">8dp</item>
+        <item name="android:minHeight">46dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="strokeColor">@color/borderColor</item>
+    </style>
+
+    <!-- Type Toggle Button (active) -->
+    <style name="TypeBtnActive" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">8dp</item>
+        <item name="android:minHeight">46dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <!-- Type Toggle Button (inactive) -->
+    <style name="TypeBtnInactive" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">8dp</item>
+        <item name="android:minHeight">46dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="strokeColor">@color/borderColor</item>
+        <item name="android:textColor">@color/textSecondary</item>
+    </style>
+
+    <!-- Quick Amount Button -->
+    <style name="QuickAmountBtn" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">10dp</item>
+        <item name="android:minHeight">38dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <!-- Calculator Buttons -->
+    <style name="CalcBtn" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">14dp</item>
+        <item name="android:minHeight">64dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">@color/calcBtnBg</item>
+        <item name="android:textColor">@color/calcText</item>
+    </style>
+
+    <style name="CalcBtn.Operator">
+        <item name="backgroundTint">@color/calcBtnOperator</item>
+    </style>
+
+    <style name="CalcBtn.Equal">
+        <item name="backgroundTint">@color/calcBtnEqual</item>
+    </style>
+
+    <style name="CalcBtn.Special">
+        <item name="backgroundTint">@color/calcBtnSpecial</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Filter Chip -->
+    <style name="FilterChip" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipCornerRadius">20dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="chipBackgroundColor">@color/cardBg</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="chipStrokeColor">@color/borderColor</item>
+        <item name="chipStrokeWidth">1dp</item>
+    </style>
+
+    <!-- AlertDialog -->
+    <style name="AppDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSurface">@color/cardBg</item>
+        <item name="colorOnSurface">@color/textPrimary</item>
+    </style>
+
+    <!-- BottomSheet -->
+    <style name="BottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@style/ShapeBottomSheet</item>
+    </style>
+
+    <style name="ShapeBottomSheet">
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+    </style>
+
+    <!-- Premium Action Sheet -->
+    <style name="PremiumBottomSheetDialog" parent="Theme.MaterialComponents.DayNight.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/PremiumBottomSheetStyle</item>
+    </style>
+
+    <style name="PremiumBottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@style/ShapePremiumBottomSheet</item>
+        <item name="backgroundTint">@color/cardWhite</item>
+    </style>
+
+    <style name="ShapePremiumBottomSheet">
+        <item name="cornerSizeTopLeft">28dp</item>
+        <item name="cornerSizeTopRight">28dp</item>
+    </style>
+
+    <style name="SheetActionRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:paddingVertical">14dp</item>
+        <item name="android:background">@drawable/bg_sheet_action_ripple</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="SheetActionIcon">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginEnd">14dp</item>
+    </style>
+
+    <style name="SheetActionLabel">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primaryTextDark</item>
+    </style>
+
+    <!-- Premium Edit Dialog -->
+    <style name="PremiumDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSurface">@color/cardWhite</item>
+        <item name="colorOnSurface">@color/primaryTextDark</item>
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <!-- Detail Row -->
+    <style name="DetailRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingVertical">8dp</item>
+    </style>
+
+    <style name="DetailLabel">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">13.5sp</item>
+        <item name="android:textColor">@color/secondaryTextDark</item>
+    </style>
+
+    <style name="DetailValue">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1.2</item>
+        <item name="android:textSize">13.5sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primaryTextDark</item>
+        <item name="android:gravity">end</item>
+        <item name="android:textAlignment">viewEnd</item>
+    </style>
+
+
+    <!-- ═══════════════════════════════════════
+         Calculator Keyboard Button Styles
+         ═══════════════════════════════════════ -->
+
+    <style name="CalcBtnBase">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/calcText</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:elevation">1dp</item>
+        <item name="rippleColor">@color/calcBtnBgPressed</item>
+    </style>
+
+    <style name="CalcBtnNumber" parent="CalcBtnBase">
+        <item name="backgroundTint">@color/calcBtnBg</item>
+    </style>
+
+    <style name="CalcBtnOperator" parent="CalcBtnBase">
+        <item name="backgroundTint">@color/calcBtnOperator</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="CalcBtnSpecial" parent="CalcBtnBase">
+        <item name="backgroundTint">@color/calcBtnSpecial</item>
+        <item name="android:textColor">@color/calcExpressionText</item>
+    </style>
+
+    <style name="CalcBtnEqual" parent="CalcBtnBase">
+        <item name="backgroundTint">@color/calcBtnEqual</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="CalcBtnDone" parent="CalcBtnBase">
+        <item name="backgroundTint">@color/calcBtnDone</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <!-- Calculator BottomSheet Theme -->
+    <style name="CalculatorBottomSheetTheme" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="bottomSheetStyle">@style/CalcBottomSheetStyle</item>
+    </style>
+
+    <style name="CalcBottomSheetStyle" parent="Widget.Material3.BottomSheet">
+        <item name="backgroundTint">@color/calcBg</item>
+        <item name="shapeAppearance">@style/CalcShapeAppearance</item>
+    </style>
+
+    <style name="CalcShapeAppearance" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <!-- Custom numeric keypad key — used on the App Lock screen -->
+    <style name="LockKeypadKey">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_margin">6dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_keypad_button</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!-- ══════ App Lock Setup Wizard (Material 3) — shared component styles ══════ -->
+    <style name="AppLockKeypadKey">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_margin">7dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/applockTextPrimary</item>
+        <item name="android:background">@drawable/bg_applock_keypad_key</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="AppLockQuestionRadio" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">18dp</item>
+        <item name="android:paddingVertical">15dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/applockTextPrimary</item>
+        <item name="android:buttonTint">@color/applockPrimary</item>
+    </style>
+
+    <style name="AppLockDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/applockOutlineSoft</item>
+        <item name="android:layout_marginHorizontal">18dp</item>
+    </style>
+
+</resources>

@@ -1,0 +1,80 @@
+<!-- ══════════════════════════════════════════════════════════════
+     AndroidManifest.xml — Add these entries to your manifest
+     ══════════════════════════════════════════════════════════════ -->
+
+<!--
+  Add inside <application> tag:
+-->
+
+    <!-- ── BACKUP MODULE ACTIVITIES ──────────────────────────────── -->
+    <activity
+        android:name=".activities.BackupCenterActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustResize"/>
+
+    <activity
+        android:name=".activities.CreateBackupActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustResize"/>
+
+    <activity
+        android:name=".activities.TelegramBackupActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustResize"/>
+
+    <activity
+        android:name=".activities.GoogleDriveBackupActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"/>
+
+    <activity
+        android:name=".activities.BackupHistoryActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"/>
+
+    <activity
+        android:name=".activities.RestoreBackupActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"/>
+
+    <activity
+        android:name=".activities.RestoreConfirmActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"/>
+
+    <activity
+        android:name=".activities.BackupSettingsActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"/>
+
+    <activity
+        android:name=".activities.BackupDetailsActivity"
+        android:exported="false"
+        android:screenOrientation="portrait"/>
+
+    <!-- ── FILE PROVIDER (for sharing backup files) ───────────────── -->
+    <provider
+        android:name="androidx.core.content.FileProvider"
+        android:authorities="${applicationId}.provider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/file_provider_paths"/>
+    </provider>
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     Also add these PERMISSIONS (if not already present):
+     ══════════════════════════════════════════════════════════════ -->
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29"/>
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>

@@ -1,0 +1,301 @@
+package com.jrappspot.cashlipi.activities;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.bumptech.glide.Glide;
+import com.jrappspot.cashlipi.R;
+import com.jrappspot.cashlipi.adapters.MainPagerAdapter;
+import com.jrappspot.cashlipi.utils.DatabaseManager;
+import com.jrappspot.cashlipi.utils.FirestoreSyncManager;
+import com.jrappspot.cashlipi.utils.FontUtils;
+
+import android.util.Log;
+
+/**
+ * DashboardActivity — এখন এই Activity শুধু "হোস্ট" হিসেবে কাজ করে:
+ *   ১. কমপ্যাক্ট ব্র্যান্ড হেডার + টাইটেল-সাইকেল অ্যানিমেশন (header-animation logic)
+ *   ২. ৭-আইকন টপ নেভ বার + ViewPager2 সিঙ্ক্রোনাইজেশন (navigation-controller logic)
+ *   ৩. Admin/Announcement/Force-update/Block-check — আগের মতোই অক্ষত (অপরিবর্তিত)
+ *
+ * প্রতিটা পেজের নিজস্ব কনটেন্ট/লজিক এখন আলাদা Fragment-এ থাকে (com.jrappspot.cashlipi.fragments.*),
+ * যাতে একটার সমস্যা বাকিগুলোকে প্রভাবিত না করে।
+ */
+public class DashboardActivity extends BaseActivity {
+
+    private DatabaseManager db;
+    private FirestoreSyncManager firestoreSync;
+
+    // ── নেভিগেশন-কন্ট্রোলার ──────────────────────────────────────────
+    private ViewPager2 viewPager;
+    private final LinearLayout[] navItems = new LinearLayout[MainPagerAdapter.PAGE_COUNT];
+    private final ImageView[] navIcons = new ImageView[MainPagerAdapter.PAGE_COUNT];
+    private final View[] navIndicators = new View[MainPagerAdapter.PAGE_COUNT];
+
+    // ── হেডার-অ্যানিমেশন (টাইটেল-সাইকেল) ─────────────────────────────
+    private TextSwitcher headerSwitcher;
+    private final Handler headerHandler = new Handler(Looper.getMainLooper());
+    private static final String BRAND_TITLE = "CashLipi";
+    private static final String[] PAGE_NAMES = {
+            "হোম", "আয়-ব্যয়", "দেনা-পাওনা", "সঞ্চয়", "বাকির খাতা", "বাজেট", "সেটিং"
+    };
+    private static final String BALANCE_PLACEHOLDER = "ব্যালেন্স: ৳০.০০"; // পরবর্তী ধাপে আসল ডেটা যুক্ত হবে
+    private static final long STEP_DELAY_MS = 2000L;
+
+    private static final String STATE_CURRENT_PAGE = "state_current_page";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_dashboard);
+        FontUtils.applyToView(this, findViewById(android.R.id.content));
+        db = DatabaseManager.getInstance(this);
+        firestoreSync = FirestoreSyncManager.getInstance(this);
+
+        // Admin notification + config listener
+        setupAdminListeners();
+        // User block check
+        checkIfUserIsBlocked();
+
+        setupHeader();
+        setupNavigation();
+
+        int startPage = savedInstanceState != null
+                ? savedInstanceState.getInt(STATE_CURRENT_PAGE, 0) : 0;
+        viewPager.setCurrentItem(startPage, false);
+        updateNavSelection(startPage);
+        runHeaderCycle(startPage);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@androidx.annotation.NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (viewPager != null) outState.putInt(STATE_CURRENT_PAGE, viewPager.getCurrentItem());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Firebase auto sync
+        syncToFirebase();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        headerHandler.removeCallbacksAndMessages(null);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  ১. হেডার-অ্যানিমেশন (টাইটেল-সাইকেল) — অন্য অংশ থেকে স্বাধীন
+    // ══════════════════════════════════════════════════════════════
+    private void setupHeader() {
+        headerSwitcher = findViewById(R.id.headerTitleSwitcher);
+        headerSwitcher.setFactory(() -> {
+            TextView tv = new TextView(DashboardActivity.this);
+            tv.setTextColor(ContextCompat.getColor(this, R.color.topHeaderTitle));
+            tv.setTextSize(18f);
+            tv.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+            tv.setLetterSpacing(0.06f);
+            tv.setSingleLine(true);
+            tv.setEllipsize(android.text.TextUtils.TruncateAt.END);
+            return tv;
+        });
+        headerSwitcher.setCurrentText(BRAND_TITLE);
+    }
+
+    /** প্রতিটা পেজে গেলে ৩-ধাপের চক্র নতুন করে শুরু হয় (state reset)। */
+    private void runHeaderCycle(int position) {
+        headerHandler.removeCallbacksAndMessages(null);
+
+        // ধাপ ১ — সবসময় "CashLipi" ব্র্যান্ড নাম দিয়ে শুরু
+        headerSwitcher.setCurrentText(BRAND_TITLE);
+
+        // ধাপ ২ — ২ সেকেন্ড পর বর্তমান পেজের নাম
+        headerHandler.postDelayed(() -> {
+            String pageName = position >= 0 && position < PAGE_NAMES.length ? PAGE_NAMES[position] : "";
+            headerSwitcher.setText(pageName);
+
+            // ধাপ ৩ — তারপর ব্যালেন্স/সামারি প্লেসহোল্ডার
+            headerHandler.postDelayed(() -> headerSwitcher.setText(BALANCE_PLACEHOLDER), STEP_DELAY_MS);
+        }, STEP_DELAY_MS);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  ২. নেভিগেশন-কন্ট্রোলার — ViewPager2 + adapter + আইকন-বার সিঙ্ক
+    // ══════════════════════════════════════════════════════════════
+    private void setupNavigation() {
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(new MainPagerAdapter(this));
+        viewPager.setOffscreenPageLimit(1);
+
+        navItems[MainPagerAdapter.POSITION_HOME] = findViewById(R.id.navHome);
+        navItems[MainPagerAdapter.POSITION_INCOME_EXPENSE] = findViewById(R.id.navIncomeExpense);
+        navItems[MainPagerAdapter.POSITION_DENA_PAWNA] = findViewById(R.id.navDenaPawna);
+        navItems[MainPagerAdapter.POSITION_SAVINGS] = findViewById(R.id.navSavings);
+        navItems[MainPagerAdapter.POSITION_BAKIR_KHATA] = findViewById(R.id.navBakirKhata);
+        navItems[MainPagerAdapter.POSITION_BUDGET] = findViewById(R.id.navBudget);
+        navItems[MainPagerAdapter.POSITION_SETTINGS] = findViewById(R.id.navSettings);
+
+        navIcons[MainPagerAdapter.POSITION_HOME] = findViewById(R.id.iconNavHome);
+        navIcons[MainPagerAdapter.POSITION_INCOME_EXPENSE] = findViewById(R.id.iconNavIncomeExpense);
+        navIcons[MainPagerAdapter.POSITION_DENA_PAWNA] = findViewById(R.id.iconNavDenaPawna);
+        navIcons[MainPagerAdapter.POSITION_SAVINGS] = findViewById(R.id.iconNavSavings);
+        navIcons[MainPagerAdapter.POSITION_BAKIR_KHATA] = findViewById(R.id.iconNavBakirKhata);
+        navIcons[MainPagerAdapter.POSITION_BUDGET] = findViewById(R.id.iconNavBudget);
+        navIcons[MainPagerAdapter.POSITION_SETTINGS] = findViewById(R.id.iconNavSettings);
+
+        navIndicators[MainPagerAdapter.POSITION_HOME] = findViewById(R.id.indicatorNavHome);
+        navIndicators[MainPagerAdapter.POSITION_INCOME_EXPENSE] = findViewById(R.id.indicatorNavIncomeExpense);
+        navIndicators[MainPagerAdapter.POSITION_DENA_PAWNA] = findViewById(R.id.indicatorNavDenaPawna);
+        navIndicators[MainPagerAdapter.POSITION_SAVINGS] = findViewById(R.id.indicatorNavSavings);
+        navIndicators[MainPagerAdapter.POSITION_BAKIR_KHATA] = findViewById(R.id.indicatorNavBakirKhata);
+        navIndicators[MainPagerAdapter.POSITION_BUDGET] = findViewById(R.id.indicatorNavBudget);
+        navIndicators[MainPagerAdapter.POSITION_SETTINGS] = findViewById(R.id.indicatorNavSettings);
+
+        // আইকনে ট্যাপ করলে সংশ্লিষ্ট পেজে স্মুথ ট্রানজিশনে চলে যাবে
+        for (int i = 0; i < navItems.length; i++) {
+            final int position = i;
+            navItems[i].setOnClickListener(v -> viewPager.setCurrentItem(position, true));
+        }
+
+        // সোয়াইপ বা ট্যাপ — যেভাবেই পেজ বদলাক, আইকন-বার + হেডার সবসময় সিঙ্ক থাকবে
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                updateNavSelection(position);
+                runHeaderCycle(position);
+            }
+        });
+    }
+
+    /** বর্তমান পেজের আইকন হাইলাইট করে, বাকি সবগুলো নিউট্রাল স্টাইলে রাখে। */
+    private void updateNavSelection(int selectedPosition) {
+        for (int i = 0; i < navIcons.length; i++) {
+            boolean selected = (i == selectedPosition);
+            navIcons[i].setColorFilter(ContextCompat.getColor(this,
+                    selected ? R.color.topNavSelected : R.color.topNavUnselected));
+            navIndicators[i].setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
+        }
+    }
+
+    // ── HELPERS ──────────────────────────────────────────────────────
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this, R.style.AppDialog)
+                .setTitle(" অ্যাপ বন্ধ করবেন?")
+                .setMessage("CashLipi ক্যাশলিপি থেকে বের হতে চান?")
+                .setPositiveButton("হ্যাঁ", (d, w) -> finish())
+                .setNegativeButton("না", null)
+                .show();
+    }
+
+    // ── Firebase Sync ──────────────────────────────────
+    // ── Admin Notification/Announcement Dialog (Image সহ) ──
+    private void showAdminMessageDialog(String title, String body, String imageUrl) {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_admin_message, null);
+        ImageView ivImage = dialogView.findViewById(R.id.ivAdminMsgImage);
+        TextView tvTitle = dialogView.findViewById(R.id.tvAdminMsgTitle);
+        TextView tvBody = dialogView.findViewById(R.id.tvAdminMsgBody);
+        View btnOk = dialogView.findViewById(R.id.btnAdminMsgOk);
+
+        tvTitle.setText(title);
+        tvBody.setText(body);
+
+        if (imageUrl != null && !imageUrl.trim().isEmpty()) {
+            ivImage.setVisibility(View.VISIBLE);
+            Glide.with(this).load(imageUrl).into(ivImage);
+        }
+
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.AppDialog)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+        btnOk.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
+
+    private void syncToFirebase() {
+        if (db.isGoogleSignedIn()) {
+            firestoreSync.uploadAllData(new FirestoreSyncManager.SyncCallback() {
+                @Override public void onSuccess(String msg) {
+                    Log.d("Dashboard", "Firebase sync ✅");
+                }
+                @Override public void onFailure(String err) {
+                    Log.w("Dashboard", "Firebase sync: " + err);
+                }
+            });
+        }
+    }
+
+    private void setupAdminListeners() {
+        // Admin notification
+        firestoreSync.listenForAdminNotifications((title, body, imageUrl) ->
+            runOnUiThread(() -> showAdminMessageDialog("🔔 " + title, body, imageUrl)));
+
+        // Admin announcement (আলাদা icon দিয়ে distinguish করা)
+        firestoreSync.listenForAnnouncements((title, body, imageUrl) ->
+            runOnUiThread(() -> showAdminMessageDialog("📣 " + title, body, imageUrl)));
+
+        // Force update / Maintenance
+        firestoreSync.listenForAppConfig((forceUpdate, maintenance,
+                latestVer, updateUrl, noticeEnabled, noticeTitle, noticeBody) ->
+            runOnUiThread(() -> {
+                if (maintenance) {
+                    new AlertDialog.Builder(this)
+                        .setTitle("🔧 রক্ষণাবেক্ষণ চলছে")
+                        .setMessage("অ্যাপটি সাময়িক বন্ধ। একটু পরে চেষ্টা করুন।")
+                        .setPositiveButton("ঠিক আছে", (d, w) -> finish())
+                        .setCancelable(false).show();
+                } else if (forceUpdate) {
+                    new AlertDialog.Builder(this)
+                        .setTitle("🚀 আপডেট প্রয়োজন")
+                        .setMessage("নতুন version পাওয়া গেছে। এখনই আপডেট করুন।")
+                        .setPositiveButton("আপডেট করুন", (d, w) -> {
+                            startActivity(new Intent(Intent.ACTION_VIEW,
+                                android.net.Uri.parse(updateUrl)));
+                            finish();
+                        })
+                        .setCancelable(false).show();
+                } else if (noticeEnabled && noticeTitle != null && !noticeTitle.isEmpty()) {
+                    new AlertDialog.Builder(this)
+                        .setTitle("ℹ️ " + noticeTitle)
+                        .setMessage(noticeBody)
+                        .setPositiveButton("বুঝেছি", null).show();
+                }
+            }));
+    }
+
+    private void checkIfUserIsBlocked() {
+        firestoreSync.checkUserBlockStatus((isBlocked, status) -> {
+            if (isBlocked) {
+                runOnUiThread(() -> {
+                    String msg = "DEVICE_BANNED".equals(status)
+                        ? "এই ডিভাইসটি নিষিদ্ধ করা হয়েছে।"
+                        : "আপনার account ব্লক করা হয়েছে।\nAdmin-এর সাথে যোগাযোগ করুন।";
+                    new AlertDialog.Builder(this)
+                        .setTitle("🚫 Access বন্ধ")
+                        .setMessage(msg)
+                        .setPositiveButton("বাহির", (d, w) -> finish())
+                        .setCancelable(false).show();
+                });
+            }
+        });
+    }
+
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- সেটিং — gear icon, matches the new 7-icon set's viewport/style. -->
+<vector xmlns:android="http://schemas.android.com/res/android"
+    android:width="26dp" android:height="26dp"
+    android:viewportWidth="160" android:viewportHeight="160">
+    <path
+        android:pathData="M134,80 L117,95 L118,118 L95,117 L80,134 L65,117 L42,118 L43,95 L26,80 L43,65 L42,42 L65,43 L80,26 L95,43 L118,42 L117,65 Z M62,80 A18,18 0 1,0 98,80 A18,18 0 1,0 62,80 Z"
+        android:fillColor="#FF000000"
+        android:fillType="evenOdd" />
+</vector>

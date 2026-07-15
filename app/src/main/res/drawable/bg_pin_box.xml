@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ফোকাসে থাকা অবস্থায় বক্সের বর্ডার লাল হয়ে যাবে -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/cardBg"/>
+            <corners android:radius="14dp"/>
+            <stroke android:width="2dp" android:color="@color/bkDanger"/>
+        </shape>
+    </item>
+
+    <!-- সাধারণ অবস্থা -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/cardBg"/>
+            <corners android:radius="14dp"/>
+            <stroke android:width="1.5dp" android:color="@color/borderColor"/>
+        </shape>
+    </item>
+
+</selector>

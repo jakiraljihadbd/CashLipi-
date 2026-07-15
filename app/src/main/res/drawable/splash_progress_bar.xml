@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <corners android:radius="3dp"/>
+            <solid android:color="#1AFFFFFF"/>
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <clip>
+            <layer-list>
+                <!-- Glow layer -->
+                <item android:top="-2dp" android:bottom="-2dp">
+                    <shape android:shape="rectangle">
+                        <corners android:radius="3dp"/>
+                        <gradient
+                            android:startColor="#8000D4FF"
+                            android:centerColor="#80BE00FF"
+                            android:endColor="#80FF0099"
+                            android:angle="0"/>
+                    </shape>
+                </item>
+                <!-- Sharp bar -->
+                <item>
+                    <shape android:shape="rectangle">
+                        <corners android:radius="3dp"/>
+                        <gradient
+                            android:startColor="#FF00D4FF"
+                            android:centerColor="#FFBE00FF"
+                            android:endColor="#FFFF0099"
+                            android:angle="0"/>
+                    </shape>
+                </item>
+            </layer-list>
+        </clip>
+    </item>
+</layer-list>

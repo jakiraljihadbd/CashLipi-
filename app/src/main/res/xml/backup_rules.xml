@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include domain="sharedpref" path="."/>
+    <!-- App Lock PIN/সিকিউরিটি উত্তর Android Keystore-backed এনক্রিপশন দিয়ে সুরক্ষিত —
+         Keystore key কখনো ব্যাকআপে যায় না, তাই এই ফাইল রিস্টোর হলে decrypt করা যাবে না
+         এবং ক্র্যাশ হতে পারে। তাই এটাকে ব্যাকআপ থেকে বাদ রাখা হলো (নতুন ডিভাইসে PIN নতুন
+         করে সেট করতে হবে, যা এমনিতেও নিরাপত্তার দিক থেকে সঠিক আচরণ)। -->
+    <exclude domain="sharedpref" path="cashlipi_app_lock_secure.xml"/>
+    <exclude domain="sharedpref" path="cashlipi_app_lock_secure_fallback.xml"/>
+</full-backup-content>

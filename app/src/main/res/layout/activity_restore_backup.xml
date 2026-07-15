@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- activity_restore_backup.xml -->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bkSurface">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="100dp">
+
+        <!-- HEADER -->
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_gradient_blue_purple"
+            android:orientation="vertical"
+            android:paddingTop="52dp"
+            android:paddingBottom="24dp"
+            android:paddingHorizontal="20dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Restore Backup"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingStart="12dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- SELECT SOURCE -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardSelectSource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Restore Source"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="14dp"/>
+
+                <!-- Local -->
+                <androidx.cardview.widget.CardView android:id="@+id/cardSourceLocal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardBackgroundColor="@color/bkCardInner"
+                    app:cardElevation="3dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="14dp">
+                        <LinearLayout android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/circle_local_bg"
+                            android:gravity="center">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/emoji_inbox_tray" android:scaleType="centerInside"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingStart="12dp">
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Local Storage"
+                                android:textColor="@color/bkTextPrimary"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="লোকাল ফাইল থেকে রিস্টোর"
+                                android:textColor="@color/bkTextSecondary"
+                                android:textSize="11sp"/>
+                        </LinearLayout>
+                        <ImageView android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/gradCircleBlueStart"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Telegram -->
+                <androidx.cardview.widget.CardView android:id="@+id/cardSourceTelegram"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="14dp"
+                    app:cardBackgroundColor="@color/bkCardInner"
+                    app:cardElevation="2dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="14dp">
+                        <LinearLayout android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/circle_telegram_bg"
+                            android:gravity="center">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/emoji_inbox_tray" android:scaleType="centerInside"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingStart="12dp">
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Telegram"
+                                android:textColor="@color/bkTextPrimary"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Telegram ফাইল থেকে রিস্টোর"
+                                android:textColor="@color/bkTextSecondary"
+                                android:textSize="11sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Google Drive -->
+                <androidx.cardview.widget.CardView android:id="@+id/cardSourceGDrive"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="14dp"
+                    app:cardBackgroundColor="@color/bkCardInner"
+                    app:cardElevation="2dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="14dp">
+                        <LinearLayout android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/circle_gdrive_bg"
+                            android:gravity="center">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/emoji_inbox_tray" android:scaleType="centerInside"/>
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:paddingStart="12dp">
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Google Drive"
+                                android:textColor="@color/bkTextPrimary"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Drive ফাইল থেকে রিস্টোর"
+                                android:textColor="@color/bkTextSecondary"
+                                android:textSize="11sp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- AVAILABLE BACKUPS -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAvailableBackups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+            <LinearLayout android:id="@+id/layoutAvailableBackups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="14dp">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Available Backups"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+                    <TextView android:id="@+id/btnBrowseFile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ব্রাউজ করুন"
+                        android:textColor="@color/bkAccentBlue"
+                        android:textSize="12sp"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="6dp"
+                        android:background="@drawable/btn_outline_blue"/>
+                </LinearLayout>
+
+                <!-- Backup 1 -->
+                <androidx.cardview.widget.CardView android:id="@+id/cardLocalBackup1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@color/bkCardInner"
+                    app:cardElevation="2dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="12dp">
+                        <LinearLayout android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/circle_gradient_blue"
+                            android:gravity="center">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/emoji_inbox_tray" android:scaleType="centerInside"/>
+                        </LinearLayout>
+                        <TextView android:id="@+id/tvBackup1Date"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="12sp"
+                            android:paddingStart="10dp"/>
+                        <TextView android:id="@+id/tvBackup1Size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/bkTextSecondary"
+                            android:textSize="11sp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Backup 2 -->
+                <androidx.cardview.widget.CardView android:id="@+id/cardLocalBackup2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@color/bkCardInner"
+                    app:cardElevation="2dp">
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="12dp">
+                        <LinearLayout android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/circle_gradient_blue"
+                            android:gravity="center">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/emoji_inbox_tray" android:scaleType="centerInside"/>
+                        </LinearLayout>
+                        <TextView android:id="@+id/tvBackup2Date"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="12sp"
+                            android:paddingStart="10dp"/>
+                        <TextView android:id="@+id/tvBackup2Size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/bkTextSecondary"
+                            android:textSize="11sp"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- PREVIEW DATA -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardPreviewData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+            <LinearLayout android:id="@+id/layoutPreviewData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:visibility="gone">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preview Data"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="14dp"/>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="আয়:"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="13sp"/>
+                    <TextView android:id="@+id/tvPreviewIncome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkAccentGreen"
+                        android:textSize="13sp"
+                        android:textStyle="bold"/>
+                    <Space android:layout_width="24dp" android:layout_height="wrap_content"/>
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="ব্যয়:"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="13sp"/>
+                    <TextView android:id="@+id/tvPreviewExpense"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkAccentRed"
+                        android:textSize="13sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="দেনা:"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="13sp"/>
+                    <TextView android:id="@+id/tvPreviewDebt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkAccentOrange"
+                        android:textSize="13sp"
+                        android:textStyle="bold"/>
+                    <Space android:layout_width="24dp" android:layout_height="wrap_content"/>
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="পাওনা:"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="13sp"/>
+                    <TextView android:id="@+id/tvPreviewReceivable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkAccentBlue"
+                        android:textSize="13sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- RESTORE BUTTON -->
+        <Button android:id="@+id/btnRestoreNow"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="16dp"
+            android:text="  Restore Backup"
+            android:textColor="@color/bkTextPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/btn_gradient_green"
+            android:stateListAnimator="@null"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

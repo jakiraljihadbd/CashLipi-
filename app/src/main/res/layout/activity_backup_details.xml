@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bkSurface">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="100dp">
+
+        <!-- HEADER -->
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_gradient_blue_purple"
+            android:orientation="vertical"
+            android:paddingTop="52dp"
+            android:paddingBottom="24dp"
+            android:paddingHorizontal="20dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Backup Details"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingStart="12dp"/>
+
+                <ImageButton android:id="@+id/btnShareRecord"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/btn_circle_translucent"
+                    android:src="@drawable/ic_share"
+                    android:tint="@android:color/white"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- HEADER INFO CARD -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardDetailHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="6dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <LinearLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView android:id="@+id/tvDetailDateTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp"/>
+
+                        <TextView android:id="@+id/tvDetailFileName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/bkTextSecondary"
+                            android:textSize="11sp"/>
+                    </LinearLayout>
+
+                    <TextView android:id="@+id/tvDetailStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" সফল"
+                        android:textColor="@color/bkAccentGreen"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/badge_success_bg"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/bkDivider"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Info rows -->
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=" Backup Type"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="12sp"/>
+                    <TextView android:id="@+id/tvDetailBackupType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=" Format"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="12sp"/>
+                    <TextView android:id="@+id/tvDetailFormat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=" Method"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="12sp"/>
+                    <TextView android:id="@+id/tvDetailMethod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=" File Size"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="12sp"/>
+                    <TextView android:id="@+id/tvDetailFileSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=" Items"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="12sp"/>
+                    <TextView android:id="@+id/tvDetailTotalItems"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- DETAIL INFO CARD -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardDetailInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- SUMMARY AMOUNTS CARD -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardDetailSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Summary"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Row 1 -->
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+
+                    <LinearLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_income_summary"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:layout_marginEnd="5dp">
+                        <LinearLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="4dp">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:src="@drawable/emoji_bar_chart" android:scaleType="centerInside"/>
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Income"
+                                android:textColor="@color/bkAccentGreen"
+                                android:textSize="11sp"/>
+                        </LinearLayout>
+                        <TextView android:id="@+id/tvDetailIncomeAmt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="৳ 0"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_expense_summary"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:layout_marginStart="5dp">
+                        <LinearLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="4dp">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:src="@drawable/emoji_bar_chart" android:scaleType="centerInside"/>
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Expense"
+                                android:textColor="@color/bkAccentRed"
+                                android:textSize="11sp"/>
+                        </LinearLayout>
+                        <TextView android:id="@+id/tvDetailExpenseAmt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="৳ 0"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Row 2 -->
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_debt_summary"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:layout_marginEnd="5dp">
+                        <LinearLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="4dp">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:src="@drawable/emoji_bar_chart" android:scaleType="centerInside"/>
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Debt"
+                                android:textColor="@color/bkAccentOrange"
+                                android:textSize="11sp"/>
+                        </LinearLayout>
+                        <TextView android:id="@+id/tvDetailDebtAmt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="৳ 0"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_receivable_summary"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:layout_marginStart="5dp">
+                        <LinearLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="4dp">
+                            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginEnd="4dp" android:src="@drawable/emoji_bar_chart" android:scaleType="centerInside"/>
+                            <TextView android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Receivable"
+                                android:textColor="@color/bkAccentBlue"
+                                android:textSize="11sp"/>
+                        </LinearLayout>
+                        <TextView android:id="@+id/tvDetailReceivableAmt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="৳ 0"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ACTION BUTTONS -->
+        <LinearLayout android:id="@+id/layoutDetailActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="8dp">
+
+            <Button android:id="@+id/btnRestoreFromThis"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:text=" Restore"
+                android:textColor="@color/bkTextPrimary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_gradient_green"
+                android:stateListAnimator="@null"/>
+
+            <Button android:id="@+id/btnShareRecord2"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="3dp"
+                android:text="↗ Share"
+                android:textColor="@color/bkTextPrimary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_gradient_primary"
+                android:stateListAnimator="@null"/>
+
+            <Button android:id="@+id/btnDeleteRecord"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text=" Delete"
+                android:textColor="@color/bkTextPrimary"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_gradient_red"
+                android:stateListAnimator="@null"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

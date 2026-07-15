@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Outer glow shadow ring -->
+    <item android:top="6dp" android:bottom="6dp" android:left="6dp" android:right="6dp">
+        <shape android:shape="ring"
+            android:innerRadiusRatio="2.4"
+            android:thicknessRatio="12"
+            android:useLevel="false">
+            <solid android:color="#40FF00CC"/>
+        </shape>
+    </item>
+    <!-- Main vivid sweep ring -->
+    <item>
+        <shape android:shape="ring"
+            android:innerRadiusRatio="2.4"
+            android:thicknessRatio="12"
+            android:useLevel="false">
+            <gradient
+                android:type="sweep"
+                android:startColor="#FF00D4FF"
+                android:centerColor="#FFBE00FF"
+                android:endColor="#FFFF0099"/>
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CashLipi ক্যাশলিপি</string>
+    <string name="app_slogan">दैनिक लेन-देन</string>
+    <string name="app_author">Jakir Al Jihad</string>
+
+    <!-- Dashboard -->
+    <string name="current_balance">वर्तमान शेष</string>
+    <string name="total_income">कुल आय</string>
+    <string name="total_expense">कुल व्यय</string>
+    <string name="total_dena">देय</string>
+    <string name="total_pabona">प्राप्य</string>
+    <string name="total_savings">बचत</string>
+    <string name="quick_actions"> त्वरित कार्य</string>
+    <string name="recent_transactions"> हाल के लेन-देन</string>
+    <string name="view_all">सभी देखें →</string>
+    <string name="see_analysis"> विवरण देखें</string>
+
+    <!-- Menu Items -->
+    <string name="menu_add_savings"> बचत जोड़ें</string>
+    <string name="menu_analysis"> विश्लेषण</string>
+    <string name="menu_calculator"> कैलकुलेटर</string>
+    <string name="menu_notes"> नोट्स</string>
+    <string name="menu_accounting"> खाता बही</string>
+    <string name="menu_ai_chat"> AI चैट</string>
+    <string name="menu_trash"> ट्रैश</string>
+    <string name="menu_backup"> बैकअप</string>
+    <string name="menu_categories"> श्रेणियाँ</string>
+    <string name="menu_about">ℹ️ के बारे में</string>
+    <string name="more">अधिक</string>
+
+    <!-- Bottom Nav -->
+    <string name="nav_home">होम</string>
+    <string name="nav_income">आय</string>
+    <string name="nav_expense">व्यय</string>
+    <string name="nav_ledger">खाता</string>
+    <string name="nav_settings">सेटिंग्स</string>
+
+    <!-- Income -->
+    <string name="add_income"> आय जोड़ें</string>
+    <string name="income_subtitle">आय स्रोत और राशि दर्ज करें</string>
+    <string name="income_source"> आय स्रोत</string>
+    <string name="income_source_hint">स्रोत चुनें या लिखें</string>
+    <string name="income_list"> आय सूची</string>
+    <string name="income_saved"> आय सहेजी गई!</string>
+    <string name="recent_income"> हालिया आय (5)</string>
+    <string name="all_income_list">सभी आय देखें →</string>
+    <string name="save_income"> आय सहेजें</string>
+    <string name="add_to_category"> श्रेणी में जोड़ें</string>
+
+    <!-- Expense -->
+    <string name="add_expense"> व्यय जोड़ें</string>
+    <string name="expense_subtitle">व्यय विवरण दर्ज करें</string>
+    <string name="expense_category"> व्यय प्रकार</string>
+    <string name="expense_category_hint">श्रेणी चुनें या लिखें</string>
+    <string name="expense_list"> व्यय सूची</string>
+    <string name="expense_saved"> व्यय सहेजा गया!</string>
+    <string name="recent_expense"> हालिया व्यय (5)</string>
+    <string name="all_expense_list">सभी व्यय देखें →</string>
+    <string name="save_expense"> व्यय सहेजें</string>
+
+    <!-- Ledger -->
+    <string name="add_ledger"> देय / प्राप्य जोड़ें</string>
+    <string name="ledger_subtitle">लेन-देन विवरण दर्ज करें</string>
+    <string name="ledger_type_dena"> देय (मुझे देना है)</string>
+    <string name="ledger_type_pabona"> प्राप्य (मुझे मिलेगा)</string>
+    <string name="ledger_person"> नाम</string>
+    <string name="ledger_person_hint">लेन-देन व्यक्ति</string>
+    <string name="ledger_category_hint">लेन-देन का कारण</string>
+    <string name="ledger_list"> खाता सूची</string>
+    <string name="ledger_saved"> लेन-देन सहेजा गया!</string>
+    <string name="recent_ledger"> हालिया लेन-देन</string>
+    <string name="all_ledger_list">सभी खाता देखें →</string>
+    <string name="save_ledger"> लेन-देन सहेजें</string>
+    <string name="mark_as_paid"> भुगतान हो गया</string>
+    <string name="mark_as_unpaid">↩️ अदत्त करें</string>
+    <string name="paid_label">भुगतान किया</string>
+    <string name="unpaid_label">अदत्त</string>
+    <string name="due_date"> नियत तारीख</string>
+
+    <!-- Savings -->
+    <string name="add_savings"> बचत करें</string>
+    <string name="savings_subtitle">बचत विवरण दर्ज करें</string>
+    <string name="savings_method"> बचत विधि</string>
+    <string name="savings_method_hint">विधि चुनें</string>
+    <string name="savings_bank_name_hint">जैसे: SBI Bank</string>
+    <string name="savings_list"> बचत सूची</string>
+    <string name="savings_saved"> बचत सहेजी गई!</string>
+    <string name="recent_savings"> हालिया बचत (5)</string>
+    <string name="all_savings_list">सभी बचत देखें →</string>
+    <string name="save_savings"> बचत सहेजें</string>
+
+    <!-- Savings Methods -->
+    <string name="method_bank"> बैंक</string>
+    <string name="method_bkash"> bKash</string>
+    <string name="method_nagad"> Nagad</string>
+    <string name="method_rocket"> Rocket</string>
+    <string name="method_cash"> नकद</string>
+    <string name="method_other"> अन्य</string>
+
+    <!-- Form Common -->
+    <string name="amount_label"> राशि (৳)</string>
+    <string name="amount_hint">राशि दर्ज करें</string>
+    <string name="date_label"> तारीख</string>
+    <string name="time_label"> समय</string>
+    <string name="note_label"> नोट (वैकल्पिक)</string>
+    <string name="note_hint">विवरण लिखें...</string>
+    <string name="date_hint">खाली छोड़ें = आज</string>
+    <string name="time_hint">खाली छोड़ें = अभी</string>
+    <string name="hint_select_or_type">सूची से चुनें या नया लिखें</string>
+    <string name="quick_amounts">त्वरित राशि</string>
+
+    <!-- Actions -->
+    <string name="save">सहेजें</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="edit"> संपादित करें</string>
+    <string name="delete"> हटाएं</string>
+    <string name="restore">↩️ पुनर्स्थापित करें</string>
+    <string name="back">← वापस जाएं</string>
+    <string name="close"> बंद करें</string>
+    <string name="confirm">पुष्टि करें</string>
+
+    <!-- Delete Dialog -->
+    <string name="delete_title">हटाएं?</string>
+    <string name="delete_message">यह आइटम ट्रैश में जाएगा। 30 दिन बाद स्वचालित रूप से हट जाएगा।</string>
+    <string name="delete_confirm">हाँ, हटाएं</string>
+    <string name="delete_cancel">नहीं, रखें</string>
+
+    <!-- Empty State -->
+    <string name="no_data">कोई डेटा नहीं</string>
+    <string name="no_income">कोई आय नहीं</string>
+    <string name="no_expense">कोई व्यय नहीं</string>
+    <string name="no_ledger">कोई खाता नहीं</string>
+    <string name="no_savings">कोई बचत नहीं</string>
+    <string name="no_notes">कोई नोट नहीं</string>
+    <string name="no_trash">ट्रैश खाली है</string>
+    <string name="add_first">पहली प्रविष्टि जोड़ें ↑</string>
+
+    <!-- Filter -->
+    <string name="filter_all">सभी</string>
+    <string name="filter_today">आज</string>
+    <string name="filter_week">सप्ताह</string>
+    <string name="filter_month">महीना</string>
+    <string name="filter_year">वर्ष</string>
+    <string name="search_hint"> खोजें...</string>
+    <string name="sort_newest">नवीनतम पहले</string>
+    <string name="sort_oldest">पुराना पहले</string>
+    <string name="sort_highest">सर्वाधिक राशि</string>
+    <string name="sort_lowest">न्यूनतम राशि</string>
+    <string name="filter_dena_only">केवल देय</string>
+    <string name="filter_pabona_only">केवल प्राप्य</string>
+    <string name="filter_paid">भुगतान किया</string>
+    <string name="filter_unpaid">अदत्त</string>
+
+    <!-- Analysis -->
+    <string name="analysis_title"> विश्लेषण</string>
+    <string name="monthly_summary">मासिक सारांश</string>
+    <string name="income_vs_expense">आय बनाम व्यय</string>
+    <string name="expense_by_category">श्रेणी अनुसार व्यय</string>
+    <string name="savings_trend">बचत प्रवृत्ति</string>
+    <string name="health_score">वित्तीय स्वास्थ्य स्कोर</string>
+    <string name="select_month">महीना चुनें</string>
+
+    <!-- Notes -->
+    <string name="notes_title"> नोट्स</string>
+    <string name="add_note">नोट जोड़ें</string>
+    <string name="note_title_hint">शीर्षक दर्ज करें...</string>
+    <string name="note_content_hint">सामग्री लिखें...</string>
+    <string name="note_saved"> नोट सहेजा गया</string>
+    <string name="pin_note"> पिन करें</string>
+    <string name="unpin_note"> अनपिन करें</string>
+    <string name="note_color">रंग चुनें</string>
+
+    <!-- Calculator -->
+    <string name="calculator_title"> कैलकुलेटर</string>
+    <string name="calc_use_as_amount">इस राशि का उपयोग करें</string>
+
+    <!-- Settings -->
+    <string name="settings_title"> सेटिंग्स</string>
+    <string name="profile_section"> प्रोफ़ाइल</string>
+    <string name="your_name">आपका नाम</string>
+    <string name="name_hint">नाम दर्ज करें...</string>
+    <string name="save_name"> नाम सहेजें</string>
+    <string name="name_saved"> नाम सहेजा गया!</string>
+    <string name="dark_mode"> डार्क मोड</string>
+    <string name="custom_keyboard">कस्टम कीबोर्ड</string>
+    <string name="custom_keyboard_desc">कैलकुलेटर कीबोर्ड (बंद = सिस्टम कीबोर्ड)</string>
+    <string name="advanced_features">⚙️ उन्नत सुविधाएं</string>
+    <string name="data_section"> डेटा प्रबंधन</string>
+    <string name="backup_restore">बैकअप और पुनर्स्थापना</string>
+    <string name="clear_all_data">सभी डेटा हटाएं</string>
+    <string name="clear_confirm_title">सभी डेटा हटाएं?</string>
+    <string name="clear_confirm_msg">यह क्रिया पूर्ववत नहीं की जा सकती! सभी आय, व्यय, खाता और बचत हट जाएगी।</string>
+    <string name="clear_yes">हाँ, सब हटाएं</string>
+    <string name="clear_no">नहीं, रखें</string>
+    <string name="app_info_section">ℹ️ ऐप जानकारी</string>
+    <string name="app_version_label">संस्करण</string>
+    <string name="app_version_value">1.0.0</string>
+    <string name="developer_label">डेवलपर</string>
+    <string name="developer_value">Jakir Al Jihad</string>
+    <string name="categories_settings"> स्थायी श्रेणियाँ</string>
+    <string name="trash_settings"> ट्रैश प्रबंधक</string>
+    <string name="about_app">ℹ️ ऐप के बारे में</string>
+    <string name="ai_chat_settings"> AI सहायक</string>
+
+    <!-- Backup -->
+    <string name="backup_title"> बैकअप</string>
+    <string name="export_json"> JSON बैकअप बनाएं</string>
+    <string name="import_json"> JSON से पुनर्स्थापित करें</string>
+    <string name="backup_success"> बैकअप सफल!</string>
+    <string name="restore_success"> पुनर्स्थापना सफल!</string>
+    <string name="backup_error"> बैकअप विफल</string>
+    <string name="select_file">फ़ाइल चुनें</string>
+
+    <!-- Trash -->
+    <string name="trash_title"> ट्रैश प्रबंधक</string>
+    <string name="empty_trash">ट्रैश खाली करें</string>
+    <string name="permanent_delete">स्थायी रूप से हटाएं</string>
+    <string name="trash_info">आइटम 30 दिन बाद स्वचालित रूप से हट जाएंगे</string>
+    <string name="empty_trash_confirm">सभी ट्रैश आइटम स्थायी रूप से हटाएं?</string>
+
+    <!-- Categories -->
+    <string name="categories_title"> स्थायी श्रेणियाँ</string>
+    <string name="income_categories"> आय श्रेणियाँ</string>
+    <string name="expense_categories"> व्यय श्रेणियाँ</string>
+    <string name="add_category">जोड़ें</string>
+    <string name="new_category_hint">नई श्रेणी लिखें...</string>
+    <string name="category_added"> श्रेणी जोड़ी गई</string>
+    <string name="category_deleted"> श्रेणी हटाई गई</string>
+
+    <!-- AI Chat -->
+    <string name="ai_chat_title"> AI सहायक</string>
+    <string name="ai_hint">अपना प्रश्न लिखें...</string>
+    <string name="ai_send">भेजें</string>
+    <string name="ai_thinking">सोच रहा है...</string>
+    <string name="ai_error"> उत्तर प्राप्त नहीं हुआ</string>
+    <string name="ai_no_internet">इंटरनेट कनेक्शन नहीं है</string>
+
+    <!-- Accounting -->
+    <string name="accounting_title"> खाता बही</string>
+    <string name="net_position">नेट स्थिति</string>
+
+    <!-- About -->
+    <string name="about_title">ℹ️ CashLipi ক্যাশলিপি के बारे में</string>
+    <string name="about_desc">CashLipi ক্যাশলিপি एक संपूर्ण व्यक्तिगत वित्त ट्रैकिंग ऐप है। आय, व्यय, खाता और बचत आसानी से ट्रैक करें। पूरी तरह ऑफलाइन — आपका डेटा केवल आपके फोन पर।</string>
+    <string name="developer_contact"> 01300168630</string>
+
+    <!-- Validation -->
+    <string name="err_amount_empty">राशि दर्ज करें</string>
+    <string name="err_amount_invalid">वैध राशि दर्ज करें</string>
+    <string name="err_source_empty">आय स्रोत दर्ज करें</string>
+    <string name="err_category_empty">व्यय प्रकार दर्ज करें</string>
+    <string name="err_person_empty">नाम दर्ज करें</string>
+    <string name="err_method_empty">विधि चुनें</string>
+    <string name="err_title_empty">शीर्षक दर्ज करें</string>
+    <string name="err_content_empty">सामग्री दर्ज करें</string>
+    <string name="err_generic">कुछ गलत हो गया। पुनः प्रयास करें।</string>
+
+    <!-- Greetings -->
+    <string name="greeting_morning">सुप्रभात </string>
+    <string name="greeting_noon">शुभ दोपहर </string>
+    <string name="greeting_evening">शुभ संध्या </string>
+    <string name="greeting_night">शुभ रात्रि </string>
+
+    <!-- Health Score Labels -->
+    <string name="health_excellent">उत्कृष्ट वित्तीय स्वास्थ्य! </string>
+    <string name="health_good">अच्छी स्थिति </string>
+    <string name="health_average">सुधार की गुंजाइश है </string>
+    <string name="health_poor">तत्काल कार्रवाई आवश्यक </string>
+
+    <!-- Tutorial / Splash -->
+    <string name="welcome_title">स्वागत है!</string>
+    <string name="welcome_subtitle">CashLipi ক্যাশলিপি — Jakir Al Jihad</string>
+    <string name="offline_badge"> ऑफलाइन</string>
+    <string name="secure_badge"> सुरक्षित</string>
+    <string name="fast_badge"> तेज़</string>
+    <string name="bangla_badge">🇧🇩 बांग्ला</string>
+    <string name="get_started"> शुरू करें</string>
+
+    <!-- Summary Labels -->
+    <string name="taka_sign">৳</string>
+    <string name="income_icon"></string>
+    <string name="expense_icon"></string>
+    <string name="dena_icon"></string>
+    <string name="pabona_icon"></string>
+    <string name="savings_icon"></string>
+
+    <!-- Language -->
+    <string name="language_section">भाषा</string>
+    <string name="select_language">ऐप भाषा</string>
+    <string name="lang_bangla">বাংলা</string>
+    <string name="lang_english">English</string>
+    <string name="lang_hindi">हिन्दी</string>
+    <string name="lang_arabic">عربي</string>
+    <string name="language_changed">भाषा बदली गई। पुनः आरंभ हो रहा है…</string>
+</resources>

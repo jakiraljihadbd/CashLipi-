@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    CashLipi — Dashboard container (UI/Navigation upgrade)
+    ভেতরে থাকে: (১) কমপ্যাক্ট ব্র্যান্ড হেডার + টাইটেল-সাইকেল অ্যানিমেশন
+               (২) ৭-আইকন টপ ন্যাভ বার (Facebook Lite-স্টাইল লেআউট প্যাটার্ন)
+               (৩) ViewPager2 — ৭টি Fragment পেজ (সোয়াইপ + ট্যাপ নেভিগেশন)
+    হেডার ও নেভ বার একসাথে একটাই ব্লক — মাঝে কোনো বর্ডার/শ্যাডো নেই।
+    ডিভাইডার শুধু নেভ বারের একদম নিচে (bg_bottom_nav.xml-এর গ্লো-লাইন প্যাটার্ন পুনর্ব্যবহার করা)।
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bgColor">
+
+    <!-- ══════════════════════════════════════════════════════════
+         TOP BLOCK — হেডার + ৭-আইকন নেভ বার (একটাই ভিজুয়াল ব্লক)
+    ══════════════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/topHeaderBg">
+
+        <!-- Compact brand header — TextSwitcher টাইটেল-সাইকেল -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/top_header_height"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
+
+            <TextSwitcher
+                android:id="@+id/headerTitleSwitcher"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inAnimation="@anim/slide_in_right"
+                android:outAnimation="@anim/slide_out_left" />
+        </LinearLayout>
+
+        <!-- ৭-আইকন টপ নেভ বার -->
+        <LinearLayout
+            android:id="@+id/topNavBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/top_nav_bar_height"
+            android:orientation="horizontal">
+
+            <!-- ১. হোম -->
+            <LinearLayout android:id="@+id/navHome" style="@style/TopNavItemStyle">
+                <ImageView android:id="@+id/iconNavHome" style="@style/TopNavIconStyle"
+                    android:src="@drawable/ic_nav_home"/>
+                <View android:id="@+id/indicatorNavHome" style="@style/TopNavIndicatorStyle"/>
+            </LinearLayout>
+
+            <!-- ২. আয়-ব্যয় -->
+            <LinearLayout android:id="@+id/navIncomeExpense" style="@style/TopNavItemStyle">
+                <ImageView android:id="@+id/iconNavIncomeExpense" style="@style/TopNavIconStyle"
+                    android:src="@drawable/ic_nav_income_expense"/>
+                <View android:id="@+id/indicatorNavIncomeExpense" style="@style/TopNavIndicatorStyle"/>
+            </LinearLayout>
+
+            <!-- ৩. দেনা-পাওনা -->
+            <LinearLayout android:id="@+id/navDenaPawna" style="@style/TopNavItemStyle">
+                <ImageView android:id="@+id/iconNavDenaPawna" style="@style/TopNavIconStyle"
+                    android:src="@drawable/ic_nav_dena_pawna"/>
+                <View android:id="@+id/indicatorNavDenaPawna" style="@style/TopNavIndicatorStyle"/>
+            </LinearLayout>
+
+            <!-- ৪. সঞ্চয় -->
+            <LinearLayout android:id="@+id/navSavings" style="@style/TopNavItemStyle">
+                <ImageView android:id="@+id/iconNavSavings" style="@style/TopNavIconStyle"
+                    android:src="@drawable/ic_nav_savings"/>
+                <View android:id="@+id/indicatorNavSavings" style="@style/TopNavIndicatorStyle"/>
+            </LinearLayout>
+
+            <!-- ৫. বাকির খাতা -->
+            <LinearLayout android:id="@+id/navBakirKhata" style="@style/TopNavItemStyle">
+                <ImageView android:id="@+id/iconNavBakirKhata" style="@style/TopNavIconStyle"
+                    android:src="@drawable/ic_nav_bakir_khata"/>
+                <View android:id="@+id/indicatorNavBakirKhata" style="@style/TopNavIndicatorStyle"/>
+            </LinearLayout>
+
+            <!-- ৬. বাজেট -->
+            <LinearLayout android:id="@+id/navBudget" style="@style/TopNavItemStyle">
+                <ImageView android:id="@+id/iconNavBudget" style="@style/TopNavIconStyle"
+                    android:src="@drawable/ic_nav_budget"/>
+                <View android:id="@+id/indicatorNavBudget" style="@style/TopNavIndicatorStyle"/>
+            </LinearLayout>
+
+            <!-- ৭. সেটিং -->
+            <LinearLayout android:id="@+id/navSettings" style="@style/TopNavItemStyle">
+                <ImageView android:id="@+id/iconNavSettings" style="@style/TopNavIconStyle"
+                    android:src="@drawable/ic_nav_settings"/>
+                <View android:id="@+id/indicatorNavSettings" style="@style/TopNavIndicatorStyle"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- টপ ব্লকের একদম নিচে ডিভাইডার — bg_bottom_nav.xml-এর গ্লো-বর্ডার প্যাটার্ন পুনর্ব্যবহার -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@drawable/dash_accent_line"/>
+    </LinearLayout>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ৭টি পেজ — সোয়াইপ + ট্যাপ নেভিগেশন (ViewPager2 + FragmentStateAdapter)
+    ══════════════════════════════════════════════════════════ -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>

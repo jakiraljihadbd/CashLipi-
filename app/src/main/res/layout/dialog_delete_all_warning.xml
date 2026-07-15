@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/cardBg"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="28dp"
+    android:paddingBottom="8dp"
+    android:gravity="center_horizontal">
+
+    <!-- আইকন -->
+    <FrameLayout
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_danger_icon_circle">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_trash_bin"
+            android:contentDescription="@null"/>
+    </FrameLayout>
+
+    <!-- টাইটেল -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="সব ডেটা মুছে ফেলবেন?"
+        android:textColor="@color/textPrimary"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <!-- ব্যাখ্যা -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="আপনার সব ইনকাম, খরচ, হিসাব (দেনা-পাওনা), সঞ্চয় ও নোট স্থায়ীভাবে মুছে যাবে।"
+        android:textColor="@color/textSecondary"
+        android:textSize="14sp"
+        android:lineSpacingExtra="3dp"
+        android:gravity="center"/>
+
+    <!-- সতর্কবার্তা -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="⚠️ এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না"
+        android:textColor="@color/bkDanger"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+</LinearLayout>

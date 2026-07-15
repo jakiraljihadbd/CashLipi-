@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bkSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="100dp">
+
+        <!-- ── HEADER ──────────────────────────────────────────────────────── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_gradient_telegram"
+            android:orientation="vertical"
+            android:paddingTop="52dp"
+            android:paddingBottom="28dp"
+            android:paddingHorizontal="20dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <TextView android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Telegram Backup"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingStart="12dp"/>
+
+                <ImageView android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_telegram_logo"
+                    android:alpha="0.9"/>
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Telegram Bot ব্যবহার করে স্বয়ংক্রিয় ব্যাকআপ পাঠান"
+                android:textColor="@color/bkTextSecondary"
+                android:textSize="13sp"
+                android:paddingStart="52dp"/>
+        </LinearLayout>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  CONNECTION STATUS (hidden by default)                          -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardConnectionStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:cardCornerRadius="14dp"
+            app:cardBackgroundColor="@color/bkCardInner"
+            app:cardElevation="2dp">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="14dp">
+                <TextView android:id="@+id/tvConnectionStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/bkAccentGreen"
+                    android:textSize="13sp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  TELEGRAM CONFIGURATION                                          -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardTelegramConfig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Telegram Configuration"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Bot Token -->
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bot Token"
+                    android:textColor="@color/bkTextSecondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="6dp"/>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:background="@drawable/input_dark_bg"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="14dp"
+                    android:layout_marginBottom="14dp">
+
+                    <EditText android:id="@+id/etBotToken"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="1234567890:ABCDefGhIJKlmNopQRStuVWXyz"
+                        android:textColorHint="@color/textSecondary"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="13sp"
+                        android:inputType="textPassword"
+                        android:singleLine="true"/>
+
+                    <ImageButton android:id="@+id/btnToggleBotToken"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@null"
+                        android:src="@drawable/ic_eye"
+                        android:tint="@color/bkTextSecondary"/>
+                </LinearLayout>
+
+                <!-- Chat ID -->
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chat ID"
+                    android:textColor="@color/bkTextSecondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="6dp"/>
+
+                <EditText android:id="@+id/etChatId"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/input_dark_bg"
+                    android:hint="-1001234567890"
+                    android:textColorHint="@color/textSecondary"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="13sp"
+                    android:inputType="numberSigned"
+                    android:paddingHorizontal="14dp"
+                    android:singleLine="true"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Test Connection Button -->
+                <Button android:id="@+id/btnTestConnection"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="  Test Connection"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/btn_gradient_telegram"
+                    android:stateListAnimator="@null"/>
+
+                <!-- Help text -->
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/card_info_bg"
+                    android:padding="12dp"
+                    android:layout_marginTop="14dp">
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" Bot Token পেতে Telegram-এ @BotFather-কে মেসেজ করুন এবং /newbot কমান্ড দিন।"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="11sp"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" Chat ID পেতে @userinfobot-এ /start পাঠান।"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  TOGGLES                                                         -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardTelegramToggles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <!-- Enable Telegram Backup -->
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+                    <LinearLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Enable Telegram Backup"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Telegram-এ ব্যাকআপ পাঠানো চালু করুন"
+                            android:textColor="@color/bkTextSecondary"
+                            android:textSize="11sp"/>
+                    </LinearLayout>
+                    <Switch android:id="@+id/switchTelegramEnabled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="@color/bkAccentTelegram"
+                        android:trackTint="@color/bkCardInner"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/bkDivider"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Auto Backup Toggle -->
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <LinearLayout android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Auto Backup"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="ডেটা যোগ/পরিবর্তনে স্বয়ংক্রিয় ব্যাকআপ"
+                            android:textColor="@color/bkTextSecondary"
+                            android:textSize="11sp"/>
+                    </LinearLayout>
+                    <Switch android:id="@+id/switchTelegramAutoBackup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="@color/bkAccentTelegram"
+                        android:trackTint="@color/bkCardInner"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  PREFERRED FORMAT                                                -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardTelegramFormat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="18dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Preferred Format"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ব্যাকআপ ফাইলের ধরন"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="11sp"/>
+                </LinearLayout>
+
+                <Spinner android:id="@+id/spinnerTelegramFormat"
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/spinner_dark_bg"
+                    android:popupBackground="@color/bkCardInner"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <!--  INFO BOX                                                         -->
+        <!-- ════════════════════════════════════════════════════════════════ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardTelegramInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/bkCardInner"
+            app:cardElevation="0dp">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="14dp">
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ℹ️"
+                    android:textSize="18sp"
+                    android:layout_marginEnd="10dp"/>
+                <TextView android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ব্যাকআপগুলো আপনার Telegram chat-এ স্বয়ংক্রিয়ভাবে পাঠানো হবে।"
+                    android:textColor="@color/bkTextSecondary"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ── SAVE BUTTON ──────────────────────────────────────────────── -->
+        <Button android:id="@+id/btnSaveSettings"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="  Save Settings"
+            android:textColor="@color/bkTextPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/btn_gradient_primary"
+            android:stateListAnimator="@null"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

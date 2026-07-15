@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_height="match_parent"
+     android:layout_width="match_parent"
+     android:background="@color/bgColor"
+     android:orientation="vertical">
+
+    <LinearLayout
+         android:layout_height="wrap_content"
+         android:layout_width="match_parent"
+         android:background="@drawable/bg_header_generic"
+         android:gravity="center_vertical"
+         android:orientation="horizontal"
+         android:paddingBottom="14dp"
+         android:paddingHorizontal="16dp"
+         android:paddingTop="12dp">
+
+        <TextView
+             android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:textSize="18sp"
+             android:textColor="@color/white"
+             android:text="ℹ️ সম্পর্কে"
+             android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:overScrollMode="never">
+
+        <LinearLayout
+             android:layout_height="wrap_content"
+             android:layout_width="match_parent"
+             android:padding="16dp"
+             android:orientation="vertical">
+
+            <!-- ===== App hero ===== -->
+            <LinearLayout
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginTop="4dp"
+                 android:layout_marginBottom="18dp"
+                 android:gravity="center"
+                 android:orientation="vertical">
+
+                <TextView
+                     android:layout_height="84dp"
+                     android:layout_width="84dp"
+                     android:layout_marginBottom="14dp"
+                     android:src="@drawable/emoji_money_bag"
+                     android:scaleType="centerInside"
+                     android:background="@drawable/bg_icon_circle_income"
+                     android:elevation="4dp" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:layout_marginBottom="6dp"
+                     android:textSize="23sp"
+                     android:textColor="@color/textPrimary"
+                     android:text="CashLipi ক্যাশলিপি"
+                     android:textStyle="bold" />
+
+                <TextView
+                     android:layout_height="wrap_content"
+                     android:layout_width="wrap_content"
+                     android:textSize="12sp"
+                     android:textColor="@color/colorPrimary"
+                     android:background="@drawable/splash_version_badge_light"
+                     android:paddingHorizontal="14dp"
+                     android:paddingVertical="4dp"
+                     android:text="সংস্করণ 1.0.0" />
+
+            </LinearLayout>
+
+            <!-- ===== App সম্পর্কে card ===== -->
+            <androidx.cardview.widget.CardView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="14dp"
+                 app:cardElevation="2dp"
+                 app:cardBackgroundColor="@color/cardBg"
+                 app:cardCornerRadius="18dp">
+
+                <LinearLayout
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:padding="18dp"
+                     android:orientation="vertical">
+
+                    <LinearLayout
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:orientation="horizontal"
+                         android:gravity="center_vertical"
+                         android:layout_marginBottom="10dp">
+
+                        <TextView
+                             android:layout_height="26dp"
+                             android:layout_width="26dp"
+                             android:layout_marginEnd="8dp"
+                             android:src="@drawable/emoji_bulb"
+                             android:scaleType="centerInside" />
+
+                        <TextView
+                             android:layout_height="wrap_content"
+                             android:layout_width="wrap_content"
+                             android:textSize="15sp"
+                             android:textColor="@color/textPrimary"
+                             android:text="অ্যাপ সম্পর্কে"
+                             android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <TextView
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:textSize="13.5sp"
+                         android:textColor="@color/textSecondary"
+                         android:lineSpacingExtra="5dp"
+                         android:text="CashLipi ক্যাশলিপি হলো একটি সম্পূর্ণ বাংলা ব্যক্তিগত হিসাব রক্ষার অ্যাপ। আয়, ব্যয়, দেনা-পাওনা এবং সঞ্চয় সহজেই ট্র্যাক করুন — সম্পূর্ণ অফলাইন, আপনার ডাটা শুধু আপনার ফোনে।" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- ===== ডেভেলপার তথ্য card ===== -->
+            <com.google.android.material.card.MaterialCardView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:layout_marginBottom="16dp"
+                 app:cardElevation="2dp"
+                 app:strokeWidth="1dp"
+                 app:strokeColor="@color/borderColor"
+                 app:cardBackgroundColor="@color/cardBg"
+                 app:cardCornerRadius="18dp">
+
+                <LinearLayout
+                     android:layout_height="wrap_content"
+                     android:layout_width="match_parent"
+                     android:orientation="vertical">
+
+                    <!-- Top accent strip -->
+                    <View
+                         android:layout_height="4dp"
+                         android:layout_width="match_parent"
+                         android:background="@drawable/bg_header_generic" />
+
+                    <LinearLayout
+                         android:layout_height="wrap_content"
+                         android:layout_width="match_parent"
+                         android:padding="18dp"
+                         android:orientation="vertical">
+
+                        <TextView
+                             android:layout_height="wrap_content"
+                             android:layout_width="wrap_content"
+                             android:layout_marginBottom="14dp"
+                             android:textSize="15sp"
+                             android:textColor="@color/textPrimary"
+                             android:text="👨‍💻 ডেভেলপার তথ্য"
+                             android:textStyle="bold" />
+
+                        <!-- Photo + name row -->
+                        <LinearLayout
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:orientation="horizontal"
+                             android:gravity="center_vertical"
+                             android:layout_marginBottom="16dp">
+
+                            <com.google.android.material.card.MaterialCardView
+                                 android:layout_height="64dp"
+                                 android:layout_width="64dp"
+                                 android:layout_marginEnd="14dp"
+                                 app:cardCornerRadius="32dp"
+                                 app:strokeWidth="2dp"
+                                 app:strokeColor="@color/colorPrimary"
+                                 app:cardElevation="0dp">
+
+                                <ImageView
+                                     android:layout_height="match_parent"
+                                     android:layout_width="match_parent"
+                                     android:src="@drawable/dev_photo"
+                                     android:scaleType="centerCrop"
+                                     android:contentDescription="Developer photo" />
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <LinearLayout
+                                 android:layout_height="wrap_content"
+                                 android:layout_width="0dp"
+                                 android:layout_weight="1"
+                                 android:orientation="vertical">
+
+                                <TextView
+                                     android:id="@+id/developerNameText"
+                                     android:layout_height="wrap_content"
+                                     android:layout_width="wrap_content"
+                                     android:textSize="16sp"
+                                     android:textColor="@color/colorPrimary"
+                                     android:text="Jakir Al Jihad"
+                                     android:textStyle="bold"
+                                     android:background="?attr/selectableItemBackground"
+                                     android:paddingVertical="2dp"
+                                     android:clickable="true"
+                                     android:focusable="true" />
+
+                                <TextView
+                                     android:layout_height="wrap_content"
+                                     android:layout_width="wrap_content"
+                                     android:layout_marginTop="2dp"
+                                     android:textSize="12.5sp"
+                                     android:textColor="@color/textHint"
+                                     android:text="Web &amp; App Developer" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <View
+                             android:layout_height="1dp"
+                             android:layout_width="match_parent"
+                             android:background="@color/dividerColor"
+                             android:layout_marginBottom="14dp" />
+
+                        <!-- Phone row -->
+                        <LinearLayout
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:orientation="horizontal"
+                             android:gravity="center_vertical"
+                             android:layout_marginBottom="12dp">
+
+                            <TextView
+                                 android:layout_height="20dp"
+                                 android:layout_width="20dp"
+                                 android:layout_marginEnd="10dp"
+                                 android:src="@drawable/emoji_telephone"
+                                 android:scaleType="centerInside" />
+
+                            <TextView
+                                 android:layout_height="wrap_content"
+                                 android:layout_width="wrap_content"
+                                 android:textSize="13.5sp"
+                                 android:textColor="@color/textSecondary"
+                                 android:text="01300168630" />
+
+                        </LinearLayout>
+
+                        <!-- App build info row -->
+                        <LinearLayout
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:orientation="horizontal"
+                             android:gravity="center_vertical"
+                             android:layout_marginBottom="16dp">
+
+                            <TextView
+                                 android:layout_height="20dp"
+                                 android:layout_width="20dp"
+                                 android:layout_marginEnd="10dp"
+                                 android:src="@drawable/emoji_laptop"
+                                 android:scaleType="centerInside" />
+
+                            <TextView
+                                 android:layout_height="wrap_content"
+                                 android:layout_width="wrap_content"
+                                 android:textSize="13.5sp"
+                                 android:textColor="@color/textSecondary"
+                                 android:text="Build: Android Code Studio" />
+
+                        </LinearLayout>
+
+                        <!-- Google search link button -->
+                        <LinearLayout
+                             android:id="@+id/developerSearchRow"
+                             android:layout_height="48dp"
+                             android:layout_width="match_parent"
+                             android:orientation="horizontal"
+                             android:gravity="center_vertical"
+                             android:background="@drawable/bg_developer_search_pill"
+                             android:paddingHorizontal="14dp"
+                             android:clickable="true"
+                             android:focusable="true">
+
+                            <TextView
+                                 android:layout_height="18dp"
+                                 android:layout_width="18dp"
+                                 android:layout_marginEnd="10dp"
+                                 android:src="@drawable/emoji_magnifier"
+                                 android:scaleType="centerInside" />
+
+                            <TextView
+                                 android:layout_height="wrap_content"
+                                 android:layout_width="0dp"
+                                 android:layout_weight="1"
+                                 android:textSize="13sp"
+                                 android:textColor="@color/colorPrimary"
+                                 android:text="Google-এ Jakir Al Jihad সম্পর্কে জানুন"
+                                 android:textStyle="bold" />
+
+                            <TextView
+                                 android:layout_height="wrap_content"
+                                 android:layout_width="wrap_content"
+                                 android:textSize="16sp"
+                                 android:textColor="@color/colorPrimary"
+                                 android:text="→" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent"
+                 android:gravity="center"
+                 android:textSize="11.5sp"
+                 android:textColor="@color/textHint"
+                 android:layout_marginBottom="8dp"
+                 android:text="© 2026 CashLipi ক্যাশলিপি — সর্বস্বত্ব সংরক্ষিত" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

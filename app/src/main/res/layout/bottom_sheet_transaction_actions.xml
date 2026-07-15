@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet"
+    android:paddingTop="10dp"
+    android:paddingBottom="20dp">
+
+    <!-- Drag handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginBottom="14dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_drag_handle"/>
+
+    <!-- Header: icon + title + amount -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="14dp">
+
+        <TextView
+            android:id="@+id/sheetIcon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:background="@drawable/bg_icon_circle_income"
+            android:layout_marginEnd="12dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sheetTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/primaryTextDark"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/sheetSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/secondaryTextDark"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/sheetAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/amountIncome"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor"
+        android:layout_marginBottom="6dp"/>
+
+    <!-- Actions -->
+    <LinearLayout
+        android:id="@+id/actionEdit"
+        style="@style/SheetActionRow">
+        <ImageView style="@style/SheetActionIcon" android:src="@drawable/emoji_pencil" android:scaleType="centerInside"/>
+        <TextView style="@style/SheetActionLabel" android:text="সম্পাদনা"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionDetails"
+        style="@style/SheetActionRow">
+        <ImageView style="@style/SheetActionIcon" android:src="@drawable/emoji_magnifier" android:scaleType="centerInside"/>
+        <TextView style="@style/SheetActionLabel" android:text="বিস্তারিত"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionShare"
+        style="@style/SheetActionRow">
+        <ImageView style="@style/SheetActionIcon" android:src="@drawable/emoji_outbox_tray" android:scaleType="centerInside"/>
+        <TextView style="@style/SheetActionLabel" android:text="শেয়ার করুন"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionTogglePaid"
+        style="@style/SheetActionRow"
+        android:visibility="gone">
+        <ImageView style="@style/SheetActionIcon" android:src="@drawable/emoji_check_mark_green" android:scaleType="centerInside"/>
+        <TextView android:id="@+id/togglePaidLabel" style="@style/SheetActionLabel" android:text="পরিশোধ করুন"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionDelete"
+        style="@style/SheetActionRow">
+        <ImageView style="@style/SheetActionIcon" android:src="@drawable/emoji_trash" android:scaleType="centerInside"/>
+        <TextView style="@style/SheetActionLabel" android:text="মুছুন"
+            android:textColor="@color/amountExpense"/>
+    </LinearLayout>
+
+</LinearLayout>

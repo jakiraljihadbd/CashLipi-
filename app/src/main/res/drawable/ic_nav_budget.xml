@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- বাজেট — wallet with flap + coin badge. -->
+<vector xmlns:android="http://schemas.android.com/res/android"
+    android:width="26dp" android:height="26dp"
+    android:viewportWidth="160" android:viewportHeight="160">
+
+    <!-- wallet body -->
+    <path
+        android:pathData="M52,52 H108 A12,12 0 0 1 120,64 V96 A12,12 0 0 1 108,108 H52 A12,12 0 0 1 40,96 V64 A12,12 0 0 1 52,52 Z"
+        android:strokeColor="#FF000000" android:strokeWidth="4" />
+
+    <!-- flap -->
+    <path
+        android:pathData="M40,66 V56 Q40,52 44,52 H92 Q96,52 96,56 V66"
+        android:strokeColor="#FF000000" android:strokeWidth="4"
+        android:strokeLineJoin="round" />
+
+    <!-- coin badge -->
+    <path
+        android:pathData="M100,74 H114 A6,6 0 0 1 120,80 V90 A6,6 0 0 1 114,96 H100 A6,6 0 0 1 94,90 V80 A6,6 0 0 1 100,74 Z"
+        android:fillColor="#FF000000" />
+</vector>

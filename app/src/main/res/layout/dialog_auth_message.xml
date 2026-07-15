@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@drawable/bg_dialog_card"
+    android:paddingHorizontal="26dp"
+    android:paddingTop="30dp"
+    android:paddingBottom="22dp">
+
+    <FrameLayout
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp">
+
+        <View
+            android:id="@+id/iconCircleBg"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_dialog_icon_circle"/>
+
+        <ImageView
+            android:id="@+id/ivDialogIcon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_dialog_warning"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"
+        tools:text="Password ভুল হয়েছে"/>
+
+    <TextView
+        android:id="@+id/tvDialogMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="#C7D2FE"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:layout_marginBottom="24dp"
+        tools:text="আপনার Email/Phone অথবা Password সঠিক নয়। আবার চেষ্টা করুন।"/>
+
+    <Button
+        android:id="@+id/btnDialogPositive"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="ঠিক আছে"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:backgroundTint="#6366F1"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:id="@+id/btnDialogSecondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="সাইন আপ করুন"
+        android:textColor="#A5B4FC"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+</LinearLayout>

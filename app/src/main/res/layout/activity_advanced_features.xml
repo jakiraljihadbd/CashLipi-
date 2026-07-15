@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bgColor">
+
+    <!-- ══════ Header (Back button removed — title only) ══════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_generic"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="20dp"
+        android:paddingHorizontal="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⚙️ অ্যাডভান্স সেটিংস"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <!-- ══════════════════════════════════════════════════ -->
+            <!--  Section 1 : Keyboard  (Single unified card)        -->
+            <!-- ══════════════════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Header row (clickable toggle) -->
+                    <LinearLayout
+                        android:id="@+id/headerKeyboard"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+
+                        <FrameLayout
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="14dp">
+                            <View
+                                android:layout_width="38dp"
+                                android:layout_height="38dp"
+                                android:background="@drawable/bg_icon_circle_keyboard"/>
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_keyboard_custom"
+                                android:scaleType="fitCenter"
+                                android:contentDescription="keyboard"/>
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="কীবোর্ড সেটিংস"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+
+                        <TextView
+                            android:id="@+id/arrowKeyboard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="❯"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorPrimary"/>
+                    </LinearLayout>
+
+                    <!-- Collapsible content -->
+                    <LinearLayout
+                        android:id="@+id/keyboardContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/dividerColor"
+                            android:layout_marginHorizontal="16dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="16dp"
+                            android:paddingTop="14dp"
+                            android:paddingBottom="16dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="কাস্টম কীবোর্ড"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/textPrimary"/>
+                                    <TextView
+                                        android:id="@+id/tvKeyboardStatus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="OFF — System Keyboard"
+                                        android:textSize="12sp"
+                                        android:textColor="@color/textSecondary"
+                                        android:paddingTop="3dp"/>
+                                </LinearLayout>
+
+                                <Switch
+                                    android:id="@+id/switchCustomKeyboard"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:thumbTint="@color/colorPrimary"
+                                    android:trackTint="@color/colorPrimaryLight"/>
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/dividerColor"
+                                android:layout_marginVertical="12dp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="চালু থাকলে আয়/ব্যয় যোগ করার সময় ক্যালকুলেটর কীবোর্ড আসবে। বন্ধ করলে ফোনের সাধারণ নম্বর কীবোর্ড ব্যবহার হবে।"
+                                android:textSize="12.5sp"
+                                android:textColor="@color/textSecondary"
+                                android:lineSpacingExtra="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ══════════════════════════════════════════════════ -->
+            <!--  Section 2 : Custom Font  (Single unified card)     -->
+            <!-- ══════════════════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Header row (clickable toggle) -->
+                    <LinearLayout
+                        android:id="@+id/headerFont"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+
+                        <FrameLayout
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="14dp">
+                            <View
+                                android:layout_width="38dp"
+                                android:layout_height="38dp"
+                                android:background="@drawable/bg_icon_circle_font"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="🔤"
+                                android:textSize="18sp"/>
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="কাস্টম ফন্ট"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+
+                        <TextView
+                            android:id="@+id/arrowFont"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="❯"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorPrimary"/>
+                    </LinearLayout>
+
+                    <!-- Collapsible content -->
+                    <LinearLayout
+                        android:id="@+id/fontContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/dividerColor"
+                            android:layout_marginHorizontal="16dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="16dp"
+                            android:paddingTop="14dp"
+                            android:paddingBottom="16dp">
+
+                            <TextView
+                                android:id="@+id/tvCurrentFont"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="বর্তমান ফন্ট: System Default"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/textPrimary"
+                                android:paddingBottom="12dp"/>
+
+                            <!-- Font preview card -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="14dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="@color/bgColor">
+
+                                <TextView
+                                    android:id="@+id/tvFontPreview"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="আমার হিসাব ১২৩\nআয় ব্যয় সঞ্চয়\nCashLipi ক্যাশলিপি"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/textPrimary"
+                                    android:gravity="center"
+                                    android:padding="18dp"
+                                    android:lineSpacingExtra="4dp"/>
+                            </androidx.cardview.widget.CardView>
+
+                            <!-- Buttons row -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center">
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginEnd="6dp"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="@color/colorPrimary">
+
+                                    <TextView
+                                        android:id="@+id/btnPickFont"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="48dp"
+                                        android:gravity="center"
+                                        android:text="📂 ফন্ট Import"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/white"
+                                        android:background="?attr/selectableItemBackground"/>
+                                </androidx.cardview.widget.CardView>
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="6dp"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="0dp"
+                                    app:cardBackgroundColor="@color/expenseLight">
+
+                                    <TextView
+                                        android:id="@+id/btnResetFont"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="48dp"
+                                        android:gravity="center"
+                                        android:text="🔄 Default"
+                                        android:textSize="13sp"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/expenseColor"
+                                        android:background="?attr/selectableItemBackground"/>
+                                </androidx.cardview.widget.CardView>
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/dividerColor"
+                                android:layout_marginVertical="12dp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="ℹ️ ফোন থেকে যেকোনো .ttf বা .otf ফন্ট ফাইল import করুন। ফন্ট app এর ভেতরে save হবে। পরবর্তী স্ক্রিন থেকে কার্যকর হবে।"
+                                android:textSize="11.5sp"
+                                android:textColor="@color/textSecondary"
+                                android:lineSpacingExtra="4dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ══════════════════════════════════════════════════ -->
+            <!--  Section 3 : Language  (Single unified card)        -->
+            <!-- ══════════════════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Header row (clickable toggle) -->
+                    <LinearLayout
+                        android:id="@+id/headerLanguage"
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+
+                        <FrameLayout
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="14dp">
+                            <View
+                                android:layout_width="38dp"
+                                android:layout_height="38dp"
+                                android:background="@drawable/bg_icon_circle_language"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="🌍"
+                                android:textSize="18sp"/>
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/language_section"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+
+                        <TextView
+                            android:id="@+id/arrowLanguage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="❯"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorPrimary"/>
+                    </LinearLayout>
+
+                    <!-- Collapsible content -->
+                    <LinearLayout
+                        android:id="@+id/languageContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/dividerColor"
+                            android:layout_marginHorizontal="16dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="16dp"
+                            android:paddingTop="14dp"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/select_language"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/textPrimary"
+                                android:paddingBottom="10dp"/>
+
+                            <RadioGroup
+                                android:id="@+id/rgLanguage"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <RadioButton
+                                    android:id="@+id/rbBangla"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingStart="8dp"
+                                    android:text="🇧🇩  বাংলা"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/textPrimary"
+                                    android:buttonTint="@color/colorPrimary"/>
+
+                                <RadioButton
+                                    android:id="@+id/rbEnglish"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingStart="8dp"
+                                    android:text="🇬🇧  English"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/textPrimary"
+                                    android:buttonTint="@color/colorPrimary"/>
+
+                                <RadioButton
+                                    android:id="@+id/rbHindi"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingStart="8dp"
+                                    android:text="🇮🇳  हिन्दी"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/textPrimary"
+                                    android:buttonTint="@color/colorPrimary"/>
+
+                                <RadioButton
+                                    android:id="@+id/rbArabic"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingStart="8dp"
+                                    android:text="🇸🇦  عربي"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/textPrimary"
+                                    android:buttonTint="@color/colorPrimary"/>
+
+                            </RadioGroup>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

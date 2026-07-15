@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- দেনা-পাওনা — give/take curves + center coin + (+ / −) marks. -->
+<vector xmlns:android="http://schemas.android.com/res/android"
+    android:width="26dp" android:height="26dp"
+    android:viewportWidth="160" android:viewportHeight="160">
+
+    <path
+        android:pathData="M34,82 Q52,62 76,74 L84,78"
+        android:strokeColor="#FF000000" android:strokeWidth="4.4"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M126,82 Q108,62 84,74 L76,78"
+        android:strokeColor="#FF000000" android:strokeWidth="4.4"
+        android:strokeLineCap="round" android:strokeAlpha="0.7" />
+
+    <!-- center coin -->
+    <path
+        android:pathData="M60,66 A20,20 0 1,0 100,66 A20,20 0 1,0 60,66 Z"
+        android:fillColor="#FF000000" android:fillAlpha="0.12"
+        android:strokeColor="#FF000000" android:strokeWidth="4" />
+
+    <!-- plus badge (পাওনা) -->
+    <path
+        android:pathData="M28,104 A12,12 0 1,0 52,104 A12,12 0 1,0 28,104 Z"
+        android:fillColor="#FF000000" android:fillAlpha="0.15" />
+    <path
+        android:pathData="M34,104 L46,104 M40,98 L40,110"
+        android:strokeColor="#FF000000" android:strokeWidth="3"
+        android:strokeLineCap="round" />
+
+    <!-- minus badge (দেনা) -->
+    <path
+        android:pathData="M108,104 A12,12 0 1,0 132,104 A12,12 0 1,0 108,104 Z"
+        android:fillColor="#FF000000" android:fillAlpha="0.15" />
+    <path
+        android:pathData="M114,104 L126,104"
+        android:strokeColor="#FF000000" android:strokeWidth="3"
+        android:strokeLineCap="round" />
+</vector>

@@ -1,0 +1,49 @@
+name: Build & Release Android App
+
+# চলবে: v1.0, v1.1 ... এরকম ট্যাগ পুশ করলে, অথবা GitHub এর "Actions" ট্যাব থেকে ম্যানুয়ালি রান করলে
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: কোড চেকআউট করো
+        uses: actions/checkout@v4
+
+      - name: Java সেটআপ করো
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: gradlew এ পারমিশন দাও
+        run: chmod +x gradlew
+
+      # ---- সাইনিং কী রিস্টোর করা (নিচে "Secrets সেটআপ" অংশ দেখুন) ----
+      - name: Keystore ফাইল বানাও
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > app/release.keystore
+
+      - name: signed রিলিজ APK বিল্ড করো
+        run: |
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=release.keystore \
+            -Pandroid.injected.signing.store.password="${{ secrets.KEYSTORE_PASSWORD }}" \
+            -Pandroid.injected.signing.key.alias="${{ secrets.KEY_ALIAS }}" \
+            -Pandroid.injected.signing.key.password="${{ secrets.KEY_PASSWORD }}"
+
+      - name: Keystore ফাইল মুছে ফেলো (নিরাপত্তার জন্য)
+        if: always()
+        run: rm -f app/release.keystore
+
+      - name: রিলিজে APK আপলোড করো
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/build/outputs/apk/release/*.apk
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

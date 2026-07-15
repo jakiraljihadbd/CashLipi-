@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bkSurface">
+
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="100dp">
+
+        <!-- HEADER -->
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_gradient_purple"
+            android:orientation="vertical"
+            android:paddingTop="52dp"
+            android:paddingBottom="24dp"
+            android:paddingHorizontal="20dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="12dp">
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Backup Settings"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="অটো ব্যাকআপ ট্রিগার ও পদ্ধতি"
+                        android:textColor="@color/bkTextSecondary"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <ImageView android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_shield_backup"
+                    android:alpha="0.9"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- AUTO BACKUP TRIGGERS -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardAutoTriggers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Auto Backup Trigger"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Income Added -->
+                <include layout="@layout/item_settings_switch"
+                    android:id="@+id/rowTriggerIncome"/>
+                <!-- Expense Added -->
+                <include layout="@layout/item_settings_switch"
+                    android:id="@+id/rowTriggerExpense"/>
+                <!-- Debt Added -->
+                <include layout="@layout/item_settings_switch"
+                    android:id="@+id/rowTriggerDebt"/>
+                <!-- Receivable Added -->
+                <include layout="@layout/item_settings_switch"
+                    android:id="@+id/rowTriggerReceivable"/>
+                <!-- Data Updated -->
+                <include layout="@layout/item_settings_switch"
+                    android:id="@+id/rowTriggerUpdated"/>
+                <!-- Data Deleted -->
+                <include layout="@layout/item_settings_switch"
+                    android:id="@+id/rowTriggerDeleted"/>
+
+                <!-- Inline trigger switches (simpler direct approach) -->
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/layoutTriggerSwitches">
+
+                    <include layout="@layout/item_trigger_row"
+                        android:id="@+id/triggerRowIncome"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" আয় যোগ হলে"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="13sp"/>
+                        <Switch android:id="@+id/swTriggerIncome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:thumbTint="@color/incomeColor"
+                            android:trackTint="@color/bkCardInner"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/bkDivider"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" ব্যয় যোগ হলে"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="13sp"/>
+                        <Switch android:id="@+id/swTriggerExpense"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:thumbTint="@color/expenseColor"
+                            android:trackTint="@color/bkCardInner"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/bkDivider"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" দেনা যোগ হলে"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="13sp"/>
+                        <Switch android:id="@+id/swTriggerDebt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:thumbTint="@color/bkAccentOrange"
+                            android:trackTint="@color/bkCardInner"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/bkDivider"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" পাওনা যোগ হলে"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="13sp"/>
+                        <Switch android:id="@+id/swTriggerReceivable"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:thumbTint="@color/pabonaColor"
+                            android:trackTint="@color/bkCardInner"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/bkDivider"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" ডেটা পরিবর্তন হলে"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="13sp"/>
+                        <Switch android:id="@+id/swTriggerUpdated"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:thumbTint="@color/savingsGradStart"
+                            android:trackTint="@color/bkCardInner"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/bkDivider"/>
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <TextView android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text=" ডেটা মুছলে"
+                            android:textColor="@color/bkTextPrimary"
+                            android:textSize="13sp"/>
+                        <Switch android:id="@+id/swTriggerDeleted"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:thumbTint="@color/expenseColor"
+                            android:trackTint="@color/bkCardInner"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- BACKUP METHODS -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardBackupMethodSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Backup Methods"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=" Telegram Backup"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="13sp"/>
+                    <Switch android:id="@+id/swMethodTelegram"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="@color/bkAccentTelegram"
+                        android:trackTint="@color/bkCardInner"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="@color/bkDivider"/>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=" Google Drive Sync"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="13sp"/>
+                    <Switch android:id="@+id/swMethodGDrive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:thumbTint="@color/bkAccentGoogle"
+                        android:trackTint="@color/bkCardInner"/>
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="@color/bkDivider"/>
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=" Local Storage Backup"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="13sp"/>
+                    <Switch android:id="@+id/swMethodLocal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:thumbTint="@color/bkAccentOrange"
+                        android:trackTint="@color/bkCardInner"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- BACKUP FREQUENCY -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardFrequency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="20dp"
+            app:cardBackgroundColor="@color/bkCard"
+            app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Backup Frequency"
+                    android:textColor="@color/bkTextPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="14dp"/>
+
+                <RadioGroup android:id="@+id/rgFrequency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton android:id="@+id/rbRealtime"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text=" Real Time (ডেটা পরিবর্তনের সাথে সাথে)"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="13sp"
+                        android:checked="true"
+                        android:buttonTint="@color/gradCircleBlueStart"/>
+
+                    <RadioButton android:id="@+id/rbDaily"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text=" Daily (প্রতিদিন)"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="13sp"
+                        android:buttonTint="@color/gradCircleBlueStart"/>
+
+                    <RadioButton android:id="@+id/rbWeekly"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text=" Weekly (প্রতি সপ্তাহে)"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="13sp"
+                        android:buttonTint="@color/gradCircleBlueStart"/>
+
+                    <RadioButton android:id="@+id/rbMonthly"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text=" Monthly (প্রতি মাসে)"
+                        android:textColor="@color/bkTextPrimary"
+                        android:textSize="13sp"
+                        android:buttonTint="@color/gradCircleBlueStart"/>
+
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ACTION BUTTONS -->
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
+
+            <Button android:id="@+id/btnResetSettings"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="রিসেট"
+                android:textColor="@color/bkTextSecondary"
+                android:textSize="14sp"
+                android:background="@drawable/btn_outline_gray"
+                android:stateListAnimator="@null"/>
+
+            <Button android:id="@+id/btnSaveBackupSettings"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="2"
+                android:layout_marginStart="8dp"
+                android:text="  সেটিংস সেভ করুন"
+                android:textColor="@color/bkTextPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_gradient_primary"
+                android:stateListAnimator="@null"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

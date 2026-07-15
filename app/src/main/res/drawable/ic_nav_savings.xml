@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- সঞ্চয় — money jar / piggy-bank silhouette. -->
+<vector xmlns:android="http://schemas.android.com/res/android"
+    android:width="26dp" android:height="26dp"
+    android:viewportWidth="160" android:viewportHeight="160">
+
+    <!-- jar body -->
+    <path
+        android:pathData="M50,128 Q40,128 40,110 L40,82 Q40,56 80,56 Q120,56 120,82 L120,110 Q120,128 110,128 Z"
+        android:fillColor="#FF000000" android:fillAlpha="0.12"
+        android:strokeColor="#FF000000" android:strokeWidth="4"
+        android:strokeLineJoin="round" />
+
+    <!-- base -->
+    <path
+        android:pathData="M51,122 H109 A5,5 0 0 1 114,127 V127 A5,5 0 0 1 109,132 H51 A5,5 0 0 1 46,127 V127 A5,5 0 0 1 51,122 Z"
+        android:fillColor="#FF000000" />
+
+    <!-- neck -->
+    <path
+        android:pathData="M72,40 H88 A6,6 0 0 1 94,46 V54 A6,6 0 0 1 88,60 H72 A6,6 0 0 1 66,54 V46 A6,6 0 0 1 72,40 Z"
+        android:fillColor="#FF000000" android:fillAlpha="0.12"
+        android:strokeColor="#FF000000" android:strokeWidth="4" />
+
+    <!-- coin slot -->
+    <path
+        android:pathData="M74.5,44 H85.5 A2.5,2.5 0 0 1 88,46.5 V46.5 A2.5,2.5 0 0 1 85.5,49 H74.5 A2.5,2.5 0 0 1 72,46.5 V46.5 A2.5,2.5 0 0 1 74.5,44 Z"
+        android:fillColor="#FF000000" />
+
+    <!-- decorative belly line -->
+    <path
+        android:pathData="M40,96 Q80,108 120,96"
+        android:strokeColor="#FF000000" android:strokeWidth="2.4" android:strokeAlpha="0.4" />
+</vector>

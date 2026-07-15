@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- হোম — roof + house body + door. Style matched to ic_home.xml / ic_analysis.xml / ic_settings.xml. -->
+<vector xmlns:android="http://schemas.android.com/res/android"
+    android:width="26dp" android:height="26dp"
+    android:viewportWidth="160" android:viewportHeight="160">
+
+    <!-- roof -->
+    <path
+        android:pathData="M32,82 L80,40 L128,82"
+        android:strokeColor="#FF000000" android:strokeWidth="4.4"
+        android:strokeLineCap="round" android:strokeLineJoin="round" />
+
+    <!-- house body -->
+    <path
+        android:pathData="M46,70 V116 Q46,120 50,120 H110 Q114,120 114,116 V70"
+        android:fillColor="#FF000000" android:fillAlpha="0.12"
+        android:strokeColor="#FF000000" android:strokeWidth="4"
+        android:strokeLineJoin="round" />
+
+    <!-- door -->
+    <path
+        android:pathData="M73,92 H87 A3,3 0 0 1 90,95 V117 A3,3 0 0 1 87,120 H73 A3,3 0 0 1 70,117 V95 A3,3 0 0 1 73,92 Z"
+        android:fillColor="#FF000000" android:fillAlpha="0.85" />
+</vector>

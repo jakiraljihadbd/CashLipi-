@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/bgColor">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_generic" android:orientation="horizontal"
+        android:gravity="center_vertical" android:paddingTop="12dp"
+        android:paddingBottom="14dp" android:paddingHorizontal="16dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text=" স্থায়ী ক্যাটাগরি" android:textSize="18sp"
+            android:textStyle="bold" android:textColor="@color/white"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:padding="12dp">
+        <Button android:id="@+id/btnTypeIncome" android:layout_width="0dp"
+            android:layout_height="42dp" android:layout_weight="1"
+            android:text=" আয়ের ক্যাটাগরি" android:textSize="12sp"
+            android:background="@drawable/bg_btn_income"
+            android:textColor="@color/white" android:layout_marginEnd="6dp"/>
+        <Button android:id="@+id/btnTypeExpense" android:layout_width="0dp"
+            android:layout_height="42dp" android:layout_weight="1"
+            android:text=" ব্যয়ের ক্যাটাগরি" android:textSize="12sp"
+            android:background="@drawable/bg_type_inactive"
+            android:textColor="@color/textSecondary" android:layout_marginStart="6dp"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:paddingHorizontal="12dp"
+        android:paddingBottom="8dp">
+        <EditText
+            android:id="@+id/etNewCategory"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_card_white"
+            android:paddingHorizontal="14dp"
+            android:textSize="14sp"
+            android:textColor="@color/textPrimary"
+            android:textColorHint="@color/textSecondary"
+            android:hint="নতুন ক্যাটাগরি লিখুন"
+            android:inputType="textCapSentences"/>
+        <Button android:id="@+id/btnAddCategory" style="@style/SubmitButton.Primary"
+            android:layout_width="wrap_content" android:layout_height="52dp"
+            android:text="যোগ করুন" android:textColor="@color/white"
+            android:paddingHorizontal="12dp"/>
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent" android:overScrollMode="never">
+        <LinearLayout android:id="@+id/categoryContainer" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical"
+            android:paddingHorizontal="12dp" android:paddingBottom="16dp"/>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

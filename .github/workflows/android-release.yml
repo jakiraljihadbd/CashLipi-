@@ -3,6 +3,8 @@ name: Build & Release Android App
 # চলবে: v1.0, v1.1 ... এরকম ট্যাগ পুশ করলে, অথবা GitHub এর "Actions" ট্যাব থেকে ম্যানুয়ালি রান করলে
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*'
   workflow_dispatch:

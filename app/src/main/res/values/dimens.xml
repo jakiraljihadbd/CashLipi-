@@ -44,7 +44,7 @@
     <!-- Top Header + 7-icon Top Nav Bar (UI/Navigation upgrade) -->
     <dimen name="top_header_height">46dp</dimen>
     <dimen name="top_nav_bar_height">54dp</dimen>
-    <dimen name="top_nav_icon_size">24dp</dimen>
+    <dimen name="top_nav_icon_size">30dp</dimen>
     <dimen name="top_nav_indicator_width">18dp</dimen>
     <dimen name="top_nav_indicator_height">3dp</dimen>
 

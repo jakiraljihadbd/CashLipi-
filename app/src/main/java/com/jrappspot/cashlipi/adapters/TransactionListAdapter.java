@@ -86,6 +86,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
                 h.tvIcon.setBackground(ctx.getResources().getDrawable(R.drawable.bg_icon_circle_income));
                 h.tvTitle.setBackground(ctx.getResources().getDrawable(R.drawable.bg_tag_income));
                 h.tvTitle.setTextColor(ContextCompat.getColor(ctx, R.color.incomeGradStart));
+                if (h.viewColorBar != null) h.viewColorBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.amountIncome));
                 break;
             case "expense":
                 h.tvIcon.setImageResource(R.drawable.emoji_money_with_wings);
@@ -93,6 +94,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
                 h.tvIcon.setBackground(ctx.getResources().getDrawable(R.drawable.bg_icon_circle_expense));
                 h.tvTitle.setBackground(ctx.getResources().getDrawable(R.drawable.bg_tag_expense));
                 h.tvTitle.setTextColor(ContextCompat.getColor(ctx, R.color.expenseGradStart));
+                if (h.viewColorBar != null) h.viewColorBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.amountExpense));
                 break;
             case "savings":
                 h.tvIcon.setImageResource(R.drawable.emoji_green_heart);
@@ -100,6 +102,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
                 h.tvIcon.setBackground(ctx.getResources().getDrawable(R.drawable.bg_icon_circle_savings));
                 h.tvTitle.setBackground(ctx.getResources().getDrawable(R.drawable.bg_tag_savings));
                 h.tvTitle.setTextColor(ContextCompat.getColor(ctx, R.color.savingsGradStart));
+                if (h.viewColorBar != null) h.viewColorBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.savingsColor));
                 break;
         }
 
@@ -127,6 +130,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     static class VH extends RecyclerView.ViewHolder {
         ImageView tvIcon;
         TextView tvTitle, tvAmount, tvDate, tvNote;
+        View viewColorBar;
         VH(@NonNull View v) {
             super(v);
             tvIcon   = v.findViewById(R.id.tvItemIcon);
@@ -134,6 +138,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
             tvAmount = v.findViewById(R.id.tvItemAmount);
             tvDate   = v.findViewById(R.id.tvItemDate);
             tvNote   = v.findViewById(R.id.tvItemNote);
+            viewColorBar = v.findViewById(R.id.viewColorBar);
         }
     }
 }

@@ -293,4 +293,28 @@
     <string name="lang_hindi">हिन्दी</string>
     <string name="lang_arabic">عربي</string>
     <string name="language_changed">ভাষা পরিবর্তন হয়েছে। পুনরায় চালু হচ্ছে…</string>
+        <string name="auto_backup_enabled">Auto Backup Enabled</string>
+        <string name="auto_backup_status">Auto Backup Status</string>
+        <string name="backup_center_create">Create</string>
+        <string name="backup_center_history">History</string>
+        <string name="backup_center_home">Home</string>
+        <string name="backup_center_restore">Restore</string>
+        <string name="backup_latest">Latest Backup</string>
+        <string name="backup_methods">Backup Methods</string>
+        <string name="backup_quick_actions">Quick Actions</string>
+        <string name="backup_success_badge">Success</string>
+        <string name="backup_summary">Backup Summary</string>
+        <string name="bot_token_help">How to Get a Bot Token?</string>
+        <string name="bot_token_steps">Telegram → @BotFather → /newbot → Copy the Token
+Chat ID: @userinfobot → /start</string>
+        <string name="enabled_label">Enabled</string>
+        <string name="gdrive_sync">Google Drive Sync</string>
+        <string name="gdrive_sync_desc">Automatic Sync to Drive</string>
+        <string name="local_storage">Local Storage</string>
+        <string name="restore_warning">Restoring will erase all current data.</string>
+        <string name="send_to_telegram">Send to Telegram Now</string>
+        <string name="setup_label">Setup ›</string>
+        <string name="telegram_backup">Telegram Backup</string>
+        <string name="telegram_backup_desc">Automatic Backup via Bot</string>
+        <string name="telegram_guide">Telegram Guide</string>
 </resources>

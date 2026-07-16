@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- সেটিং — gear icon, matches the new 7-icon set's viewport/style. -->
-<vector xmlns:android="http://schemas.android.com/res/android"
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="26dp" android:height="26dp"
     android:viewportWidth="160" android:viewportHeight="160">
     <path

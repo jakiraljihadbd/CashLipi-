@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.activities.AddTransactionActivity;
-import com.jrappspot.cashlipi.adapters.TransactionListAdapter;
+import com.jrappspot.cashlipi.activities.AnalysisActivity;
 import com.jrappspot.cashlipi.models.Transaction;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 import com.jrappspot.cashlipi.utils.DateFilterUtil;
@@ -32,21 +33,18 @@ import com.jrappspot.cashlipi.utils.ListViewController;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * আয়-ব্যয় পেজ — এই ধাপে শুধু আয়ের তালিকার দিকে পয়েন্ট করা আছে (স্পেসিফিকেশন অনুযায়ী,
- * এই ধাপে যেকোনো একটা লিস্ট দেখালেই যথেষ্ট)। ভবিষ্যতে আয়+ব্যয় মার্জড পেজ হবে।
- * লজিক IncomeListActivity থেকে হুবহু নেওয়া, শুধু Activity → Fragment রূপান্তর।
- */
 public class IncomeExpenseFragment extends Fragment {
 
     private DatabaseManager db;
     private RecyclerView rv;
     private LinearLayout emptyState;
     private EditText etSearch;
-    private TextView tvTotal, tvCount;
+    private TextView tvMonthAmount, tvMonthSubtitle, tvMonthTitle;
+    private TextView tabIncome, tabExpense;
     private List<Transaction> allList = new ArrayList<>();
     private List<Transaction> filteredList = new ArrayList<>();
     private String currentFilter = "all";
+    private String currentType = "income"; // "income" | "expense"
     private final ListViewController viewController = new ListViewController();
     private View rootView;
 
@@ -54,7 +52,7 @@ public class IncomeExpenseFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                               @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_list_common, container, false);
+        return inflater.inflate(R.layout.fragment_income_expense, container, false);
     }
 
     @Override
@@ -65,17 +63,19 @@ public class IncomeExpenseFragment extends Fragment {
         rv = root.findViewById(R.id.rvList);
         emptyState = root.findViewById(R.id.emptyState);
         etSearch = root.findViewById(R.id.etSearch);
-        tvTotal = root.findViewById(R.id.tvSummaryTotal);
-        tvCount = root.findViewById(R.id.tvSummaryCount);
+        tvMonthTitle = root.findViewById(R.id.tvMonthTitle);
+        tvMonthAmount = root.findViewById(R.id.tvMonthAmount);
+        tvMonthSubtitle = root.findViewById(R.id.tvMonthSubtitle);
+        tabIncome = root.findViewById(R.id.tabIncome);
+        tabExpense = root.findViewById(R.id.tabExpense);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        TextView tvHeader = root.findViewById(R.id.tvListHeader);
-        if (tvHeader != null) tvHeader.setText(" আয়ের তালিকা");
-        View header = root.findViewById(R.id.listHeader);
-        if (header != null) header.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.bg_header_income));
+        tabIncome.setOnClickListener(v -> switchType("income"));
+        tabExpense.setOnClickListener(v -> switchType("expense"));
 
         setupFilterChips(root);
         viewController.attachControls(requireContext(), root, this::applyFilter);
+
         ImageView ivClear = root.findViewById(R.id.ivClearSearch);
         etSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
@@ -86,11 +86,26 @@ public class IncomeExpenseFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
         if (ivClear != null) ivClear.setOnClickListener(v -> { etSearch.setText(""); etSearch.requestFocus(); });
+
         root.findViewById(R.id.btnAddNew).setOnClickListener(v -> {
             Intent i = new Intent(requireContext(), AddTransactionActivity.class);
-            i.putExtra(AddTransactionActivity.EXTRA_MODE, "income");
+            i.putExtra(AddTransactionActivity.EXTRA_MODE, currentType);
             startActivity(i);
         });
+
+        View btnViewAnalysis = root.findViewById(R.id.btnViewAnalysis);
+        if (btnViewAnalysis != null) {
+            btnViewAnalysis.setOnClickListener(v -> startActivity(new Intent(requireContext(), AnalysisActivity.class)));
+        }
+
+        View btnPdf = root.findViewById(R.id.btnPdf);
+        View btnPrint = root.findViewById(R.id.btnPrint);
+        if (btnPdf != null) btnPdf.setOnClickListener(v ->
+                Toast.makeText(requireContext(), "PDF এক্সপোর্ট শীঘ্রই আসছে", Toast.LENGTH_SHORT).show());
+        if (btnPrint != null) btnPrint.setOnClickListener(v ->
+                Toast.makeText(requireContext(), "প্রিন্ট ফিচার শীঘ্রই আসছে", Toast.LENGTH_SHORT).show());
+
+        refreshTypeUI();
         loadData();
     }
 
@@ -100,9 +115,64 @@ public class IncomeExpenseFragment extends Fragment {
         loadData();
     }
 
+    private void switchType(String type) {
+        if (type.equals(currentType)) return;
+        currentType = type;
+        refreshTypeUI();
+        loadData();
+    }
+
+    private void refreshTypeUI() {
+        boolean isIncome = "income".equals(currentType);
+
+        tabIncome.setBackground(isIncome ? ContextCompat.getDrawable(requireContext(), R.drawable.bg_txn_tab_selected_income) : null);
+        tabIncome.setTextColor(ContextCompat.getColor(requireContext(), isIncome ? R.color.white : R.color.txnTabInactiveText));
+        tabExpense.setBackground(!isIncome ? ContextCompat.getDrawable(requireContext(), R.drawable.bg_txn_tab_selected_expense) : null);
+        tabExpense.setTextColor(ContextCompat.getColor(requireContext(), !isIncome ? R.color.white : R.color.txnTabInactiveText));
+
+        View btnAddNew = rootView.findViewById(R.id.btnAddNew);
+        if (btnAddNew != null) {
+            btnAddNew.setBackground(ContextCompat.getDrawable(requireContext(),
+                    isIncome ? R.drawable.bg_fab_income : R.drawable.bg_fab_expense));
+        }
+
+        ImageView btnPdf = rootView.findViewById(R.id.btnPdf);
+        ImageView btnPrint = rootView.findViewById(R.id.btnPrint);
+        int tint = ContextCompat.getColor(requireContext(), isIncome ? R.color.incomeColor : R.color.expenseColor);
+        if (btnPdf != null) btnPdf.setColorFilter(tint);
+        if (btnPrint != null) btnPrint.setColorFilter(tint);
+
+        if (tvMonthTitle != null) {
+            tvMonthTitle.setText(isIncome ? "বর্তমান মাসের সারসংক্ষেপ (আয়)" : "বর্তমান মাসের সারসংক্ষেপ (ব্যয়)");
+        }
+    }
+
     private void loadData() {
-        allList = new ArrayList<>(db.getIncomeList());
+        allList = new ArrayList<>("expense".equals(currentType) ? db.getExpenseList() : db.getIncomeList());
         applyFilter();
+        updateMonthSummary();
+    }
+
+    private void updateMonthSummary() {
+        if (tvMonthAmount == null) return;
+        boolean isIncome = "income".equals(currentType);
+        double monthTotal = 0;
+        String latestDate = null;
+        for (Transaction t : allList) {
+            if (!DateFilterUtil.matches(t.getDate(), "month")) continue;
+            monthTotal += t.getAmount();
+            if (latestDate == null || (t.getDate() != null && t.getDate().compareTo(latestDate) > 0)) {
+                latestDate = t.getDate();
+            }
+        }
+        String sign = isIncome ? "+ " : "- ";
+        tvMonthAmount.setText(sign + DatabaseManager.formatAmount(monthTotal));
+        tvMonthAmount.setTextColor(ContextCompat.getColor(requireContext(),
+                isIncome ? R.color.amountIncome : R.color.amountExpense));
+        if (tvMonthSubtitle != null) {
+            String dateText = latestDate != null ? DatabaseManager.formatDateDisplay(latestDate) : "--";
+            tvMonthSubtitle.setText("(সর্বশেষ হালনাগাদ: " + dateText + ")");
+        }
     }
 
     private void setupFilterChips(View root) {
@@ -145,10 +215,6 @@ public class IncomeExpenseFragment extends Fragment {
             filteredList.add(t);
         }
         viewController.applySort(filteredList);
-        double total = 0;
-        for (Transaction t : filteredList) total += t.getAmount();
-        tvTotal.setText(DatabaseManager.formatAmount(total));
-        tvCount.setText(filteredList.size() + " টি এন্ট্রি");
         if (filteredList.isEmpty()) {
             rv.setVisibility(View.GONE);
             View tableContainer = rootView.findViewById(R.id.tableContainer);
@@ -157,9 +223,9 @@ public class IncomeExpenseFragment extends Fragment {
         } else {
             emptyState.setVisibility(View.GONE);
             rv.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.layout_animation_fall_down));
-            viewController.render(requireContext(), rootView, filteredList, "income",
-                    (item, pos) -> TransactionSheetHelper.showTransactionSheet(requireActivity(), db, "income", item, this::loadData),
-                    (item, pos) -> TransactionSheetHelper.showTransactionSheet(requireActivity(), db, "income", item, this::loadData));
+            viewController.render(requireContext(), rootView, filteredList, currentType,
+                    (item, pos) -> TransactionSheetHelper.showTransactionSheet(requireActivity(), db, currentType, item, this::loadData),
+                    (item, pos) -> TransactionSheetHelper.showTransactionSheet(requireActivity(), db, currentType, item, this::loadData));
             rv.scheduleLayoutAnimation();
         }
     }

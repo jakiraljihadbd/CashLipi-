@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- বাকির খাতা — notebook with ruled lines + pen. -->
-<vector xmlns:android="http://schemas.android.com/res/android"
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="26dp" android:height="26dp"
     android:viewportWidth="160" android:viewportHeight="160">
 

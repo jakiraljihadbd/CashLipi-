@@ -11,6 +11,13 @@
     android:clickable="true"
     android:focusable="true">
 
+    <View
+        android:id="@+id/viewColorBar"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="10dp"
+        android:background="@color/amountIncome"/>
+
     <ImageView
         android:id="@+id/tvItemIcon"
         android:layout_width="48dp"

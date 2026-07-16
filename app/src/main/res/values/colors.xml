@@ -114,7 +114,7 @@
     <color name="topHeaderTitle">#FFFFFF</color>
     <color name="topHeaderSubtitle">#CCFFFFFF</color>
     <color name="topNavSelected">#00D4FF</color>
-    <color name="topNavUnselected">#8A9AAE</color>
+    <color name="topNavUnselected">#C3CEE0</color>
 
     <!-- Splash -->
     <color name="splashBg">#150C18</color>

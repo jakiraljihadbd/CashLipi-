@@ -120,6 +120,7 @@
     <color name="fabAddStart">#F97316</color>
     <color name="fabAddEnd">#EC4899</color>
     <color name="fabAddIcon">#FFFFFF</color>
+    <color name="bottomNavBg">#0F1B2E</color>
     <color name="bottomNavSelected">#00D4FF</color>
     <color name="bottomNavUnselected">#8B97AE</color>
 

@@ -30,6 +30,7 @@ import com.jrappspot.cashlipi.adapters.IncomeExpenseCardAdapter;
 import com.jrappspot.cashlipi.models.Transaction;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 import com.jrappspot.cashlipi.utils.DateFilterUtil;
+import com.jrappspot.cashlipi.utils.InvoicePdfHelper;
 import com.jrappspot.cashlipi.utils.TransactionSheetHelper;
 
 import java.util.ArrayList;
@@ -120,9 +121,9 @@ public class IncomeExpenseFragment extends Fragment {
         View btnPrint = root.findViewById(R.id.btnPrint);
         View btnSort = root.findViewById(R.id.btnSort);
         if (btnPdf != null) btnPdf.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "PDF এক্সপোর্ট শীঘ্রই আসছে", Toast.LENGTH_SHORT).show());
+                InvoicePdfHelper.showExportDialog(requireContext(), currentType, filteredList, false));
         if (btnPrint != null) btnPrint.setOnClickListener(v ->
-                Toast.makeText(requireContext(), "প্রিন্ট ফিচার শীঘ্রই আসছে", Toast.LENGTH_SHORT).show());
+                InvoicePdfHelper.showExportDialog(requireContext(), currentType, filteredList, true));
         if (btnSort != null) btnSort.setOnClickListener(this::showSortMenu);
 
         refreshTypeUI();
@@ -226,8 +227,8 @@ public class IncomeExpenseFragment extends Fragment {
     }
 
     private void setupFilterChips(View root) {
-        String[] labels = {"সব", "আজ", "সপ্তাহ", "মাস", "বছর"};
-        String[] keys = {"all", "today", "week", "month", "year"};
+        String[] labels = {"সব", "মাস", "বছর"};
+        String[] keys = {"all", "month", "year"};
         chipRowLayout = root.findViewById(R.id.chipRow);
         if (chipRowLayout == null) return;
         chipRowLayout.removeAllViews();

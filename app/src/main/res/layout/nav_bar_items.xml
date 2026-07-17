@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ৭-আইকন নেভ বার — DashboardActivity রানটাইমে এই ভিউটাকে topNavSlot বা bottomNavSlot-এ বসায়।
-     ব্যাকগ্রাউন্ড কালার ও আইকন সাইজ সেটিং অনুযায়ী কোডে সেট করা হয় (bindNavBarStyle)। -->
+     ব্যাকগ্রাউন্ড কালার ও আইকন সাইজ সেটিং অনুযায়ী কোডে সেট করা হয় (bindNavBarStyle)।
+     প্রতিটা আইটেমে আইকনের নিচে একটা লেবেল আছে — শুধু "নিচে" পজিশনে ভিজিবল হয় (applyNavCustomization),
+     যাতে ছোট আইকনগুলো কী বোঝায় তা স্পষ্ট বোঝা যায়। -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/topNavBar"
@@ -12,6 +14,8 @@
     <LinearLayout android:id="@+id/navHome" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavHome" style="@style/TopNavIconStyle"
             android:src="@drawable/ic_nav_home"/>
+        <TextView android:id="@+id/labelNavHome" style="@style/TopNavLabelStyle"
+            android:text="@string/nav_label_home"/>
         <View android:id="@+id/indicatorNavHome" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
@@ -19,6 +23,8 @@
     <LinearLayout android:id="@+id/navIncomeExpense" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavIncomeExpense" style="@style/TopNavIconStyle"
             android:src="@drawable/ic_nav_income_expense"/>
+        <TextView android:id="@+id/labelNavIncomeExpense" style="@style/TopNavLabelStyle"
+            android:text="@string/nav_label_income_expense"/>
         <View android:id="@+id/indicatorNavIncomeExpense" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
@@ -26,6 +32,8 @@
     <LinearLayout android:id="@+id/navDenaPawna" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavDenaPawna" style="@style/TopNavIconStyle"
             android:src="@drawable/ic_nav_dena_pawna"/>
+        <TextView android:id="@+id/labelNavDenaPawna" style="@style/TopNavLabelStyle"
+            android:text="@string/nav_label_dena_pawna"/>
         <View android:id="@+id/indicatorNavDenaPawna" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
@@ -33,6 +41,8 @@
     <LinearLayout android:id="@+id/navSavings" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavSavings" style="@style/TopNavIconStyle"
             android:src="@drawable/ic_nav_savings"/>
+        <TextView android:id="@+id/labelNavSavings" style="@style/TopNavLabelStyle"
+            android:text="@string/nav_label_savings"/>
         <View android:id="@+id/indicatorNavSavings" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
@@ -40,6 +50,8 @@
     <LinearLayout android:id="@+id/navBakirKhata" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavBakirKhata" style="@style/TopNavIconStyle"
             android:src="@drawable/ic_nav_bakir_khata"/>
+        <TextView android:id="@+id/labelNavBakirKhata" style="@style/TopNavLabelStyle"
+            android:text="@string/nav_label_bakir_khata"/>
         <View android:id="@+id/indicatorNavBakirKhata" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
@@ -47,6 +59,8 @@
     <LinearLayout android:id="@+id/navBudget" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavBudget" style="@style/TopNavIconStyle"
             android:src="@drawable/ic_nav_budget"/>
+        <TextView android:id="@+id/labelNavBudget" style="@style/TopNavLabelStyle"
+            android:text="@string/nav_label_budget"/>
         <View android:id="@+id/indicatorNavBudget" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
@@ -54,6 +68,8 @@
     <LinearLayout android:id="@+id/navSettings" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavSettings" style="@style/TopNavIconStyle"
             android:src="@drawable/ic_nav_settings"/>
+        <TextView android:id="@+id/labelNavSettings" style="@style/TopNavLabelStyle"
+            android:text="@string/nav_label_settings"/>
         <View android:id="@+id/indicatorNavSettings" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 </LinearLayout>

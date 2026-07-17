@@ -1,113 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    CashLipi — Dashboard container (UI/Navigation upgrade v2)
+    CashLipi — Dashboard container (UI/Navigation upgrade v3)
     ভেতরে থাকে:
-      (১) কমপ্যাক্ট ব্র্যান্ড হেডার (টাইটেল-সাইকেল) + Add (+) বাটন — পপ-আপে ৩টি কুইক-অ্যাড অপশন + সেটিং
+      (১) কমপ্যাক্ট ব্র্যান্ড হেডার (স্ট্যাটিক "CashLipi") + Add (+) বাটন + headerSliderSlot (ফাঁকা —
+          ব্যালেন্স/টাইটেল-সাইকেল সরিয়ে এখানে ভবিষ্যতে স্লাইড/AI-advice কার্ড বসবে)
       (২) ৭-আইকন নেভ বার — সেটিং অনুযায়ী "উপরে" (ডিফল্ট) অথবা "নিচে" পজিশনে বসে (topNavBar ভিউটাই রিপ্যারেন্ট হয়)
-      (৩) নিচে পজিশনে থাকলে — bottomNavContainer দেখানো হয়, যেখানে + বাটন কার্ভ করে বারের উপর ভেসে থাকে
+      (৩) নিচে পজিশনে থাকলে — bottomNavContainer দেখানো হয়, fabNotchBackdrop বারের রং দিয়ে একটা গোল
+          "কুশন" তৈরি করে যার উপর + বাটন ভাসমান থাকে (মর্ডান কার্ভ লুক)
       (৪) ViewPager2 — ৭টি Fragment পেজ (সোয়াইপ অন/অফ সেটিং দিয়ে নিয়ন্ত্রিত)
+      (৫) fabMenuOverlay — + বাটনে ট্যাপ করলে ফ্যান-আউট অ্যানিমেশনে ৪টা অপশন ভাসে (স্ক্রিমসহ)
 -->
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/bgColor">
+    android:layout_height="match_parent">
 
-    <!-- ══════════════════════════════════════════════════════════
-         TOP BLOCK — হেডার (+ Add বাটন) + topNavSlot (নেভ বার এখানে বসে যখন পজিশন = উপরে)
-    ══════════════════════════════════════════════════════════ -->
     <LinearLayout
-        android:id="@+id/topBlock"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/topHeaderBg">
+        android:background="@color/bgColor">
 
-        <!-- Compact brand header — TextSwitcher টাইটেল-সাইকেল + Add বাটন -->
+        <!-- ══════════════════════════════════════════════════════════
+             TOP BLOCK — হেডার (+ Add বাটন) + headerSliderSlot (ফাঁকা) + topNavSlot
+        ══════════════════════════════════════════════════════════ -->
         <LinearLayout
+            android:id="@+id/topBlock"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/top_header_height"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="16dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/topHeaderBg">
 
-            <TextSwitcher
-                android:id="@+id/headerTitleSwitcher"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inAnimation="@anim/slide_in_right"
-                android:outAnimation="@anim/slide_out_left" />
+            <!-- কমপ্যাক্ট ব্র্যান্ড হেডার — স্ট্যাটিক "CashLipi" + Add বাটন -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/top_header_height"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp">
 
-            <!-- Add (+) বাটন — ট্যাপ করলে পপ-আপ: আয়-ব্যয় যোগ / দেনা-পাওনা যোগ / সঞ্চয় যোগ / সেটিং -->
+                <TextView
+                    android:id="@+id/headerBrandTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="CashLipi"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.06"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="@color/topHeaderTitle"/>
+
+                <!-- Add (+) বাটন — ট্যাপ করলে ফ্যান-আউট মেন্যু: আয়-ব্যয় যোগ / দেনা-পাওনা যোগ / সঞ্চয় যোগ / সেটিং -->
+                <ImageButton
+                    android:id="@+id/headerAddBtn"
+                    android:layout_width="@dimen/header_add_btn_size"
+                    android:layout_height="@dimen/header_add_btn_size"
+                    android:layout_marginStart="10dp"
+                    android:padding="7dp"
+                    android:background="@drawable/bg_fab_add"
+                    android:src="@drawable/ic_plus"
+                    android:contentDescription="@string/add_menu_title"
+                    android:scaleType="fitCenter"
+                    android:elevation="3dp"/>
+            </LinearLayout>
+
+            <!-- headerSliderSlot — "ব্যালেন্স" টাইটেল-সাইকেল সরিয়ে ফাঁকা রাখা হলো।
+                 এখানে পরে কাস্টম স্লাইড/ব্যানার (এবং চাইলে AI-advice কার্ড) বসানো যাবে।
+                 বর্তমানে height=0dp ও gone — কনটেন্ট বসালে height=wrap_content ও visible করে দিলেই হবে। -->
+            <FrameLayout
+                android:id="@+id/headerSliderSlot"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:visibility="gone"/>
+
+            <!-- নেভ বার এখানে বসে (পজিশন = "উপরে", ডিফল্ট) — topNavBar রানটাইমে এখানে inflate/attach হয় -->
+            <FrameLayout
+                android:id="@+id/topNavSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!-- টপ ব্লকের একদম নিচে ডিভাইডার -->
+            <View
+                android:id="@+id/topBlockDivider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/dash_accent_line"/>
+        </LinearLayout>
+
+        <!-- ══════════════════════════════════════════════════════════
+             ৭টি পেজ — সোয়াইপ (সেটিং দিয়ে অন/অফ) + ট্যাপ নেভিগেশন
+        ══════════════════════════════════════════════════════════ -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!-- ══════════════════════════════════════════════════════════
+             BOTTOM BLOCK — পজিশন = "নিচে" হলে দেখানো হয়। bottomNavSlot-এ topNavBar রিপ্যারেন্ট হয়,
+             fabNotchBackdrop বারের রং দিয়ে + বাটনের পেছনে গোল "কুশন" তৈরি করে যাতে + বাটনটা বারের
+             সাথে মিশে আধুনিক কার্ভ লুক দেয় (bg_fab_add-এর নিচে একটা বড়, একই-রঙা বৃত্ত)।
+        ══════════════════════════════════════════════════════════ -->
+        <FrameLayout
+            android:id="@+id/bottomNavContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:id="@+id/bottomNavSlot"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/bottom_nav_bar_height"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bg_bottom_nav_dark"
+                android:elevation="8dp"/>
+
+            <View
+                android:id="@+id/fabNotchBackdrop"
+                android:layout_width="@dimen/bottom_fab_notch_size"
+                android:layout_height="@dimen/bottom_fab_notch_size"
+                android:layout_gravity="top|center_horizontal"
+                android:layout_marginTop="-26dp"
+                android:background="@drawable/shape_circle_solid"
+                android:elevation="7dp"/>
+
             <ImageButton
-                android:id="@+id/headerAddBtn"
-                android:layout_width="@dimen/header_add_btn_size"
-                android:layout_height="@dimen/header_add_btn_size"
-                android:layout_marginStart="10dp"
-                android:padding="7dp"
+                android:id="@+id/bottomFab"
+                android:layout_width="@dimen/bottom_fab_size"
+                android:layout_height="@dimen/bottom_fab_size"
+                android:layout_gravity="top|center_horizontal"
+                android:layout_marginTop="-18dp"
+                android:padding="14dp"
                 android:background="@drawable/bg_fab_add"
                 android:src="@drawable/ic_plus"
                 android:contentDescription="@string/add_menu_title"
                 android:scaleType="fitCenter"
-                android:elevation="3dp"/>
-        </LinearLayout>
-
-        <!-- নেভ বার এখানে বসে (পজিশন = "উপরে", ডিফল্ট) — topNavBar রানটাইমে এখানে inflate/attach হয় -->
-        <FrameLayout
-            android:id="@+id/topNavSlot"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <!-- টপ ব্লকের একদম নিচে ডিভাইডার -->
-        <View
-            android:id="@+id/topBlockDivider"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@drawable/dash_accent_line"/>
+                android:elevation="10dp"/>
+        </FrameLayout>
     </LinearLayout>
 
-    <!-- ══════════════════════════════════════════════════════════
-         ৭টি পেজ — সোয়াইপ (সেটিং দিয়ে অন/অফ) + ট্যাপ নেভিগেশন
-    ══════════════════════════════════════════════════════════ -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <!-- ══════════════════════════════════════════════════════════
-         BOTTOM BLOCK — পজিশন = "নিচে" হলে দেখানো হয়। bottomNavSlot-এ topNavBar রিপ্যারেন্ট হয়,
-         আর মাঝখানে কার্ভ + FAB নেভ বারের উপরে সামান্য ভেসে থাকে (elevation + negative margin)।
-    ══════════════════════════════════════════════════════════ -->
+    <!-- ══════════════════════════════════════════════════════════════
+         + বাটন ফ্যান-আউট মেন্যু ওভারলে — পুরো স্ক্রিন জুড়ে, ডিফল্ট GONE।
+         টপ পজিশনে fabMenuTop (হেডারের নিচে ডানে) আর বটম পজিশনে fabMenuBottom
+         (+ বাটনের উপরে) — যেটা প্রযোজ্য সেটাই ভিজিবল হয়।
+    ══════════════════════════════════════════════════════════════ -->
     <FrameLayout
-        android:id="@+id/bottomNavContainer"
+        android:id="@+id/fabMenuOverlay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
 
-        <FrameLayout
-            android:id="@+id/bottomNavSlot"
+        <View
+            android:id="@+id/fabMenuScrim"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/bottom_nav_bar_height"
-            android:layout_gravity="bottom"
-            android:background="@drawable/bg_bottom_nav_dark"
-            android:elevation="8dp"/>
+            android:layout_height="match_parent"
+            android:background="@color/fabMenuScrim"/>
 
-        <ImageButton
-            android:id="@+id/bottomFab"
-            android:layout_width="@dimen/bottom_fab_size"
-            android:layout_height="@dimen/bottom_fab_size"
-            android:layout_gravity="top|center_horizontal"
-            android:layout_marginTop="-18dp"
-            android:padding="14dp"
-            android:background="@drawable/bg_fab_add"
-            android:src="@drawable/ic_plus"
-            android:contentDescription="@string/add_menu_title"
-            android:scaleType="fitCenter"
-            android:elevation="10dp"/>
+        <!-- টপ পজিশনের জন্য — হেডারের নিচে, ডানপাশে -->
+        <LinearLayout
+            android:id="@+id/fabMenuTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="66dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical"
+            android:visibility="gone"/>
+
+        <!-- বটম পজিশনের জন্য — + বাটনের ঠিক উপরে, কেন্দ্রে -->
+        <LinearLayout
+            android:id="@+id/fabMenuBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="150dp"
+            android:orientation="vertical"
+            android:visibility="gone"/>
     </FrameLayout>
 
-</LinearLayout>
+</FrameLayout>

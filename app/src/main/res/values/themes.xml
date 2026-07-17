@@ -95,6 +95,41 @@
         <item name="android:textColor">@color/textPrimary</item>
     </style>
 
+    <!-- নেভ বার আইকনের নিচে ছোট লেবেল — শুধু "নিচে" পজিশনে দেখানো হয়, স্পষ্টতার জন্য -->
+    <style name="TopNavLabelStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/topNavUnselected</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <!-- ── ফ্যান-আউট (+) মেন্যু — মিনি সার্কেল বাটন + লেবেল চিপ ── -->
+    <style name="FabMiniButtonStyle">
+        <item name="android:layout_width">46dp</item>
+        <item name="android:layout_height">46dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">@drawable/shape_circle_solid</item>
+        <item name="android:tint">@color/white</item>
+        <item name="android:elevation">6dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="FabMiniLabelStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">12dp</item>
+        <item name="android:paddingVertical">6dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_fab_mini_label</item>
+        <item name="android:elevation">6dp</item>
+    </style>
+
     <!-- Card -->
     <style name="AppCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardCornerRadius">16dp</item>

@@ -119,6 +119,8 @@
     <!-- হেডার/বটম + বাটন ও কার্ভ FAB -->
     <color name="fabAddStart">#F97316</color>
     <color name="fabAddEnd">#EC4899</color>
+    <!-- + বাটন ফ্যান-আউট মেন্যুর পেছনের ডার্ক স্ক্রিম -->
+    <color name="fabMenuScrim">#B3000000</color>
     <color name="fabAddIcon">#FFFFFF</color>
 
     <!-- নেভিগেশন বার ব্যাকগ্রাউন্ড — প্রিসেট রং সোয়াচ (Settings → নেভিগেশন মেন্যু) -->
@@ -330,6 +332,16 @@
     <color name="txnMinusCircleBg">#F0388B</color>
     <color name="iconCirclePrimaryStart">#6366F1</color>
     <color name="iconCirclePrimaryEnd">#4F46E5</color>
+
+    <!-- Save-circle outer ring (soft glow) -->
+    <color name="ringSoftGreen">#3310B981</color>
+    <color name="ringSoftRed">#33DC2626</color>
+
+    <!-- Payment method chips -->
+    <color name="paymentItemBg">#F4F6FB</color>
+    <color name="paymentItemBorder">#E2E8F5</color>
+    <color name="paymentItemSelectedBgGreen">#E4F6EF</color>
+    <color name="paymentItemSelectedBgRed">#FCE8E8</color>
 
     <!-- Income extras -->
     <color name="incomeCardGradStart">#6EE7B7</color>

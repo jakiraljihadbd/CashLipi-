@@ -52,6 +52,15 @@
 
     <!-- Bottom Nav -->
     <string name="nav_home">হোম</string>
+
+    <!-- নেভ বার আইকনের নিচের লেবেল (শুধু "নিচে" পজিশনে দেখা যায়) -->
+    <string name="nav_label_home">হোম</string>
+    <string name="nav_label_income_expense">আয়-ব্যয়</string>
+    <string name="nav_label_dena_pawna">দেনা-পাওনা</string>
+    <string name="nav_label_savings">সঞ্চয়</string>
+    <string name="nav_label_bakir_khata">বাকির খাতা</string>
+    <string name="nav_label_budget">বাজেট</string>
+    <string name="nav_label_settings">সেটিং</string>
     <string name="nav_income">আয় যোগ</string>
     <string name="nav_expense">ব্যয় যোগ</string>
     <string name="nav_ledger">দেনা/পাওনা</string>

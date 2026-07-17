@@ -2,77 +2,102 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp"
+    android:orientation="vertical"
     android:layout_marginBottom="10dp"
-    android:gravity="center_vertical"
     android:background="@drawable/bg_card_premium_ripple"
     android:elevation="8dp"
     android:clickable="true"
     android:focusable="true">
 
+    <!-- উপরের সূক্ষ্ম দাগ (প্রায় অদৃশ্য) -->
     <View
-        android:id="@+id/viewColorBar"
-        android:layout_width="4dp"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="10dp"
+        android:id="@+id/viewColorBarTop"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="18dp"
         android:background="@color/amountIncome"/>
 
-    <ImageView
-        android:id="@+id/tvItemIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/emoji_money_bag"
-        android:scaleType="centerInside"
-        android:padding="9dp"
-        android:background="@drawable/bg_icon_circle_income"
-        android:layout_marginEnd="14dp"/>
-
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="15dp"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/viewColorBar"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="12dp"
+            android:background="@color/amountIncome"/>
+
+        <ImageView
+            android:id="@+id/tvItemIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/emoji_money_bag"
+            android:scaleType="centerInside"
+            android:padding="9dp"
+            android:background="@drawable/bg_icon_circle_income"
+            android:layout_marginEnd="14dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.01"
+                android:paddingHorizontal="11dp"
+                android:paddingVertical="4dp"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/tvItemDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/secondaryTextDark"
+                android:layout_marginTop="6dp"/>
+
+            <TextView
+                android:id="@+id/tvItemNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="@color/secondaryTextDark"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:alpha="0.8"
+                android:layout_marginTop="3dp"
+                android:visibility="gone"/>
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvItemTitle"
+            android:id="@+id/tvItemAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="3dp"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:textColor="@color/amountIncome"
+            android:layout_marginStart="10dp"/>
 
-        <TextView
-            android:id="@+id/tvItemDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="11.5sp"
-            android:textColor="@color/secondaryTextDark"
-            android:layout_marginTop="5dp"/>
-
-        <TextView
-            android:id="@+id/tvItemNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="11.5sp"
-            android:textColor="@color/secondaryTextDark"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:alpha="0.8"
-            android:layout_marginTop="3dp"
-            android:visibility="gone"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvItemAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:textColor="@color/amountIncome"
-        android:layout_marginStart="10dp"/>
+    <!-- নিচের সূক্ষ্ম দাগ (প্রায় অদৃশ্য) -->
+    <View
+        android:id="@+id/viewColorBarBottom"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginHorizontal="18dp"
+        android:background="@color/amountIncome"/>
 
 </LinearLayout>

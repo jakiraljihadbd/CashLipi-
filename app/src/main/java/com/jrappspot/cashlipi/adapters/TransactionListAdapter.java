@@ -86,7 +86,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
                 h.tvIcon.setBackground(ctx.getResources().getDrawable(R.drawable.bg_icon_circle_income));
                 h.tvTitle.setBackground(ctx.getResources().getDrawable(R.drawable.bg_tag_income));
                 h.tvTitle.setTextColor(ContextCompat.getColor(ctx, R.color.incomeGradStart));
-                if (h.viewColorBar != null) h.viewColorBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.amountIncome));
+                if (h.viewColorBar != null) h.viewColorBar.setBackground(roundedBar(ContextCompat.getColor(ctx, R.color.amountIncome)));
+                setEdgeBarColor(h, ContextCompat.getColor(ctx, R.color.amountIncome));
                 break;
             case "expense":
                 h.tvIcon.setImageResource(R.drawable.emoji_money_with_wings);
@@ -94,7 +95,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
                 h.tvIcon.setBackground(ctx.getResources().getDrawable(R.drawable.bg_icon_circle_expense));
                 h.tvTitle.setBackground(ctx.getResources().getDrawable(R.drawable.bg_tag_expense));
                 h.tvTitle.setTextColor(ContextCompat.getColor(ctx, R.color.expenseGradStart));
-                if (h.viewColorBar != null) h.viewColorBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.amountExpense));
+                if (h.viewColorBar != null) h.viewColorBar.setBackground(roundedBar(ContextCompat.getColor(ctx, R.color.amountExpense)));
+                setEdgeBarColor(h, ContextCompat.getColor(ctx, R.color.amountExpense));
                 break;
             case "savings":
                 h.tvIcon.setImageResource(R.drawable.emoji_green_heart);
@@ -102,7 +104,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
                 h.tvIcon.setBackground(ctx.getResources().getDrawable(R.drawable.bg_icon_circle_savings));
                 h.tvTitle.setBackground(ctx.getResources().getDrawable(R.drawable.bg_tag_savings));
                 h.tvTitle.setTextColor(ContextCompat.getColor(ctx, R.color.savingsGradStart));
-                if (h.viewColorBar != null) h.viewColorBar.setBackgroundColor(ContextCompat.getColor(ctx, R.color.savingsColor));
+                if (h.viewColorBar != null) h.viewColorBar.setBackground(roundedBar(ContextCompat.getColor(ctx, R.color.savingsColor)));
+                setEdgeBarColor(h, ContextCompat.getColor(ctx, R.color.savingsColor));
                 break;
         }
 
@@ -124,13 +127,29 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         }
     }
 
+    // বাম দাগ — দুই প্রান্ত হালকা বাঁকানো (pill shape)
+    private android.graphics.drawable.GradientDrawable roundedBar(int color) {
+        android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+        gd.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
+        gd.setColor(color);
+        gd.setCornerRadius(8f * ctx.getResources().getDisplayMetrics().density);
+        return gd;
+    }
+
+    // উপরে-নিচের দাগ — বাম দাগের একই রঙ, কিন্তু প্রায় অদৃশ্য (~১২% স্বচ্ছতা), দুই প্রান্ত বাঁকানো
+    private void setEdgeBarColor(VH h, int color) {
+        int lightColor = (31 << 24) | (color & 0x00FFFFFF); // 31/255 ≈ 12% alpha
+        if (h.viewColorBarTop != null) h.viewColorBarTop.setBackground(roundedBar(lightColor));
+        if (h.viewColorBarBottom != null) h.viewColorBarBottom.setBackground(roundedBar(lightColor));
+    }
+
     @Override
     public int getItemCount() { return list.size(); }
 
     static class VH extends RecyclerView.ViewHolder {
         ImageView tvIcon;
         TextView tvTitle, tvAmount, tvDate, tvNote;
-        View viewColorBar;
+        View viewColorBar, viewColorBarTop, viewColorBarBottom;
         VH(@NonNull View v) {
             super(v);
             tvIcon   = v.findViewById(R.id.tvItemIcon);
@@ -138,6 +157,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
             tvAmount = v.findViewById(R.id.tvItemAmount);
             tvDate   = v.findViewById(R.id.tvItemDate);
             tvNote   = v.findViewById(R.id.tvItemNote);
+            viewColorBarTop = v.findViewById(R.id.viewColorBarTop);
+            viewColorBarBottom = v.findViewById(R.id.viewColorBarBottom);
             viewColorBar = v.findViewById(R.id.viewColorBar);
         }
     }

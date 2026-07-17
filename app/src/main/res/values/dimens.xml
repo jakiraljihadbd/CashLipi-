@@ -45,8 +45,8 @@
     <dimen name="top_header_height">46dp</dimen>
     <dimen name="top_nav_bar_height">58dp</dimen>
     <dimen name="top_nav_icon_size">34dp</dimen>
-    <dimen name="top_nav_icon_size_large">36dp</dimen>
-    <dimen name="top_nav_icon_size_small">26dp</dimen>
+    <dimen name="top_nav_icon_size_large">40dp</dimen>
+    <dimen name="top_nav_icon_size_small">30dp</dimen>
     <dimen name="top_nav_indicator_width">18dp</dimen>
     <dimen name="top_nav_indicator_height">3dp</dimen>
 
@@ -55,11 +55,20 @@
     <dimen name="header_add_icon_size">20dp</dimen>
 
     <!-- নেভিগেশন মেন্যু — নিচে বসালে কার্ভ FAB -->
-    <dimen name="bottom_nav_bar_height">64dp</dimen>
-    <dimen name="bottom_nav_icon_size_large">30dp</dimen>
-    <dimen name="bottom_nav_icon_size_small">22dp</dimen>
-    <dimen name="bottom_fab_size">58dp</dimen>
+    <dimen name="bottom_nav_bar_height">72dp</dimen>
+    <dimen name="bottom_nav_icon_size_large">36dp</dimen>
+    <dimen name="bottom_nav_icon_size_small">28dp</dimen>
+    <dimen name="bottom_fab_size">60dp</dimen>
     <dimen name="bottom_fab_icon_size">26dp</dimen>
+    <dimen name="bottom_fab_notch_size">76dp</dimen>
+
+    <!-- + বাটন ফ্যান-আউট মেন্যু (মিনি আইকন + লেবেল চিপ) -->
+    <dimen name="fab_menu_item_spacing">14dp</dimen>
+    <dimen name="fab_menu_icon_size">46dp</dimen>
+    <dimen name="fab_menu_icon_padding">12dp</dimen>
+    <dimen name="fab_menu_label_pad_h">12dp</dimen>
+    <dimen name="fab_menu_label_pad_v">6dp</dimen>
+    <dimen name="fab_menu_label_margin_end">10dp</dimen>
 
     <!-- Balance Card -->
     <dimen name="balance_card_padding">20dp</dimen>

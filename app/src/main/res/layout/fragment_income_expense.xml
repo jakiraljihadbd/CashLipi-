@@ -54,7 +54,58 @@
                 android:focusable="true"/>
         </LinearLayout>
 
-        <!-- ===== সার্চ + PDF + প্রিন্ট + সর্ট (স্কয়ার, কালারফুল) ===== -->
+        <!-- ===== মাসিক সারসংক্ষেপ — কমপ্যাক্ট, কালারফুল (টগলের পরেই) ===== -->
+        <LinearLayout
+            android:id="@+id/monthSummaryCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="7dp"
+            android:background="@drawable/ie_summary_bg_income">
+
+            <ImageView
+                android:id="@+id/ivMonthIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="7dp"
+                android:src="@drawable/ic_plus_circle"
+                android:scaleType="centerInside"
+                android:background="@drawable/ie_summary_icon_income"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:id="@+id/tvMonthTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="এই মাসের মোট আয়"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ieIncomeText"
+                    android:alpha="0.85"/>
+
+                <TextView
+                    android:id="@+id/tvMonthAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:text="৳ 0"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ieIncomeText"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ===== সার্চ + PDF + প্রিন্ট + সর্ট (স্কয়ার, কালারফুল, উঁচু elevation) ===== -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -65,17 +116,18 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="46dp"
+                android:layout_height="48dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:background="@drawable/ie_search_bg"
-                android:paddingStart="12dp"
+                android:elevation="3dp"
+                android:paddingStart="14dp"
                 android:paddingEnd="8dp">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
                     android:src="@drawable/ic_search"
                     android:layout_marginEnd="8dp"
                     android:alpha="0.6"/>
@@ -108,40 +160,43 @@
 
             <ImageView
                 android:id="@+id/btnPdf"
-                android:layout_width="44dp"
-                android:layout_height="46dp"
+                android:layout_width="46dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="6dp"
                 android:padding="11dp"
                 android:src="@drawable/ic_pdf"
                 android:scaleType="centerInside"
                 app:tint="@color/ieWhite"
                 android:background="@drawable/ie_icon_btn_income"
+                android:elevation="3dp"
                 android:clickable="true"
                 android:focusable="true"/>
 
             <ImageView
                 android:id="@+id/btnPrint"
-                android:layout_width="44dp"
-                android:layout_height="46dp"
+                android:layout_width="46dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="6dp"
                 android:padding="11dp"
                 android:src="@drawable/ic_print"
                 android:scaleType="centerInside"
                 app:tint="@color/ieWhite"
                 android:background="@drawable/ie_icon_btn_income"
+                android:elevation="3dp"
                 android:clickable="true"
                 android:focusable="true"/>
 
             <ImageView
                 android:id="@+id/btnSort"
-                android:layout_width="44dp"
-                android:layout_height="46dp"
+                android:layout_width="46dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="6dp"
                 android:padding="11dp"
                 android:src="@drawable/ic_sort"
                 android:scaleType="centerInside"
                 app:tint="@color/ieWhite"
                 android:background="@drawable/ie_icon_btn_income"
+                android:elevation="3dp"
                 android:clickable="true"
                 android:focusable="true"/>
         </LinearLayout>
@@ -194,57 +249,6 @@
                 android:textColor="@color/ieDarkText"
                 android:clickable="true"
                 android:focusable="true"/>
-        </LinearLayout>
-
-        <!-- ===== মাসিক সারসংক্ষেপ — কমপ্যাক্ট, কালারফুল ===== -->
-        <LinearLayout
-            android:id="@+id/monthSummaryCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="10dp"
-            android:background="@drawable/ie_summary_bg_income">
-
-            <ImageView
-                android:id="@+id/ivMonthIcon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_plus_circle"
-                android:scaleType="centerInside"
-                android:background="@drawable/ie_summary_icon_income"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="12dp">
-
-                <TextView
-                    android:id="@+id/tvMonthTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="এই মাসের মোট আয়"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/ieIncomeText"
-                    android:alpha="0.85"/>
-
-                <TextView
-                    android:id="@+id/tvMonthAmount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="৳ 0"
-                    android:textSize="22sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/ieIncomeText"/>
-            </LinearLayout>
         </LinearLayout>
 
         <!-- Filter Chips -->

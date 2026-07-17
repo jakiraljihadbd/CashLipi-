@@ -30,35 +30,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/topHeaderBg">
+            android:background="@android:color/transparent">
 
-            <!-- কমপ্যাক্ট ব্র্যান্ড হেডার — স্ট্যাটিক "CashLipi" + Add বাটন -->
+            <!-- Add বাটন — CashLipi ব্র্যান্ড বার সরিয়ে দেওয়া হয়েছে, শুধু + বাটন থাকবে -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/top_header_height"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:gravity="center_vertical|end"
                 android:paddingHorizontal="16dp">
-
-                <TextView
-                    android:id="@+id/headerBrandTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="CashLipi"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.06"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textColor="@color/topHeaderTitle"/>
 
                 <!-- Add (+) বাটন — ট্যাপ করলে ফ্যান-আউট মেন্যু: আয়-ব্যয় যোগ / দেনা-পাওনা যোগ / সঞ্চয় যোগ / সেটিং -->
                 <ImageButton
                     android:id="@+id/headerAddBtn"
                     android:layout_width="@dimen/header_add_btn_size"
                     android:layout_height="@dimen/header_add_btn_size"
-                    android:layout_marginStart="10dp"
                     android:padding="7dp"
                     android:background="@drawable/bg_fab_add"
                     android:src="@drawable/ic_plus"

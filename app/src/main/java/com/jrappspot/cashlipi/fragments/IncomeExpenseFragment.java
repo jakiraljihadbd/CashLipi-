@@ -31,6 +31,7 @@ import com.jrappspot.cashlipi.models.Transaction;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 import com.jrappspot.cashlipi.utils.DateFilterUtil;
 import com.jrappspot.cashlipi.utils.InvoicePdfHelper;
+import com.jrappspot.cashlipi.utils.SoundEffectPlayer;
 import com.jrappspot.cashlipi.utils.TransactionSheetHelper;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class IncomeExpenseFragment extends Fragment {
     private String currentType = "income"; // "income" | "expense"
     private String viewMode = "card"; // "card" | "table"
     private View rootView;
+    private SoundEffectPlayer soundEffectPlayer;
 
     @Nullable
     @Override
@@ -76,6 +78,7 @@ public class IncomeExpenseFragment extends Fragment {
         super.onViewCreated(root, savedInstanceState);
         db = DatabaseManager.getInstance(requireContext());
         rootView = root;
+        soundEffectPlayer = SoundEffectPlayer.getInstance(requireContext());
         rv = root.findViewById(R.id.rvList);
         emptyState = root.findViewById(R.id.emptyState);
         tableContainer = root.findViewById(R.id.tableContainer);
@@ -92,8 +95,8 @@ public class IncomeExpenseFragment extends Fragment {
         btnViewAnalysis = root.findViewById(R.id.btnViewAnalysis);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        tabIncome.setOnClickListener(v -> switchType("income"));
-        tabExpense.setOnClickListener(v -> switchType("expense"));
+        tabIncome.setOnClickListener(v -> { switchType("income"); playTapSound(); });
+        tabExpense.setOnClickListener(v -> { switchType("expense"); playTapSound(); });
         btnViewCard.setOnClickListener(v -> switchViewMode("card"));
         btnViewTable.setOnClickListener(v -> switchViewMode("table"));
         btnViewAnalysis.setOnClickListener(v -> startActivity(new Intent(requireContext(), AnalysisActivity.class)));
@@ -112,6 +115,7 @@ public class IncomeExpenseFragment extends Fragment {
         if (ivClear != null) ivClear.setOnClickListener(v -> { etSearch.setText(""); etSearch.requestFocus(); });
 
         root.findViewById(R.id.btnAddNew).setOnClickListener(v -> {
+            playTapSound();
             Intent i = new Intent(requireContext(), AddTransactionActivity.class);
             i.putExtra(AddTransactionActivity.EXTRA_MODE, currentType);
             startActivity(i);
@@ -152,6 +156,10 @@ public class IncomeExpenseFragment extends Fragment {
         currentType = type;
         refreshTypeUI();
         loadData();
+    }
+
+    private void playTapSound() {
+        if (soundEffectPlayer != null) soundEffectPlayer.playTap();
     }
 
     private void switchViewMode(String mode) {
@@ -227,35 +235,12 @@ public class IncomeExpenseFragment extends Fragment {
     }
 
     private void setupFilterChips(View root) {
-        String[] labels = {"সব", "মাস", "বছর"};
-        String[] keys = {"all", "month", "year"};
+        // সব / মাস / বছর ফিল্টার বাদ দেওয়া হয়েছে — চিপ রো সম্পূর্ণ লুকানো থাকবে
+        View chipRowScroll = root.findViewById(R.id.chipRowScroll);
+        if (chipRowScroll != null) chipRowScroll.setVisibility(View.GONE);
         chipRowLayout = root.findViewById(R.id.chipRow);
-        if (chipRowLayout == null) return;
-        chipRowLayout.removeAllViews();
-        for (int i = 0; i < labels.length; i++) {
-            final String key = keys[i];
-            TextView chip = new TextView(requireContext());
-            chip.setText(labels[i]);
-            chip.setTextSize(12.5f);
-            chip.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
-            chip.setGravity(android.view.Gravity.CENTER);
-            chip.setPadding(38, 18, 38, 18);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMarginEnd(8);
-            chip.setLayoutParams(lp);
-            chip.setClickable(true);
-            chip.setFocusable(true);
-            boolean selected = key.equals(currentFilter);
-            boolean isIncome = "income".equals(currentType);
-            chip.setBackground(ContextCompat.getDrawable(requireContext(),
-                    selected ? (isIncome ? R.drawable.ie_view_tab_active_income : R.drawable.ie_view_tab_active_expense) : R.drawable.ie_view_tab_track));
-            chip.setTextColor(selected ? ContextCompat.getColor(requireContext(), R.color.ieWhite)
-                    : ContextCompat.getColor(requireContext(), R.color.ieDarkText));
-            if (selected) chip.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.chip_scale));
-            chip.setOnClickListener(v -> { currentFilter = key; setupFilterChips(root); applyFilter(); });
-            chipRowLayout.addView(chip);
-        }
+        if (chipRowLayout != null) chipRowLayout.removeAllViews();
+        currentFilter = "all";
     }
 
     private void applyFilter() {

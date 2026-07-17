@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.view.Gravity;
@@ -27,9 +29,11 @@ import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.models.Transaction;
 import com.jrappspot.cashlipi.utils.AmountInputHelper;
 import com.jrappspot.cashlipi.utils.BackupManager;
+import com.jrappspot.cashlipi.utils.BlurUtils;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 import com.jrappspot.cashlipi.utils.FirestoreSyncManager;
 import com.jrappspot.cashlipi.utils.FontUtils;
+import com.jrappspot.cashlipi.utils.SoundEffectPlayer;
 import com.jrappspot.cashlipi.utils.SuccessPopup;
 
 import org.json.JSONObject;
@@ -82,6 +86,24 @@ public class AddTransactionActivity extends BaseActivity {
     private final Executor aiExecutor = Executors.newSingleThreadExecutor();
     private static final int REQ_VOICE_INPUT = 9021;
 
+    private View aiThinkingOverlay;
+    private ImageView ivAiBlurBg;
+    private TextView tvAiThinking;
+    private final android.os.Handler thinkingHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    private int thinkingDotCount = 0;
+    private final Runnable thinkingDotsRunnable = new Runnable() {
+        @Override public void run() {
+            if (tvAiThinking == null) return;
+            thinkingDotCount = (thinkingDotCount + 1) % 4;
+            StringBuilder dots = new StringBuilder();
+            for (int i = 0; i < thinkingDotCount; i++) dots.append('.');
+            tvAiThinking.setText("AI ভাবছে" + dots);
+            thinkingHandler.postDelayed(this, 380);
+        }
+    };
+
+    private SoundEffectPlayer soundEffectPlayer;
+
     /** ডিফল্ট লেনদেন মাধ্যম লেবেল — কী → প্রদর্শিত নাম */
     private static final Map<String, String> PAYMENT_LABELS = new LinkedHashMap<>();
     static {
@@ -107,6 +129,11 @@ public class AddTransactionActivity extends BaseActivity {
         setDefaultDateTime();
         setupClickListeners();
         applyModeUI();
+        soundEffectPlayer = SoundEffectPlayer.getInstance(this);
+    }
+
+    private void playTapSound() {
+        if (soundEffectPlayer != null) soundEffectPlayer.playTap();
     }
 
     private void initViews() {
@@ -130,6 +157,9 @@ public class AddTransactionActivity extends BaseActivity {
         rowPaymentMethods1 = findViewById(R.id.rowPaymentMethods1);
         rowPaymentMethods2 = findViewById(R.id.rowPaymentMethods2);
         btnAiVoiceEntry = findViewById(R.id.btnAiVoiceEntry);
+        aiThinkingOverlay = findViewById(R.id.aiThinkingOverlay);
+        ivAiBlurBg = findViewById(R.id.ivAiBlurBg);
+        tvAiThinking = findViewById(R.id.tvAiThinking);
 
         // Custom calculator keyboard on amount field
         AmountInputHelper.attach(this, etAmount);
@@ -147,12 +177,14 @@ public class AddTransactionActivity extends BaseActivity {
             if (!isIncome) {
                 isIncome = true;
                 applyModeUI();
+                playTapSound();
             }
         });
         tabExpense.setOnClickListener(v -> {
             if (isIncome) {
                 isIncome = false;
                 applyModeUI();
+                playTapSound();
             }
         });
 
@@ -205,19 +237,22 @@ public class AddTransactionActivity extends BaseActivity {
 
     /** Pollinations AI (কোনো key লাগে না) দিয়ে ভয়েস টেক্সট থেকে লেনদেনের তথ্য বের করা */
     private void parseWithAi(String spokenText) {
-        Toast.makeText(this, "AI ভাবছে...", Toast.LENGTH_SHORT).show();
+        showAiThinking();
         aiExecutor.execute(() -> {
             try {
                 String incomeCats = String.join(", ", db.getCategories("income"));
                 String expenseCats = String.join(", ", db.getCategories("expense"));
 
-                String prompt = "তুমি CashLipi অ্যাপের লেনদেন পার্সার। ইউজারের বলা কথা থেকে লেনদেনের তথ্য বের করে "
-                        + "শুধুমাত্র একটি বিশুদ্ধ JSON অবজেক্ট দাও, অন্য কোনো লেখা, ব্যাখ্যা বা মার্কডাউন দিও না। "
+                String prompt = "তুমি CashLipi অ্যাপের একজন অভিজ্ঞ, মনোযোগী লেনদেন পার্সার। ইউজার যা বলেছে তা গভীরভাবে বিশ্লেষণ করে "
+                        + "লেনদেনের প্রতিটি তথ্য বুদ্ধিমত্তার সাথে বের করবে, তারপর শুধুমাত্র একটি বিশুদ্ধ JSON অবজেক্ট দাও, "
+                        + "অন্য কোনো লেখা, ব্যাখ্যা বা মার্কডাউন দিও না। "
                         + "ফরম্যাট ঠিক এরকম: {\"type\":\"income\" অথবা \"expense\",\"amount\":সংখ্যা,"
-                        + "\"category\":\"সংক্ষিপ্ত ক্যাটাগরি নাম\",\"method\":\"cash\" বা \"bkash\" বা \"nagad\" বা \"rocket\" বা \"bank\" বা \"other\","
-                        + "\"note\":\"সংক্ষিপ্ত নোট বা খালি স্ট্রিং\"}. "
+                        + "\"category\":\"একটি প্রাসঙ্গিক ইমোজিসহ সংক্ষিপ্ত, পরিষ্কার ক্যাটাগরি নাম (যেমন: 🍔 খাবার, 🚌 যাতায়াত, 💼 বেতন)\","
+                        + "\"method\":\"cash\" বা \"bkash\" বা \"nagad\" বা \"rocket\" বা \"bank\" বা \"other\","
+                        + "\"note\":\"একটি ছোট, সুন্দরভাবে গোছানো নোট — প্রাসঙ্গিক হলে একটি ইমোজি দিয়ে শুরু, প্রয়োজনীয় বিস্তারিত সংক্ষেপে, নাহলে খালি স্ট্রিং\"}. "
                         + "বিদ্যমান আয়ের ক্যাটাগরি: " + incomeCats + ". "
                         + "বিদ্যমান ব্যয়ের ক্যাটাগরি: " + expenseCats + ". "
+                        + "সম্ভব হলে বিদ্যমান ক্যাটাগরির সাথে মিলিয়ে দাও, নাহলে নতুন উপযুক্ত ক্যাটাগরি বানাও। "
                         + "মাধ্যম উল্লেখ না থাকলে \"cash\" ধরে নাও। "
                         + "ইউজার বলেছে: \"" + spokenText + "\"";
 
@@ -241,12 +276,50 @@ public class AddTransactionActivity extends BaseActivity {
                 if (start < 0 || end <= start) throw new IllegalStateException("AI থেকে সঠিক উত্তর আসেনি");
                 JSONObject obj = new JSONObject(raw.substring(start, end + 1));
 
-                runOnUiThread(() -> showAiPreview(spokenText, obj));
+                runOnUiThread(() -> {
+                    hideAiThinking();
+                    showAiPreview(spokenText, obj);
+                });
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(this,
-                        "AI বুঝতে পারেনি, আবার চেষ্টা করুন বা নিজে হাতে লিখুন", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> {
+                    hideAiThinking();
+                    Toast.makeText(this,
+                            "AI বুঝতে পারেনি, আবার চেষ্টা করুন বা নিজে হাতে লিখুন", Toast.LENGTH_SHORT).show();
+                });
             }
         });
+    }
+
+    /** পুরো পেজ ব্লার করে মাঝখানে বড় করে "AI ভাবছে..." — টাইপিং এনিমেশনসহ দেখানো */
+    private void showAiThinking() {
+        if (aiThinkingOverlay == null) return;
+        View root = findViewById(android.R.id.content);
+        try {
+            Bitmap blurred = BlurUtils.blurredSnapshot(root, 0.22f, 6);
+            ivAiBlurBg.setImageDrawable(new BitmapDrawable(getResources(), blurred));
+        } catch (Exception ignored) {
+            // ব্লার তৈরি না হলেও ওভারলে ডিমসহ দেখানো হবে
+        }
+        aiThinkingOverlay.setAlpha(0f);
+        aiThinkingOverlay.setVisibility(View.VISIBLE);
+        aiThinkingOverlay.animate().alpha(1f).setDuration(220).start();
+
+        thinkingDotCount = 0;
+        thinkingHandler.removeCallbacks(thinkingDotsRunnable);
+        thinkingHandler.post(thinkingDotsRunnable);
+    }
+
+    private void hideAiThinking() {
+        if (aiThinkingOverlay == null) return;
+        thinkingHandler.removeCallbacks(thinkingDotsRunnable);
+        aiThinkingOverlay.animate().alpha(0f).setDuration(180)
+                .withEndAction(() -> aiThinkingOverlay.setVisibility(View.GONE)).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        thinkingHandler.removeCallbacksAndMessages(null);
     }
 
     /** AI-এর পার্স করা তথ্য প্রিভিউ বটম-শিটে দেখানো, এডিট করা যাবে, তারপর সংরক্ষণ */
@@ -577,6 +650,7 @@ public class AddTransactionActivity extends BaseActivity {
         t.setMethod(selectedMethod);
 
         if (isIncome) db.addIncome(t); else db.addExpense(t);
+        playTapSound();
 
         BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
         FirestoreSyncManager.getInstance(this).uploadAllData(null);

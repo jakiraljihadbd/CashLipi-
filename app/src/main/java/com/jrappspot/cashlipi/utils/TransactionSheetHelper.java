@@ -109,7 +109,7 @@ public class TransactionSheetHelper {
         }
     }
 
-    private static void confirmDeleteTransaction(Activity act, DatabaseManager db, String type,
+    public static void confirmDeleteTransaction(Activity act, DatabaseManager db, String type,
                                                    Transaction item, Refresh onChange) {
         new AlertDialog.Builder(act, R.style.PremiumDialog)
                 .setTitle("মুছে ফেলবেন?")

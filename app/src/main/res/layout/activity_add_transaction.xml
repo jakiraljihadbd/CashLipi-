@@ -31,41 +31,18 @@
                 android:paddingHorizontal="20dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="10dp">
-
-                    <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/logo_splash"
-                        android:layout_marginEnd="8dp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="CashLipi"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.02"
-                        android:textColor="#FFFFFF"
-                        android:alpha="0.95"/>
-                </LinearLayout>
-
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
+                    android:layout_marginTop="4dp"
                     android:layout_marginBottom="5dp">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="ডাটা এন্ট্রি"
+                        android:text="আয় ব্যয় হিসাব"
                         android:textSize="26sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-black"
@@ -85,18 +62,11 @@
                     </FrameLayout>
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="আপনার আয় ও ব্যয়ের বিবরণী সহজেই রাখুন"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:alpha="0.92"/>
             </LinearLayout>
 
             <!-- ===== Body ===== -->
             <LinearLayout
+                android:id="@+id/bodyContainerTxn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -140,6 +110,36 @@
                         android:focusable="true"/>
                 </LinearLayout>
 
+                <!-- ===== AI ভয়েস দিয়ে যোগ করুন — এক ক্লিকে ===== -->
+                <LinearLayout
+                    android:id="@+id/btnAiVoiceEntry"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/bg_ai_voice_pill"
+                    android:elevation="3dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivAiMic"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_mic_ai"
+                        android:layout_marginEnd="8dp"/>
+
+                    <TextView
+                        android:id="@+id/tvAiVoiceLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✨ ভয়েসে বলুন, AI যোগ করে দেবে"
+                        android:textSize="14.5sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+
                 <!-- Amount / Note + Save circle -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -169,8 +169,10 @@
                                 android:layout_height="wrap_content"
                                 android:paddingVertical="14dp"
                                 android:inputType="numberDecimal"
-                                android:textSize="18sp"
+                                android:textSize="26sp"
                                 android:textStyle="bold"
+                                android:fontFamily="sans-serif-black"
+                                android:letterSpacing="0.01"
                                 android:textColor="@color/textPrimary"
                                 android:imeOptions="actionNext"/>
                         </com.google.android.material.textfield.TextInputLayout>
@@ -196,13 +198,21 @@
                     </LinearLayout>
 
                     <FrameLayout
-                        android:layout_width="140dp"
-                        android:layout_height="140dp">
+                        android:layout_width="152dp"
+                        android:layout_height="152dp">
+
+                        <View
+                            android:id="@+id/ringSaveTxn"
+                            android:layout_width="152dp"
+                            android:layout_height="152dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/ring_outline_green"/>
 
                         <Button
                             android:id="@+id/btnSaveTxn"
-                            android:layout_width="140dp"
-                            android:layout_height="140dp"
+                            android:layout_width="128dp"
+                            android:layout_height="128dp"
+                            android:layout_gravity="center"
                             android:background="@drawable/circle_gradient_green"
                             android:text="আয়\nসংরক্ষণ"
                             android:textSize="16sp"
@@ -300,8 +310,83 @@
                         android:focusable="true"/>
                 </LinearLayout>
 
+                <!-- ===== Payment Method — লেনদেন মাধ্যম ===== -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="পেমেন্টের ধরণ"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-black"
+                    android:textColor="@color/textPrimary"/>
+
+                <LinearLayout
+                    android:id="@+id/rowPaymentMethods1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:id="@+id/rowPaymentMethods2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"/>
+
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <!-- ===== AI ভাবছে... — ব্লার ওভারলে ===== -->
+    <FrameLayout
+        android:id="@+id/aiThinkingOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/ivAiBlurBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#59000000"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/bg_ai_thinking_card"
+            android:paddingHorizontal="34dp"
+            android:paddingVertical="28dp"
+            android:elevation="10dp">
+
+            <ProgressBar
+                android:id="@+id/pbAiThinking"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:indeterminateTint="@color/white"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/tvAiThinking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AI ভাবছে..."
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-black"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

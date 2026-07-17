@@ -114,7 +114,24 @@
     <color name="topHeaderTitle">#FFFFFF</color>
     <color name="topHeaderSubtitle">#CCFFFFFF</color>
     <color name="topNavSelected">#00D4FF</color>
-    <color name="topNavUnselected">#C3CEE0</color>
+    <color name="topNavUnselected">#E5EAF6</color>
+
+    <!-- হেডার/বটম + বাটন ও কার্ভ FAB -->
+    <color name="fabAddStart">#F97316</color>
+    <color name="fabAddEnd">#EC4899</color>
+    <!-- + বাটন ফ্যান-আউট মেন্যুর পেছনের ডার্ক স্ক্রিম -->
+    <color name="fabMenuScrim">#B3000000</color>
+    <color name="fabAddIcon">#FFFFFF</color>
+
+    <!-- নেভিগেশন বার ব্যাকগ্রাউন্ড — প্রিসেট রং সোয়াচ (Settings → নেভিগেশন মেন্যু) -->
+    <color name="navSwatchNavy">#0F1B2E</color>
+    <color name="navSwatchIndigo">#4F46E5</color>
+    <color name="navSwatchPurple">#7C3AED</color>
+    <color name="navSwatchTeal">#0D9488</color>
+    <color name="navSwatchGreen">#059669</color>
+    <color name="navSwatchOrange">#EA580C</color>
+    <color name="navSwatchPink">#DB2777</color>
+    <color name="navSwatchCharcoal">#1F2937</color>
 
     <!-- Splash -->
     <color name="splashBg">#150C18</color>
@@ -300,6 +317,10 @@
     <color name="gradCircleBlueEnd">#2563EB</color>
     <color name="gradCircleGreenStart">#10B981</color>
     <color name="gradCircleGreenEnd">#059669</color>
+    <color name="txnSaveCircleGreenStart">#4ADE80</color>
+    <color name="txnSaveCircleGreenEnd">#16A34A</color>
+    <color name="txnRingStrokeGreenLight">#6EE7A0</color>
+    <color name="txnRingStrokeRedLight">#F5A3A3</color>
     <color name="gradPurpleStart">#8B5CF6</color>
     <color name="gradPurpleEnd">#7C3AED</color>
 
@@ -315,6 +336,16 @@
     <color name="txnMinusCircleBg">#F0388B</color>
     <color name="iconCirclePrimaryStart">#6366F1</color>
     <color name="iconCirclePrimaryEnd">#4F46E5</color>
+
+    <!-- Save-circle outer ring (soft glow) -->
+    <color name="ringSoftGreen">#3316A34A</color>
+    <color name="ringSoftRed">#33DC2626</color>
+
+    <!-- Payment method chips -->
+    <color name="paymentItemBg">#F4F6FB</color>
+    <color name="paymentItemBorder">#E2E8F5</color>
+    <color name="paymentItemSelectedBgGreen">#E4F6EF</color>
+    <color name="paymentItemSelectedBgRed">#FCE8E8</color>
 
     <!-- Income extras -->
     <color name="incomeCardGradStart">#6EE7B7</color>
@@ -627,4 +658,22 @@
     <color name="applockDisabled">#E6E1F5</color>
     <color name="applockDisabledText">#B3ABC7</color>
 
+    <!-- ═══════════════════════════════════════════════════════════════
+         আয়-ব্যয় পেজ — কালার (শুধু এই পেজের জন্য)
+         ═══════════════════════════════════════════════════════════════ -->
+    <color name="ieIncomeDark">#0A5C31</color>
+    <color name="ieIncomeDeep">#073D20</color>
+    <color name="ieIncomeBright">#16A34A</color>
+    <color name="ieIncomeLightBg">#E8F5E9</color>
+    <color name="ieIncomeText">#0A5C31</color>
+    <color name="ieExpenseDark">#A31212</color>
+    <color name="ieExpenseDeep">#6E0C0C</color>
+    <color name="ieExpenseBright">#E53935</color>
+    <color name="ieExpenseLightBg">#FFEBEE</color>
+    <color name="ieExpenseText">#B71C1C</color>
+    <color name="ieWhite">#FFFFFF</color>
+    <color name="ieGreyBg">#F0F1F3</color>
+    <color name="ieDarkText">#1A1A1A</color>
+    <color name="ieEditBlue">#1565C0</color>
+    <color name="ieEditBlueLightBg">#E3F2FD</color>
 </resources>

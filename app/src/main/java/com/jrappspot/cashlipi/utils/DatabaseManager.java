@@ -503,6 +503,43 @@ public class DatabaseManager {
         prefs.edit().putBoolean("darkMode", enabled).apply();
     }
 
+    // ─── নেভিগেশন মেন্যু কাস্টমাইজেশন প্রেফারেন্স ────────────────────────
+    /** "top" অথবা "bottom" — ডিফল্ট "top" */
+    public String getNavPosition() {
+        return prefs.getString("navPosition", "top");
+    }
+
+    public void setNavPosition(String position) {
+        prefs.edit().putString("navPosition", position).apply();
+    }
+
+    /** true = বড় আইকন (ডিফল্ট), false = ছোট/কমপ্যাক্ট আইকন */
+    public boolean isNavIconLarge() {
+        return prefs.getBoolean("navIconLarge", true);
+    }
+
+    public void setNavIconLarge(boolean large) {
+        prefs.edit().putBoolean("navIconLarge", large).apply();
+    }
+
+    /** ডান-বাম সোয়াইপ করে পেজ বদলানো — ডিফল্ট চালু */
+    public boolean isNavSwipeEnabled() {
+        return prefs.getBoolean("navSwipeEnabled", true);
+    }
+
+    public void setNavSwipeEnabled(boolean enabled) {
+        prefs.edit().putBoolean("navSwipeEnabled", enabled).apply();
+    }
+
+    /** নেভিগেশন বারের ব্যাকগ্রাউন্ড রং — hex স্ট্রিং (যেমন "#0F1B2E"), ডিফল্ট ব্র্যান্ড নেভি */
+    public String getNavBgColor() {
+        return prefs.getString("navBgColor", "#0F1B2E");
+    }
+
+    public void setNavBgColor(String hexColor) {
+        prefs.edit().putString("navBgColor", hexColor).apply();
+    }
+
     // ─── Custom Calculator Keyboard preference ───────────────────────────
     public boolean isCustomKeyboardEnabled() {
         return prefs.getBoolean("customKeyboard", false); // default: বন্ধ

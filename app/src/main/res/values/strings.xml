@@ -13,6 +13,27 @@
     <string name="total_savings">সঞ্চয়</string>
     <string name="quick_actions"> দ্রুত কাজ</string>
     <string name="recent_transactions"> সর্বশেষ লেনদেন</string>
+
+    <!-- Header Add (+) পপ-আপ মেন্যু -->
+    <string name="add_menu_title">যোগ করুন</string>
+    <string name="add_menu_income_expense">আয়-ব্যয় যোগ</string>
+    <string name="add_menu_dena_pawna">দেনা-পাওনা যোগ</string>
+    <string name="add_menu_savings">সঞ্চয় যোগ</string>
+    <string name="add_menu_settings">সেটিং</string>
+
+    <!-- নেভিগেশন মেন্যু কাস্টমাইজ (Settings) -->
+    <string name="nav_customize_title">নেভিগেশন মেন্যু</string>
+    <string name="nav_customize_subtitle">সাইজ, ব্যাকগ্রাউন্ড রং, পজিশন ও সোয়াইপ কাস্টমাইজ করুন</string>
+    <string name="nav_icon_size_label">মেন্যু আইকন সাইজ</string>
+    <string name="nav_icon_size_large">বড়</string>
+    <string name="nav_icon_size_small">ছোট</string>
+    <string name="nav_bg_color_label">নেভিগেশন বার ব্যাকগ্রাউন্ড রং</string>
+    <string name="nav_swipe_label">সোয়াইপ করে পেজ পরিবর্তন</string>
+    <string name="nav_position_label">নেভিগেশন মেন্যুর অবস্থান</string>
+    <string name="nav_position_top">উপরে</string>
+    <string name="nav_position_bottom">নিচে</string>
+    <string name="nav_save_btn">সংরক্ষণ করুন</string>
+
     <string name="view_all">সব দেখুন →</string>
     <string name="see_analysis"> বিস্তারিত দেখুন</string>
 
@@ -31,6 +52,15 @@
 
     <!-- Bottom Nav -->
     <string name="nav_home">হোম</string>
+
+    <!-- নেভ বার আইকনের নিচের লেবেল (শুধু "নিচে" পজিশনে দেখা যায়) -->
+    <string name="nav_label_home">হোম</string>
+    <string name="nav_label_income_expense">আয়-ব্যয়</string>
+    <string name="nav_label_dena_pawna">দেনা-পাওনা</string>
+    <string name="nav_label_savings">সঞ্চয়</string>
+    <string name="nav_label_bakir_khata">বাকির খাতা</string>
+    <string name="nav_label_budget">বাজেট</string>
+    <string name="nav_label_settings">সেটিং</string>
     <string name="nav_income">আয় যোগ</string>
     <string name="nav_expense">ব্যয় যোগ</string>
     <string name="nav_ledger">দেনা/পাওনা</string>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cardBg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="18dp">
+
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/nav_customize_title"
+            android:textSize="17sp" android:textStyle="bold"
+            android:textColor="@color/textPrimary"/>
+
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="2dp" android:layout_marginBottom="16dp"
+            android:text="@string/nav_customize_subtitle"
+            android:textSize="12sp" android:textColor="@color/textSecondary"/>
+
+        <!-- ── আইকন সাইজ ── -->
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/nav_icon_size_label"
+            android:textSize="13sp" android:textStyle="bold"
+            android:textColor="@color/colorPrimary" android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_login_toggle_group"
+            android:padding="3dp" android:layout_marginBottom="18dp">
+
+            <TextView android:id="@+id/btnSizeLarge"
+                android:layout_width="0dp" android:layout_height="match_parent"
+                android:layout_weight="1" android:gravity="center"
+                android:text="@string/nav_icon_size_large"
+                android:textSize="13sp" android:textColor="@color/white"
+                android:background="@drawable/bg_login_toggle_selected"
+                android:clickable="true" android:focusable="true"/>
+
+            <TextView android:id="@+id/btnSizeSmall"
+                android:layout_width="0dp" android:layout_height="match_parent"
+                android:layout_weight="1" android:gravity="center"
+                android:text="@string/nav_icon_size_small"
+                android:textSize="13sp" android:textColor="@color/textSecondary"
+                android:clickable="true" android:focusable="true"/>
+        </LinearLayout>
+
+        <!-- ── ব্যাকগ্রাউন্ড রং ── -->
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/nav_bg_color_label"
+            android:textSize="13sp" android:textStyle="bold"
+            android:textColor="@color/colorPrimary" android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/swatchContainer"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center"
+            android:layout_marginBottom="18dp">
+
+            <FrameLayout android:id="@+id/swatchWrapNavy" style="@style/NavSwatchWrap">
+                <View android:id="@+id/swatchNavy" style="@style/NavSwatchDot"
+                    android:backgroundTint="@color/navSwatchNavy" android:tag="#0F1B2E"/>
+            </FrameLayout>
+            <FrameLayout android:id="@+id/swatchWrapIndigo" style="@style/NavSwatchWrap">
+                <View android:id="@+id/swatchIndigo" style="@style/NavSwatchDot"
+                    android:backgroundTint="@color/navSwatchIndigo" android:tag="#4F46E5"/>
+            </FrameLayout>
+            <FrameLayout android:id="@+id/swatchWrapPurple" style="@style/NavSwatchWrap">
+                <View android:id="@+id/swatchPurple" style="@style/NavSwatchDot"
+                    android:backgroundTint="@color/navSwatchPurple" android:tag="#7C3AED"/>
+            </FrameLayout>
+            <FrameLayout android:id="@+id/swatchWrapTeal" style="@style/NavSwatchWrap">
+                <View android:id="@+id/swatchTeal" style="@style/NavSwatchDot"
+                    android:backgroundTint="@color/navSwatchTeal" android:tag="#0D9488"/>
+            </FrameLayout>
+            <FrameLayout android:id="@+id/swatchWrapGreen" style="@style/NavSwatchWrap">
+                <View android:id="@+id/swatchGreen" style="@style/NavSwatchDot"
+                    android:backgroundTint="@color/navSwatchGreen" android:tag="#059669"/>
+            </FrameLayout>
+            <FrameLayout android:id="@+id/swatchWrapOrange" style="@style/NavSwatchWrap">
+                <View android:id="@+id/swatchOrange" style="@style/NavSwatchDot"
+                    android:backgroundTint="@color/navSwatchOrange" android:tag="#EA580C"/>
+            </FrameLayout>
+            <FrameLayout android:id="@+id/swatchWrapPink" style="@style/NavSwatchWrap">
+                <View android:id="@+id/swatchPink" style="@style/NavSwatchDot"
+                    android:backgroundTint="@color/navSwatchPink" android:tag="#DB2777"/>
+            </FrameLayout>
+            <FrameLayout android:id="@+id/swatchWrapCharcoal" style="@style/NavSwatchWrap">
+                <View android:id="@+id/swatchCharcoal" style="@style/NavSwatchDot"
+                    android:backgroundTint="@color/navSwatchCharcoal" android:tag="#1F2937"/>
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- ── পজিশন ── -->
+        <TextView
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/nav_position_label"
+            android:textSize="13sp" android:textStyle="bold"
+            android:textColor="@color/colorPrimary" android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_login_toggle_group"
+            android:padding="3dp" android:layout_marginBottom="18dp">
+
+            <TextView android:id="@+id/btnPosTop"
+                android:layout_width="0dp" android:layout_height="match_parent"
+                android:layout_weight="1" android:gravity="center"
+                android:text="@string/nav_position_top"
+                android:textSize="13sp" android:textColor="@color/white"
+                android:background="@drawable/bg_login_toggle_selected"
+                android:clickable="true" android:focusable="true"/>
+
+            <TextView android:id="@+id/btnPosBottom"
+                android:layout_width="0dp" android:layout_height="match_parent"
+                android:layout_weight="1" android:gravity="center"
+                android:text="@string/nav_position_bottom"
+                android:textSize="13sp" android:textColor="@color/textSecondary"
+                android:clickable="true" android:focusable="true"/>
+        </LinearLayout>
+
+        <!-- ── সোয়াইপ ── -->
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/nav_swipe_label"
+                android:textSize="14sp" android:textColor="@color/textPrimary"/>
+
+            <Switch android:id="@+id/switchNavSwipe"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <Button android:id="@+id/btnNavSave"
+            android:layout_width="match_parent" android:layout_height="@dimen/btn_height"
+            android:text="@string/nav_save_btn"
+            android:textColor="@color/white" android:textAllCaps="false"
+            android:background="@drawable/btn_gradient_primary"/>
+    </LinearLayout>
+</ScrollView>

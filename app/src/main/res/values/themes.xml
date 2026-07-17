@@ -160,6 +160,9 @@
         <item name="boxStrokeWidth">1.6dp</item>
         <item name="boxBackgroundColor">@color/white</item>
         <item name="android:textColorHint">@color/textSecondary</item>
+        <!-- হিন্ট (যেমন "আয়ের পরিমাণ") সবসময় ছোট/ভাসমান অবস্থায় দেখায়, ইনপুট টেক্সটের বড় সাইজ ধার করে না —
+             তাই লেখা কাটা পড়ে "..." হয় না, অথচ টাকার সংখ্যা এখনও বড় (etAmount-এর নিজস্ব textSize) দেখায় -->
+        <item name="expandedHintEnabled">false</item>
     </style>
 
     <!-- Submit Button base -->

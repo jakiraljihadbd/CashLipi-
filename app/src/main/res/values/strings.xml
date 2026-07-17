@@ -58,6 +58,9 @@
     <string name="nav_label_income_expense">আয়-ব্যয়</string>
     <string name="nav_label_dena_pawna">দেনা-পাওনা</string>
     <string name="nav_label_savings">সঞ্চয়</string>
+    <!-- নিচের নেভবারে + বাটনের ঠিক নিচে যে আইটেমটা পড়ে (সঞ্চয়) সেটার জায়গায় "যোগ" লেখা দেখানো হয়,
+         যাতে + বাটনের সাথে লেবেলের কনফ্লিক্ট/ওভারল্যাপ না হয় -->
+    <string name="nav_label_fab_gap">যোগ</string>
     <string name="nav_label_bakir_khata">বাকির খাতা</string>
     <string name="nav_label_budget">বাজেট</string>
     <string name="nav_label_settings">সেটিং</string>

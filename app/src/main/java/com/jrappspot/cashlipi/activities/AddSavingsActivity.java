@@ -123,6 +123,7 @@ public class AddSavingsActivity extends BaseActivity {
         t.setTime(selectedTime.isEmpty()?DatabaseManager.nowTime():selectedTime);
         t.setNote(note);t.setType("savings");t.setSourceType("direct");
         db.addSavings(t);
+        com.jrappspot.cashlipi.widgets.FinanceWidgetProvider.updateAll(this);
         com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
         // 🔥 Firebase auto-sync
         FirestoreSyncManager.getInstance(this).uploadAllData(null);

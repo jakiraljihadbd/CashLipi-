@@ -20,6 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:background="@color/bgColor">
 
         <!-- ══════════════════════════════════════════════════════════
@@ -32,8 +34,12 @@
             android:orientation="vertical"
             android:background="@android:color/transparent">
 
-            <!-- Add বাটন — CashLipi ব্র্যান্ড বার সরিয়ে দেওয়া হয়েছে, শুধু + বাটন থাকবে -->
+            <!-- Add বাটন — CashLipi ব্র্যান্ড বার সরিয়ে দেওয়া হয়েছে, শুধু + বাটন থাকবে।
+                 নিচের পজিশনে এই সারিটা পুরো লুকানো হয় (headerRow GONE, কোডে) — নাহলে খালি একটা
+                 সাদা/ফাঁকা স্ট্রিপ থেকে যেত। উপরের পজিশনে নেভবারের সাথে একই রঙে (navBgColor) রাঙানো
+                 হয় যাতে হেডার+নেভবার একটানা একটা বার মনে হয়, আলাদা সাদা অংশ চোখে না পড়ে। -->
             <LinearLayout
+                android:id="@+id/headerRow"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/top_header_height"
                 android:orientation="horizontal"
@@ -94,6 +100,8 @@
             android:id="@+id/bottomNavContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:visibility="gone">
 
             <FrameLayout
@@ -104,12 +112,14 @@
                 android:background="@drawable/bg_bottom_nav_dark"
                 android:elevation="8dp"/>
 
+            <!-- fabNotchBackdrop এখন পেজ ব্যাকগ্রাউন্ডের রঙে (bgColor) — বারের রঙে না — যাতে সত্যিকারের
+                 "ফাঁকা/হোল" U-কার্ভ নচ তৈরি হয়, বার আর + বাটনের মাঝে ফাঁকা গর্তের মতো দেখায় (কার্ভ ভরাট না) -->
             <View
                 android:id="@+id/fabNotchBackdrop"
                 android:layout_width="@dimen/bottom_fab_notch_size"
                 android:layout_height="@dimen/bottom_fab_notch_size"
                 android:layout_gravity="top|center_horizontal"
-                android:layout_marginTop="-26dp"
+                android:layout_marginTop="-30dp"
                 android:background="@drawable/shape_circle_solid"
                 android:elevation="7dp"/>
 
@@ -118,7 +128,7 @@
                 android:layout_width="@dimen/bottom_fab_size"
                 android:layout_height="@dimen/bottom_fab_size"
                 android:layout_gravity="top|center_horizontal"
-                android:layout_marginTop="-18dp"
+                android:layout_marginTop="-22dp"
                 android:padding="14dp"
                 android:background="@drawable/bg_fab_add"
                 android:src="@drawable/ic_plus"
@@ -131,12 +141,16 @@
     <!-- ══════════════════════════════════════════════════════════════
          + বাটন ফ্যান-আউট মেন্যু ওভারলে — পুরো স্ক্রিন জুড়ে, ডিফল্ট GONE।
          টপ পজিশনে fabMenuTop (হেডারের নিচে ডানে) আর বটম পজিশনে fabMenuBottom
-         (+ বাটনের উপরে) — যেটা প্রযোজ্য সেটাই ভিজিবল হয়।
+         (+ বাটনের উপরে) — যেটা প্রযোজ্য সেটাই ভিজিবল হয়। এখন আইটেমগুলো পাশাপাশি
+         (horizontal) সাজানো, বড় আইকন, আর কোডে (openFabMenu) প্রতিটার জন্য আলাদা
+         translationY দিয়ে একটা বাঁকানো/আর্ক আকৃতি তৈরি করা হয়।
     ══════════════════════════════════════════════════════════════ -->
     <FrameLayout
         android:id="@+id/fabMenuOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:visibility="gone"
         android:clickable="true"
         android:focusable="true">
@@ -147,25 +161,29 @@
             android:layout_height="match_parent"
             android:background="@color/fabMenuScrim"/>
 
-        <!-- টপ পজিশনের জন্য — হেডারের নিচে, ডানপাশে -->
+        <!-- টপ পজিশনের জন্য — হেডারের নিচে, ডানপাশে, পাশাপাশি সাজানো -->
         <LinearLayout
             android:id="@+id/fabMenuTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
-            android:layout_marginTop="66dp"
-            android:layout_marginEnd="20dp"
-            android:orientation="vertical"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:visibility="gone"/>
 
-        <!-- বটম পজিশনের জন্য — + বাটনের ঠিক উপরে, কেন্দ্রে -->
+        <!-- বটম পজিশনের জন্য — + বাটনের ঠিক উপরে, কেন্দ্রে, পাশাপাশি বাঁকানো (arc) সাজানো -->
         <LinearLayout
             android:id="@+id/fabMenuBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="150dp"
-            android:orientation="vertical"
+            android:layout_marginBottom="118dp"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:visibility="gone"/>
     </FrameLayout>
 

@@ -54,6 +54,8 @@ public class DashboardActivity extends BaseActivity {
     private FrameLayout bottomNavSlot;
     private FrameLayout bottomNavContainer;
     private View fabNotchBackdrop;
+    private LinearLayout headerRow;
+    private View topBlockDivider;
     private ImageButton headerAddBtn;
     private ImageButton bottomFab;
 
@@ -64,6 +66,7 @@ public class DashboardActivity extends BaseActivity {
     private LinearLayout fabMenuBottom;
     private boolean fabMenuOpen = false;
     private ImageButton activeFabAnchor; // যে বাটন থেকে মেন্যু খোলা হয়েছে (রোটেশনের জন্য)
+    private boolean navSavingsGapActive = false; // + বাটনের নিচে "সঞ্চয়"-স্লট এখন "যোগ"-গ্যাপ কিনা
 
     private static final String STATE_CURRENT_PAGE = "state_current_page";
 
@@ -126,6 +129,8 @@ public class DashboardActivity extends BaseActivity {
         bottomNavSlot = findViewById(R.id.bottomNavSlot);
         bottomNavContainer = findViewById(R.id.bottomNavContainer);
         fabNotchBackdrop = findViewById(R.id.fabNotchBackdrop);
+        headerRow = findViewById(R.id.headerRow);
+        topBlockDivider = findViewById(R.id.topBlockDivider);
         headerAddBtn = findViewById(R.id.headerAddBtn);
         bottomFab = findViewById(R.id.bottomFab);
 
@@ -186,7 +191,8 @@ public class DashboardActivity extends BaseActivity {
             boolean selected = (i == selectedPosition);
             navIcons[i].setColorFilter(ContextCompat.getColor(this,
                     selected ? R.color.topNavSelected : R.color.topNavUnselected));
-            navIndicators[i].setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
+            boolean isGapSlot = navSavingsGapActive && i == MainPagerAdapter.POSITION_BAKIR_KHATA;
+            navIndicators[i].setVisibility(isGapSlot ? View.GONE : (selected ? View.VISIBLE : View.INVISIBLE));
         }
     }
 
@@ -234,7 +240,8 @@ public class DashboardActivity extends BaseActivity {
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             }
             bottomNavContainer.setVisibility(View.VISIBLE);
-            headerAddBtn.setVisibility(View.GONE);
+            headerRow.setVisibility(View.GONE);
+            topBlockDivider.setVisibility(View.GONE);
             // গোলাকার কোণা রেখেই কাস্টম রং বসানো (bg_bottom_nav_dark-এর উপরে ওভাররাইড)
             GradientDrawable bg = new GradientDrawable();
             bg.setColor(navBgColor);
@@ -242,12 +249,12 @@ public class DashboardActivity extends BaseActivity {
             bg.setCornerRadii(new float[]{r, r, r, r, 0, 0, 0, 0});
             bottomNavSlot.setBackground(bg);
             bottomFab.setVisibility(View.VISIBLE);
-            // + বাটনের পেছনের গোল "কুশন" — একই নেভবার রঙে, যাতে + বাটনটা বারের সাথে মিশে
-            // আধুনিক কার্ভ/নচ লুক দেয় (বারের রং থেকে আলাদা দেখাবে না)
+            // + বাটনের পেছনের গোল "কুশন" — পেজ ব্যাকগ্রাউন্ডের (bgColor) রঙে, যাতে সত্যিকারের
+            // ফাঁকা/হোল U-নচ তৈরি হয় (বারের রঙে ভরাট না, বরং ফাঁকা কাটআউটের মতো দেখায়)
             if (fabNotchBackdrop != null) {
                 GradientDrawable notchBg = new GradientDrawable();
                 notchBg.setShape(GradientDrawable.OVAL);
-                notchBg.setColor(navBgColor);
+                notchBg.setColor(ContextCompat.getColor(this, R.color.bgColor));
                 fabNotchBackdrop.setBackground(notchBg);
                 fabNotchBackdrop.setVisibility(View.VISIBLE);
             }
@@ -258,12 +265,43 @@ public class DashboardActivity extends BaseActivity {
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             }
             bottomNavContainer.setVisibility(View.GONE);
+            headerRow.setVisibility(View.VISIBLE);
+            headerRow.setBackgroundColor(navBgColor);
+            topBlockDivider.setVisibility(View.VISIBLE);
             headerAddBtn.setVisibility(View.VISIBLE);
             topNavSlot.setBackgroundColor(navBgColor);
         }
 
         // ── ৩. সোয়াইপ অন/অফ ──
         viewPager.setUserInputEnabled(db.isNavSwipeEnabled());
+
+        // ── ৪. + বাটনের ঠিক নিচে যে আইটেমটা পড়ে (বাকির খাতা, ৭টার ৪র্থ/মাঝেরটা) তাকে "যোগ"-গ্যাপে বদলে দেওয়া ──
+        updateGapMode(bottomPosition);
+    }
+
+    /**
+     * নিচের নেভবারে + বাটন ঠিক মাঝের আইটেম ("বাকির খাতা")-এর উপর ভাসে (nav_bar_items.xml-এ ৪র্থ)।
+     * বটম-পজিশনে সেই স্লটের আইকন লুকিয়ে, লেবেল "যোগ" করে, ট্যাপ করলে যোগ-মেন্যু খোলে (বাকির খাতা
+     * পেজে যায় না) — + বাটনেরই অংশ মনে হয়। সঞ্চয় এখন সবসময় স্বাভাবিক/দৃশ্যমান/ট্যাপযোগ্য থাকে।
+     * উপরের পজিশনে ফিরলে "বাকির খাতা" আবার স্বাভাবিক আইকন/লেবেল/নেভিগেশনে ফিরে আসে (top position-এ
+     * পুরো ৭টা আইকনই স্বাভাবিকভাবে অ্যাক্সেসযোগ্য থাকে)।
+     */
+    private void updateGapMode(boolean bottomPosition) {
+        int i = MainPagerAdapter.POSITION_BAKIR_KHATA;
+        if (navItems[i] == null) return;
+        navSavingsGapActive = bottomPosition; // নাম পুরনো রাখা হলো, এখন এটা "গ্যাপ স্লট" বোঝায় (বাকির খাতা)
+
+        if (bottomPosition) {
+            if (navIcons[i] != null) navIcons[i].setVisibility(View.INVISIBLE);
+            if (navLabels[i] != null) navLabels[i].setText(R.string.nav_label_fab_gap);
+            if (navIndicators[i] != null) navIndicators[i].setVisibility(View.GONE);
+            navItems[i].setOnClickListener(v -> toggleFabMenu(bottomFab));
+        } else {
+            if (navIcons[i] != null) navIcons[i].setVisibility(View.VISIBLE);
+            if (navLabels[i] != null) navLabels[i].setText(R.string.nav_label_bakir_khata);
+            if (navIndicators[i] != null) navIndicators[i].setVisibility(View.INVISIBLE);
+            navItems[i].setOnClickListener(v -> viewPager.setCurrentItem(i, true));
+        }
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -292,7 +330,7 @@ public class DashboardActivity extends BaseActivity {
         fabMenuScrim.setOnClickListener(v -> closeFabMenu());
     }
 
-    /** ৪টা অ্যাকশন-আইটেম (লেবেল চিপ + রঙিন গোল আইকন) তৈরি করে দেওয়া container-এ যোগ করে। */
+    /** ৪টা অ্যাকশন-আইটেম (বড় রঙিন গোল আইকন + নিচে ছোট লেবেল) পাশাপাশি সাজিয়ে container-এ যোগ করে। */
     private void buildFabMenuItems(LinearLayout container) {
         addFabMenuItem(container, R.drawable.ic_nav_income_expense, getString(R.string.add_menu_income_expense),
                 R.color.incomeColor, () -> {
@@ -308,60 +346,60 @@ public class DashboardActivity extends BaseActivity {
                 R.color.secondaryTextDark, () -> viewPager.setCurrentItem(MainPagerAdapter.POSITION_SETTINGS, true));
     }
 
+    /** একটা আইটেম = বড় গোল আইকন বাটন, ঠিক নিচে ছোট লেবেল — উল্লম্ব মিনি-স্ট্যাক, যা container-এ পাশাপাশি বসে। */
     private void addFabMenuItem(LinearLayout container, int iconRes, String label, int colorRes, Runnable action) {
-        LinearLayout row = new LinearLayout(this);
-        row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setGravity(android.view.Gravity.CENTER_VERTICAL);
-        LinearLayout.LayoutParams rowLp = new LinearLayout.LayoutParams(
+        LinearLayout stack = new LinearLayout(this);
+        stack.setOrientation(LinearLayout.VERTICAL);
+        stack.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+        LinearLayout.LayoutParams stackLp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        rowLp.gravity = android.view.Gravity.END;
-        rowLp.bottomMargin = getResources().getDimensionPixelSize(R.dimen.fab_menu_item_spacing);
-        row.setLayoutParams(rowLp);
-
-        TextView labelChip = new TextView(this);
-        labelChip.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        FontUtils.applyToView(this, labelChip);
-        labelChip.setText(label);
-        applyStyleFabMiniLabel(labelChip);
+        int sideMargin = getResources().getDimensionPixelSize(R.dimen.fab_menu_item_spacing);
+        stackLp.setMarginStart(sideMargin);
+        stackLp.setMarginEnd(sideMargin);
+        stack.setLayoutParams(stackLp);
 
         ImageView iconBtn = new ImageView(this);
         int size = getResources().getDimensionPixelSize(R.dimen.fab_menu_icon_size);
-        LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(size, size);
-        iconBtn.setLayoutParams(iconLp);
+        iconBtn.setLayoutParams(new LinearLayout.LayoutParams(size, size));
         int pad = getResources().getDimensionPixelSize(R.dimen.fab_menu_icon_padding);
         iconBtn.setPadding(pad, pad, pad, pad);
         iconBtn.setBackground(ContextCompat.getDrawable(this, R.drawable.shape_circle_solid));
         iconBtn.setBackgroundTintList(ContextCompat.getColorStateList(this, colorRes));
         iconBtn.setImageResource(iconRes);
         iconBtn.setColorFilter(ContextCompat.getColor(this, R.color.white));
-        iconBtn.setElevation(6f);
+        iconBtn.setElevation(8f);
 
-        row.addView(labelChip);
-        row.addView(iconBtn);
+        TextView labelChip = new TextView(this);
+        LinearLayout.LayoutParams labelLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        labelLp.topMargin = getResources().getDimensionPixelSize(R.dimen.fab_menu_label_top_margin);
+        labelChip.setLayoutParams(labelLp);
+        FontUtils.applyToView(this, labelChip);
+        labelChip.setText(label);
+        applyStyleFabMiniLabel(labelChip);
 
-        View.OnClickListener rowClick = v -> {
+        stack.addView(iconBtn);
+        stack.addView(labelChip);
+
+        View.OnClickListener stackClick = v -> {
             closeFabMenu();
             action.run();
         };
-        row.setOnClickListener(rowClick);
-        iconBtn.setOnClickListener(rowClick);
+        stack.setOnClickListener(stackClick);
+        iconBtn.setOnClickListener(stackClick);
 
-        container.addView(row);
+        container.addView(stack);
     }
 
     private void applyStyleFabMiniLabel(TextView tv) {
         int padH = getResources().getDimensionPixelSize(R.dimen.fab_menu_label_pad_h);
         int padV = getResources().getDimensionPixelSize(R.dimen.fab_menu_label_pad_v);
         tv.setPadding(padH, padV, padH, padV);
-        int marginEnd = getResources().getDimensionPixelSize(R.dimen.fab_menu_label_margin_end);
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tv.getLayoutParams();
-        lp.setMarginEnd(marginEnd);
-        tv.setLayoutParams(lp);
-        tv.setTextSize(13f);
+        tv.setTextSize(11f);
+        tv.setMaxLines(1);
         tv.setTextColor(ContextCompat.getColor(this, R.color.white));
         tv.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_fab_mini_label));
-        tv.setElevation(6f);
+        tv.setElevation(8f);
     }
 
     private void toggleFabMenu(ImageButton anchor) {
@@ -372,6 +410,10 @@ public class DashboardActivity extends BaseActivity {
         }
     }
 
+    /**
+     * ফ্যান-আউট মেন্যু খোলে — আইটেমগুলো পাশাপাশি (horizontal), + বাটনের ঠিক উপরে একটা বাঁকানো/আর্ক
+     * আকৃতিতে ফুটে ওঠে (মাঝেরগুলো একটু বেশি উপরে ওঠে, দুই পাশেরগুলো একটু কম — arcOffset ফর্মুলা দিয়ে)।
+     */
     private void openFabMenu(ImageButton anchor) {
         fabMenuOpen = true;
         activeFabAnchor = anchor;
@@ -387,17 +429,24 @@ public class DashboardActivity extends BaseActivity {
         activeContainer.setVisibility(View.VISIBLE);
         anchor.animate().rotation(45f).setDuration(200).start();
 
-        for (int i = 0; i < activeContainer.getChildCount(); i++) {
-            View row = activeContainer.getChildAt(i);
-            row.setAlpha(0f);
-            row.setScaleX(0.4f);
-            row.setScaleY(0.4f);
-            row.setTranslationY(activeContainer.getHeight() > 0 ? 40f : 60f);
-            row.animate()
-                    .alpha(1f).scaleX(1f).scaleY(1f).translationY(0f)
-                    .setStartDelay(i * 45L)
-                    .setDuration(240)
-                    .setInterpolator(new OvershootInterpolator(1.1f))
+        int count = activeContainer.getChildCount();
+        float amplitude = getResources().getDimensionPixelSize(R.dimen.fab_menu_arc_amplitude);
+        float mid = (count - 1) / 2f;
+
+        for (int i = 0; i < count; i++) {
+            View item = activeContainer.getChildAt(i);
+            float normalized = mid == 0 ? 0 : (i - mid) / mid;   // -1..1, ০ মাঝখানে
+            float arcLift = amplitude * (1f - normalized * normalized); // মাঝেরটা সবচেয়ে বেশি উপরে
+
+            item.setAlpha(0f);
+            item.setScaleX(0.3f);
+            item.setScaleY(0.3f);
+            item.setTranslationY(50f);
+            item.animate()
+                    .alpha(1f).scaleX(1f).scaleY(1f).translationY(-arcLift)
+                    .setStartDelay(i * 50L)
+                    .setDuration(260)
+                    .setInterpolator(new OvershootInterpolator(1.15f))
                     .start();
         }
     }

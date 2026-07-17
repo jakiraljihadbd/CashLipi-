@@ -89,6 +89,7 @@ public class AddTransactionActivity extends BaseActivity {
     private View aiThinkingOverlay;
     private ImageView ivAiBlurBg;
     private TextView tvAiThinking;
+    private TextView tvAiHeardText;
     private final android.os.Handler thinkingHandler = new android.os.Handler(android.os.Looper.getMainLooper());
     private int thinkingDotCount = 0;
     private final Runnable thinkingDotsRunnable = new Runnable() {
@@ -160,6 +161,7 @@ public class AddTransactionActivity extends BaseActivity {
         aiThinkingOverlay = findViewById(R.id.aiThinkingOverlay);
         ivAiBlurBg = findViewById(R.id.ivAiBlurBg);
         tvAiThinking = findViewById(R.id.tvAiThinking);
+        tvAiHeardText = findViewById(R.id.tvAiHeardText);
 
         // Custom calculator keyboard on amount field
         AmountInputHelper.attach(this, etAmount);
@@ -229,7 +231,6 @@ public class AddTransactionActivity extends BaseActivity {
             ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             if (results != null && !results.isEmpty()) {
                 String spokenText = results.get(0);
-                Toast.makeText(this, "শুনেছি: " + spokenText, Toast.LENGTH_SHORT).show();
                 parseWithAi(spokenText);
             }
         }
@@ -237,7 +238,7 @@ public class AddTransactionActivity extends BaseActivity {
 
     /** Pollinations AI (কোনো key লাগে না) দিয়ে ভয়েস টেক্সট থেকে লেনদেনের তথ্য বের করা */
     private void parseWithAi(String spokenText) {
-        showAiThinking();
+        showAiThinking(spokenText);
         aiExecutor.execute(() -> {
             try {
                 String incomeCats = String.join(", ", db.getCategories("income"));
@@ -290,9 +291,12 @@ public class AddTransactionActivity extends BaseActivity {
         });
     }
 
-    /** পুরো পেজ ব্লার করে মাঝখানে বড় করে "AI ভাবছে..." — টাইপিং এনিমেশনসহ দেখানো */
-    private void showAiThinking() {
+    /** পুরো পেজ ব্লার করে মাঝখানে বড় করে "AI ভাবছে..." দেখানো হয় — উপরে ইউজার যা বলেছে তা সুন্দর "কোট" আকারে দেখায় */
+    private void showAiThinking(String spokenText) {
         if (aiThinkingOverlay == null) return;
+        if (tvAiHeardText != null) {
+            tvAiHeardText.setText("“" + spokenText + "”");
+        }
         View root = findViewById(android.R.id.content);
         try {
             Bitmap blurred = BlurUtils.blurredSnapshot(root, 0.22f, 6);
@@ -480,6 +484,9 @@ public class AddTransactionActivity extends BaseActivity {
         // Save circle button — আয়ে সবুজ, ব্যয়ে লাল (বাইরের চিকন রিং সহ)
         btnSaveTxn.setBackground(getResources().getDrawable(
                 isIncome ? R.drawable.circle_gradient_green : R.drawable.circle_gradient_red));
+        // MaterialButton ডিফল্টভাবে থিমের colorPrimary (নীল) দিয়ে backgroundTint বসিয়ে দেয়,
+        // যেটা উপরের গ্রেডিয়েন্ট ড্রয়েবলকে ঢেকে ফেলে — এটা null করে আসল সবুজ/লাল রঙ দেখানো নিশ্চিত করা হচ্ছে
+        btnSaveTxn.setBackgroundTintList(null);
         btnSaveTxn.setText(isIncome ? "আয়\nসংরক্ষণ" : "ব্যয়\nসংরক্ষণ");
         if (ringSaveTxn != null) {
             ringSaveTxn.setBackground(getResources().getDrawable(
@@ -651,6 +658,7 @@ public class AddTransactionActivity extends BaseActivity {
 
         if (isIncome) db.addIncome(t); else db.addExpense(t);
         playTapSound();
+        com.jrappspot.cashlipi.widgets.FinanceWidgetProvider.updateAll(this);
 
         BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
         FirestoreSyncManager.getInstance(this).uploadAllData(null);

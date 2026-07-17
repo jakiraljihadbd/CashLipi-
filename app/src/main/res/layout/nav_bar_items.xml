@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- ৭-আইকন নেভ বার — DashboardActivity রানটাইমে এই ভিউটাকে topNavSlot বা bottomNavSlot-এ বসায়।
-     ব্যাকগ্রাউন্ড কালার ও আইকন সাইজ সেটিং অনুযায়ী কোডে সেট করা হয় (bindNavBarStyle)।
-     প্রতিটা আইটেমে আইকনের নিচে একটা লেবেল আছে — শুধু "নিচে" পজিশনে ভিজিবল হয় (applyNavCustomization),
-     যাতে ছোট আইকনগুলো কী বোঝায় তা স্পষ্ট বোঝা যায়। -->
+     ব্যাকগ্রাউন্ড কালার ও আইকন সাইজ সেটিং অনুযায়ী কোডে সেট করা হয় (applyNavCustomization)।
+     প্রতিটা আইটেমে আইকনের নিচে একটা লেবেল আছে — শুধু "নিচে" পজিশনে ভিজিবল হয়।
+     ক্রম ইচ্ছাকৃতভাবে এভাবে সাজানো: Home, IncomeExpense, DenaPawna, BakirKhata, Savings, Budget, Settings —
+     "বাকির খাতা" এখন ৭টার ঠিক মাঝেরটা (৪র্থ), তাই নিচের পজিশনে + বাটনের ঠিক নিচে পড়ে এবং সেই স্লট
+     DashboardActivity-তে "যোগ"-গ্যাপে বদলে যায় (icon/label লুকিয়ে, ট্যাপ করলে যোগ-মেন্যু খোলে)।
+     এতে "সঞ্চয়" সবসময় স্বাভাবিক, পূর্ণ দৃশ্যমান ও ট্যাপযোগ্য থাকে। -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/topNavBar"
@@ -37,22 +40,22 @@
         <View android:id="@+id/indicatorNavDenaPawna" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
-    <!-- ৪. সঞ্চয় -->
-    <LinearLayout android:id="@+id/navSavings" style="@style/TopNavItemStyle">
-        <ImageView android:id="@+id/iconNavSavings" style="@style/TopNavIconStyle"
-            android:src="@drawable/ic_nav_savings"/>
-        <TextView android:id="@+id/labelNavSavings" style="@style/TopNavLabelStyle"
-            android:text="@string/nav_label_savings"/>
-        <View android:id="@+id/indicatorNavSavings" style="@style/TopNavIndicatorStyle"/>
-    </LinearLayout>
-
-    <!-- ৫. বাকির খাতা -->
+    <!-- ৪. বাকির খাতা — ঠিক মাঝেরটা; নিচের পজিশনে + বাটনের নিচে পড়ে, তাই গ্যাপ-মোডে বদলে যায় -->
     <LinearLayout android:id="@+id/navBakirKhata" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavBakirKhata" style="@style/TopNavIconStyle"
             android:src="@drawable/ic_nav_bakir_khata"/>
         <TextView android:id="@+id/labelNavBakirKhata" style="@style/TopNavLabelStyle"
             android:text="@string/nav_label_bakir_khata"/>
         <View android:id="@+id/indicatorNavBakirKhata" style="@style/TopNavIndicatorStyle"/>
+    </LinearLayout>
+
+    <!-- ৫. সঞ্চয় -->
+    <LinearLayout android:id="@+id/navSavings" style="@style/TopNavItemStyle">
+        <ImageView android:id="@+id/iconNavSavings" style="@style/TopNavIconStyle"
+            android:src="@drawable/ic_nav_savings"/>
+        <TextView android:id="@+id/labelNavSavings" style="@style/TopNavLabelStyle"
+            android:text="@string/nav_label_savings"/>
+        <View android:id="@+id/indicatorNavSavings" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
     <!-- ৬. বাজেট -->

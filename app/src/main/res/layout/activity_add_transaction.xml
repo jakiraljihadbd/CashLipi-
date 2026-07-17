@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bgColor">
@@ -214,6 +215,7 @@
                             android:layout_height="128dp"
                             android:layout_gravity="center"
                             android:background="@drawable/circle_gradient_green"
+                            app:backgroundTint="@null"
                             android:text="আয়\nসংরক্ষণ"
                             android:textSize="16sp"
                             android:textStyle="bold"
@@ -369,6 +371,30 @@
             android:paddingHorizontal="34dp"
             android:paddingVertical="28dp"
             android:elevation="10dp">
+
+            <!-- ইউজার ভয়েসে যা বলেছে সেটা সুন্দরভাবে "কোট" আকারে উপরে দেখানো হয় -->
+            <TextView
+                android:id="@+id/tvAiHeardLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎙️ আপনি বলেছেন"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.03"
+                android:textColor="#B9C4FF"
+                android:layout_marginBottom="6dp"/>
+
+            <TextView
+                android:id="@+id/tvAiHeardText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="18dp"
+                android:gravity="center"
+                android:maxWidth="230dp"
+                android:textSize="15.5sp"
+                android:textStyle="bold|italic"
+                android:textColor="@color/white"
+                tools:text="৫০০ টাকা বাজার খরচ হয়েছে"/>
 
             <ProgressBar
                 android:id="@+id/pbAiThinking"

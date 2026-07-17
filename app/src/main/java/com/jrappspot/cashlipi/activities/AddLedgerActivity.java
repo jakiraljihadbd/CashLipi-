@@ -178,6 +178,7 @@ public class AddLedgerActivity extends BaseActivity {
         e.setNote(note);
         e.setPaid(false);
         db.addLedger(e);
+        com.jrappspot.cashlipi.widgets.FinanceWidgetProvider.updateAll(this);
         com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
         // 🔥 Firebase auto-sync
         FirestoreSyncManager.getInstance(this).uploadAllData(null);

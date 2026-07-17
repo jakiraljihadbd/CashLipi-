@@ -63,12 +63,14 @@
     <dimen name="bottom_fab_notch_size">76dp</dimen>
 
     <!-- + বাটন ফ্যান-আউট মেন্যু (মিনি আইকন + লেবেল চিপ) -->
-    <dimen name="fab_menu_item_spacing">14dp</dimen>
-    <dimen name="fab_menu_icon_size">46dp</dimen>
-    <dimen name="fab_menu_icon_padding">12dp</dimen>
-    <dimen name="fab_menu_label_pad_h">12dp</dimen>
-    <dimen name="fab_menu_label_pad_v">6dp</dimen>
+    <dimen name="fab_menu_item_spacing">10dp</dimen>
+    <dimen name="fab_menu_icon_size">58dp</dimen>
+    <dimen name="fab_menu_icon_padding">15dp</dimen>
+    <dimen name="fab_menu_label_pad_h">8dp</dimen>
+    <dimen name="fab_menu_label_pad_v">3dp</dimen>
     <dimen name="fab_menu_label_margin_end">10dp</dimen>
+    <dimen name="fab_menu_arc_amplitude">26dp</dimen>
+    <dimen name="fab_menu_label_top_margin">6dp</dimen>
 
     <!-- Balance Card -->
     <dimen name="balance_card_padding">20dp</dimen>

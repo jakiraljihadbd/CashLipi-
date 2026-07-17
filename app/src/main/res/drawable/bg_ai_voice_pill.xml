@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- "ভয়েসে বলুন, AI যোগ করে দেবে" পিল — আগে খুবই হালকা/স্বচ্ছ (২৪% অপাসিটি) ছিল বলে বোঝা যাচ্ছিল না,
+     এখন প্রায়-সলিড ভাইব্রেন্ট ভায়োলেট→পিংক গ্রেডিয়েন্ট, উজ্জ্বল বর্ডারসহ। -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <gradient android:startColor="#3D8B5CF6" android:endColor="#3DEC4899"
+    <gradient android:startColor="#8B5CF6" android:endColor="#EC4899"
         android:angle="0"/>
     <corners android:radius="16dp"/>
-    <stroke android:width="1.2dp" android:color="#66FFFFFF"/>
+    <stroke android:width="1.5dp" android:color="#CCFFFFFF"/>
 </shape>

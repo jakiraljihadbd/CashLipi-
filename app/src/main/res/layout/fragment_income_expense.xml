@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/appBg">
+    android:background="@color/ieGreyBg">
 
     <LinearLayout
         android:id="@+id/contentColumn"
@@ -16,17 +16,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- ===== আয় / ব্যয় টগল পিল ===== -->
+        <!-- ===== আয় / ব্যয় টগল — বড়, ফুল-ওয়েট, কালারফুল ===== -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="12dp"
+            android:layout_height="58dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
-            android:background="@drawable/bg_txn_tab_container"
+            android:background="@drawable/ie_view_tab_track"
             android:padding="4dp"
-            android:elevation="3dp">
+            android:elevation="4dp">
 
             <TextView
                 android:id="@+id/tabIncome"
@@ -34,8 +34,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text=" আয়"
-                android:textSize="15sp"
+                android:text="আয়"
+                android:textSize="17sp"
                 android:textStyle="bold"
                 android:clickable="true"
                 android:focusable="true"/>
@@ -47,18 +47,18 @@
                 android:layout_weight="1"
                 android:layout_marginStart="4dp"
                 android:gravity="center"
-                android:text=" ব্যয়"
-                android:textSize="15sp"
+                android:text="ব্যয়"
+                android:textSize="17sp"
                 android:textStyle="bold"
                 android:clickable="true"
                 android:focusable="true"/>
         </LinearLayout>
 
-        <!-- ===== সার্চ + PDF + প্রিন্ট ===== -->
+        <!-- ===== সার্চ + PDF + প্রিন্ট + সর্ট (স্কয়ার, কালারফুল) ===== -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="12dp"
             android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
@@ -69,16 +69,16 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:background="@drawable/bg_search_premium"
-                android:paddingStart="14dp"
-                android:paddingEnd="10dp">
+                android:background="@drawable/ie_search_bg"
+                android:paddingStart="12dp"
+                android:paddingEnd="8dp">
 
                 <ImageView
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:src="@drawable/ic_search"
                     android:layout_marginEnd="8dp"
-                    android:alpha="0.7"/>
+                    android:alpha="0.6"/>
 
                 <EditText
                     android:id="@+id/etSearch"
@@ -88,8 +88,9 @@
                     android:inputType="text"
                     android:hint="অনুসন্ধান করুন..."
                     android:textSize="13.5sp"
-                    android:textColor="@color/searchTextColor"
-                    android:textColorHint="@color/searchHintColor"
+                    android:textStyle="bold"
+                    android:textColor="@color/ieDarkText"
+                    android:textColorHint="#9AA0A6"
                     android:background="@android:color/transparent"
                     android:singleLine="true"
                     android:maxLines="1"
@@ -107,49 +108,52 @@
 
             <ImageView
                 android:id="@+id/btnPdf"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="8dp"
-                android:padding="10dp"
+                android:layout_width="44dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="6dp"
+                android:padding="11dp"
                 android:src="@drawable/ic_pdf"
                 android:scaleType="centerInside"
-                android:background="@drawable/bg_icon_btn_light"
+                app:tint="@color/ieWhite"
+                android:background="@drawable/ie_icon_btn_income"
                 android:clickable="true"
                 android:focusable="true"/>
 
             <ImageView
                 android:id="@+id/btnPrint"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="8dp"
-                android:padding="10dp"
+                android:layout_width="44dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="6dp"
+                android:padding="11dp"
                 android:src="@drawable/ic_print"
                 android:scaleType="centerInside"
-                android:background="@drawable/bg_icon_btn_light"
+                app:tint="@color/ieWhite"
+                android:background="@drawable/ie_icon_btn_income"
                 android:clickable="true"
                 android:focusable="true"/>
 
             <ImageView
                 android:id="@+id/btnSort"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="8dp"
-                android:padding="10dp"
+                android:layout_width="44dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="6dp"
+                android:padding="11dp"
                 android:src="@drawable/ic_sort"
                 android:scaleType="centerInside"
-                android:background="@drawable/bg_icon_btn_light"
+                app:tint="@color/ieWhite"
+                android:background="@drawable/ie_icon_btn_income"
                 android:clickable="true"
                 android:focusable="true"/>
         </LinearLayout>
 
-        <!-- ===== ভিউ সুইচার: কার্ড ভিউ / ছক ভিউ / বিশ্লেষণ ===== -->
+        <!-- ===== ভিউ সুইচার: কার্ড / ছক / বিশ্লেষণ (স্কয়ার, কালারফুল) ===== -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="12dp"
+            android:layout_height="44dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
-            android:background="@drawable/bg_view_toggle_track"
+            android:background="@drawable/ie_view_tab_track"
             android:padding="3dp">
 
             <TextView
@@ -157,9 +161,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text=" কার্ড ভিউ"
+                android:text="কার্ড ভিউ"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:textSize="12.5sp"
                 android:textStyle="bold"
                 android:clickable="true"
                 android:focusable="true"/>
@@ -170,9 +174,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="3dp"
-                android:text=" ছক ভিউ"
+                android:text="ছক ভিউ"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:textSize="12.5sp"
                 android:textStyle="bold"
                 android:clickable="true"
                 android:focusable="true"/>
@@ -183,68 +187,73 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="3dp"
-                android:text=" বিশ্লেষণ"
+                android:text="বিশ্লেষণ"
                 android:gravity="center"
-                android:textSize="12sp"
+                android:textSize="12.5sp"
                 android:textStyle="bold"
-                android:textColor="@color/chipUnselectedText"
-                android:background="@drawable/bg_icon_btn_light"
+                android:textColor="@color/ieDarkText"
                 android:clickable="true"
                 android:focusable="true"/>
         </LinearLayout>
 
-        <!-- ===== মাসিক সারসংক্ষেপ কার্ড ===== -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- ===== মাসিক সারসংক্ষেপ — কমপ্যাক্ট, কালারফুল ===== -->
+        <LinearLayout
+            android:id="@+id/monthSummaryCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/cardWhite">
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp"
+            android:background="@drawable/ie_summary_bg_income">
+
+            <ImageView
+                android:id="@+id/ivMonthIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/ic_plus_circle"
+                android:scaleType="centerInside"
+                android:background="@drawable/ie_summary_icon_income"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_marginStart="12dp">
 
                 <TextView
                     android:id="@+id/tvMonthTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="বর্তমান মাসের সারসংক্ষেপ (আয়)"
-                    android:textSize="12.5sp"
-                    android:textColor="@color/textSecondary"/>
+                    android:text="এই মাসের মোট আয়"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ieIncomeText"
+                    android:alpha="0.85"/>
 
                 <TextView
                     android:id="@+id/tvMonthAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="+ ৳ 0"
-                    android:textSize="30sp"
+                    android:layout_marginTop="2dp"
+                    android:text="৳ 0"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="@color/amountIncome"/>
-
-                <TextView
-                    android:id="@+id/tvMonthSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="(সর্বশেষ হালনাগাদ: --)"
-                    android:textSize="11.5sp"
-                    android:textColor="@color/textHint"/>
+                    android:textColor="@color/ieIncomeText"/>
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
         <!-- Filter Chips -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
-            android:paddingHorizontal="16dp"
-            android:layout_marginBottom="8dp">
+            android:paddingHorizontal="12dp"
+            android:layout_marginBottom="6dp">
             <LinearLayout
                 android:id="@+id/chipRow"
                 android:layout_width="wrap_content"
@@ -258,33 +267,30 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="12dp"
             android:paddingTop="2dp"
             android:paddingBottom="80dp"
             android:clipToPadding="false"
             android:overScrollMode="never"/>
 
-        <!-- Table (ছক) view -->
-        <LinearLayout
+        <!-- Table (ছক) view — মাসিক ভিত্তিক, শুধু দেখার জন্য (এডিট করা যাবে না) -->
+        <ScrollView
             android:id="@+id/tableContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="12dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:overScrollMode="never"
+            android:paddingHorizontal="12dp"
+            android:clipToPadding="false">
 
-            <include android:id="@+id/tableHeader" layout="@layout/item_transaction_table_header"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTable"
+            <LinearLayout
+                android:id="@+id/tableMonthsContainer"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_table_body"
-                android:overScrollMode="never"/>
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="80dp"/>
+        </ScrollView>
 
         <!-- Empty State -->
         <LinearLayout
@@ -306,40 +312,41 @@
                 android:layout_height="wrap_content"
                 android:text="কোনো তথ্য নেই"
                 android:textSize="16sp"
-                android:textColor="@color/textPrimary"
+                android:textColor="@color/ieDarkText"
                 android:textStyle="bold"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="নিচের বাটন থেকে যোগ করুন"
                 android:textSize="13sp"
-                android:textColor="@color/textSecondary"
+                android:textColor="@color/ieDarkText"
+                android:alpha="0.6"
                 android:layout_marginTop="6dp"/>
         </LinearLayout>
     </LinearLayout>
 
-    <!-- ===== ফ্লোটিং অ্যাড বাটন ===== -->
+    <!-- ===== ফ্লোটিং অ্যাড বাটন — স্কয়ার-রাউন্ড, কালারফুল ===== -->
     <LinearLayout
         android:id="@+id/btnAddNew"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:background="@drawable/bg_fab_income"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/ie_fab_income"
         android:gravity="center"
-        android:elevation="8dp"
+        android:elevation="10dp"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginBottom="22dp"
+        android:layout_marginEnd="18dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
-            android:textSize="28sp"
+            android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/white"/>
+            android:textColor="@color/ieWhite"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    CashLipi — Dashboard container (UI/Navigation upgrade)
-    ভেতরে থাকে: (১) কমপ্যাক্ট ব্র্যান্ড হেডার + টাইটেল-সাইকেল অ্যানিমেশন
-               (২) ৭-আইকন টপ ন্যাভ বার (Facebook Lite-স্টাইল লেআউট প্যাটার্ন)
-               (৩) ViewPager2 — ৭টি Fragment পেজ (সোয়াইপ + ট্যাপ নেভিগেশন)
-    হেডার ও নেভ বার একসাথে একটাই ব্লক — মাঝে কোনো বর্ডার/শ্যাডো নেই।
-    ডিভাইডার শুধু নেভ বারের একদম নিচে (bg_bottom_nav.xml-এর গ্লো-লাইন প্যাটার্ন পুনর্ব্যবহার করা)।
+    CashLipi — Dashboard container (UI/Navigation upgrade v2)
+    ভেতরে থাকে:
+      (১) কমপ্যাক্ট ব্র্যান্ড হেডার (টাইটেল-সাইকেল) + Add (+) বাটন — পপ-আপে ৩টি কুইক-অ্যাড অপশন + সেটিং
+      (২) ৭-আইকন নেভ বার — সেটিং অনুযায়ী "উপরে" (ডিফল্ট) অথবা "নিচে" পজিশনে বসে (topNavBar ভিউটাই রিপ্যারেন্ট হয়)
+      (৩) নিচে পজিশনে থাকলে — bottomNavContainer দেখানো হয়, যেখানে + বাটন কার্ভ করে বারের উপর ভেসে থাকে
+      (৪) ViewPager2 — ৭টি Fragment পেজ (সোয়াইপ অন/অফ সেটিং দিয়ে নিয়ন্ত্রিত)
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,15 +16,16 @@
     android:background="@color/bgColor">
 
     <!-- ══════════════════════════════════════════════════════════
-         TOP BLOCK — হেডার + ৭-আইকন নেভ বার (একটাই ভিজুয়াল ব্লক)
+         TOP BLOCK — হেডার (+ Add বাটন) + topNavSlot (নেভ বার এখানে বসে যখন পজিশন = উপরে)
     ══════════════════════════════════════════════════════════ -->
     <LinearLayout
+        android:id="@+id/topBlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/topHeaderBg">
 
-        <!-- Compact brand header — TextSwitcher টাইটেল-সাইকেল -->
+        <!-- Compact brand header — TextSwitcher টাইটেল-সাইকেল + Add বাটন -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/top_header_height"
@@ -39,79 +40,74 @@
                 android:layout_weight="1"
                 android:inAnimation="@anim/slide_in_right"
                 android:outAnimation="@anim/slide_out_left" />
+
+            <!-- Add (+) বাটন — ট্যাপ করলে পপ-আপ: আয়-ব্যয় যোগ / দেনা-পাওনা যোগ / সঞ্চয় যোগ / সেটিং -->
+            <ImageButton
+                android:id="@+id/headerAddBtn"
+                android:layout_width="@dimen/header_add_btn_size"
+                android:layout_height="@dimen/header_add_btn_size"
+                android:layout_marginStart="10dp"
+                android:padding="7dp"
+                android:background="@drawable/bg_fab_add"
+                android:src="@drawable/ic_plus"
+                android:contentDescription="@string/add_menu_title"
+                android:scaleType="fitCenter"
+                android:elevation="3dp"/>
         </LinearLayout>
 
-        <!-- ৭-আইকন টপ নেভ বার -->
-        <LinearLayout
-            android:id="@+id/topNavBar"
+        <!-- নেভ বার এখানে বসে (পজিশন = "উপরে", ডিফল্ট) — topNavBar রানটাইমে এখানে inflate/attach হয় -->
+        <FrameLayout
+            android:id="@+id/topNavSlot"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/top_nav_bar_height"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"/>
 
-            <!-- ১. হোম -->
-            <LinearLayout android:id="@+id/navHome" style="@style/TopNavItemStyle">
-                <ImageView android:id="@+id/iconNavHome" style="@style/TopNavIconStyle"
-                    android:src="@drawable/ic_nav_home"/>
-                <View android:id="@+id/indicatorNavHome" style="@style/TopNavIndicatorStyle"/>
-            </LinearLayout>
-
-            <!-- ২. আয়-ব্যয় -->
-            <LinearLayout android:id="@+id/navIncomeExpense" style="@style/TopNavItemStyle">
-                <ImageView android:id="@+id/iconNavIncomeExpense" style="@style/TopNavIconStyle"
-                    android:src="@drawable/ic_nav_income_expense"/>
-                <View android:id="@+id/indicatorNavIncomeExpense" style="@style/TopNavIndicatorStyle"/>
-            </LinearLayout>
-
-            <!-- ৩. দেনা-পাওনা -->
-            <LinearLayout android:id="@+id/navDenaPawna" style="@style/TopNavItemStyle">
-                <ImageView android:id="@+id/iconNavDenaPawna" style="@style/TopNavIconStyle"
-                    android:src="@drawable/ic_nav_dena_pawna"/>
-                <View android:id="@+id/indicatorNavDenaPawna" style="@style/TopNavIndicatorStyle"/>
-            </LinearLayout>
-
-            <!-- ৪. সঞ্চয় -->
-            <LinearLayout android:id="@+id/navSavings" style="@style/TopNavItemStyle">
-                <ImageView android:id="@+id/iconNavSavings" style="@style/TopNavIconStyle"
-                    android:src="@drawable/ic_nav_savings"/>
-                <View android:id="@+id/indicatorNavSavings" style="@style/TopNavIndicatorStyle"/>
-            </LinearLayout>
-
-            <!-- ৫. বাকির খাতা -->
-            <LinearLayout android:id="@+id/navBakirKhata" style="@style/TopNavItemStyle">
-                <ImageView android:id="@+id/iconNavBakirKhata" style="@style/TopNavIconStyle"
-                    android:src="@drawable/ic_nav_bakir_khata"/>
-                <View android:id="@+id/indicatorNavBakirKhata" style="@style/TopNavIndicatorStyle"/>
-            </LinearLayout>
-
-            <!-- ৬. বাজেট -->
-            <LinearLayout android:id="@+id/navBudget" style="@style/TopNavItemStyle">
-                <ImageView android:id="@+id/iconNavBudget" style="@style/TopNavIconStyle"
-                    android:src="@drawable/ic_nav_budget"/>
-                <View android:id="@+id/indicatorNavBudget" style="@style/TopNavIndicatorStyle"/>
-            </LinearLayout>
-
-            <!-- ৭. সেটিং -->
-            <LinearLayout android:id="@+id/navSettings" style="@style/TopNavItemStyle">
-                <ImageView android:id="@+id/iconNavSettings" style="@style/TopNavIconStyle"
-                    android:src="@drawable/ic_nav_settings"/>
-                <View android:id="@+id/indicatorNavSettings" style="@style/TopNavIndicatorStyle"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- টপ ব্লকের একদম নিচে ডিভাইডার — bg_bottom_nav.xml-এর গ্লো-বর্ডার প্যাটার্ন পুনর্ব্যবহার -->
+        <!-- টপ ব্লকের একদম নিচে ডিভাইডার -->
         <View
+            android:id="@+id/topBlockDivider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:background="@drawable/dash_accent_line"/>
     </LinearLayout>
 
     <!-- ══════════════════════════════════════════════════════════
-         ৭টি পেজ — সোয়াইপ + ট্যাপ নেভিগেশন (ViewPager2 + FragmentStateAdapter)
+         ৭টি পেজ — সোয়াইপ (সেটিং দিয়ে অন/অফ) + ট্যাপ নেভিগেশন
     ══════════════════════════════════════════════════════════ -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
+
+    <!-- ══════════════════════════════════════════════════════════
+         BOTTOM BLOCK — পজিশন = "নিচে" হলে দেখানো হয়। bottomNavSlot-এ topNavBar রিপ্যারেন্ট হয়,
+         আর মাঝখানে কার্ভ + FAB নেভ বারের উপরে সামান্য ভেসে থাকে (elevation + negative margin)।
+    ══════════════════════════════════════════════════════════ -->
+    <FrameLayout
+        android:id="@+id/bottomNavContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <FrameLayout
+            android:id="@+id/bottomNavSlot"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_nav_bar_height"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_bottom_nav_dark"
+            android:elevation="8dp"/>
+
+        <ImageButton
+            android:id="@+id/bottomFab"
+            android:layout_width="@dimen/bottom_fab_size"
+            android:layout_height="@dimen/bottom_fab_size"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="-18dp"
+            android:padding="14dp"
+            android:background="@drawable/bg_fab_add"
+            android:src="@drawable/ic_plus"
+            android:contentDescription="@string/add_menu_title"
+            android:scaleType="fitCenter"
+            android:elevation="10dp"/>
+    </FrameLayout>
 
 </LinearLayout>

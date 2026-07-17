@@ -50,6 +50,51 @@
         <item name="android:visibility">invisible</item>
     </style>
 
+    <!-- নেভিগেশন কাস্টমাইজ ডায়ালগে রং সোয়াচ -->
+    <style name="NavSwatchWrap">
+        <item name="android:layout_width">34dp</item>
+        <item name="android:layout_height">34dp</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="NavSwatchDot">
+        <item name="android:layout_width">28dp</item>
+        <item name="android:layout_height">28dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/shape_circle_solid</item>
+    </style>
+
+    <!-- Add (+) পপ-আপ মেন্যু রো -->
+    <style name="AddMenuRowStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="AddMenuIconStyle">
+        <item name="android:layout_width">36dp</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:padding">7dp</item>
+        <item name="android:background">@drawable/shape_circle_solid</item>
+        <item name="android:tint">@color/white</item>
+    </style>
+
+    <style name="AddMenuLabelStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/textPrimary</item>
+    </style>
+
     <!-- Card -->
     <style name="AppCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardCornerRadius">16dp</item>

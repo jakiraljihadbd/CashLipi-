@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Add (+) বাটনের গোলাকার ব্র্যান্ড-গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড — লাইট/ডার্ক দুই থিমেই একই রঙ থাকে,
+     তাই কখনো কালো দেখাবে না। শুধু ripple/press state ছাড়া বাকিটা স্ট্যাটিক গ্রেডিয়েন্ট সার্কেল। -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:type="linear"
+                android:angle="45"
+                android:startColor="@color/fabAddStart"
+                android:endColor="@color/fabAddEnd"/>
+        </shape>
+    </item>
+    <item>
+        <ripple android:color="#33FFFFFF">
+            <item>
+                <shape android:shape="oval">
+                    <solid android:color="@android:color/transparent"/>
+                </shape>
+            </item>
+        </ripple>
+    </item>
+</layer-list>

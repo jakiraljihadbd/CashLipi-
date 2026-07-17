@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- নেভিগেশন মেন্যু "নিচে" পজিশনে থাকলে ব্যবহৃত হয় — উপরের হেডার ব্লকের মতোই গাঢ় ব্যাকগ্রাউন্ড,
+     উপরের কোণা গোলাকার + ওপরে সূক্ষ্ম গ্লো-বর্ডার, যাতে টপ ব্লকের সাথে ভিজ্যুয়াল কনসিসটেন্সি থাকে। -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bottomNavBg"/>
+            <corners android:topLeftRadius="18dp" android:topRightRadius="18dp"/>
+        </shape>
+    </item>
+    <item android:top="0dp" android:height="2dp" android:gravity="top">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#00000000"
+                android:centerColor="#3300D4FF"
+                android:endColor="#00000000"
+                android:angle="0"/>
+        </shape>
+    </item>
+</layer-list>

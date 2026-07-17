@@ -1,11 +1,16 @@
 package com.jrappspot.cashlipi.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
@@ -16,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.adapters.MainPagerAdapter;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
@@ -44,6 +50,14 @@ public class DashboardActivity extends BaseActivity {
     private final ImageView[] navIcons = new ImageView[MainPagerAdapter.PAGE_COUNT];
     private final View[] navIndicators = new View[MainPagerAdapter.PAGE_COUNT];
 
+    // ── নেভিগেশন মেন্যু কাস্টমাইজেশন (সাইজ/রং/পজিশন/সোয়াইপ) ──────────
+    private View topNavBar;               // nav_bar_items.xml root — top/bottom স্লটের মধ্যে রিপ্যারেন্ট হয়
+    private FrameLayout topNavSlot;
+    private FrameLayout bottomNavSlot;
+    private FrameLayout bottomNavContainer;
+    private ImageButton headerAddBtn;
+    private ImageButton bottomFab;
+
     // ── হেডার-অ্যানিমেশন (টাইটেল-সাইকেল) ─────────────────────────────
     private TextSwitcher headerSwitcher;
     private final Handler headerHandler = new Handler(Looper.getMainLooper());
@@ -71,6 +85,7 @@ public class DashboardActivity extends BaseActivity {
 
         setupHeader();
         setupNavigation();
+        setupAddMenu();
 
         int startPage = savedInstanceState != null
                 ? savedInstanceState.getInt(STATE_CURRENT_PAGE, 0) : 0;
@@ -90,6 +105,8 @@ public class DashboardActivity extends BaseActivity {
         super.onResume();
         // Firebase auto sync
         syncToFirebase();
+        // সেটিং থেকে ফিরে এলে নেভিগেশন মেন্যুর সাইজ/রং/পজিশন/সোয়াইপ তাৎক্ষণিক আপডেট হয়
+        applyNavCustomization();
     }
 
     @Override
@@ -141,7 +158,17 @@ public class DashboardActivity extends BaseActivity {
         viewPager.setAdapter(new MainPagerAdapter(this));
         viewPager.setOffscreenPageLimit(1);
 
-        navItems[MainPagerAdapter.POSITION_HOME] = findViewById(R.id.navHome);
+        topNavSlot = findViewById(R.id.topNavSlot);
+        bottomNavSlot = findViewById(R.id.bottomNavSlot);
+        bottomNavContainer = findViewById(R.id.bottomNavContainer);
+        headerAddBtn = findViewById(R.id.headerAddBtn);
+        bottomFab = findViewById(R.id.bottomFab);
+
+        // ৭-আইকন নেভ বার একবারই inflate হয় — পরে position অনুযায়ী topNavSlot/bottomNavSlot-এ রিপ্যারেন্ট হয়
+        topNavBar = LayoutInflater.from(this).inflate(R.layout.nav_bar_items, topNavSlot, false);
+        topNavSlot.addView(topNavBar);
+
+        navItems[MainPagerAdapter.POSITION_HOME] = topNavBar.findViewById(R.id.navHome);
         navItems[MainPagerAdapter.POSITION_INCOME_EXPENSE] = findViewById(R.id.navIncomeExpense);
         navItems[MainPagerAdapter.POSITION_DENA_PAWNA] = findViewById(R.id.navDenaPawna);
         navItems[MainPagerAdapter.POSITION_SAVINGS] = findViewById(R.id.navSavings);
@@ -189,6 +216,108 @@ public class DashboardActivity extends BaseActivity {
                     selected ? R.color.topNavSelected : R.color.topNavUnselected));
             navIndicators[i].setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
         }
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  ৩. নেভিগেশন মেন্যু কাস্টমাইজেশন — সাইজ / ব্যাকগ্রাউন্ড রং / পজিশন (উপরে-নিচে) / সোয়াইপ
+    //     Settings → "নেভিগেশন মেন্যু" থেকে বদলানো প্রেফারেন্স এখানে প্রয়োগ হয়, onResume-এ সবসময় রিফ্রেশ হয়।
+    // ══════════════════════════════════════════════════════════════
+    private void applyNavCustomization() {
+        if (topNavBar == null) return;
+
+        boolean bottomPosition = "bottom".equals(db.getNavPosition());
+        boolean large = db.isNavIconLarge();
+        int navBgColor;
+        try {
+            navBgColor = Color.parseColor(db.getNavBgColor());
+        } catch (IllegalArgumentException e) {
+            navBgColor = ContextCompat.getColor(this, R.color.bottomNavBg);
+        }
+
+        // ── ১. আইকন সাইজ প্রয়োগ (top/bottom দুই ক্ষেত্রেই একই সেটিং কাজ করে) ──
+        int iconSizePx = getResources().getDimensionPixelSize(
+                bottomPosition
+                        ? (large ? R.dimen.bottom_nav_icon_size_large : R.dimen.bottom_nav_icon_size_small)
+                        : (large ? R.dimen.top_nav_icon_size_large : R.dimen.top_nav_icon_size_small));
+        for (ImageView icon : navIcons) {
+            if (icon == null) continue;
+            ViewGroup.LayoutParams lp = icon.getLayoutParams();
+            lp.width = iconSizePx;
+            lp.height = iconSizePx;
+            icon.setLayoutParams(lp);
+        }
+
+        // ── ২. পজিশন প্রয়োগ — একই topNavBar ভিউটাকে top স্লট বা bottom স্লটে রিপ্যারেন্ট করা ──
+        ViewGroup currentParent = (ViewGroup) topNavBar.getParent();
+        if (bottomPosition) {
+            if (currentParent != bottomNavSlot) {
+                if (currentParent != null) currentParent.removeView(topNavBar);
+                bottomNavSlot.addView(topNavBar, new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            }
+            bottomNavContainer.setVisibility(View.VISIBLE);
+            headerAddBtn.setVisibility(View.GONE);
+            // গোলাকার কোণা রেখেই কাস্টম রং বসানো (bg_bottom_nav_dark-এর উপরে ওভাররাইড)
+            GradientDrawable bg = new GradientDrawable();
+            bg.setColor(navBgColor);
+            float r = getResources().getDisplayMetrics().density * 18f;
+            bg.setCornerRadii(new float[]{r, r, r, r, 0, 0, 0, 0});
+            bottomNavSlot.setBackground(bg);
+            bottomFab.setVisibility(View.VISIBLE);
+        } else {
+            if (currentParent != topNavSlot) {
+                if (currentParent != null) currentParent.removeView(topNavBar);
+                topNavSlot.addView(topNavBar, new FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            }
+            bottomNavContainer.setVisibility(View.GONE);
+            headerAddBtn.setVisibility(View.VISIBLE);
+            topNavSlot.setBackgroundColor(navBgColor);
+        }
+
+        // ── ৩. সোয়াইপ অন/অফ ──
+        viewPager.setUserInputEnabled(db.isNavSwipeEnabled());
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  ৪. Add (+) বাটন — হেডারে (উপরে পজিশন) বা কার্ভ FAB (নিচে পজিশন), দুটোই একই পপ-আপ খোলে
+    // ══════════════════════════════════════════════════════════════
+    private void setupAddMenu() {
+        View.OnClickListener openMenu = v -> showAddMenu(v);
+        headerAddBtn.setOnClickListener(openMenu);
+        bottomFab.setOnClickListener(v -> {
+            // সাধারণ স্কেল-বাউন্স অ্যানিমেশন — সহজ ও হালকা
+            v.animate().scaleX(0.88f).scaleY(0.88f).setDuration(90).withEndAction(() ->
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(120).start()).start();
+            showAddMenu(v);
+        });
+    }
+
+    private void showAddMenu(View anchor) {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View sheet = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_add_menu, null);
+        dialog.setContentView(sheet);
+
+        sheet.findViewById(R.id.menuAddIncomeExpense).setOnClickListener(v -> {
+            dialog.dismiss();
+            Intent i = new Intent(this, AddTransactionActivity.class);
+            i.putExtra(AddTransactionActivity.EXTRA_MODE, "expense");
+            startActivity(i);
+        });
+        sheet.findViewById(R.id.menuAddDenaPawna).setOnClickListener(v -> {
+            dialog.dismiss();
+            startActivity(new Intent(this, AddLedgerActivity.class));
+        });
+        sheet.findViewById(R.id.menuAddSavings).setOnClickListener(v -> {
+            dialog.dismiss();
+            startActivity(new Intent(this, AddSavingsActivity.class));
+        });
+        sheet.findViewById(R.id.menuAddSettings).setOnClickListener(v -> {
+            dialog.dismiss();
+            viewPager.setCurrentItem(MainPagerAdapter.POSITION_SETTINGS, true);
+        });
+
+        dialog.show();
     }
 
     // ── HELPERS ──────────────────────────────────────────────────────

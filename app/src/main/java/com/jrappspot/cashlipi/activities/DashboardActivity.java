@@ -136,7 +136,7 @@ public class DashboardActivity extends BaseActivity {
         bottomFab = findViewById(R.id.bottomFab);
 
         // ৭-আইকন নেভ বার একবারই inflate হয় — পরে position অনুযায়ী topNavSlot/bottomNavSlot-এ রিপ্যারেন্ট হয়
-        topNavBar = LayoutInflater.from(this).inflate(R.layout.nav_bar_items, topNavSlot, false);
+        topNavBar = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.nav_bar_items, topNavSlot, false);
         topNavSlot.addView(topNavBar);
 
         navItems[MainPagerAdapter.POSITION_HOME] = topNavBar.findViewById(R.id.navHome);

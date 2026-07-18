@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- CashLipi — প্রোফেশনাল নেভিগেশন ড্রয়ার। DashboardActivity-এ DrawerLayout-এর ভেতরে
+     start-gravity প্যানেল হিসেবে বসে। হ্যামবার্গার বাটনে ট্যাপ করলে এটা খোলে। -->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/cardBg"
+    android:fitsSystemWindows="true"
+    android:elevation="12dp"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/nav_drawer_header"/>
+
+        <!-- ── ড্রয়ার মেনু আইটেম ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="6dp">
+
+            <LinearLayout
+                android:id="@+id/drawerItemFbGroup"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_empty_people"
+                    android:backgroundTint="#1877F2"/>
+                <TextView style="@style/DrawerRowLabel" android:text="ফেসবুক গ্রুপে যোগ দিন"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerItemBackup"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_backup_cloud"
+                    android:backgroundTint="@color/colorPrimary"/>
+                <TextView style="@style/DrawerRowLabel" android:text="ব্যাকআপ ও রিস্টোর"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerItemSettings"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_settings"
+                    android:backgroundTint="#6B7280"/>
+                <TextView style="@style/DrawerRowLabel" android:text="সেটিংস"/>
+            </LinearLayout>
+
+            <View style="@style/DrawerDivider"/>
+
+            <LinearLayout
+                android:id="@+id/drawerItemTerms"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_shield"
+                    android:backgroundTint="#0EA5E9"/>
+                <TextView style="@style/DrawerRowLabel" android:text="শর্তাবলী"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerItemPrivacy"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_shield_backup"
+                    android:backgroundTint="#0EA5E9"/>
+                <TextView style="@style/DrawerRowLabel" android:text="গোপনীয়তা নীতি"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerItemFeedback"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_mail"
+                    android:backgroundTint="#F59E0B"/>
+                <TextView style="@style/DrawerRowLabel" android:text="মতামত দিন"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerItemFaq"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_faq_question"
+                    android:backgroundTint="#8B5CF6"/>
+                <TextView style="@style/DrawerRowLabel" android:text="সাধারণ প্রশ্ন"/>
+            </LinearLayout>
+
+            <View style="@style/DrawerDivider"/>
+
+            <LinearLayout
+                android:id="@+id/drawerItemOtherApps"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_apps_grid"
+                    android:backgroundTint="#14B8A6"/>
+                <TextView style="@style/DrawerRowLabel" android:text="অন্যান্য অ্যাপ"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerItemDeveloper"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_person_circle"
+                    android:backgroundTint="#374151"/>
+                <TextView style="@style/DrawerRowLabel" android:text="ডেভেলপার তথ্য"/>
+            </LinearLayout>
+
+            <View style="@style/DrawerDivider"/>
+
+            <LinearLayout
+                android:id="@+id/drawerItemSignOut"
+                style="@style/DrawerRow">
+                <ImageView style="@style/DrawerRowIcon"
+                    android:src="@drawable/ic_logout"
+                    android:backgroundTint="@color/errorColor"/>
+                <TextView style="@style/DrawerRowLabel"
+                    android:text="বের হন"
+                    android:textColor="@color/errorColor"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:text="CashLipi"
+                android:textSize="11sp"
+                android:textColor="@color/textSecondary"
+                android:alpha="0.6"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

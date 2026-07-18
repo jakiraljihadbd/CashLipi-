@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="স্মার্ট পরামর্শ"
-            android:textSize="14sp" android:textStyle="bold"
+            android:textSize="15.5sp" android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:maxLines="1" android:ellipsize="end"/>
 
@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="আজই সঞ্চয় শুরু করুন"
-            android:textSize="11.5sp"
+            android:textSize="12.5sp"
             android:textColor="#E6FFFFFF"
             android:layout_marginTop="2dp"
             android:maxLines="2" android:ellipsize="end"/>

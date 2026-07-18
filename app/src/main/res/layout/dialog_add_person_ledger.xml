@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        android:paddingHorizontal="18dp">
+
+        <!-- Drag handle -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_marginBottom="12dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_drag_handle"/>
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvSheetTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"/>
+
+            <TextView
+                android:id="@+id/tvSheetPersonName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_relation_chip"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="3dp"
+                android:textSize="11.5sp"
+                android:textStyle="bold"
+                android:textColor="#B3105A"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+        </LinearLayout>
+
+        <!-- Amount -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" পরিমাণ (৳)"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:layout_marginBottom="6dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSheetAmount"
+            style="@style/AppTextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="পরিমাণ লিখুন"
+            android:layout_marginBottom="10dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSheetAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:textColor="@color/ledgerColor"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Quick amounts -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+            <Button android:id="@+id/btnSheetQ100" style="@style/QuickAmountBtn"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="১০০" android:layout_marginEnd="4dp"/>
+            <Button android:id="@+id/btnSheetQ500" style="@style/QuickAmountBtn"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="৫০০" android:layout_marginEnd="4dp"/>
+            <Button android:id="@+id/btnSheetQ1000" style="@style/QuickAmountBtn"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="১,০০০" android:layout_marginEnd="4dp"/>
+            <Button android:id="@+id/btnSheetQ5000" style="@style/QuickAmountBtn"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="৫,০০০"/>
+        </LinearLayout>
+
+        <!-- Date & Time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="12dp">
+            <LinearLayout
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical"
+                android:layout_marginEnd="6dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text=" তারিখ" android:textSize="12.5sp" android:textStyle="bold"
+                    android:textColor="@color/textPrimary" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tvSheetDate"
+                    android:layout_width="match_parent" android:layout_height="46dp"
+                    android:gravity="center_vertical" android:paddingHorizontal="12dp"
+                    android:background="@drawable/bg_card_white"
+                    android:textSize="12.5sp" android:textColor="@color/textPrimary"
+                    android:clickable="true" android:focusable="true"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical"
+                android:layout_marginStart="6dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text=" সময়" android:textSize="12.5sp" android:textStyle="bold"
+                    android:textColor="@color/textPrimary" android:layout_marginBottom="6dp"/>
+                <TextView android:id="@+id/tvSheetTime"
+                    android:layout_width="match_parent" android:layout_height="46dp"
+                    android:gravity="center_vertical" android:paddingHorizontal="12dp"
+                    android:background="@drawable/bg_card_white"
+                    android:textSize="12.5sp" android:textColor="@color/textPrimary"
+                    android:clickable="true" android:focusable="true"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Note -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilSheetNote"
+            style="@style/AppTextInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint=" নোট / কারণ (ঐচ্ছিক)"
+            android:layout_marginBottom="18dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSheetNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnSheetSave"
+            style="@style/SubmitButton.Ledger"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_height"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

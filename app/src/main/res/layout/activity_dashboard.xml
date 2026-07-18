@@ -12,6 +12,13 @@
       (৪) ViewPager2 — ৭টি Fragment পেজ (সোয়াইপ অন/অফ সেটিং দিয়ে নিয়ন্ত্রিত)
       (৫) fabMenuOverlay — + বাটনে ট্যাপ করলে ফ্যান-আউট অ্যানিমেশনে ৪টা অপশন ভাসে (স্ক্রিমসহ)
 -->
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/dashboardDrawerLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -151,12 +158,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <!-- টপ ব্লকের একদম নিচে ডিভাইডার -->
+            <!-- টপ ব্লকের একদম নিচে ডিভাইডার — স্মার্ট পরামর্শ কার্ডের ঠিক উপরে একটা সোজা দাগের
+                 মতো দেখাচ্ছিল বলে সরিয়ে দেওয়া হলো (GONE, ভিউটা কোডে রেফারেন্স থাকলে যেন ক্র্যাশ না করে) -->
             <View
                 android:id="@+id/topBlockDivider"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@drawable/dash_accent_line"/>
+                android:background="@drawable/dash_accent_line"
+                android:visibility="gone"/>
         </LinearLayout>
 
         <!-- ══════════════════════════════════════════════════════════
@@ -263,5 +272,9 @@
             android:clipToPadding="false"
             android:visibility="gone"/>
     </FrameLayout>
+    </FrameLayout>
 
-</FrameLayout>
+    <!-- ── প্রোফেশনাল নেভিগেশন ড্রয়ার — হ্যামবার্গার বাটনে ট্যাপ করলে বাম থেকে খোলে ── -->
+    <include layout="@layout/nav_drawer_content"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

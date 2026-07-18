@@ -1,10 +1,14 @@
 package com.jrappspot.cashlipi.activities;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -14,19 +18,36 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.jrappspot.cashlipi.R;
+import com.jrappspot.cashlipi.adapters.PersonLedgerAdapter;
+import com.jrappspot.cashlipi.models.LedgerEntry;
 import com.jrappspot.cashlipi.models.Person;
+import com.jrappspot.cashlipi.utils.AmountInputHelper;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
+import com.jrappspot.cashlipi.utils.FirestoreSyncManager;
+import com.jrappspot.cashlipi.utils.SuccessPopup;
+import com.jrappspot.cashlipi.utils.TransactionSheetHelper;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * একজন ব্যক্তির বিস্তারিত পেজ — কমপ্যাক্ট হেডারে পরিচিতি দেখায়, ডান পাশে হোয়াটসঅ্যাপ/কল/মেইল
- * বাটন এবং ⋮ মেনুতে এডিট/মুছার অপশন থাকে। এই ধাপে শুধু পরিচিতি অংশ প্রস্তুত — এই ব্যক্তির
- * person.id ধরে দিলাম/পেলাম লেনদেনের তালিকা ও যোগ-বাটন ভবিষ্যতে নিচের placeholder জায়গায় যুক্ত হবে।
+ * একজন ব্যক্তির বিস্তারিত পেজ — কমপ্যাক্ট হেডারে পরিচিতি (ছবি/নাম/সম্পর্ক, হোয়াটসঅ্যাপ/কল/মেইল
+ * বাটন, ⋮ মেনুতে এডিট/মুছুন) এবং নিচে এই ব্যক্তির সাথে থাকা সব দিলাম/পেলাম (LedgerEntry, নাম
+ * মিলিয়ে) লেনদেন — নিট বকেয়ার সামারি বার, প্রতিটা এন্ট্রির পাশে রানিং ব্যালেন্স, এবং নিচে
+ * পেলাম/দিলাম বাটনে চেপে দ্রুত নতুন এন্ট্রি যোগ করার বটম শিট। আইটেমে ট্যাপ করলে বিদ্যমান
+ * TransactionSheetHelper.showLedgerSheet() (সম্পাদনা/বিস্তারিত/শেয়ার/পরিশোধ/মুছুন) খোলে।
  */
 public class PersonDetailActivity extends AppCompatActivity {
 
@@ -47,6 +68,17 @@ public class PersonDetailActivity extends AppCompatActivity {
     private TextView tvInitial, tvName, tvRelationBadge, tvPhone;
     private ImageView btnWhatsapp, btnCall, btnMail;
 
+    // দেনা-পাওনা লেনদেন অংশ
+    private LinearLayout summaryBar, emptyLedgerState;
+    private TextView tvSummaryLabel, tvSummaryAmount, tvSummarySub;
+    private RecyclerView rvPersonLedger;
+    private Button btnAddPelam, btnAddDilam;
+    private PersonLedgerAdapter ledgerAdapter;
+    private final List<PersonLedgerAdapter.Row> ledgerRows = new ArrayList<>();
+
+    // Quick-add bottom sheet-এর জন্য অস্থায়ী state
+    private String sheetDate = "", sheetTime = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,17 +97,33 @@ public class PersonDetailActivity extends AppCompatActivity {
         btnCall = findViewById(R.id.btnCall);
         btnMail = findViewById(R.id.btnMail);
 
+        summaryBar       = findViewById(R.id.summaryBar);
+        tvSummaryLabel   = findViewById(R.id.tvSummaryLabel);
+        tvSummaryAmount  = findViewById(R.id.tvSummaryAmount);
+        tvSummarySub     = findViewById(R.id.tvSummarySub);
+        rvPersonLedger   = findViewById(R.id.rvPersonLedger);
+        emptyLedgerState = findViewById(R.id.emptyLedgerState);
+        btnAddPelam      = findViewById(R.id.btnAddPelam);
+        btnAddDilam      = findViewById(R.id.btnAddDilam);
+        rvPersonLedger.setLayoutManager(new LinearLayoutManager(this));
+
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
         btnCall.setOnClickListener(v -> callPerson());
         btnWhatsapp.setOnClickListener(v -> openWhatsapp());
         btnMail.setOnClickListener(v -> sendMail());
         findViewById(R.id.btnMorePerson).setOnClickListener(this::showMoreMenu);
+
+        // পেলাম → পাওনা (আমি পাব) এন্ট্রি, দিলাম → দেনা (আমি দেব) এন্ট্রি — এই পেজের জন্য শুধু
+        // colloquial লেবেল, বাকি অ্যাপের দেনা/পাওনা মডেলই অক্ষত থাকে
+        btnAddPelam.setOnClickListener(v -> showAddLedgerSheet("pabona"));
+        btnAddDilam.setOnClickListener(v -> showAddLedgerSheet("dena"));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         loadPerson();
+        loadLedger();
     }
 
     private void loadPerson() {
@@ -113,6 +161,177 @@ public class PersonDetailActivity extends AppCompatActivity {
             int colorIdx = Math.abs(person.getName().hashCode()) % AVATAR_BGS.length;
             avatarInitial.setBackgroundResource(AVATAR_BGS[colorIdx]);
         }
+    }
+
+    /**
+     * এই ব্যক্তির নামে থাকা সব LedgerEntry (person নাম মিলিয়ে) লোড করে, পুরনো থেকে নতুন সাজিয়ে
+     * প্রতিটার পর রানিং ব্যালেন্স হিসাব করে, তারপর নতুন থেকে পুরনো ক্রমে (উপরে সর্বশেষ) দেখায়।
+     */
+    private void loadLedger() {
+        if (person == null) return;
+        List<LedgerEntry> raw = db.getLedgerForPersonName(person.getName());
+
+        List<LedgerEntry> chrono = new ArrayList<>(raw);
+        Collections.sort(chrono, (a, b) -> {
+            String ka = a.getDate() + " " + a.getTime();
+            String kb = b.getDate() + " " + b.getTime();
+            int c = ka.compareTo(kb);
+            if (c != 0) return c;
+            return a.getCreatedAt().compareTo(b.getCreatedAt());
+        });
+
+        ledgerRows.clear();
+        double running = 0;
+        for (LedgerEntry e : chrono) {
+            if (!e.isPaid()) {
+                running += e.isPabona() ? e.getAmount() : -e.getAmount();
+            }
+            ledgerRows.add(new PersonLedgerAdapter.Row(e, running));
+        }
+        Collections.reverse(ledgerRows); // সর্বশেষ লেনদেন উপরে
+
+        int unpaidCount = 0;
+        for (LedgerEntry e : raw) if (!e.isPaid()) unpaidCount++;
+
+        // সামারি বার
+        if (raw.isEmpty()) {
+            summaryBar.setVisibility(View.GONE);
+        } else {
+            summaryBar.setVisibility(View.VISIBLE);
+            double net = ledgerRows.isEmpty() ? 0 : ledgerRows.get(0).balanceAfter;
+            if (net > 0.5) {
+                summaryBar.setBackgroundResource(R.drawable.bg_type_active_pabona);
+                tvSummaryLabel.setText("আপনি পাবেন");
+                tvSummaryAmount.setText(DatabaseManager.formatAmount(net));
+            } else if (net < -0.5) {
+                summaryBar.setBackgroundResource(R.drawable.bg_type_active_dena);
+                tvSummaryLabel.setText("আপনি দেবেন");
+                tvSummaryAmount.setText(DatabaseManager.formatAmount(Math.abs(net)));
+            } else {
+                summaryBar.setBackgroundResource(R.drawable.bg_type_settled);
+                tvSummaryLabel.setText("হিসাব");
+                tvSummaryAmount.setText("সব পরিশোধিত ✓");
+            }
+            tvSummarySub.setText("মোট " + raw.size() + " টি লেনদেন\n" + unpaidCount + " টি বাকি");
+        }
+
+        // তালিকা বনাম খালি অবস্থা
+        if (ledgerRows.isEmpty()) {
+            rvPersonLedger.setVisibility(View.GONE);
+            emptyLedgerState.setVisibility(View.VISIBLE);
+        } else {
+            rvPersonLedger.setVisibility(View.VISIBLE);
+            emptyLedgerState.setVisibility(View.GONE);
+            ledgerAdapter = new PersonLedgerAdapter(this, ledgerRows,
+                    entry -> TransactionSheetHelper.showLedgerSheet(this, db, entry, () -> {
+                        loadLedger();
+                        com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
+                        FirestoreSyncManager.getInstance(this).uploadAllData(null);
+                    }));
+            rvPersonLedger.setAdapter(ledgerAdapter);
+        }
+    }
+
+    /** নিচের পেলাম/দিলাম বাটনে চাপলে এই ব্যক্তির নাম প্রি-ফিল করে দ্রুত এন্ট্রি যোগ করার শিট। */
+    private void showAddLedgerSheet(String type) {
+        if (person == null) return;
+        boolean isDena = "dena".equals(type);
+
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.PremiumBottomSheetDialog);
+        View v = LayoutInflater.from(this).inflate(R.layout.dialog_add_person_ledger, null);
+        dialog.setContentView(v);
+
+        TextView tvTitle = v.findViewById(R.id.tvSheetTitle);
+        TextView tvPersonChip = v.findViewById(R.id.tvSheetPersonName);
+        TextInputLayout tilAmount = v.findViewById(R.id.tilSheetAmount);
+        TextInputEditText etAmount = v.findViewById(R.id.etSheetAmount);
+        TextInputEditText etNote = v.findViewById(R.id.etSheetNote);
+        TextView tvDate = v.findViewById(R.id.tvSheetDate);
+        TextView tvTime = v.findViewById(R.id.tvSheetTime);
+        Button btnSave = v.findViewById(R.id.btnSheetSave);
+
+        tvTitle.setText(isDena ? " দিলাম যোগ করুন" : " পেলাম যোগ করুন");
+        tvPersonChip.setText(person.getName());
+        btnSave.setBackgroundResource(isDena ? R.drawable.bg_type_active_dena : R.drawable.bg_type_active_pabona);
+        btnSave.setText(isDena ? " দিলাম সংরক্ষণ করুন" : " পেলাম সংরক্ষণ করুন");
+
+        AmountInputHelper.attach(this, etAmount);
+
+        sheetDate = DatabaseManager.nowDate();
+        sheetTime = DatabaseManager.nowTime();
+        tvDate.setText(DatabaseManager.formatDateDisplay(sheetDate));
+        tvTime.setText(DatabaseManager.formatTimeDisplay(sheetTime));
+
+        tvDate.setOnClickListener(x -> {
+            Calendar c = Calendar.getInstance();
+            new DatePickerDialog(this, (view, y, m, d) -> {
+                sheetDate = String.format("%04d-%02d-%02d", y, m + 1, d);
+                tvDate.setText(DatabaseManager.formatDateDisplay(sheetDate));
+            }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+        });
+        tvTime.setOnClickListener(x -> {
+            Calendar c = Calendar.getInstance();
+            new TimePickerDialog(this, (view, h, min) -> {
+                sheetTime = String.format("%02d:%02d", h, min);
+                tvTime.setText(DatabaseManager.formatTimeDisplay(sheetTime));
+            }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();
+        });
+
+        int[] qIds = {R.id.btnSheetQ100, R.id.btnSheetQ500, R.id.btnSheetQ1000, R.id.btnSheetQ5000};
+        int[] qVals = {100, 500, 1000, 5000};
+        for (int i = 0; i < qIds.length; i++) {
+            final int val = qVals[i];
+            Button qb = v.findViewById(qIds[i]);
+            qb.setOnClickListener(x -> {
+                String cur = etAmount.getText() != null ? etAmount.getText().toString() : "";
+                try {
+                    double base = cur.isEmpty() ? 0 : Double.parseDouble(cur);
+                    etAmount.setText(String.valueOf((long) (base + val)));
+                } catch (Exception e) {
+                    etAmount.setText(String.valueOf(val));
+                }
+                etAmount.setSelection(etAmount.getText().length());
+            });
+        }
+
+        btnSave.setOnClickListener(x -> {
+            String amtStr = etAmount.getText() != null ? etAmount.getText().toString().trim() : "";
+            if (amtStr.isEmpty()) { tilAmount.setError("পরিমাণ লিখুন"); return; }
+            double amount;
+            try {
+                amount = Double.parseDouble(amtStr);
+                if (amount <= 0) throw new NumberFormatException();
+            } catch (Exception e) {
+                tilAmount.setError("সঠিক পরিমাণ লিখুন");
+                return;
+            }
+            tilAmount.setError(null);
+
+            LedgerEntry entry = new LedgerEntry();
+            entry.setPerson(person.getName());
+            entry.setType(type);
+            entry.setAmount(amount);
+            entry.setDate(sheetDate.isEmpty() ? DatabaseManager.nowDate() : sheetDate);
+            entry.setTime(sheetTime.isEmpty() ? DatabaseManager.nowTime() : sheetTime);
+            entry.setNote(etNote.getText() != null ? etNote.getText().toString().trim() : "");
+            entry.setPaid(false);
+            db.addLedger(entry);
+
+            com.jrappspot.cashlipi.widgets.FinanceWidgetProvider.updateAll(this);
+            com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
+            FirestoreSyncManager.getInstance(this).uploadAllData(null);
+
+            dialog.dismiss();
+            loadLedger();
+
+            SuccessPopup.Category cat = isDena ? SuccessPopup.Category.DENA : SuccessPopup.Category.PABONA;
+            SuccessPopup.show(this, cat,
+                    (isDena ? "দিলাম" : "পেলাম") + " যোগ সফল হয়েছে!",
+                    person.getName() + "-এর হিসাব আপডেট হয়েছে।",
+                    null, null);
+        });
+
+        dialog.show();
     }
 
     private void callPerson() {

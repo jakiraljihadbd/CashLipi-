@@ -52,6 +52,9 @@ public class DashboardActivity extends BaseActivity {
     private DatabaseManager db;
     private FirestoreSyncManager firestoreSync;
 
+    // ── নেভিগেশন ড্রয়ার ──────────────────────────────────────────────
+    private androidx.drawerlayout.widget.DrawerLayout drawerLayout;
+
     // ── টপ আইডেন্টিটি বার (হ্যামবার্গার/সালাম-নাম-সময়-তারিখ স্লাইড/নোটিফিকেশন/প্রোফাইল) ──
     private ImageButton headerMenuBtn, headerNotifBtn, headerProfileBtn;
     private ViewFlipper headerIdentityFlipper;
@@ -105,6 +108,7 @@ public class DashboardActivity extends BaseActivity {
         setupNavigation();
         setupFabMenu();
         setupTopIdentityBar();
+        setupNavDrawer();
 
         int startPage = savedInstanceState != null
                 ? savedInstanceState.getInt(STATE_CURRENT_PAGE, 0) : 0;
@@ -128,6 +132,7 @@ public class DashboardActivity extends BaseActivity {
         refreshAiAdviceTips();
         startIdentityAutoSlide();
         startAiAdviceAutoSlide();
+        refreshDrawerHeader();
     }
 
     @Override
@@ -148,9 +153,10 @@ public class DashboardActivity extends BaseActivity {
         headerIdentityFlipper = findViewById(R.id.headerIdentityFlipper);
         headerAiFlipper       = findViewById(R.id.headerAiFlipper);
 
-        // হ্যামবার্গার — সেটিং/মেনু পেজ খোলে
-        headerMenuBtn.setOnClickListener(v ->
-                startActivity(new Intent(this, SettingsActivity.class)));
+        // হ্যামবার্গার — প্রোফেশনাল নেভিগেশন ড্রয়ার খোলে (আগে সরাসরি SettingsActivity খুলত)
+        headerMenuBtn.setOnClickListener(v -> {
+            if (drawerLayout != null) drawerLayout.openDrawer(Gravity.START);
+        });
 
         // নোটিফিকেশন — আপাতত নতুন নোটিফিকেশন থাকলে জানাবে (অ্যাডমিন লিসেনার আলাদাভাবে ডায়ালগ দেখায়)
         headerNotifBtn.setOnClickListener(v ->
@@ -161,6 +167,137 @@ public class DashboardActivity extends BaseActivity {
                 startActivity(new Intent(this, ProfileActivity.class)));
 
         buildIdentityFlipper();
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  ০.৫ প্রোফেশনাল নেভিগেশন ড্রয়ার — হেডার (ছবি/নাম/Google একাউন্ট) + মেনু রো-গুলো
+    // ══════════════════════════════════════════════════════════════
+    private void setupNavDrawer() {
+        drawerLayout = findViewById(R.id.dashboardDrawerLayout);
+        if (drawerLayout == null) return;
+
+        refreshDrawerHeader();
+
+        // হেডারে ট্যাপ করলে প্রোফাইল পেজ
+        View headerRoot = ((View) ((TextView) findViewById(R.id.drawerProfileName)).getParent());
+        headerRoot.setOnClickListener(v -> {
+            drawerLayout.closeDrawer(Gravity.START);
+            startActivity(new Intent(this, ProfileActivity.class));
+        });
+
+        // ── মেনু রো ক্লিক লিসেনার ──
+        setDrawerRowClick(R.id.drawerItemFbGroup, v ->
+                openExternalUrl(getString(R.string.drawer_facebook_group_url)));
+
+        setDrawerRowClick(R.id.drawerItemBackup, v ->
+                startActivity(new Intent(this, BackupCenterActivity.class)));
+
+        setDrawerRowClick(R.id.drawerItemSettings, v ->
+                startActivity(new Intent(this, SettingsActivity.class)));
+
+        setDrawerRowClick(R.id.drawerItemTerms, v ->
+                openExternalUrl(getString(R.string.drawer_terms_url)));
+
+        setDrawerRowClick(R.id.drawerItemPrivacy, v ->
+                openExternalUrl(getString(R.string.drawer_privacy_policy_url)));
+
+        setDrawerRowClick(R.id.drawerItemFeedback, v -> {
+            Intent email = new Intent(Intent.ACTION_SENDTO);
+            email.setData(android.net.Uri.parse("mailto:" + getString(R.string.drawer_support_email)));
+            email.putExtra(Intent.EXTRA_SUBJECT, "CashLipi — মতামত");
+            try {
+                startActivity(email);
+            } catch (Exception e) {
+                Toast.makeText(this, "কোনো ইমেইল অ্যাপ পাওয়া যায়নি", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        setDrawerRowClick(R.id.drawerItemFaq, v ->
+                openExternalUrl(getString(R.string.drawer_faq_url)));
+
+        setDrawerRowClick(R.id.drawerItemOtherApps, v ->
+                openExternalUrl("https://play.google.com/store/apps/dev?id=" + getPackageName()));
+
+        setDrawerRowClick(R.id.drawerItemDeveloper, v ->
+                startActivity(new Intent(this, AboutActivity.class)));
+
+        setDrawerRowClick(R.id.drawerItemSignOut, v ->
+                new AlertDialog.Builder(this)
+                        .setTitle("বের হন")
+                        .setMessage("আপনি কি সাইন আউট করতে চান? এতে লোকাল ডাটা মুছে যাবে না।")
+                        .setPositiveButton("হ্যাঁ, বের হন", (d, w) -> {
+                            com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+                            db.clearGoogleAccount();
+                            drawerLayout.closeDrawer(Gravity.START);
+                            Intent i = new Intent(this, LoginActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
+                        })
+                        .setNegativeButton("বাতিল", null)
+                        .show());
+    }
+
+    private void setDrawerRowClick(int viewId, View.OnClickListener action) {
+        View row = findViewById(viewId);
+        if (row == null) return;
+        row.setOnClickListener(v -> {
+            if (drawerLayout != null) drawerLayout.closeDrawer(Gravity.START);
+            action.onClick(v);
+        });
+    }
+
+    /** প্রোফাইল থেকে ফিরে এলে নাম/ছবি/একাউন্ট আপ-টু-ডেট থাকতে onResume থেকেও কল হয়। */
+    private void refreshDrawerHeader() {
+        ImageView photo   = findViewById(R.id.drawerProfilePhoto);
+        TextView initials = findViewById(R.id.drawerProfileInitials);
+        TextView name     = findViewById(R.id.drawerProfileName);
+        TextView account  = findViewById(R.id.drawerProfileAccount);
+        if (photo == null || initials == null || name == null || account == null) return;
+
+        String displayName = db.getDisplayName();
+        name.setText(displayName == null || displayName.trim().isEmpty() ? "ব্যবহারকারী" : displayName);
+
+        String accountLine = db.isGoogleSignedIn() && !db.getGoogleEmail().isEmpty()
+                ? db.getGoogleEmail()
+                : (!db.getUserEmail().isEmpty() ? db.getUserEmail() : "সাইন ইন করা নেই");
+        account.setText(accountLine);
+
+        String photoSource = db.getEffectivePhotoSource();
+        if (photoSource != null && !photoSource.isEmpty()) {
+            Object loadFrom = photoSource.startsWith("http")
+                    ? photoSource : new java.io.File(photoSource);
+            Glide.with(this)
+                    .load(loadFrom)
+                    .transform(new com.bumptech.glide.load.resource.bitmap.CircleCrop())
+                    .placeholder(android.R.drawable.ic_menu_myplaces)
+                    .error(android.R.drawable.ic_menu_myplaces)
+                    .into(photo);
+            photo.setVisibility(View.VISIBLE);
+            initials.setVisibility(View.GONE);
+        } else {
+            String initialsText;
+            String n = displayName == null ? "" : displayName.trim();
+            if (n.isEmpty()) initialsText = "👤";
+            else {
+                String[] parts = n.split("\\s+");
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < parts.length && sb.length() < 2; i++)
+                    if (!parts[i].isEmpty()) sb.append(parts[i].charAt(0));
+                initialsText = sb.length() > 0 ? sb.toString().toUpperCase() : "👤";
+            }
+            initials.setText(initialsText);
+            photo.setVisibility(View.GONE);
+            initials.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void openExternalUrl(String url) {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)));
+        } catch (Exception e) {
+            Toast.makeText(this, "লিংকটি খোলা যায়নি", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // সালাম (সময়ভিত্তিক) → CashLipi → সময় → তারিখ — একের পর এক স্লাইড
@@ -684,6 +821,10 @@ public class DashboardActivity extends BaseActivity {
     // ── HELPERS ──────────────────────────────────────────────────────
     @Override
     public void onBackPressed() {
+        if (drawerLayout != null && drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawer(Gravity.START);
+            return;
+        }
         if (fabMenuOpen) {
             closeFabMenu();
             return;

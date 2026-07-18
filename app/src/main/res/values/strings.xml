@@ -16,6 +16,15 @@
 
     <!-- Header Add (+) পপ-আপ মেন্যু -->
     <string name="add_menu_title">যোগ করুন</string>
+
+    <!-- ══════════════════════════════
+         নেভিগেশন ড্রয়ার — লিংক/ইমেইল (নিজের আসল লিংক/ইমেইল দিয়ে বদলে নিন)
+    ══════════════════════════════ -->
+    <string name="drawer_facebook_group_url">https://facebook.com/groups/cashlipi</string>
+    <string name="drawer_terms_url">https://sites.google.com/view/cashlipi/terms</string>
+    <string name="drawer_privacy_policy_url">https://sites.google.com/view/cashlipi/privacy</string>
+    <string name="drawer_faq_url">https://sites.google.com/view/cashlipi/faq</string>
+    <string name="drawer_support_email">support@example.com</string>
     <string name="add_menu_income_expense">আয়-ব্যয় যোগ</string>
     <string name="add_menu_dena_pawna">দেনা-পাওনা যোগ</string>
     <string name="add_menu_savings">সঞ্চয় যোগ</string>

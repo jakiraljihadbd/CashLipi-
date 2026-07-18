@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- রানিং ব্যালেন্স চিপ — ব্যক্তির লেনদেন তালিকায় প্রতিটা এন্ট্রির পাশে "এই মুহূর্ত পর্যন্ত বাকি"
+     দেখানোর জন্য। রঙ (dena/pabona/settled) কোডে setTint দিয়ে বসানো হয়, তাই এখানে সাদা/নিউট্রাল shape। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/denaLight"/>
+    <corners android:radius="20dp"/>
+</shape>

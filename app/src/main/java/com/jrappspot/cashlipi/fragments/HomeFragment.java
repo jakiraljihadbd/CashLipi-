@@ -149,8 +149,8 @@ public class HomeFragment extends Fragment {
         tvMainBalance.setTextColor(0xFFFFFFFF);
         applyBalanceVisibility();
 
-        tvTotalIncome.setText(DatabaseManager.formatAmount(income));
-        tvTotalExpense.setText(DatabaseManager.formatAmount(expense));
+        tvTotalIncome.setText("+ " + DatabaseManager.formatAmount(income));
+        tvTotalExpense.setText("- " + DatabaseManager.formatAmount(expense));
         tvTotalDena.setText(DatabaseManager.formatAmount(dena));
         tvTotalPabona.setText(DatabaseManager.formatAmount(pabona));
         tvTotalSavings.setText(DatabaseManager.formatAmount(savings));
@@ -218,7 +218,7 @@ public class HomeFragment extends Fragment {
             View dot = new View(requireContext());
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(3, 0, 3, 0);
+            lp.setMargins(5, 0, 5, 0);
             dot.setLayoutParams(lp);
             dot.setBackgroundResource(R.drawable.dot_inactive);
             tipDots.addView(dot);

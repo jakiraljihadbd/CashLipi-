@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ব্যক্তির সব দেনা-পাওনা পরিশোধিত হলে সামারি বারে দেখানোর সবুজ গ্র্যাডিয়েন্ট। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="#10B981" android:endColor="#059669" android:angle="135"/>
+    <corners android:radius="16dp"/>
+</shape>

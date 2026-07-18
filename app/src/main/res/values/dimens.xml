@@ -60,7 +60,7 @@
     <dimen name="bottom_nav_icon_size_small">28dp</dimen>
     <dimen name="bottom_fab_size">60dp</dimen>
     <dimen name="bottom_fab_icon_size">26dp</dimen>
-    <dimen name="bottom_fab_notch_size">76dp</dimen>
+    <dimen name="bottom_fab_notch_size">88dp</dimen>
 
     <!-- + বাটন ফ্যান-আউট মেন্যু (মিনি আইকন + লেবেল চিপ) -->
     <dimen name="fab_menu_item_spacing">10dp</dimen>

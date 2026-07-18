@@ -2,6 +2,9 @@
 <resources>
     <color name="colorPrimary">#4F46E5</color>
     <color name="colorPrimaryDark">#3730A3</color>
+    <!-- বিকাশ ব্র্যান্ড পিংক — অ্যাপের একদম উপরের স্ট্যাটাস বার এখন এই রঙে -->
+    <color name="bkashPink">#E2136E</color>
+    <color name="bkashPinkDark">#B80F58</color>
     <color name="colorAccent">#F97316</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
@@ -681,23 +684,23 @@
          Material 3 — Home screen tonal container roles (Light)
          ফ্ল্যাট টোনাল কনটেইনার, কোনো গ্লো/গ্র্যাডিয়েন্ট নেই — M3 নিয়ম মেনে
     ══════════════════════════════════════════════════════════ -->
-    <color name="m3HomeBalanceContainer">#EC1361</color>
+    <color name="m3HomeBalanceContainer">#E2136E</color>
     <color name="m3OnHomeBalanceContainer">#FFFFFF</color>
     <color name="m3HomeBalancePill">#33FFFFFF</color>
 
-    <color name="m3IncomeContainer">#BDEECF</color>
+    <color name="m3IncomeContainer">#8FE6B4</color>
     <color name="m3OnIncomeContainer">#0B5B34</color>
 
-    <color name="m3ExpenseContainer">#F9C7C3</color>
+    <color name="m3ExpenseContainer">#F5A29B</color>
     <color name="m3OnExpenseContainer">#7A1913</color>
 
-    <color name="m3DenaContainer">#FADE9E</color>
+    <color name="m3DenaContainer">#F8C868</color>
     <color name="m3OnDenaContainer">#6E4600</color>
 
-    <color name="m3PabonaContainer">#BDD3FF</color>
+    <color name="m3PabonaContainer">#8FB0FF</color>
     <color name="m3OnPabonaContainer">#0B3A85</color>
 
-    <color name="m3SavingsContainer">#E4C6FF</color>
+    <color name="m3SavingsContainer">#D19CFF</color>
     <color name="m3OnSavingsContainer">#4E1F8F</color>
 
     <color name="m3MenuCardSurface">#FFFFFF</color>

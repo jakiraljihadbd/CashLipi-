@@ -31,6 +31,7 @@ public class FinanceWidgetProvider extends AppWidgetProvider {
     }
 
     private static void updateWidget(Context context, AppWidgetManager appWidgetManager, int widgetId) {
+        try {
         DatabaseManager db = DatabaseManager.getInstance(context);
 
         double income = db.getTotalIncome();
@@ -67,6 +68,9 @@ public class FinanceWidgetProvider extends AppWidgetProvider {
         views.setOnClickPendingIntent(R.id.widgetRefreshBtn, refreshPendingIntent);
 
         appWidgetManager.updateAppWidget(widgetId, views);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static String formatTaka(double amount) {

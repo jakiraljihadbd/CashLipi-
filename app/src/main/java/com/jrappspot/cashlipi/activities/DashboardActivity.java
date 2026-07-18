@@ -2,7 +2,6 @@ package com.jrappspot.cashlipi.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +23,7 @@ import com.jrappspot.cashlipi.adapters.MainPagerAdapter;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 import com.jrappspot.cashlipi.utils.FirestoreSyncManager;
 import com.jrappspot.cashlipi.utils.FontUtils;
+import com.jrappspot.cashlipi.utils.NavBarStyler;
 
 import android.util.Log;
 
@@ -67,6 +67,7 @@ public class DashboardActivity extends BaseActivity {
     private boolean fabMenuOpen = false;
     private ImageButton activeFabAnchor; // যে বাটন থেকে মেন্যু খোলা হয়েছে (রোটেশনের জন্য)
     private boolean navSavingsGapActive = false; // + বাটনের নিচে "সঞ্চয়"-স্লট এখন "যোগ"-গ্যাপ কিনা
+    private String currentNavStyle = NavBarStyler.STYLE_CLASSIC;
 
     private static final String STATE_CURRENT_PAGE = "state_current_page";
 
@@ -191,8 +192,17 @@ public class DashboardActivity extends BaseActivity {
             boolean selected = (i == selectedPosition);
             navIcons[i].setColorFilter(ContextCompat.getColor(this,
                     selected ? R.color.topNavSelected : R.color.topNavUnselected));
-            boolean isGapSlot = navSavingsGapActive && i == MainPagerAdapter.POSITION_BAKIR_KHATA;
-            navIndicators[i].setVisibility(isGapSlot ? View.GONE : (selected ? View.VISIBLE : View.INVISIBLE));
+        }
+        int navBgColor;
+        try {
+            navBgColor = Color.parseColor(db.getNavBgColor());
+        } catch (IllegalArgumentException e) {
+            navBgColor = ContextCompat.getColor(this, R.color.bottomNavBg);
+        }
+        NavBarStyler.applyItemSelection(this, navItems, navIndicators, selectedPosition, currentNavStyle, navBgColor);
+        // "যোগ"-গ্যাপ স্লটে (বাকির খাতা, বটম-পজিশনে) ইন্ডিকেটর কখনোই দেখানো হয় না
+        if (navSavingsGapActive && navIndicators[MainPagerAdapter.POSITION_BAKIR_KHATA] != null) {
+            navIndicators[MainPagerAdapter.POSITION_BAKIR_KHATA].setVisibility(View.GONE);
         }
     }
 
@@ -205,6 +215,7 @@ public class DashboardActivity extends BaseActivity {
 
         boolean bottomPosition = "bottom".equals(db.getNavPosition());
         boolean large = db.isNavIconLarge();
+        currentNavStyle = db.getNavStyle();
         int navBgColor;
         try {
             navBgColor = Color.parseColor(db.getNavBgColor());
@@ -225,10 +236,11 @@ public class DashboardActivity extends BaseActivity {
             icon.setLayoutParams(lp);
         }
 
-        // ── লেবেল শুধু "নিচে" পজিশনে দেখানো হয় — ছোট আইকনগুলো কী বোঝায় তা স্পষ্ট করতে ──
+        // ── লেবেল "নিচে" পজিশনে বা "মিনিমাল" স্টাইলে সবসময় দেখানো হয় — স্পষ্টতার জন্য ──
+        boolean showLabels = bottomPosition || NavBarStyler.STYLE_MINIMAL.equals(currentNavStyle);
         for (TextView label : navLabels) {
             if (label == null) continue;
-            label.setVisibility(bottomPosition ? View.VISIBLE : View.GONE);
+            label.setVisibility(showLabels ? View.VISIBLE : View.GONE);
         }
 
         // ── ২. পজিশন প্রয়োগ — একই topNavBar ভিউটাকে top স্লট বা bottom স্লটে রিপ্যারেন্ট করা ──
@@ -242,21 +254,12 @@ public class DashboardActivity extends BaseActivity {
             bottomNavContainer.setVisibility(View.VISIBLE);
             headerRow.setVisibility(View.GONE);
             topBlockDivider.setVisibility(View.GONE);
-            // গোলাকার কোণা রেখেই কাস্টম রং বসানো (bg_bottom_nav_dark-এর উপরে ওভাররাইড)
-            GradientDrawable bg = new GradientDrawable();
-            bg.setColor(navBgColor);
-            float r = getResources().getDisplayMetrics().density * 18f;
-            bg.setCornerRadii(new float[]{r, r, r, r, 0, 0, 0, 0});
-            bottomNavSlot.setBackground(bg);
+            // drawCradle=true — বারের নিজের সিলুয়েটেই + বাটনের জন্য সত্যিকারের বাঁকানো কাটআউট নচ আঁকা হয়
+            NavBarStyler.applyBarBackground(this, bottomNavSlot, currentNavStyle, navBgColor, true, true);
             bottomFab.setVisibility(View.VISIBLE);
-            // + বাটনের পেছনের গোল "কুশন" — পেজ ব্যাকগ্রাউন্ডের (bgColor) রঙে, যাতে সত্যিকারের
-            // ফাঁকা/হোল U-নচ তৈরি হয় (বারের রঙে ভরাট না, বরং ফাঁকা কাটআউটের মতো দেখায়)
+            // পুরনো "পেজ-রঙা গোল কুশন" হ্যাক আর দরকার নেই — বারের ড্রয়েবলই এখন আসল গর্ত কেটে আঁকে
             if (fabNotchBackdrop != null) {
-                GradientDrawable notchBg = new GradientDrawable();
-                notchBg.setShape(GradientDrawable.OVAL);
-                notchBg.setColor(ContextCompat.getColor(this, R.color.bgColor));
-                fabNotchBackdrop.setBackground(notchBg);
-                fabNotchBackdrop.setVisibility(View.VISIBLE);
+                fabNotchBackdrop.setVisibility(View.GONE);
             }
         } else {
             if (currentParent != topNavSlot) {
@@ -266,10 +269,10 @@ public class DashboardActivity extends BaseActivity {
             }
             bottomNavContainer.setVisibility(View.GONE);
             headerRow.setVisibility(View.VISIBLE);
-            headerRow.setBackgroundColor(navBgColor);
+            headerRow.setBackgroundColor(NavBarStyler.effectiveBarColor(this, currentNavStyle, navBgColor));
             topBlockDivider.setVisibility(View.VISIBLE);
             headerAddBtn.setVisibility(View.VISIBLE);
-            topNavSlot.setBackgroundColor(navBgColor);
+            NavBarStyler.applyBarBackground(this, topNavSlot, currentNavStyle, navBgColor, false);
         }
 
         // ── ৩. সোয়াইপ অন/অফ ──
@@ -277,6 +280,9 @@ public class DashboardActivity extends BaseActivity {
 
         // ── ৪. + বাটনের ঠিক নিচে যে আইটেমটা পড়ে (বাকির খাতা, ৭টার ৪র্থ/মাঝেরটা) তাকে "যোগ"-গ্যাপে বদলে দেওয়া ──
         updateGapMode(bottomPosition);
+
+        // ── ৫. স্টাইল/পজিশন বদলের পর সিলেক্টেড আইটেমের পিল/গ্লো রিফ্রেশ ──
+        if (viewPager != null) updateNavSelection(viewPager.getCurrentItem());
     }
 
     /**
@@ -330,7 +336,8 @@ public class DashboardActivity extends BaseActivity {
         fabMenuScrim.setOnClickListener(v -> closeFabMenu());
     }
 
-    /** ৪টা অ্যাকশন-আইটেম (বড় রঙিন গোল আইকন + নিচে ছোট লেবেল) পাশাপাশি সাজিয়ে container-এ যোগ করে। */
+    /** ৩টা অ্যাকশন-আইটেম (বড় রঙিন গোল আইকন + নিচে ছোট লেবেল) পাশাপাশি সাজিয়ে container-এ যোগ করে —
+     *  সেটিং অপশনটা এখান থেকে সরিয়ে দেওয়া হয়েছে, শুধু আয়-ব্যয় / দেনা-পাওনা / সঞ্চয় থাকবে। */
     private void buildFabMenuItems(LinearLayout container) {
         addFabMenuItem(container, R.drawable.ic_nav_income_expense, getString(R.string.add_menu_income_expense),
                 R.color.incomeColor, () -> {
@@ -342,8 +349,6 @@ public class DashboardActivity extends BaseActivity {
                 R.color.ledgerColor, () -> startActivity(new Intent(this, AddLedgerActivity.class)));
         addFabMenuItem(container, R.drawable.ic_nav_savings, getString(R.string.add_menu_savings),
                 R.color.savingsColor, () -> startActivity(new Intent(this, AddSavingsActivity.class)));
-        addFabMenuItem(container, R.drawable.ic_nav_settings, getString(R.string.add_menu_settings),
-                R.color.secondaryTextDark, () -> viewPager.setCurrentItem(MainPagerAdapter.POSITION_SETTINGS, true));
     }
 
     /** একটা আইটেম = বড় গোল আইকন বাটন, ঠিক নিচে ছোট লেবেল — উল্লম্ব মিনি-স্ট্যাক, যা container-এ পাশাপাশি বসে। */
@@ -413,6 +418,8 @@ public class DashboardActivity extends BaseActivity {
     /**
      * ফ্যান-আউট মেন্যু খোলে — আইটেমগুলো পাশাপাশি (horizontal), + বাটনের ঠিক উপরে একটা বাঁকানো/আর্ক
      * আকৃতিতে ফুটে ওঠে (মাঝেরগুলো একটু বেশি উপরে ওঠে, দুই পাশেরগুলো একটু কম — arcOffset ফর্মুলা দিয়ে)।
+     * সাথে (বটম-পজিশনে) নেভবারের বাম-অর্ধেক আর ডান-অর্ধেক + বাটনকে কেন্দ্র করে হালকা ফাঁক হয়ে সরে যায় —
+     * রেফারেন্স মাইক্রো-ইন্টার‍্যাকশনের মতো, "সবকিছু + থেকেই ছড়িয়ে পড়ছে" এই অনুভূতি দেয়।
      */
     private void openFabMenu(ImageButton anchor) {
         fabMenuOpen = true;
@@ -449,6 +456,8 @@ public class DashboardActivity extends BaseActivity {
                     .setInterpolator(new OvershootInterpolator(1.15f))
                     .start();
         }
+
+        if (bottomPosition) animateNavSplit(true);
     }
 
     private void closeFabMenu() {
@@ -461,6 +470,45 @@ public class DashboardActivity extends BaseActivity {
             fabMenuTop.setVisibility(View.GONE);
             fabMenuBottom.setVisibility(View.GONE);
         }).start();
+
+        if ("bottom".equals(db.getNavPosition())) animateNavSplit(false);
+    }
+
+    /**
+     * নিচের নেভবারের + বাটনের বাঁ-পাশের আইটেমগুলো (হোম, আয়-ব্যয়, দেনা-পাওনা) বাম দিকে আর ডান-পাশের
+     * আইটেমগুলো (সঞ্চয়, বাজেট, সেটিং) ডান দিকে হালকা সরে গিয়ে + বাটনের চারপাশে ফাঁক তৈরি করে —
+     * open=true হলে ফাঁক হয় (স্প্লিট), open=false হলে আবার জোড়া লেগে যায়। মাঝের গ্যাপ আইটেম
+     * (বাকির খাতা, + বাটনের ঠিক নিচে) সরে না, তাই referencePoint হিসেবে ওটার child-index ব্যবহার হয়।
+     */
+    private void animateNavSplit(boolean open) {
+        if (topNavBar == null) return;
+        int childCount = topNavBar.getChildCount();
+        int gapIndex = -1;
+        for (int i = 0; i < childCount; i++) {
+            if (topNavBar.getChildAt(i).getId() == R.id.navBakirKhata) {
+                gapIndex = i;
+                break;
+            }
+        }
+        if (gapIndex == -1) return;
+
+        float splitDistance = getResources().getDimensionPixelSize(R.dimen.fab_menu_arc_amplitude) * 0.55f;
+        for (int i = 0; i < childCount; i++) {
+            View child = topNavBar.getChildAt(i);
+            float targetX;
+            if (i < gapIndex) {
+                targetX = open ? -splitDistance : 0f;
+            } else if (i > gapIndex) {
+                targetX = open ? splitDistance : 0f;
+            } else {
+                continue; // মাঝের গ্যাপ আইটেম নিজে সরে না
+            }
+            child.animate()
+                    .translationX(targetX)
+                    .setDuration(open ? 240 : 200)
+                    .setInterpolator(open ? new OvershootInterpolator(1.0f) : new android.view.animation.DecelerateInterpolator())
+                    .start();
+        }
     }
 
     // ── HELPERS ──────────────────────────────────────────────────────

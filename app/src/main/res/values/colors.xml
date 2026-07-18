@@ -317,8 +317,8 @@
     <color name="gradCircleBlueEnd">#2563EB</color>
     <color name="gradCircleGreenStart">#10B981</color>
     <color name="gradCircleGreenEnd">#059669</color>
-    <color name="txnSaveCircleGreenStart">#4ADE80</color>
-    <color name="txnSaveCircleGreenEnd">#16A34A</color>
+    <color name="txnSaveCircleGreenStart">#16A34A</color>
+    <color name="txnSaveCircleGreenEnd">#065F46</color>
     <color name="txnRingStrokeGreenLight">#6EE7A0</color>
     <color name="txnRingStrokeRedLight">#F5A3A3</color>
     <color name="gradPurpleStart">#8B5CF6</color>

@@ -504,9 +504,9 @@ public class DatabaseManager {
     }
 
     // ─── নেভিগেশন মেন্যু কাস্টমাইজেশন প্রেফারেন্স ────────────────────────
-    /** "top" অথবা "bottom" — ডিফল্ট "top" */
+    /** "top" অথবা "bottom" — ডিফল্ট এখন "bottom" (কার্ভড U-নচ + FAB স্টাইল নিচেই থাকবে) */
     public String getNavPosition() {
-        return prefs.getString("navPosition", "top");
+        return prefs.getString("navPosition", "bottom");
     }
 
     public void setNavPosition(String position) {
@@ -538,6 +538,15 @@ public class DatabaseManager {
 
     public void setNavBgColor(String hexColor) {
         prefs.edit().putString("navBgColor", hexColor).apply();
+    }
+
+    /** নেভ বার প্রিসেট স্টাইল — "classic"|"floating"|"glass"|"gradient"|"minimal"|"neon"|"card", ডিফল্ট "classic" */
+    public String getNavStyle() {
+        return prefs.getString("navStyle", "classic");
+    }
+
+    public void setNavStyle(String styleKey) {
+        prefs.edit().putString("navStyle", styleKey).apply();
     }
 
     // ─── Custom Calculator Keyboard preference ───────────────────────────

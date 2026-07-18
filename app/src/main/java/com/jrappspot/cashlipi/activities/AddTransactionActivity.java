@@ -551,25 +551,27 @@ public class AddTransactionActivity extends BaseActivity {
         }
     }
 
-    /** ডিফল্ট লেনদেন মাধ্যম গ্রিড (Cash, bKash, Nagad, Rocket, Bank, Others) — দুই সারিতে সমান ভাগে */
+    /** ডিফল্ট লেনদেন মাধ্যম গ্রিড (Cash, bKash, Nagad, Rocket, Bank, Others) — আগে দুই সারিতে ৩টা করে
+     *  ছিল, এখন সবগুলো (৬টা) এক লাইনেই থাকে (rowPaymentMethods1) — আইকন/টেক্সট একটু ছোট করে সাইজ
+     *  করা হয়েছে যাতে ৬টাই এক সারিতে ঠিকমতো ধরে, ফলে পুরো পেজটা স্ক্রল ছাড়াই দেখা যায়। */
     private void loadPaymentMethods() {
-        if (rowPaymentMethods1 == null || rowPaymentMethods2 == null) return;
+        if (rowPaymentMethods1 == null) return;
         rowPaymentMethods1.removeAllViews();
-        rowPaymentMethods2.removeAllViews();
+        if (rowPaymentMethods2 != null) rowPaymentMethods2.removeAllViews();
 
         int accentColor = androidx.core.content.ContextCompat.getColor(
                 this, isIncome ? R.color.incomeColor : R.color.expenseColor);
 
+        int total = PAYMENT_LABELS.size();
         int i = 0;
         for (Map.Entry<String, String> entry : PAYMENT_LABELS.entrySet()) {
             String key = entry.getKey();
             String label = entry.getValue();
-            LinearLayout targetRow = (i < 3) ? rowPaymentMethods1 : rowPaymentMethods2;
 
             LinearLayout item = new LinearLayout(this);
             item.setOrientation(LinearLayout.VERTICAL);
             item.setGravity(Gravity.CENTER);
-            item.setPadding(10, 16, 10, 16);
+            item.setPadding(4, 12, 4, 12);
             item.setClickable(true);
             item.setFocusable(true);
 
@@ -580,18 +582,19 @@ public class AddTransactionActivity extends BaseActivity {
 
             ImageView icon = new ImageView(this);
             icon.setImageResource(getMethodIcon(key));
-            LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(56, 56);
+            LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(40, 40);
             icon.setLayoutParams(iconLp);
             if (selected) icon.setColorFilter(accentColor);
 
             TextView label1 = new TextView(this);
             label1.setText(label);
-            label1.setTextSize(11.5f);
+            label1.setTextSize(9.5f);
+            label1.setMaxLines(1);
             label1.setTypeface(label1.getTypeface(), android.graphics.Typeface.BOLD);
             label1.setTextColor(selected ? accentColor : androidx.core.content.ContextCompat.getColor(this, R.color.textPrimary));
             LinearLayout.LayoutParams labelLp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            labelLp.topMargin = 8;
+            labelLp.topMargin = 6;
             label1.setLayoutParams(labelLp);
 
             item.addView(icon);
@@ -599,7 +602,7 @@ public class AddTransactionActivity extends BaseActivity {
 
             LinearLayout.LayoutParams itemLp = new LinearLayout.LayoutParams(
                     0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            itemLp.setMarginEnd((i % 3 != 2) ? 10 : 0);
+            itemLp.setMarginEnd((i != total - 1) ? 6 : 0);
             item.setLayoutParams(itemLp);
 
             item.setOnClickListener(v -> {
@@ -607,7 +610,7 @@ public class AddTransactionActivity extends BaseActivity {
                 loadPaymentMethods();
             });
 
-            targetRow.addView(item);
+            rowPaymentMethods1.addView(item);
             i++;
         }
     }

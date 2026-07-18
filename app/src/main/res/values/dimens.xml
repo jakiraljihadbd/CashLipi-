@@ -70,6 +70,10 @@
     <dimen name="fab_menu_label_pad_v">3dp</dimen>
     <dimen name="fab_menu_label_margin_end">10dp</dimen>
     <dimen name="fab_menu_arc_amplitude">26dp</dimen>
+
+    <!-- নেভ কাস্টমাইজ পেজ — স্টাইল প্রিসেট কার্ড -->
+    <dimen name="nav_style_card_width">108dp</dimen>
+    <dimen name="nav_style_card_spacing">10dp</dimen>
     <dimen name="fab_menu_label_top_margin">6dp</dimen>
 
     <!-- Balance Card -->

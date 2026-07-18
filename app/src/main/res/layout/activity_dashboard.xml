@@ -5,8 +5,10 @@
       (১) কমপ্যাক্ট ব্র্যান্ড হেডার (স্ট্যাটিক "CashLipi") + Add (+) বাটন + headerSliderSlot (ফাঁকা —
           ব্যালেন্স/টাইটেল-সাইকেল সরিয়ে এখানে ভবিষ্যতে স্লাইড/AI-advice কার্ড বসবে)
       (২) ৭-আইকন নেভ বার — সেটিং অনুযায়ী "উপরে" (ডিফল্ট) অথবা "নিচে" পজিশনে বসে (topNavBar ভিউটাই রিপ্যারেন্ট হয়)
-      (৩) নিচে পজিশনে থাকলে — bottomNavContainer দেখানো হয়, fabNotchBackdrop বারের রং দিয়ে একটা গোল
-          "কুশন" তৈরি করে যার উপর + বাটন ভাসমান থাকে (মর্ডান কার্ভ লুক)
+      (৩) নিচে পজিশনে থাকলে — bottomNavContainer দেখানো হয়, bottomNavSlot-এর ব্যাকগ্রাউন্ড এখন
+          NotchedBarDrawable (কোডে বসানো) — বারের সিলুয়েটেই + বাটনের জন্য সত্যিকারের বাঁকানো
+          কাটআউট/কার্ভ (cradle) আঁকা হয়, + বাটন সেই গর্তের মধ্যেই বসে (fabNotchBackdrop ভিউটা
+          পুরনো হ্যাক ছিল, এখন GONE — আর ব্যবহার হয় না)
       (৪) ViewPager2 — ৭টি Fragment পেজ (সোয়াইপ অন/অফ সেটিং দিয়ে নিয়ন্ত্রিত)
       (৫) fabMenuOverlay — + বাটনে ট্যাপ করলে ফ্যান-আউট অ্যানিমেশনে ৪টা অপশন ভাসে (স্ক্রিমসহ)
 -->
@@ -128,7 +130,7 @@
                 android:layout_width="@dimen/bottom_fab_size"
                 android:layout_height="@dimen/bottom_fab_size"
                 android:layout_gravity="top|center_horizontal"
-                android:layout_marginTop="-22dp"
+                android:layout_marginTop="-30dp"
                 android:padding="14dp"
                 android:background="@drawable/bg_fab_add"
                 android:src="@drawable/ic_plus"

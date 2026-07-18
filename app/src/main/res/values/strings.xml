@@ -33,6 +33,10 @@
     <string name="nav_position_top">উপরে</string>
     <string name="nav_position_bottom">নিচে</string>
     <string name="nav_save_btn">সংরক্ষণ করুন</string>
+    <string name="nav_style_section_title">নেভ বার স্টাইল বাছাই করুন</string>
+    <string name="nav_live_preview_title">লাইভ প্রিভিউ</string>
+    <string name="nav_done_btn">সংরক্ষণ করে ফিরে যান</string>
+    <string name="nav_live_apply_hint">প্রতিটা পরিবর্তন সাথে সাথেই প্রয়োগ হয় — আলাদা করে সেভ করতে হবে না</string>
 
     <string name="view_all">সব দেখুন →</string>
     <string name="see_analysis"> বিস্তারিত দেখুন</string>

@@ -93,10 +93,11 @@ public class SettingsFragment extends Fragment {
             menuAppLock.setOnClickListener(v ->
                     startActivity(new Intent(requireContext(), AppLockActivity.class)));
 
-        // নেভিগেশন মেন্যু কাস্টমাইজ (সাইজ / ব্যাকগ্রাউন্ড রং / পজিশন / সোয়াইপ)
+        // নেভিগেশন মেন্যু কাস্টমাইজ (স্টাইল / সাইজ / ব্যাকগ্রাউন্ড রং / পজিশন / সোয়াইপ) — এখন পূর্ণ পেজ
         View menuNavCustomize = root.findViewById(R.id.menuNavCustomize);
         if (menuNavCustomize != null)
-            menuNavCustomize.setOnClickListener(v -> showNavCustomizeDialog());
+            menuNavCustomize.setOnClickListener(v ->
+                    startActivity(new Intent(requireContext(), com.jrappspot.cashlipi.activities.NavCustomizeActivity.class)));
 
         View menuCat = root.findViewById(R.id.menuCategories);
         if (menuCat != null)

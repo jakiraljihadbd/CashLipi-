@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Home — Pink balance card (reference: pink dashboard screenshot) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#EC1361"
+                android:centerColor="#F0327C"
+                android:endColor="#F9598F"
+                android:angle="45"/>
+            <corners android:radius="22dp"/>
+        </shape>
+    </item>
+    <!-- soft glow blob top-right -->
+    <item android:left="230dp" android:bottom="90dp" android:top="-30dp" android:right="-30dp">
+        <shape android:shape="oval">
+            <solid android:color="#26FFFFFF"/>
+        </shape>
+    </item>
+    <!-- soft glow blob bottom-left -->
+    <item android:right="250dp" android:top="60dp" android:left="-30dp" android:bottom="-30dp">
+        <shape android:shape="oval">
+            <solid android:color="#14FFFFFF"/>
+        </shape>
+    </item>
+</layer-list>

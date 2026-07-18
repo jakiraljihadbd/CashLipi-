@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- এক টুকরো AI পরামর্শ কার্ড — HomeFragment.java থেকে tipFlipper-এ ইনফ্লেট করা হয় -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="14dp">
+
+    <ImageView
+        android:id="@+id/tipIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/emoji_bulb"
+        android:layout_marginEnd="12dp"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tipTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="স্মার্ট পরামর্শ"
+            android:textSize="14sp" android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:maxLines="1" android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/tipSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="আজই সঞ্চয় শুরু করুন"
+            android:textSize="11.5sp"
+            android:textColor="#E6FFFFFF"
+            android:layout_marginTop="2dp"
+            android:maxLines="2" android:ellipsize="end"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tipAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AI"
+        android:textSize="10sp" android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/bg_ai_pill"
+        android:paddingHorizontal="10dp" android:paddingVertical="5dp"
+        android:layout_marginStart="8dp"/>
+
+</LinearLayout>

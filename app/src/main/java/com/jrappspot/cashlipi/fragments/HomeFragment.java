@@ -7,41 +7,63 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.jrappspot.cashlipi.R;
+import com.jrappspot.cashlipi.activities.AccountingActivity;
 import com.jrappspot.cashlipi.activities.AddSavingsActivity;
 import com.jrappspot.cashlipi.activities.AiChatActivity;
 import com.jrappspot.cashlipi.activities.AnalysisActivity;
+import com.jrappspot.cashlipi.activities.CalculatorActivity;
 import com.jrappspot.cashlipi.activities.ExpenseListActivity;
 import com.jrappspot.cashlipi.activities.IncomeListActivity;
 import com.jrappspot.cashlipi.activities.LedgerListActivity;
+import com.jrappspot.cashlipi.activities.NotesActivity;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * হোম পেজ — ব্যালেন্স কার্ড, সামারি কার্ডসমূহ (আয়/ব্যয়/দেনা/পাওনা/সঞ্চয়), AI টিপ ব্যানার।
- * বিদ্যমান DashboardActivity-এর ডিজাইন ও লজিক হুবহু অক্ষত রেখে Fragment-এ রূপান্তরিত করা হয়েছে।
- * (পুরনো headerSlideBar/ticker/greeting/internet-row অংশটুকু বাদ দেওয়া হয়েছে —
- *  সেই ভূমিকা এখন নতুন গ্লোবাল টপ-হেডারের টাইটেল-সাইকেল অ্যানিমেশন পালন করে।)
+ * হোম পেজ — নতুন ডিজাইন:
+ *  ১) উপরে অটো-স্লাইডিং AI পরামর্শ কার্ড (৪ সেকেন্ড পরপর বদলায়, নিচে ডট ইন্ডিকেটর)
+ *  ২) পিংক ব্যালেন্স কার্ড
+ *  ৩) আয় + ব্যয়
+ *  ৪) দেনা + পাওনা  (আগের "লোন পেলাম/দিলাম" এর বদলে)
+ *  ৫) চিকন সঞ্চয় বার
+ *  ৬) কুইক মেনু গ্রিড — AI Chat / এনালাইসিস / বাকির খাতা / ক্যালকুলেটর / নোট / একাউন্টিং
  */
 public class HomeFragment extends Fragment {
 
     private DatabaseManager db;
 
     private TextView tvMainBalance, tvTotalIncome, tvTotalExpense;
-    private TextView tvTotalDena, tvTotalPabona, tvTotalSavings, tvAiTip;
+    private TextView tvTotalDena, tvTotalPabona, tvTotalSavings;
+
+    private ViewFlipper tipFlipper;
+    private LinearLayout tipDots;
 
     private final Handler tipHandler = new Handler(Looper.getMainLooper());
-    private int tipIndex = 0;
-    private String[] aiTips;
+    private int tipCount = 0;
+
+    private static final class TipData {
+        final String subtitle;
+        final int iconRes;
+        final int bgRes;
+        TipData(String subtitle, int iconRes, int bgRes) {
+            this.subtitle = subtitle;
+            this.iconRes = iconRes;
+            this.bgRes = bgRes;
+        }
+    }
 
     @Nullable
     @Override
@@ -62,7 +84,7 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadDashboard();
-        startAiTips();
+        startAutoSlide();
     }
 
     @Override
@@ -78,7 +100,8 @@ public class HomeFragment extends Fragment {
         tvTotalDena    = view.findViewById(R.id.tvTotalDena);
         tvTotalPabona  = view.findViewById(R.id.tvTotalPabona);
         tvTotalSavings = view.findViewById(R.id.tvTotalSavings);
-        tvAiTip        = view.findViewById(R.id.tvAiTip);
+        tipFlipper     = view.findViewById(R.id.tipFlipper);
+        tipDots        = view.findViewById(R.id.tipDots);
     }
 
     private void loadDashboard() {
@@ -89,7 +112,6 @@ public class HomeFragment extends Fragment {
         double pabona  = db.getTotalPabona();
         double balance = db.getBalance();
 
-        // Balance — WHITE always (positive/negative both white per spec)
         tvMainBalance.setText(DatabaseManager.formatAmount(balance));
         tvMainBalance.setTextColor(0xFFFFFFFF);
 
@@ -99,61 +121,100 @@ public class HomeFragment extends Fragment {
         tvTotalPabona.setText(DatabaseManager.formatAmount(pabona));
         tvTotalSavings.setText(DatabaseManager.formatAmount(savings));
 
-        // Build smart AI tips based on real data
-        buildAiTips(income, expense, savings, dena, pabona, balance);
+        buildTipCarousel(income, expense, savings, dena, pabona, balance);
     }
 
-    // ── AI TIPS — smart tips based on transaction data ────────────────
-    private void buildAiTips(double income, double expense, double savings,
-                              double dena, double pabona, double balance) {
-        List<String> tips = new ArrayList<>();
+    // ── AI TIP CAROUSEL — real-data-based smart tips, one card per tip ─────
+    private void buildTipCarousel(double income, double expense, double savings,
+                                   double dena, double pabona, double balance) {
+        List<TipData> tips = new ArrayList<>();
 
         if (income == 0 && expense == 0) {
-            tips.add("লেনদেন যোগ করুন, AI আপনাকে স্মার্ট পরামর্শ দেবে!");
+            tips.add(new TipData("লেনদেন যোগ করুন, AI আপনাকে স্মার্ট পরামর্শ দেবে!",
+                    R.drawable.emoji_bulb, R.drawable.bg_tip_card_purple));
         } else {
             if (income > 0 && expense > 0) {
                 double ratio = expense / income * 100;
                 if (ratio > 90)
-                    tips.add(" আয়ের " + (int) ratio + "% ব্যয় হচ্ছে! সঞ্চয় বাড়ানো দরকার।");
+                    tips.add(new TipData("আয়ের " + (int) ratio + "% ব্যয় হচ্ছে! সঞ্চয় বাড়ানো দরকার।",
+                            R.drawable.emoji_warning, R.drawable.bg_tip_card_rose));
                 else if (ratio > 70)
-                    tips.add(" আয়ের " + (int) ratio + "% ব্যয় হচ্ছে। নিয়ন্ত্রণে রাখুন।");
+                    tips.add(new TipData("আয়ের " + (int) ratio + "% ব্যয় হচ্ছে। নিয়ন্ত্রণে রাখুন।",
+                            R.drawable.emoji_bulb, R.drawable.bg_tip_card_orange));
                 else
-                    tips.add(" চমৎকার! আয়ের মাত্র " + (int) ratio + "% ব্যয় হচ্ছে।");
+                    tips.add(new TipData("চমৎকার! আয়ের মাত্র " + (int) ratio + "% ব্যয় হচ্ছে।",
+                            R.drawable.emoji_check_mark_green, R.drawable.bg_tip_card_green));
             }
             if (savings == 0)
-                tips.add(" প্রতি মাসে অন্তত ১০% আয় সঞ্চয় করার অভ্যাস করুন।");
+                tips.add(new TipData("সঞ্চয় শূন্য! আজই সঞ্চয় শুরু করুন।",
+                        R.drawable.emoji_green_heart, R.drawable.bg_tip_card_orange));
             else
-                tips.add(" সঞ্চয় " + DatabaseManager.formatAmount(savings) + " — দারুণ অভ্যাস!");
+                tips.add(new TipData("সঞ্চয় " + DatabaseManager.formatAmount(savings) + " — দারুণ অভ্যাস!",
+                        R.drawable.emoji_green_heart, R.drawable.bg_tip_card_green));
             if (dena > 0)
-                tips.add(" দেনা " + DatabaseManager.formatAmount(dena) + " বাকি। আজই পরিশোধের পরিকল্পনা করুন।");
+                tips.add(new TipData("দেনা " + DatabaseManager.formatAmount(dena) + " বাকি। আজই পরিশোধের পরিকল্পনা করুন।",
+                        R.drawable.emoji_book_red, R.drawable.bg_tip_card_rose));
             if (pabona > 0)
-                tips.add(" পাওনা " + DatabaseManager.formatAmount(pabona) + " — সংগ্রহ করতে ভুলবেন না।");
+                tips.add(new TipData("পাওনা " + DatabaseManager.formatAmount(pabona) + " — সংগ্রহ করতে ভুলবেন না।",
+                        R.drawable.emoji_book_green, R.drawable.bg_tip_card_blue));
             if (balance < 0)
-                tips.add(" ব্যালেন্স নেগেটিভ! অপ্রয়োজনীয় ব্যয় কমান।");
+                tips.add(new TipData("ব্যালেন্স নেগেটিভ! অপ্রয়োজনীয় ব্যয় কমান।",
+                        R.drawable.emoji_warning, R.drawable.bg_tip_card_rose));
             else if (balance > 0 && income > 0)
-                tips.add(" ব্যালেন্স ইতিবাচক। বিনিয়োগের কথা ভাবুন!");
+                tips.add(new TipData("ব্যালেন্স ইতিবাচক। বিনিয়োগের কথা ভাবুন!",
+                        R.drawable.emoji_chart_up, R.drawable.bg_tip_card_purple));
         }
 
-        if (tips.isEmpty()) tips.add("স্মার্ট পরামর্শ লোড হচ্ছে...");
-        aiTips = tips.toArray(new String[0]);
-        tipIndex = 0;
-        if (tvAiTip != null && aiTips.length > 0)
-            tvAiTip.setText(aiTips[0]);
+        if (tips.isEmpty())
+            tips.add(new TipData("স্মার্ট পরামর্শ লোড হচ্ছে...",
+                    R.drawable.emoji_bulb, R.drawable.bg_tip_card_purple));
+
+        tipFlipper.removeAllViews();
+        tipDots.removeAllViews();
+
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        for (TipData tip : tips) {
+            View card = inflater.inflate(R.layout.item_tip_card, tipFlipper, false);
+            card.setBackgroundResource(tip.bgRes);
+            ((ImageView) card.findViewById(R.id.tipIcon)).setImageResource(tip.iconRes);
+            ((TextView) card.findViewById(R.id.tipTitle)).setText("স্মার্ট পরামর্শ");
+            ((TextView) card.findViewById(R.id.tipSubtitle)).setText(tip.subtitle);
+            tipFlipper.addView(card);
+
+            View dot = new View(requireContext());
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(3, 0, 3, 0);
+            dot.setLayoutParams(lp);
+            dot.setBackgroundResource(R.drawable.dot_inactive);
+            tipDots.addView(dot);
+        }
+
+        tipCount = tips.size();
+        tipFlipper.setDisplayedChild(0);
+        updateDots(0);
     }
 
-    private void startAiTips() {
+    private void updateDots(int activeIndex) {
+        for (int i = 0; i < tipDots.getChildCount(); i++) {
+            tipDots.getChildAt(i).setBackgroundResource(
+                    i == activeIndex ? R.drawable.dot_active : R.drawable.dot_inactive);
+        }
+    }
+
+    // ── AUTO-SLIDE — advances the tip carousel every 4 seconds ────────
+    private void startAutoSlide() {
         tipHandler.removeCallbacksAndMessages(null);
-        tipHandler.postDelayed(() -> {
-            if (aiTips == null || aiTips.length <= 1) return;
-            tipIndex = (tipIndex + 1) % aiTips.length;
-            if (tvAiTip != null) {
-                AlphaAnimation fade = new AlphaAnimation(0f, 1f);
-                fade.setDuration(500);
-                tvAiTip.setText(aiTips[tipIndex]);
-                tvAiTip.startAnimation(fade);
+        tipHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (tipFlipper != null && tipCount > 1) {
+                    tipFlipper.showNext();
+                    updateDots(tipFlipper.getDisplayedChild());
+                }
+                tipHandler.postDelayed(this, 4000);
             }
-            startAiTips();
-        }, 5000);
+        }, 4000);
     }
 
     // ── CLICK LISTENERS ──────────────────────────────────────────────
@@ -174,7 +235,21 @@ public class HomeFragment extends Fragment {
         root.findViewById(R.id.balanceCard).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AnalysisActivity.class)));
 
-        root.findViewById(R.id.aiTipBanner).setOnClickListener(v ->
+        root.findViewById(R.id.tipFlipper).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AiChatActivity.class)));
+
+        // Quick menu grid
+        root.findViewById(R.id.menuAiChat).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), AiChatActivity.class)));
+        root.findViewById(R.id.menuAnalysis).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), AnalysisActivity.class)));
+        root.findViewById(R.id.menuLedger).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), LedgerListActivity.class)));
+        root.findViewById(R.id.menuCalculator).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), CalculatorActivity.class)));
+        root.findViewById(R.id.menuNotes).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), NotesActivity.class)));
+        root.findViewById(R.id.menuAccounting).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), AccountingActivity.class)));
     }
 }

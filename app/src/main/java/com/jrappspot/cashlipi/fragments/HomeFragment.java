@@ -1,6 +1,8 @@
 package com.jrappspot.cashlipi.fragments;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -50,6 +52,13 @@ public class HomeFragment extends Fragment {
 
     private ViewFlipper tipFlipper;
     private LinearLayout tipDots;
+
+    // ── ব্যালেন্স দেখা/লুকানো (চোখ আইকন) ───────────────────────────────
+    private ImageView balanceEyeToggle;
+    private double currentBalance = 0;
+    private boolean balanceHidden = false;
+    private static final String PREFS_NAME = "cashlipi_home_prefs";
+    private static final String KEY_BALANCE_HIDDEN = "balance_hidden";
 
     private final Handler tipHandler = new Handler(Looper.getMainLooper());
     private int tipCount = 0;
@@ -102,6 +111,30 @@ public class HomeFragment extends Fragment {
         tvTotalSavings = view.findViewById(R.id.tvTotalSavings);
         tipFlipper     = view.findViewById(R.id.tipFlipper);
         tipDots        = view.findViewById(R.id.tipDots);
+        balanceEyeToggle = view.findViewById(R.id.balanceEyeToggle);
+
+        balanceHidden = requireContext()
+                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getBoolean(KEY_BALANCE_HIDDEN, false);
+
+        balanceEyeToggle.setOnClickListener(v -> {
+            balanceHidden = !balanceHidden;
+            requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                    .edit().putBoolean(KEY_BALANCE_HIDDEN, balanceHidden).apply();
+            applyBalanceVisibility();
+        });
+    }
+
+    // ── ব্যালেন্স মাস্ক করা/দেখানো টেক্সট + আইকন আপডেট ─────────────────
+    private void applyBalanceVisibility() {
+        if (tvMainBalance == null) return;
+        if (balanceHidden) {
+            tvMainBalance.setText("৳ ***");
+            balanceEyeToggle.setImageResource(R.drawable.ic_eye_off);
+        } else {
+            tvMainBalance.setText(DatabaseManager.formatAmount(currentBalance));
+            balanceEyeToggle.setImageResource(R.drawable.ic_eye);
+        }
     }
 
     private void loadDashboard() {
@@ -112,8 +145,9 @@ public class HomeFragment extends Fragment {
         double pabona  = db.getTotalPabona();
         double balance = db.getBalance();
 
-        tvMainBalance.setText(DatabaseManager.formatAmount(balance));
+        currentBalance = balance;
         tvMainBalance.setTextColor(0xFFFFFFFF);
+        applyBalanceVisibility();
 
         tvTotalIncome.setText(DatabaseManager.formatAmount(income));
         tvTotalExpense.setText(DatabaseManager.formatAmount(expense));

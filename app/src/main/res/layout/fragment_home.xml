@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="12dp"
+        android:paddingHorizontal="0dp"
         android:paddingTop="10dp"
         android:paddingBottom="24dp">
 
@@ -35,10 +35,10 @@
             <ViewFlipper
                 android:id="@+id/tipFlipper"
                 android:layout_width="match_parent"
-                android:layout_height="94dp"
+                android:layout_height="76dp"
                 android:flipInterval="4000"
-                android:inAnimation="@android:anim/fade_in"
-                android:outAnimation="@android:anim/fade_out"
+                android:inAnimation="@anim/slide_in_right"
+                android:outAnimation="@anim/slide_out_left"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground">
                 <!-- child cards are added dynamically in HomeFragment.java based on real data -->
@@ -61,7 +61,7 @@
         <FrameLayout
             android:id="@+id/balanceCard"
             android:layout_width="match_parent"
-            android:layout_height="172dp"
+            android:layout_height="150dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_balance_pink"
             android:clickable="true" android:focusable="true"
@@ -72,70 +72,54 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="18dp">
+                android:paddingHorizontal="18dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="14dp">
 
-                <!-- top row: label pill + status -->
+                <!-- top decorative line/mark -->
+                <View
+                    android:layout_width="36dp"
+                    android:layout_height="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/bg_balance_top_mark"
+                    android:layout_marginBottom="10dp"/>
+
+                <!-- ব্যালেন্স label + eye toggle -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="28dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:background="@drawable/bg_balance_pill"
-                        android:paddingHorizontal="10dp">
-                        <ImageView
-                            android:layout_width="14dp"
-                            android:layout_height="14dp"
-                            android:src="@drawable/ic_eye"
-                            app:tint="#FFFFFF"
-                            android:layout_marginEnd="6dp"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="এই মাস"
-                            android:textSize="11sp" android:textStyle="bold"
-                            android:textColor="#FFFFFF"/>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"/>
-
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="2dp">
                     <TextView
-                        android:id="@+id/balanceStatusText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="সচল"
-                        android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="#DFFFFFFF"/>
+                        android:text="ব্যালেন্স"
+                        android:textSize="14sp" android:textStyle="bold"
+                        android:textColor="#DFFFFFFF"
+                        android:letterSpacing="0.03"
+                        android:layout_marginEnd="8dp"/>
+                    <ImageView
+                        android:id="@+id/balanceEyeToggle"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_eye"
+                        app:tint="#FFFFFF"
+                        android:clickable="true" android:focusable="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
                 </LinearLayout>
 
                 <View
                     android:layout_width="0dp" android:layout_height="0dp"
                     android:layout_weight="1"/>
 
-                <!-- ব্যালেন্স label + amount -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ব্যালেন্স"
-                    android:textSize="13sp" android:textStyle="bold"
-                    android:textColor="#DFFFFFFF"
-                    android:letterSpacing="0.03"
-                    android:layout_marginBottom="2dp"/>
-
                 <TextView
                     android:id="@+id/tvMainBalance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="৳ 0"
-                    android:textSize="38sp" android:textStyle="bold"
+                    android:textSize="42sp" android:textStyle="bold"
                     android:textColor="#FFFFFF"/>
 
                 <View
@@ -146,23 +130,24 @@
                 <LinearLayout
                     android:id="@+id/balanceCardClick"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="26dp"
                     android:orientation="horizontal"
                     android:gravity="center"
                     android:background="@drawable/bg_balance_detail_pill"
-                    android:paddingHorizontal="16dp"
+                    android:paddingHorizontal="12dp"
                     android:clickable="true" android:focusable="true">
-                    <ImageView
-                        android:layout_width="13dp"
-                        android:layout_height="13dp"
-                        android:src="@drawable/emoji_bar_chart"
-                        android:layout_marginEnd="6dp"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="বিস্তারিত দেখুন"
-                        android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="#FFFFFF"/>
+                        android:textSize="10sp" android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="4dp"/>
+                    <ImageView
+                        android:layout_width="11dp"
+                        android:layout_height="11dp"
+                        android:src="@drawable/ic_chevron_right"
+                        app:tint="#FFFFFF"/>
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>
@@ -179,7 +164,7 @@
             <FrameLayout
                 android:id="@+id/cardIncome"
                 android:layout_width="0dp"
-                android:layout_height="96dp"
+                android:layout_height="72dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/bg_summary_income"
@@ -190,31 +175,36 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center" android:padding="10dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" android:paddingHorizontal="14dp">
                     <ImageView
-                        android:layout_width="26dp" android:layout_height="26dp"
-                        android:src="@drawable/emoji_money_bag"
-                        android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="আয়"
-                        android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/m3OnIncomeContainer"
-                        android:alpha="0.8"/>
-                    <TextView
-                        android:id="@+id/tvTotalIncome"
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="৳ 0"
-                        android:textSize="17sp" android:textStyle="bold"
-                        android:textColor="@color/m3OnIncomeContainer"/>
+                        android:layout_width="20dp" android:layout_height="20dp"
+                        android:src="@drawable/ic_widget_income"
+                        android:layout_marginEnd="10dp"/>
+                    <LinearLayout
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="আয়"
+                            android:textSize="12sp" android:textStyle="bold"
+                            android:textColor="@color/m3OnIncomeContainer"
+                            android:alpha="0.8"/>
+                        <TextView
+                            android:id="@+id/tvTotalIncome"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="৳ 0"
+                            android:textSize="19sp" android:textStyle="bold"
+                            android:textColor="@color/m3OnIncomeContainer"/>
+                    </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/cardExpense"
                 android:layout_width="0dp"
-                android:layout_height="96dp"
+                android:layout_height="72dp"
                 android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:background="@drawable/bg_summary_expense"
@@ -225,24 +215,29 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center" android:padding="10dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" android:paddingHorizontal="14dp">
                     <ImageView
-                        android:layout_width="26dp" android:layout_height="26dp"
-                        android:src="@drawable/emoji_money_with_wings"
-                        android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="ব্যয়"
-                        android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/m3OnExpenseContainer"
-                        android:alpha="0.8"/>
-                    <TextView
-                        android:id="@+id/tvTotalExpense"
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="৳ 0"
-                        android:textSize="17sp" android:textStyle="bold"
-                        android:textColor="@color/m3OnExpenseContainer"/>
+                        android:layout_width="20dp" android:layout_height="20dp"
+                        android:src="@drawable/ic_widget_expense"
+                        android:layout_marginEnd="10dp"/>
+                    <LinearLayout
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="ব্যয়"
+                            android:textSize="12sp" android:textStyle="bold"
+                            android:textColor="@color/m3OnExpenseContainer"
+                            android:alpha="0.8"/>
+                        <TextView
+                            android:id="@+id/tvTotalExpense"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="৳ 0"
+                            android:textSize="19sp" android:textStyle="bold"
+                            android:textColor="@color/m3OnExpenseContainer"/>
+                    </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
@@ -259,7 +254,7 @@
             <FrameLayout
                 android:id="@+id/cardDena"
                 android:layout_width="0dp"
-                android:layout_height="88dp"
+                android:layout_height="68dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/bg_summary_dena"
@@ -270,31 +265,37 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center" android:padding="8dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" android:paddingHorizontal="12dp">
                     <ImageView
-                        android:layout_width="24dp" android:layout_height="24dp"
-                        android:src="@drawable/emoji_book_red"
-                        android:layout_marginBottom="3dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="দেনা"
-                        android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/m3OnDenaContainer"
-                        android:alpha="0.8"/>
-                    <TextView
-                        android:id="@+id/tvTotalDena"
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="৳ 0"
-                        android:textSize="16sp" android:textStyle="bold"
-                        android:textColor="@color/m3OnDenaContainer"/>
+                        android:layout_width="18dp" android:layout_height="18dp"
+                        android:src="@drawable/ic_minus_circle"
+                        app:tint="@color/m3OnDenaContainer"
+                        android:layout_marginEnd="8dp"/>
+                    <LinearLayout
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="দেনা"
+                            android:textSize="11.5sp" android:textStyle="bold"
+                            android:textColor="@color/m3OnDenaContainer"
+                            android:alpha="0.8"/>
+                        <TextView
+                            android:id="@+id/tvTotalDena"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="৳ 0"
+                            android:textSize="17sp" android:textStyle="bold"
+                            android:textColor="@color/m3OnDenaContainer"/>
+                    </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/cardPabona"
                 android:layout_width="0dp"
-                android:layout_height="88dp"
+                android:layout_height="68dp"
                 android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:background="@drawable/bg_summary_pabona"
@@ -305,24 +306,30 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center" android:padding="8dp">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" android:paddingHorizontal="12dp">
                     <ImageView
-                        android:layout_width="24dp" android:layout_height="24dp"
-                        android:src="@drawable/emoji_book_green"
-                        android:layout_marginBottom="3dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="পাওনা"
-                        android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="@color/m3OnPabonaContainer"
-                        android:alpha="0.8"/>
-                    <TextView
-                        android:id="@+id/tvTotalPabona"
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="৳ 0"
-                        android:textSize="16sp" android:textStyle="bold"
-                        android:textColor="@color/m3OnPabonaContainer"/>
+                        android:layout_width="18dp" android:layout_height="18dp"
+                        android:src="@drawable/ic_plus_circle"
+                        app:tint="@color/m3OnPabonaContainer"
+                        android:layout_marginEnd="8dp"/>
+                    <LinearLayout
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="পাওনা"
+                            android:textSize="11.5sp" android:textStyle="bold"
+                            android:textColor="@color/m3OnPabonaContainer"
+                            android:alpha="0.8"/>
+                        <TextView
+                            android:id="@+id/tvTotalPabona"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="৳ 0"
+                            android:textSize="17sp" android:textStyle="bold"
+                            android:textColor="@color/m3OnPabonaContainer"/>
+                    </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
@@ -333,7 +340,7 @@
         <FrameLayout
             android:id="@+id/cardSavings"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="52dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_summary_savings"
             android:clickable="true" android:focusable="true"
@@ -347,19 +354,14 @@
                 android:gravity="center_vertical"
                 android:paddingHorizontal="16dp">
 
-                <ImageView
-                    android:layout_width="24dp" android:layout_height="24dp"
-                    android:src="@drawable/emoji_green_heart"
-                    android:layout_marginEnd="10dp"/>
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="সঞ্চয়"
-                    android:textSize="12sp" android:textStyle="bold"
+                    android:textSize="13.5sp" android:textStyle="bold"
                     android:textColor="@color/m3OnSavingsContainer"
-                    android:alpha="0.8"
+                    android:alpha="0.85"
                     android:letterSpacing="0.04"/>
 
                 <TextView
@@ -397,25 +399,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="14dp"
+                android:paddingVertical="9dp"
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="0dp">
                 <FrameLayout
-                    android:layout_width="46dp" android:layout_height="46dp"
+                    android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#EEF2FF"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="24dp" android:layout_height="24dp"
+                        android:layout_width="20dp" android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_robot"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="AI Chat"
-                    android:textSize="10.5sp" android:textStyle="bold"
+                    android:textSize="12sp" android:textStyle="bold"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
 
@@ -426,25 +428,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="14dp"
+                android:paddingVertical="9dp"
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="0dp">
                 <FrameLayout
-                    android:layout_width="46dp" android:layout_height="46dp"
+                    android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#EFF6FF"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="24dp" android:layout_height="24dp"
+                        android:layout_width="20dp" android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_chart_up"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="এনালাইসিস"
-                    android:textSize="10.5sp" android:textStyle="bold"
+                    android:textSize="12sp" android:textStyle="bold"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
 
@@ -455,24 +457,24 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="14dp"
+                android:paddingVertical="9dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="0dp">
                 <FrameLayout
-                    android:layout_width="46dp" android:layout_height="46dp"
+                    android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#FFFBEB"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="24dp" android:layout_height="24dp"
+                        android:layout_width="20dp" android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_ledger"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="বাকির খাতা"
-                    android:textSize="10.5sp" android:textStyle="bold"
+                    android:textSize="12sp" android:textStyle="bold"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
         </LinearLayout>
@@ -489,25 +491,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="14dp"
+                android:paddingVertical="9dp"
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="0dp">
                 <FrameLayout
-                    android:layout_width="46dp" android:layout_height="46dp"
+                    android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F0FDFA"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="24dp" android:layout_height="24dp"
+                        android:layout_width="20dp" android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_abacus"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="ক্যালকুলেটর"
-                    android:textSize="10.5sp" android:textStyle="bold"
+                    android:textSize="12sp" android:textStyle="bold"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
 
@@ -518,25 +520,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="14dp"
+                android:paddingVertical="9dp"
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="0dp">
                 <FrameLayout
-                    android:layout_width="46dp" android:layout_height="46dp"
+                    android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#FDF2F8"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="24dp" android:layout_height="24dp"
+                        android:layout_width="20dp" android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_memo"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="নোট"
-                    android:textSize="10.5sp" android:textStyle="bold"
+                    android:textSize="12sp" android:textStyle="bold"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
 
@@ -547,24 +549,24 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="14dp"
+                android:paddingVertical="9dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="0dp">
                 <FrameLayout
-                    android:layout_width="46dp" android:layout_height="46dp"
+                    android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#ECFDF5"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="24dp" android:layout_height="24dp"
+                        android:layout_width="20dp" android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_bank"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="একাউন্টিং"
-                    android:textSize="10.5sp" android:textStyle="bold"
+                    android:textSize="12sp" android:textStyle="bold"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
         </LinearLayout>

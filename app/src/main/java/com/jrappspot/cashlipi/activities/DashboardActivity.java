@@ -3,6 +3,9 @@ package com.jrappspot.cashlipi.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -27,6 +32,12 @@ import com.jrappspot.cashlipi.utils.NavBarStyler;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * DashboardActivity — এখন এই Activity শুধু "হোস্ট" হিসেবে কাজ করে:
  *   ১. কমপ্যাক্ট ব্র্যান্ড হেডার + টাইটেল-সাইকেল অ্যানিমেশন (header-animation logic)
@@ -40,6 +51,13 @@ public class DashboardActivity extends BaseActivity {
 
     private DatabaseManager db;
     private FirestoreSyncManager firestoreSync;
+
+    // ── টপ আইডেন্টিটি বার (হ্যামবার্গার/সালাম-নাম-সময়-তারিখ স্লাইড/নোটিফিকেশন/প্রোফাইল) ──
+    private ImageButton headerMenuBtn, headerNotifBtn, headerProfileBtn;
+    private ViewFlipper headerIdentityFlipper;
+    private ViewFlipper headerAiFlipper;
+    private final Handler identityHandler = new Handler(Looper.getMainLooper());
+    private final Handler aiAdviceHandler = new Handler(Looper.getMainLooper());
 
     // ── নেভিগেশন-কন্ট্রোলার ──────────────────────────────────────────
     private ViewPager2 viewPager;
@@ -86,6 +104,7 @@ public class DashboardActivity extends BaseActivity {
 
         setupNavigation();
         setupFabMenu();
+        setupTopIdentityBar();
 
         int startPage = savedInstanceState != null
                 ? savedInstanceState.getInt(STATE_CURRENT_PAGE, 0) : 0;
@@ -106,16 +125,167 @@ public class DashboardActivity extends BaseActivity {
         syncToFirebase();
         // সেটিং থেকে ফিরে এলে নেভিগেশন মেন্যুর সাইজ/রং/পজিশন/সোয়াইপ তাৎক্ষণিক আপডেট হয়
         applyNavCustomization();
+        refreshAiAdviceTips();
+        startIdentityAutoSlide();
+        startAiAdviceAutoSlide();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         if (fabMenuOpen) closeFabMenu();
+        identityHandler.removeCallbacksAndMessages(null);
+        aiAdviceHandler.removeCallbacksAndMessages(null);
     }
 
     // ══════════════════════════════════════════════════════════════
-    //  ১. হেডার — এখন স্ট্যাটিক "CashLipi" (activity_dashboard.xml-এ সরাসরি সেট করা)।
+    //  ০. টপ আইডেন্টিটি বার — হ্যামবার্গার + সালাম/নাম/সময়/তারিখ স্লাইড + নোটিফিকেশন/প্রোফাইল
+    // ══════════════════════════════════════════════════════════════
+    private void setupTopIdentityBar() {
+        headerMenuBtn    = findViewById(R.id.headerMenuBtn);
+        headerNotifBtn   = findViewById(R.id.headerNotifBtn);
+        headerProfileBtn = findViewById(R.id.headerProfileBtn);
+        headerIdentityFlipper = findViewById(R.id.headerIdentityFlipper);
+        headerAiFlipper       = findViewById(R.id.headerAiFlipper);
+
+        // হ্যামবার্গার — সেটিং/মেনু পেজ খোলে
+        headerMenuBtn.setOnClickListener(v ->
+                startActivity(new Intent(this, SettingsActivity.class)));
+
+        // নোটিফিকেশন — আপাতত নতুন নোটিফিকেশন থাকলে জানাবে (অ্যাডমিন লিসেনার আলাদাভাবে ডায়ালগ দেখায়)
+        headerNotifBtn.setOnClickListener(v ->
+                Toast.makeText(this, "কোনো নতুন নোটিফিকেশন নেই", Toast.LENGTH_SHORT).show());
+
+        // প্রোফাইল
+        headerProfileBtn.setOnClickListener(v ->
+                startActivity(new Intent(this, ProfileActivity.class)));
+
+        buildIdentityFlipper();
+    }
+
+    // সালাম (সময়ভিত্তিক) → CashLipi → সময় → তারিখ — একের পর এক স্লাইড
+    private void buildIdentityFlipper() {
+        headerIdentityFlipper.removeAllViews();
+        List<String> slides = new ArrayList<>();
+        slides.add(greetingByTime());
+        slides.add("CashLipi");
+        slides.add(currentTimeText());
+        slides.add(currentDateText());
+
+        for (String text : slides) {
+            TextView tv = new TextView(this);
+            tv.setText(text);
+            tv.setTextColor(Color.WHITE);
+            tv.setTextSize(13.5f);
+            tv.setTypeface(tv.getTypeface(), android.graphics.Typeface.BOLD);
+            tv.setMaxLines(1);
+            tv.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            tv.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            headerIdentityFlipper.addView(tv);
+        }
+    }
+
+    private String greetingByTime() {
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if (hour < 12) return "সুপ্রভাত!";
+        if (hour < 16) return "শুভ দুপুর!";
+        if (hour < 19) return "শুভ বিকাল!";
+        return "শুভ সন্ধ্যা!";
+    }
+
+    private String currentTimeText() {
+        return new SimpleDateFormat("hh:mm a", new Locale("bn")).format(new java.util.Date());
+    }
+
+    private String currentDateText() {
+        return new SimpleDateFormat("dd MMM, yyyy", new Locale("bn")).format(new java.util.Date());
+    }
+
+    private void startIdentityAutoSlide() {
+        identityHandler.removeCallbacksAndMessages(null);
+        identityHandler.postDelayed(new Runnable() {
+            @Override public void run() {
+                if (headerIdentityFlipper != null) {
+                    // সময়/তারিখ স্লাইড দেখানোর ঠিক আগে টেক্সট রিফ্রেশ করা হয় যাতে সবসময় বর্তমান সময় দেখায়
+                    int next = (headerIdentityFlipper.getDisplayedChild() + 1) % headerIdentityFlipper.getChildCount();
+                    if (next == 2 && headerIdentityFlipper.getChildAt(2) instanceof TextView) {
+                        ((TextView) headerIdentityFlipper.getChildAt(2)).setText(currentTimeText());
+                    }
+                    headerIdentityFlipper.showNext();
+                }
+                identityHandler.postDelayed(this, 2600);
+            }
+        }, 2600);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    //  ০.১ চিকন AI-advice স্লাইড — headerSliderSlot-এ, সবসময় দৃশ্যমান
+    // ══════════════════════════════════════════════════════════════
+    private void refreshAiAdviceTips() {
+        if (headerAiFlipper == null) return;
+        double income  = db.getTotalIncome();
+        double expense = db.getTotalExpense();
+        double savings = db.getTotalSavings();
+        double dena    = db.getTotalDena();
+        double pabona  = db.getTotalPabona();
+        double balance = db.getBalance();
+
+        List<String> tips = new ArrayList<>();
+        if (income == 0 && expense == 0) {
+            tips.add("লেনদেন যোগ করুন, AI আপনাকে স্মার্ট পরামর্শ দেবে!");
+        } else {
+            if (income > 0 && expense > 0) {
+                double ratio = expense / income * 100;
+                if (ratio > 90) tips.add("আয়ের " + (int) ratio + "% ব্যয় হচ্ছে! সঞ্চয় বাড়ানো দরকার।");
+                else if (ratio > 70) tips.add("আয়ের " + (int) ratio + "% ব্যয় হচ্ছে। নিয়ন্ত্রণে রাখুন।");
+                else tips.add("চমৎকার! আয়ের মাত্র " + (int) ratio + "% ব্যয় হচ্ছে।");
+            }
+            if (savings == 0) tips.add("সঞ্চয় শূন্য! আজই সঞ্চয় শুরু করুন।");
+            else tips.add("সঞ্চয় " + DatabaseManager.formatAmount(savings) + " — দারুণ অভ্যাস!");
+            if (dena > 0) tips.add("দেনা " + DatabaseManager.formatAmount(dena) + " বাকি। পরিশোধের পরিকল্পনা করুন।");
+            if (pabona > 0) tips.add("পাওনা " + DatabaseManager.formatAmount(pabona) + " — সংগ্রহ করতে ভুলবেন না।");
+            if (balance < 0) tips.add("ব্যালেন্স নেগেটিভ! অপ্রয়োজনীয় ব্যয় কমান।");
+        }
+        if (tips.isEmpty()) tips.add("স্মার্ট পরামর্শ লোড হচ্ছে...");
+
+        headerAiFlipper.removeAllViews();
+        for (String tip : tips) {
+            TextView tv = new TextView(this);
+            tv.setText("💡 " + tip);
+            tv.setTextColor(Color.WHITE);
+            tv.setTextSize(11.5f);
+            tv.setMaxLines(1);
+            tv.setEllipsize(android.text.TextUtils.TruncateAt.END);
+            tv.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+            tv.setPadding(dp(16), 0, dp(16), 0);
+            tv.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            headerAiFlipper.addView(tv);
+        }
+        headerAiFlipper.setOnClickListener(v ->
+                startActivity(new Intent(this, com.jrappspot.cashlipi.activities.AiChatActivity.class)));
+    }
+
+    private void startAiAdviceAutoSlide() {
+        aiAdviceHandler.removeCallbacksAndMessages(null);
+        if (headerAiFlipper == null) return;
+        aiAdviceHandler.postDelayed(new Runnable() {
+            @Override public void run() {
+                if (headerAiFlipper != null && headerAiFlipper.getChildCount() > 1) {
+                    headerAiFlipper.showNext();
+                }
+                aiAdviceHandler.postDelayed(this, 4000);
+            }
+        }, 4000);
+    }
+
+    private int dp(int value) {
+        float density = getResources().getDisplayMetrics().density;
+        return Math.round(value * density);
+    }
+
+
     //     আগের টাইটেল-সাইকেল/ব্যালেন্স-প্লেসহোল্ডার সরানো হয়েছে — headerSliderSlot (XML-এ)
     //     এখন ফাঁকা, ভবিষ্যতে কাস্টম স্লাইড/AI-advice কার্ড এখানে বসানো যাবে।
     // ══════════════════════════════════════════════════════════════

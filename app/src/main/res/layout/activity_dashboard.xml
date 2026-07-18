@@ -27,6 +27,69 @@
         android:background="@color/bgColor">
 
         <!-- ══════════════════════════════════════════════════════════
+             TOP IDENTITY BAR — সবসময় দৃশ্যমান (নেভ পজিশন সেটিং নির্বিশেষে)।
+             বামে হ্যামবার্গার মেনু, মাঝে সালাম/অ্যাপ-নাম/সময়/তারিখ — একের পর এক স্লাইড,
+             ডানে নোটিফিকেশন + প্রোফাইল আইকন। রং = ব্যালেন্স কার্ডের রং, চিকন বার।
+        ══════════════════════════════════════════════════════════ -->
+        <LinearLayout
+            android:id="@+id/topIdentityBar"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/m3HomeBalanceContainer"
+            android:paddingHorizontal="8dp">
+
+            <ImageButton
+                android:id="@+id/headerMenuBtn"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:padding="7dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_menu_hamburger"
+                app:tint="#FFFFFF"
+                android:contentDescription="মেনু"/>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="4dp">
+
+                <ViewFlipper
+                    android:id="@+id/headerIdentityFlipper"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:flipInterval="2600"
+                    android:inAnimation="@anim/slide_in_right"
+                    android:outAnimation="@anim/slide_out_left">
+                    <!-- চাইল্ড TextView গুলো DashboardActivity.java থেকে রানটাইমে যোগ হয় -->
+                </ViewFlipper>
+            </FrameLayout>
+
+            <ImageButton
+                android:id="@+id/headerNotifBtn"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:padding="7dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_bell_notification"
+                app:tint="#FFFFFF"
+                android:contentDescription="নোটিফিকেশন"/>
+
+            <ImageButton
+                android:id="@+id/headerProfileBtn"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:padding="6dp"
+                android:layout_marginStart="2dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_person_circle"
+                app:tint="#FFFFFF"
+                android:contentDescription="প্রোফাইল"/>
+        </LinearLayout>
+
+        <!-- ══════════════════════════════════════════════════════════
              TOP BLOCK — হেডার (+ Add বাটন) + headerSliderSlot (ফাঁকা) + topNavSlot
         ══════════════════════════════════════════════════════════ -->
         <LinearLayout
@@ -61,14 +124,25 @@
                     android:elevation="3dp"/>
             </LinearLayout>
 
-            <!-- headerSliderSlot — "ব্যালেন্স" টাইটেল-সাইকেল সরিয়ে ফাঁকা রাখা হলো।
-                 এখানে পরে কাস্টম স্লাইড/ব্যানার (এবং চাইলে AI-advice কার্ড) বসানো যাবে।
-                 বর্তমানে height=0dp ও gone — কনটেন্ট বসালে height=wrap_content ও visible করে দিলেই হবে। -->
+            <!-- headerSliderSlot — চিকন AI-advice স্লাইড, সবসময় দৃশ্যমান (নেভ পজিশন নির্বিশেষে) -->
             <FrameLayout
                 android:id="@+id/headerSliderSlot"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:visibility="gone"/>
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+
+                <ViewFlipper
+                    android:id="@+id/headerAiFlipper"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:background="@color/m3HomeBalanceContainer"
+                    android:flipInterval="4000"
+                    android:inAnimation="@anim/slide_in_right"
+                    android:outAnimation="@anim/slide_out_left"
+                    android:clickable="true" android:focusable="true">
+                    <!-- চাইল্ড TextView গুলো DashboardActivity.java থেকে রানটাইমে যোগ হয় -->
+                </ViewFlipper>
+            </FrameLayout>
 
             <!-- নেভ বার এখানে বসে (পজিশন = "উপরে", ডিফল্ট) — topNavBar রানটাইমে এখানে inflate/attach হয় -->
             <FrameLayout
@@ -169,7 +243,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="148dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal"
             android:clipChildren="false"

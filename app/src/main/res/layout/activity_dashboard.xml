@@ -124,12 +124,13 @@
                     android:elevation="3dp"/>
             </LinearLayout>
 
-            <!-- headerSliderSlot — চিকন AI-advice স্লাইড, সবসময় দৃশ্যমান (নেভ পজিশন নির্বিশেষে) -->
+            <!-- headerSliderSlot — HomeFragment-এ নিজস্ব "স্মার্ট পরামর্শ" carousel থাকায় এই পুরনো
+                 ডুপ্লিকেট ব্যানারটা লুকানো হলো — হেডার হাইট কমাতে ও পুনরাবৃত্তি এড়াতে। -->
             <FrameLayout
                 android:id="@+id/headerSliderSlot"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ViewFlipper
                     android:id="@+id/headerAiFlipper"

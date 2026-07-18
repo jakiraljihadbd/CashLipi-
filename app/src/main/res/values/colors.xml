@@ -685,19 +685,19 @@
     <color name="m3OnHomeBalanceContainer">#FFFFFF</color>
     <color name="m3HomeBalancePill">#33FFFFFF</color>
 
-    <color name="m3IncomeContainer">#D7F5E0</color>
+    <color name="m3IncomeContainer">#BDEECF</color>
     <color name="m3OnIncomeContainer">#0B5B34</color>
 
-    <color name="m3ExpenseContainer">#FBDCDA</color>
+    <color name="m3ExpenseContainer">#F9C7C3</color>
     <color name="m3OnExpenseContainer">#7A1913</color>
 
-    <color name="m3DenaContainer">#FCEACB</color>
+    <color name="m3DenaContainer">#FADE9E</color>
     <color name="m3OnDenaContainer">#6E4600</color>
 
-    <color name="m3PabonaContainer">#DAE6FF</color>
+    <color name="m3PabonaContainer">#BDD3FF</color>
     <color name="m3OnPabonaContainer">#0B3A85</color>
 
-    <color name="m3SavingsContainer">#EFDBFF</color>
+    <color name="m3SavingsContainer">#E4C6FF</color>
     <color name="m3OnSavingsContainer">#4E1F8F</color>
 
     <color name="m3MenuCardSurface">#FFFFFF</color>

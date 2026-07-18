@@ -1,109 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="14dp"
     android:layout_marginBottom="10dp"
-    android:gravity="center_vertical"
     android:background="@drawable/bg_card_premium_ripple"
     android:elevation="6dp"
     android:clickable="true"
     android:focusable="true">
 
-    <!-- ছবি / initial অ্যাভাটার -->
-    <FrameLayout
-        android:layout_width="58dp"
-        android:layout_height="58dp"
-        android:layout_marginEnd="14dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- ছবি / initial অ্যাভাটার -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="14dp">
+
+            <ImageView
+                android:id="@+id/ivPersonPhoto"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/avatarInitial"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_avatar_circle_1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvInitial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="?"
+                    android:textSize="21sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- নাম, সম্পর্ক, ফোন, ঠিকানা -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvPersonName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/tvRelationDot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" • "
+                    android:textSize="14sp"
+                    android:textColor="@color/textSecondary"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tvPersonRelation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="13.5sp"
+                    android:textColor="@color/textSecondary"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:src="@drawable/ic_call_filled"
+                    app:tint="@color/textSecondary"
+                    android:layout_marginEnd="5dp"/>
+
+                <TextView
+                    android:id="@+id/tvPersonPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="13.5sp"
+                    android:textColor="@color/textSecondary"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:src="@drawable/ic_location_pin"
+                    android:layout_marginEnd="5dp"/>
+
+                <TextView
+                    android:id="@+id/tvPersonAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="12sp"
+                    android:textColor="@color/textSecondary"
+                    android:alpha="0.85"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <ImageView
-            android:id="@+id/ivPersonPhoto"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:scaleType="centerCrop"
-            android:visibility="gone"/>
-
-        <LinearLayout
-            android:id="@+id/avatarInitial"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            android:background="@drawable/bg_avatar_circle_1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tvInitial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="?"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
-        </LinearLayout>
-    </FrameLayout>
-
-    <!-- নাম, সম্পর্ক, ফোন -->
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tvPersonName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/textPrimary"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-
-            <TextView
-                android:id="@+id/tvRelationDot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=" • "
-                android:textSize="14sp"
-                android:textColor="@color/textSecondary"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/tvPersonRelation"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="14sp"
-                android:textColor="@color/textSecondary"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:visibility="gone"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvPersonPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@color/textSecondary"
-            android:drawablePadding="6dp"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="6dp"
+            android:src="@drawable/ic_chevron_right"
+            android:alpha="0.4"/>
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/ic_chevron_right"
-        android:alpha="0.4"/>
+    <!-- লেনদেন সারসংক্ষেপ ব্যাজ -->
+    <LinearLayout
+        android:id="@+id/rowStats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvTxnCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_relation_chip"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="#B3105A"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/tvUnpaidBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_badge_unpaid"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:textColor="@color/denaActiveGradEnd"/>
+    </LinearLayout>
 
 </LinearLayout>

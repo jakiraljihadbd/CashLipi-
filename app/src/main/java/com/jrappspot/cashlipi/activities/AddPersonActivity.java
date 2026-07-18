@@ -50,7 +50,7 @@ public class AddPersonActivity extends AppCompatActivity {
     private FrameLayout photoFrame;
     private ImageView ivPhoto;
     private View photoRing, photoPlaceholder;
-    private EditText etName, etRelation, etPhone, etAddress;
+    private EditText etName, etRelation, etPhone, etAddress, etEmail;
     private LinearLayout tvDate, tvTime, btnSavePerson;
     private TextView tvDateText, tvTimeText;
 
@@ -87,6 +87,7 @@ public class AddPersonActivity extends AppCompatActivity {
         etRelation = findViewById(R.id.etRelation);
         etPhone = findViewById(R.id.etPhone);
         etAddress = findViewById(R.id.etAddress);
+        etEmail = findViewById(R.id.etEmail);
         tvDate = findViewById(R.id.tvDate);
         tvTime = findViewById(R.id.tvTime);
         tvDateText = findViewById(R.id.tvDateText);
@@ -242,6 +243,7 @@ public class AddPersonActivity extends AppCompatActivity {
         etRelation.setText(p.getRelation());
         etPhone.setText(p.getPhone());
         etAddress.setText(p.getAddress());
+        etEmail.setText(p.getEmail());
         if (!p.getDate().isEmpty()) { selectedDate = p.getDate(); tvDateText.setText(DatabaseManager.formatDateDisplay(selectedDate)); }
         if (!p.getTime().isEmpty()) { selectedTime = p.getTime(); tvTimeText.setText(DatabaseManager.formatTimeDisplay(selectedTime)); }
         if (p.hasPhoto() && new File(p.getPhotoPath()).exists()) applyPhoto(p.getPhotoPath());
@@ -261,6 +263,7 @@ public class AddPersonActivity extends AppCompatActivity {
         p.setRelation(etRelation.getText() != null ? etRelation.getText().toString().trim() : "");
         p.setPhone(phone);
         p.setAddress(etAddress.getText() != null ? etAddress.getText().toString().trim() : "");
+        p.setEmail(etEmail.getText() != null ? etEmail.getText().toString().trim() : "");
         p.setDate(selectedDate);
         p.setTime(selectedTime);
         if (!pendingPhotoPath.isEmpty()) p.setPhotoPath(pendingPhotoPath);

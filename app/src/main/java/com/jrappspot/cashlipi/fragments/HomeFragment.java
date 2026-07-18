@@ -266,8 +266,6 @@ public class HomeFragment extends Fragment {
 
         root.findViewById(R.id.balanceCardClick).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AnalysisActivity.class)));
-        root.findViewById(R.id.balanceCard).setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), AnalysisActivity.class)));
 
         root.findViewById(R.id.tipFlipper).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AiChatActivity.class)));

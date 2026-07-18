@@ -15,13 +15,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.models.Person;
+import com.jrappspot.cashlipi.models.PersonStat;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
- * দেনা-পাওনা পেজের ব্যক্তি তালিকার অ্যাডাপ্টার — বড়, বোল্ড UI।
- * ছবি থাকলে গোলাকার ছবি, না থাকলে নামের প্রথম অক্ষরসহ রঙিন অ্যাভাটার।
+ * দেনা-পাওনা পেজের ব্যক্তি তালিকার অ্যাডাপ্টার — ছবি/নাম/সম্পর্ক/ফোন/ঠিকানার পাশাপাশি
+ * প্রতিটা ব্যক্তির মোট লেনদেন ও অপরিশোধিত এন্ট্রির সংখ্যা ব্যাজ আকারে দেখায় (statsMap থেকে, ঐচ্ছিক)।
  */
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
 
@@ -38,11 +40,17 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
     private final Context ctx;
     private final List<Person> items;
     private final OnPersonClick listener;
+    private final Map<String, PersonStat> statsMap; // key: person.getName().trim().toLowerCase() — nullable
 
     public PersonAdapter(Context ctx, List<Person> items, OnPersonClick listener) {
+        this(ctx, items, listener, null);
+    }
+
+    public PersonAdapter(Context ctx, List<Person> items, OnPersonClick listener, Map<String, PersonStat> statsMap) {
         this.ctx = ctx;
         this.items = items;
         this.listener = listener;
+        this.statsMap = statsMap;
     }
 
     @NonNull
@@ -68,13 +76,17 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
         }
 
         if (p.hasPhone()) {
-            h.tvPhone.setVisibility(View.VISIBLE);
+            h.rowPhone.setVisibility(View.VISIBLE);
             h.tvPhone.setText(p.getPhone());
-        } else if (p.hasAddress()) {
-            h.tvPhone.setVisibility(View.VISIBLE);
-            h.tvPhone.setText(p.getAddress());
         } else {
-            h.tvPhone.setVisibility(View.GONE);
+            h.rowPhone.setVisibility(View.GONE);
+        }
+
+        if (p.hasAddress()) {
+            h.rowAddress.setVisibility(View.VISIBLE);
+            h.tvAddress.setText(p.getAddress());
+        } else {
+            h.rowAddress.setVisibility(View.GONE);
         }
 
         if (p.hasPhoto() && new File(p.getPhotoPath()).exists()) {
@@ -89,6 +101,25 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
             h.avatarInitial.setBackgroundResource(AVATAR_BGS[colorIdx]);
         }
 
+        PersonStat stat = statsMap != null ? statsMap.get(p.getName().trim().toLowerCase()) : null;
+        if (stat != null && stat.hasAnyTxn()) {
+            h.rowStats.setVisibility(View.VISIBLE);
+            h.tvTxnCount.setText(stat.totalCount + " টি লেনদেন");
+            if (stat.hasUnpaid()) {
+                h.tvUnpaidBadge.setVisibility(View.VISIBLE);
+                h.tvUnpaidBadge.setBackgroundResource(R.drawable.bg_badge_unpaid);
+                h.tvUnpaidBadge.setTextColor(ctx.getResources().getColor(R.color.denaActiveGradEnd));
+                h.tvUnpaidBadge.setText(stat.unpaidCount + " টি অপরিশোধিত");
+            } else {
+                h.tvUnpaidBadge.setVisibility(View.VISIBLE);
+                h.tvUnpaidBadge.setBackgroundResource(R.drawable.bg_badge_paid);
+                h.tvUnpaidBadge.setTextColor(ctx.getResources().getColor(R.color.successColor));
+                h.tvUnpaidBadge.setText("সব পরিশোধিত");
+            }
+        } else {
+            h.rowStats.setVisibility(View.GONE);
+        }
+
         h.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onClick(p, h.getAdapterPosition());
         });
@@ -99,8 +130,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
 
     static class VH extends RecyclerView.ViewHolder {
         ImageView ivPhoto;
-        LinearLayout avatarInitial;
-        TextView tvInitial, tvName, tvDot, tvRelation, tvPhone;
+        LinearLayout avatarInitial, rowPhone, rowAddress, rowStats;
+        TextView tvInitial, tvName, tvDot, tvRelation, tvPhone, tvAddress, tvTxnCount, tvUnpaidBadge;
 
         VH(@NonNull View itemView) {
             super(itemView);
@@ -110,7 +141,13 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
             tvName = itemView.findViewById(R.id.tvPersonName);
             tvDot = itemView.findViewById(R.id.tvRelationDot);
             tvRelation = itemView.findViewById(R.id.tvPersonRelation);
+            rowPhone = itemView.findViewById(R.id.rowPhone);
             tvPhone = itemView.findViewById(R.id.tvPersonPhone);
+            rowAddress = itemView.findViewById(R.id.rowAddress);
+            tvAddress = itemView.findViewById(R.id.tvPersonAddress);
+            rowStats = itemView.findViewById(R.id.rowStats);
+            tvTxnCount = itemView.findViewById(R.id.tvTxnCount);
+            tvUnpaidBadge = itemView.findViewById(R.id.tvUnpaidBadge);
         }
     }
 }

@@ -24,6 +24,9 @@ public class Person {
     @SerializedName("address")
     private String address;       // ঐচ্ছিক
 
+    @SerializedName("email")
+    private String email;         // ঐচ্ছিক — মেইল বাটনের জন্য ব্যবহৃত হয়
+
     @SerializedName("photoPath")
     private String photoPath;     // internal storage-এ ক্রপ করা ছবির path — ঐচ্ছিক
 
@@ -54,6 +57,7 @@ public class Person {
     public boolean hasPhone() { return phone != null && !phone.trim().isEmpty(); }
     public boolean hasAddress() { return address != null && !address.trim().isEmpty(); }
     public boolean hasRelation() { return relation != null && !relation.trim().isEmpty(); }
+    public boolean hasEmail() { return email != null && !email.trim().isEmpty(); }
 
     /** তালিকায় বৃত্তাকার ছবির বদলে দেখানোর জন্য নামের প্রথম অক্ষর। */
     public String getInitial() {
@@ -67,6 +71,7 @@ public class Person {
     public String getRelation() { return relation != null ? relation : ""; }
     public String getPhone() { return phone != null ? phone : ""; }
     public String getAddress() { return address != null ? address : ""; }
+    public String getEmail() { return email != null ? email : ""; }
     public String getPhotoPath() { return photoPath != null ? photoPath : ""; }
     public String getDate() { return date != null ? date : ""; }
     public String getTime() { return time != null ? time : ""; }
@@ -80,6 +85,7 @@ public class Person {
     public void setRelation(String relation) { this.relation = relation; }
     public void setPhone(String phone) { this.phone = phone; }
     public void setAddress(String address) { this.address = address; }
+    public void setEmail(String email) { this.email = email; }
     public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
     public void setDate(String date) { this.date = date; }
     public void setTime(String time) { this.time = time; }

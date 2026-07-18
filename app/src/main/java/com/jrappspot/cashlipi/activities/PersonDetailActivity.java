@@ -1,11 +1,13 @@
 package com.jrappspot.cashlipi.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +24,9 @@ import com.jrappspot.cashlipi.utils.DatabaseManager;
 import java.io.File;
 
 /**
- * একজন ব্যক্তির বিস্তারিত পেজ — পরিচিতি দেখায় ও এডিট/ডিলিট/কল করার সুযোগ দেয়।
- * এই ধাপে শুধু পরিচিতি অংশ প্রস্তুত — এই ব্যক্তির person.id ধরে দিলাম/পেলাম লেনদেনের
- * তালিকা ও যোগ-বাটন এখানেই ভবিষ্যতে যুক্ত হবে (নিচের placeholder জায়গায়)।
+ * একজন ব্যক্তির বিস্তারিত পেজ — কমপ্যাক্ট হেডারে পরিচিতি দেখায়, ডান পাশে হোয়াটসঅ্যাপ/কল/মেইল
+ * বাটন এবং ⋮ মেনুতে এডিট/মুছার অপশন থাকে। এই ধাপে শুধু পরিচিতি অংশ প্রস্তুত — এই ব্যক্তির
+ * person.id ধরে দিলাম/পেলাম লেনদেনের তালিকা ও যোগ-বাটন ভবিষ্যতে নিচের placeholder জায়গায় যুক্ত হবে।
  */
 public class PersonDetailActivity extends AppCompatActivity {
 
@@ -42,7 +44,8 @@ public class PersonDetailActivity extends AppCompatActivity {
 
     private ImageView ivPhoto;
     private LinearLayout avatarInitial;
-    private TextView tvInitial, tvName, tvRelationBadge, tvPhone, tvAddress;
+    private TextView tvInitial, tvName, tvRelationBadge, tvPhone;
+    private ImageView btnWhatsapp, btnCall, btnMail;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,16 +61,15 @@ public class PersonDetailActivity extends AppCompatActivity {
         tvName = findViewById(R.id.tvDetailName);
         tvRelationBadge = findViewById(R.id.tvDetailRelationBadge);
         tvPhone = findViewById(R.id.tvDetailPhone);
-        tvAddress = findViewById(R.id.tvDetailAddress);
+        btnWhatsapp = findViewById(R.id.btnWhatsapp);
+        btnCall = findViewById(R.id.btnCall);
+        btnMail = findViewById(R.id.btnMail);
 
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-        findViewById(R.id.btnCall).setOnClickListener(v -> callPerson());
-        findViewById(R.id.btnEditPerson).setOnClickListener(v -> {
-            Intent i = new Intent(this, AddPersonActivity.class);
-            i.putExtra(AddPersonActivity.EXTRA_EDIT_PERSON_ID, personId);
-            startActivity(i);
-        });
-        findViewById(R.id.btnDeletePerson).setOnClickListener(v -> confirmDelete());
+        btnCall.setOnClickListener(v -> callPerson());
+        btnWhatsapp.setOnClickListener(v -> openWhatsapp());
+        btnMail.setOnClickListener(v -> sendMail());
+        findViewById(R.id.btnMorePerson).setOnClickListener(this::showMoreMenu);
     }
 
     @Override
@@ -96,14 +98,9 @@ public class PersonDetailActivity extends AppCompatActivity {
             tvPhone.setVisibility(View.GONE);
         }
 
-        if (person.hasAddress()) {
-            tvAddress.setVisibility(View.VISIBLE);
-            tvAddress.setText(person.getAddress());
-        } else {
-            tvAddress.setVisibility(View.GONE);
-        }
-
-        findViewById(R.id.btnCall).setVisibility(person.hasPhone() ? View.VISIBLE : View.GONE);
+        btnCall.setVisibility(person.hasPhone() ? View.VISIBLE : View.GONE);
+        btnWhatsapp.setVisibility(person.hasPhone() ? View.VISIBLE : View.GONE);
+        btnMail.setVisibility(person.hasEmail() ? View.VISIBLE : View.GONE);
 
         if (person.hasPhoto() && new File(person.getPhotoPath()).exists()) {
             avatarInitial.setVisibility(View.GONE);
@@ -125,6 +122,46 @@ public class PersonDetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "কল করা যায়নি", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void openWhatsapp() {
+        if (person == null || !person.hasPhone()) return;
+        String phone = person.getPhone().replaceAll("[^0-9+]", "");
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://wa.me/" + phone));
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "হোয়াটসঅ্যাপ খোলা যায়নি", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void sendMail() {
+        if (person == null || !person.hasEmail()) return;
+        try {
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + person.getEmail()));
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "মেইল অ্যাপ পাওয়া যায়নি", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showMoreMenu(View anchor) {
+        PopupMenu menu = new PopupMenu(this, anchor);
+        menu.getMenu().add(0, 1, 0, "সম্পাদনা করুন");
+        menu.getMenu().add(0, 2, 1, "মুছে ফেলুন");
+        menu.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == 1) {
+                Intent i = new Intent(this, AddPersonActivity.class);
+                i.putExtra(AddPersonActivity.EXTRA_EDIT_PERSON_ID, personId);
+                startActivity(i);
+                return true;
+            } else if (item.getItemId() == 2) {
+                confirmDelete();
+                return true;
+            }
+            return false;
+        });
+        menu.show();
     }
 
     private void confirmDelete() {

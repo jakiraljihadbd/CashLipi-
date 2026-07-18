@@ -6,141 +6,157 @@
     android:orientation="vertical"
     android:background="@color/bgColor">
 
-    <!-- হেডার -->
+    <!-- কমপ্যাক্ট হেডার -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:background="@color/cardBg"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="10dp"
+        android:paddingStart="2dp"
+        android:paddingEnd="8dp"
+        android:paddingVertical="8dp"
         android:elevation="3dp">
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:padding="10dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:padding="8dp"
             android:src="@drawable/ic_arrow_back"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"/>
 
-        <FrameLayout
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="4dp">
-
-            <ImageView
-                android:id="@+id/ivDetailPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:visibility="gone"/>
-
-            <LinearLayout
-                android:id="@+id/avatarInitialDetail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_avatar_circle_1"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/tvDetailInitial"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="?"
-                    android:textSize="19sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
-        </FrameLayout>
-
+        <!-- ছবি + নাম — ছবির উপরের কিনারার সাথে নাম মিলিয়ে রাখতে গ্র্যাভিটি টপ -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="12dp"
-            android:orientation="vertical">
+            android:layout_marginStart="2dp"
+            android:orientation="horizontal"
+            android:gravity="top">
+
+            <FrameLayout
+                android:layout_width="46dp"
+                android:layout_height="46dp">
+
+                <ImageView
+                    android:id="@+id/ivDetailPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/avatarInitialDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_avatar_circle_1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tvDetailInitial"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="?"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+            </FrameLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvDetailName"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textPrimary"
-                    android:maxLines="1"
-                    android:ellipsize="end"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvDetailName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textPrimary"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+
+                    <TextView
+                        android:id="@+id/tvDetailRelationBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:background="@drawable/bg_relation_chip"
+                        android:paddingHorizontal="9dp"
+                        android:paddingVertical="1.5dp"
+                        android:textSize="10.5sp"
+                        android:textStyle="bold"
+                        android:textColor="#B3105A"
+                        android:visibility="gone"/>
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDetailRelationBadge"
+                    android:id="@+id/tvDetailPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_relation_chip"
-                    android:paddingHorizontal="10dp"
-                    android:paddingVertical="2dp"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:textColor="#B3105A"
+                    android:layout_marginTop="1dp"
+                    android:textSize="12.5sp"
+                    android:textColor="@color/textSecondary"
                     android:visibility="gone"/>
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvDetailPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:textSize="13.5sp"
-                android:textColor="@color/textSecondary"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/tvDetailAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:textSize="13sp"
-                android:textColor="@color/textSecondary"
-                android:visibility="gone"/>
         </LinearLayout>
+
+        <!-- ডান পাশে: হোয়াটসঅ্যাপ, কল, মেইল, তারপর ⋮ মেনু (এডিট/মুছুন) -->
+        <ImageView
+            android:id="@+id/btnWhatsapp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:padding="9dp"
+            android:src="@drawable/ic_whatsapp"
+            app:tint="#25D366"
+            android:background="@drawable/bg_action_circle_whatsapp"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <ImageView
             android:id="@+id/btnCall"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:padding="10dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="4dp"
+            android:padding="9dp"
             android:src="@drawable/ic_call_filled"
             app:tint="#10B981"
-            android:background="@drawable/bg_contact_pick_btn"
+            android:background="@drawable/bg_action_circle_call"
             android:clickable="true"
             android:focusable="true"/>
 
         <ImageView
-            android:id="@+id/btnEditPerson"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:id="@+id/btnMail"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:layout_marginStart="4dp"
-            android:padding="10dp"
-            android:src="@drawable/ic_edit"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="9dp"
+            android:src="@drawable/ic_mail"
+            app:tint="#3B82F6"
+            android:background="@drawable/bg_action_circle_mail"
             android:clickable="true"
             android:focusable="true"/>
 
         <ImageView
-            android:id="@+id/btnDeletePerson"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:padding="10dp"
-            android:src="@drawable/ic_delete"
+            android:id="@+id/btnMorePerson"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="2dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_more_vert"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"/>

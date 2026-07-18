@@ -238,6 +238,17 @@ public class DatabaseManager {
         return loadList(KEY_LEDGER, t);
     }
 
+    /** নাম মিলিয়ে (case/space insensitive) কোনো একজন ব্যক্তির সব দেনা-পাওনা এন্ট্রি — দেনা-পাওনা পেজে ব্যবহারের জন্য। */
+    public List<LedgerEntry> getLedgerForPersonName(String personName) {
+        List<LedgerEntry> result = new java.util.ArrayList<>();
+        if (personName == null || personName.trim().isEmpty()) return result;
+        String target = personName.trim().toLowerCase();
+        for (LedgerEntry e : getLedgerList()) {
+            if (e.getPerson().trim().toLowerCase().equals(target)) result.add(e);
+        }
+        return result;
+    }
+
     public LedgerEntry addLedger(LedgerEntry entry) {
         List<LedgerEntry> list = getLedgerList();
         entry.setId(generateId());

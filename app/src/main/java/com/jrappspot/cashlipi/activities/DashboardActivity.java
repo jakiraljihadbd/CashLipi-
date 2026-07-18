@@ -49,7 +49,7 @@ public class DashboardActivity extends BaseActivity {
     private final View[] navIndicators = new View[MainPagerAdapter.PAGE_COUNT];
 
     // ── নেভিগেশন মেন্যু কাস্টমাইজেশন (সাইজ/রং/পজিশন/সোয়াইপ) ──────────
-    private View topNavBar;               // nav_bar_items.xml root — top/bottom স্লটের মধ্যে রিপ্যারেন্ট হয়
+    private LinearLayout topNavBar;               // nav_bar_items.xml root — top/bottom স্লটের মধ্যে রিপ্যারেন্ট হয়
     private FrameLayout topNavSlot;
     private FrameLayout bottomNavSlot;
     private FrameLayout bottomNavContainer;

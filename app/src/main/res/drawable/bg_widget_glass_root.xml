@@ -1,31 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    আগে এখানে ৩-লেয়ারের gradient + translucent "glass" ইফেক্ট ছিল, যেটা অনেক
+    OEM লঞ্চারে (Xiaomi/Realme/Oppo/Samsung ইত্যাদি) RemoteViews-এ ঠিকমতো
+    কম্পোজিট না হয়ে পুরো উইজেট কালো দেখাচ্ছিল। এখন শুধু opaque (স্বচ্ছতাহীন)
+    সলিড রঙ + পাতলা বর্ডার — নিরাপদ, সব ডিভাইসে একইরকম দেখাবে।
+-->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- বেস — গাঢ় স্বচ্ছ (translucent) গ্লাস প্যানেল -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#CC141B2E"/>
+            <solid android:color="#1B1F3B"/>
             <corners android:radius="26dp"/>
         </shape>
     </item>
 
-    <!-- উপরের হালকা সাদা "শাইন" — গ্লাসের রিফ্লেকশন ভাব -->
-    <item android:top="0dp" android:left="0dp" android:right="0dp" android:bottom="70dp">
-        <shape android:shape="rectangle">
-            <gradient
-                android:startColor="#26FFFFFF"
-                android:endColor="#00FFFFFF"
-                android:angle="90"/>
-            <corners android:topLeftRadius="26dp" android:topRightRadius="26dp"
-                android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp"/>
-        </shape>
-    </item>
-
-    <!-- বাইরের পাতলা গ্লাস বর্ডার -->
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@android:color/transparent"/>
-            <stroke android:width="1dp" android:color="#38FFFFFF"/>
+            <stroke android:width="1dp" android:color="#3A3F63"/>
             <corners android:radius="26dp"/>
         </shape>
     </item>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- হেডার -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="দেনা পাওনা"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"/>
+
+            <TextView
+                android:id="@+id/tvPersonCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="যাদের সাথে হিসাব রাখবেন, তাদের যোগ করুন"
+                android:textSize="13sp"
+                android:textColor="@color/textSecondary"/>
+        </LinearLayout>
+
+        <!-- তালিকা -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPersonList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="14dp"
+            android:paddingBottom="90dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"/>
+
+        <!-- খালি অবস্থা -->
+        <LinearLayout
+            android:id="@+id/emptyState"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            android:paddingBottom="60dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_empty_people"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="কোনো ব্যক্তি বা প্রতিষ্ঠান যোগ নেই"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="নিচের + বাটনে চেপে নতুন ব্যক্তি যোগ করুন"
+                android:textSize="13sp"
+                android:textColor="@color/textSecondary"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ফ্লোটিং + বাটন -->
+    <LinearLayout
+        android:id="@+id/btnAddPerson"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+        android:background="@drawable/bg_fab_dena_pawna"
+        android:gravity="center"
+        android:elevation="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="22dp"
+        android:layout_marginEnd="18dp">
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_add_plain"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

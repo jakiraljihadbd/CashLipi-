@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bgColor">
+
+    <!-- হেডার -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/cardBg"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="10dp"
+        android:elevation="3dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <FrameLayout
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="4dp">
+
+            <ImageView
+                android:id="@+id/ivDetailPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/avatarInitialDetail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_avatar_circle_1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvDetailInitial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="?"
+                    android:textSize="19sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvDetailName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/tvDetailRelationBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_relation_chip"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="2dp"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#B3105A"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvDetailPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textSize="13.5sp"
+                android:textColor="@color/textSecondary"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tvDetailAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize="13sp"
+                android:textColor="@color/textSecondary"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnCall"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_call_filled"
+            app:tint="#10B981"
+            android:background="@drawable/bg_contact_pick_btn"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <ImageView
+            android:id="@+id/btnEditPerson"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="4dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_edit"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <ImageView
+            android:id="@+id/btnDeletePerson"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
+    </LinearLayout>
+
+    <!-- লেনদেনের জায়গা — পরের ধাপে person.id ধরে দিলাম/পেলাম যুক্ত হবে -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingHorizontal="40dp">
+
+        <ImageView
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:src="@drawable/ic_nav_dena_pawna"
+            android:alpha="0.35"
+            android:layout_marginBottom="14dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="এই ব্যক্তির সাথে এখনও কোনো লেনদেন যোগ করা হয়নি"
+            android:textSize="14.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/textPrimary"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="দিলাম / পেলাম হিসাব শীঘ্রই এখানে যুক্ত হবে"
+            android:textSize="12.5sp"
+            android:textColor="@color/textSecondary"
+            android:gravity="center"/>
+    </LinearLayout>
+
+</LinearLayout>

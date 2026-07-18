@@ -155,4 +155,29 @@
     <color name="lockGlassCardBg">#26FFFFFF</color>
     <color name="lockGlassCardStroke">#40FFFFFF</color>
     <color name="lockPulseRing">#668B5CF6</color>
+
+    <!-- ══════════════════════════════════════════════════════════
+         Material 3 — Home screen tonal container roles (Dark)
+    ══════════════════════════════════════════════════════════ -->
+    <color name="m3HomeBalanceContainer">#C81155</color>
+    <color name="m3OnHomeBalanceContainer">#FFFFFF</color>
+    <color name="m3HomeBalancePill">#33FFFFFF</color>
+
+    <color name="m3IncomeContainer">#173B27</color>
+    <color name="m3OnIncomeContainer">#8FE3AE</color>
+
+    <color name="m3ExpenseContainer">#41211E</color>
+    <color name="m3OnExpenseContainer">#F5B4AE</color>
+
+    <color name="m3DenaContainer">#3D2F0E</color>
+    <color name="m3OnDenaContainer">#F0CE7E</color>
+
+    <color name="m3PabonaContainer">#132C4E</color>
+    <color name="m3OnPabonaContainer">#A9C6FF</color>
+
+    <color name="m3SavingsContainer">#2E1F44</color>
+    <color name="m3OnSavingsContainer">#DCB8FF</color>
+
+    <color name="m3MenuCardSurface">#131C2E</color>
+    <color name="m3MenuCardOutline">#26324A</color>
 </resources>

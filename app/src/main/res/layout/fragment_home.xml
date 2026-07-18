@@ -66,7 +66,7 @@
             android:background="@drawable/bg_balance_pink"
             android:clickable="true" android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:elevation="4dp">
+            android:elevation="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -185,13 +185,7 @@
                 android:background="@drawable/bg_summary_income"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="4dp">
-
-                <View
-                    android:layout_width="60dp" android:layout_height="60dp"
-                    android:layout_gravity="end|top"
-                    android:layout_marginTop="-14dp" android:layout_marginEnd="-14dp"
-                    android:background="@drawable/dash_card_orb"/>
+                android:elevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -206,15 +200,14 @@
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="আয়"
                         android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="#CCFFFFFF"/>
+                        android:textColor="@color/m3OnIncomeContainer"
+                        android:alpha="0.8"/>
                     <TextView
                         android:id="@+id/tvTotalIncome"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="৳ 0"
                         android:textSize="17sp" android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:shadowColor="#8034D399"
-                        android:shadowDx="0" android:shadowDy="0" android:shadowRadius="8"/>
+                        android:textColor="@color/m3OnIncomeContainer"/>
                 </LinearLayout>
             </FrameLayout>
 
@@ -227,13 +220,7 @@
                 android:background="@drawable/bg_summary_expense"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="4dp">
-
-                <View
-                    android:layout_width="60dp" android:layout_height="60dp"
-                    android:layout_gravity="end|top"
-                    android:layout_marginTop="-14dp" android:layout_marginEnd="-14dp"
-                    android:background="@drawable/dash_card_orb"/>
+                android:elevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -248,15 +235,14 @@
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="ব্যয়"
                         android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="#CCFFFFFF"/>
+                        android:textColor="@color/m3OnExpenseContainer"
+                        android:alpha="0.8"/>
                     <TextView
                         android:id="@+id/tvTotalExpense"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="৳ 0"
                         android:textSize="17sp" android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:shadowColor="#80FF0099"
-                        android:shadowDx="0" android:shadowDy="0" android:shadowRadius="8"/>
+                        android:textColor="@color/m3OnExpenseContainer"/>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
@@ -279,13 +265,7 @@
                 android:background="@drawable/bg_summary_dena"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="4dp">
-
-                <View
-                    android:layout_width="55dp" android:layout_height="55dp"
-                    android:layout_gravity="end|top"
-                    android:layout_marginTop="-12dp" android:layout_marginEnd="-12dp"
-                    android:background="@drawable/dash_card_orb"/>
+                android:elevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -300,15 +280,14 @@
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="দেনা"
                         android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="#CCFFFFFF"/>
+                        android:textColor="@color/m3OnDenaContainer"
+                        android:alpha="0.8"/>
                     <TextView
                         android:id="@+id/tvTotalDena"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="৳ 0"
                         android:textSize="16sp" android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:shadowColor="#80FBBF24"
-                        android:shadowDx="0" android:shadowDy="0" android:shadowRadius="7"/>
+                        android:textColor="@color/m3OnDenaContainer"/>
                 </LinearLayout>
             </FrameLayout>
 
@@ -321,13 +300,7 @@
                 android:background="@drawable/bg_summary_pabona"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="4dp">
-
-                <View
-                    android:layout_width="55dp" android:layout_height="55dp"
-                    android:layout_gravity="end|top"
-                    android:layout_marginTop="-12dp" android:layout_marginEnd="-12dp"
-                    android:background="@drawable/dash_card_orb"/>
+                android:elevation="1dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -342,15 +315,14 @@
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="পাওনা"
                         android:textSize="11sp" android:textStyle="bold"
-                        android:textColor="#CCFFFFFF"/>
+                        android:textColor="@color/m3OnPabonaContainer"
+                        android:alpha="0.8"/>
                     <TextView
                         android:id="@+id/tvTotalPabona"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="৳ 0"
                         android:textSize="16sp" android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:shadowColor="#8060A5FA"
-                        android:shadowDx="0" android:shadowDy="0" android:shadowRadius="7"/>
+                        android:textColor="@color/m3OnPabonaContainer"/>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
@@ -366,13 +338,7 @@
             android:background="@drawable/bg_summary_savings"
             android:clickable="true" android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:elevation="4dp">
-
-            <View
-                android:layout_width="90dp" android:layout_height="90dp"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="-18dp"
-                android:background="@drawable/dash_card_orb"/>
+            android:elevation="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -392,7 +358,8 @@
                     android:layout_weight="1"
                     android:text="সঞ্চয়"
                     android:textSize="12sp" android:textStyle="bold"
-                    android:textColor="#CCFFFFFF"
+                    android:textColor="@color/m3OnSavingsContainer"
+                    android:alpha="0.8"
                     android:letterSpacing="0.04"/>
 
                 <TextView
@@ -401,9 +368,7 @@
                     android:layout_height="wrap_content"
                     android:text="৳ 0"
                     android:textSize="20sp" android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:shadowColor="#80EC4899"
-                    android:shadowDx="0" android:shadowDy="0" android:shadowRadius="10"/>
+                    android:textColor="@color/m3OnSavingsContainer"/>
             </LinearLayout>
         </FrameLayout>
 
@@ -436,7 +401,7 @@
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="2dp">
+                android:elevation="0dp">
                 <FrameLayout
                     android:layout_width="46dp" android:layout_height="46dp"
                     android:background="@drawable/bg_menu_icon_circle"
@@ -465,7 +430,7 @@
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="2dp">
+                android:elevation="0dp">
                 <FrameLayout
                     android:layout_width="46dp" android:layout_height="46dp"
                     android:background="@drawable/bg_menu_icon_circle"
@@ -493,7 +458,7 @@
                 android:paddingVertical="14dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="2dp">
+                android:elevation="0dp">
                 <FrameLayout
                     android:layout_width="46dp" android:layout_height="46dp"
                     android:background="@drawable/bg_menu_icon_circle"
@@ -528,7 +493,7 @@
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="2dp">
+                android:elevation="0dp">
                 <FrameLayout
                     android:layout_width="46dp" android:layout_height="46dp"
                     android:background="@drawable/bg_menu_icon_circle"
@@ -557,7 +522,7 @@
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="2dp">
+                android:elevation="0dp">
                 <FrameLayout
                     android:layout_width="46dp" android:layout_height="46dp"
                     android:background="@drawable/bg_menu_icon_circle"
@@ -585,7 +550,7 @@
                 android:paddingVertical="14dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="2dp">
+                android:elevation="0dp">
                 <FrameLayout
                     android:layout_width="46dp" android:layout_height="46dp"
                     android:background="@drawable/bg_menu_icon_circle"

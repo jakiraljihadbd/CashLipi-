@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- No longer used for decorative glow blobs (removed for M3 flat style).
-     Kept as a fully transparent 0dp shape only so any leftover reference doesn't crash the build. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
     <solid android:color="@android:color/transparent"/>
+    <stroke android:width="3dp" android:color="#E2136E"/>
 </shape>

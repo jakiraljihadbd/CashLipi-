@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".AccountApp"
@@ -86,6 +87,16 @@
         <activity android:name=".activities.AddLedgerActivity"
             android:exported="false" android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".activities.AddPersonActivity"
+            android:exported="false" android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".activities.PersonDetailActivity"
+            android:exported="false" android:screenOrientation="portrait" />
+
+        <activity android:name=".activities.PhotoCropActivity"
+            android:exported="false" android:screenOrientation="portrait" />
 
         <activity android:name=".activities.AddSavingsActivity"
             android:exported="false" android:screenOrientation="portrait"

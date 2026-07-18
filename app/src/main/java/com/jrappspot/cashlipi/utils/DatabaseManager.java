@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.jrappspot.cashlipi.models.LedgerEntry;
 import com.jrappspot.cashlipi.models.Note;
+import com.jrappspot.cashlipi.models.Person;
 import com.jrappspot.cashlipi.models.TrashItem;
 import com.jrappspot.cashlipi.models.Transaction;
 
@@ -31,6 +32,7 @@ public class DatabaseManager {
     private static final String KEY_INCOME = "income";
     private static final String KEY_EXPENSE = "expense";
     private static final String KEY_LEDGER = "ledger";
+    private static final String KEY_PERSON = "dena_pawna_persons";
     private static final String KEY_SAVINGS = "savings";
     private static final String KEY_NOTES = "notes";
     private static final String KEY_TRASH = "trash";
@@ -69,6 +71,9 @@ public class DatabaseManager {
         }
         if (getLedgerList().isEmpty() && !prefs.contains(KEY_LEDGER)) {
             saveList(KEY_LEDGER, new ArrayList<>());
+        }
+        if (getPersonList().isEmpty() && !prefs.contains(KEY_PERSON)) {
+            saveList(KEY_PERSON, new ArrayList<>());
         }
         if (getSavingsList().isEmpty() && !prefs.contains(KEY_SAVINGS)) {
             saveList(KEY_SAVINGS, new ArrayList<>());
@@ -290,6 +295,60 @@ public class DatabaseManager {
             if ("pabona".equals(e.getType()) && !e.isPaid()) total += e.getAmount();
         }
         return total;
+    }
+
+    // ═══════════════════════════════════════════
+    //  দেনা-পাওনা — PERSON CRUD
+    //  (শুধু পরিচিতি — লেনদেন পরে person.id ধরে যুক্ত হবে)
+    // ═══════════════════════════════════════════
+    public List<Person> getPersonList() {
+        Type t = new TypeToken<List<Person>>() {}.getType();
+        return loadList(KEY_PERSON, t);
+    }
+
+    public Person addPerson(Person person) {
+        List<Person> list = getPersonList();
+        person.setId(generateId());
+        person.setCreatedAt(nowIso());
+        if (person.getDate().isEmpty()) person.setDate(nowDate());
+        if (person.getTime().isEmpty()) person.setTime(nowTime());
+        list.add(0, person);
+        saveList(KEY_PERSON, list);
+        return person;
+    }
+
+    public boolean updatePerson(int index, Person updated) {
+        List<Person> list = getPersonList();
+        if (index < 0 || index >= list.size()) return false;
+        updated.setUpdatedAt(nowIso());
+        list.set(index, updated);
+        saveList(KEY_PERSON, list);
+        return true;
+    }
+
+    public boolean deletePerson(int index) {
+        List<Person> list = getPersonList();
+        if (index < 0 || index >= list.size()) return false;
+        list.remove(index);
+        saveList(KEY_PERSON, list);
+        return true;
+    }
+
+    public Person getPersonById(String id) {
+        if (id == null) return null;
+        for (Person p : getPersonList()) {
+            if (id.equals(p.getId())) return p;
+        }
+        return null;
+    }
+
+    public int getPersonIndexById(String id) {
+        if (id == null) return -1;
+        List<Person> list = getPersonList();
+        for (int i = 0; i < list.size(); i++) {
+            if (id.equals(list.get(i).getId())) return i;
+        }
+        return -1;
     }
 
     // ═══════════════════════════════════════════

@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.jrappspot.cashlipi.fragments.DenaPawnaFragment;
 import com.jrappspot.cashlipi.fragments.EmptyFragment;
 import com.jrappspot.cashlipi.fragments.HomeFragment;
 import com.jrappspot.cashlipi.fragments.IncomeExpenseFragment;
@@ -37,7 +38,7 @@ public class MainPagerAdapter extends FragmentStateAdapter {
             case POSITION_INCOME_EXPENSE:
                 return new IncomeExpenseFragment();
             case POSITION_DENA_PAWNA:
-                return new EmptyFragment();
+                return new DenaPawnaFragment();
             case POSITION_SAVINGS:
                 return new SavingsFragment();
             case POSITION_BAKIR_KHATA:

@@ -18,17 +18,25 @@ import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.models.LedgerEntry;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
- * একজন নির্দিষ্ট ব্যক্তির (PersonDetailActivity) দেনা-পাওনা তালিকা দেখায় — প্রতিটা এন্ট্রির
- * পাশে সেই মুহূর্ত পর্যন্ত রানিং ব্যালেন্স (কে কাকে কত পাবে) একটা ছোট চিপে দেখানো হয়।
- * আইটেমে ট্যাপ করলে বিদ্যমান TransactionSheetHelper.showLedgerSheet() (সম্পাদনা/বিস্তারিত/
- * শেয়ার/পরিশোধ/মুছুন) চালু হয় — নতুন করে কিছু বানানো হয়নি, বিদ্যমান সিস্টেম পুনর্ব্যবহার করা হয়েছে।
+ * একজন নির্দিষ্ট ব্যক্তির (PersonDetailActivity) দেনা-পাওনা তালিকা — তারিখ অনুযায়ী গ্রুপ করে
+ * ("আজ" / "গতকাল" / আসল তারিখ হেডার) দেখায়, প্রতিটা এন্ট্রির পাশে সেই মুহূর্ত পর্যন্ত রানিং
+ * ব্যালেন্স। আইটেমে ট্যাপ করলে বিদ্যমান TransactionSheetHelper.showLedgerSheet() (সম্পাদনা/
+ * বিস্তারিত/শেয়ার/পরিশোধ/মুছুন) চালু হয় — বিদ্যমান সিস্টেম পুনর্ব্যবহার করা হয়েছে, নতুন করে
+ * ডুপ্লিকেট মেনু বানানো হয়নি।
  */
-public class PersonLedgerAdapter extends RecyclerView.Adapter<PersonLedgerAdapter.VH> {
+public class PersonLedgerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    /** একটা row-এর জন্য এন্ট্রি + সেই পর্যন্ত রানিং ব্যালেন্স — শুধু UI-এর জন্য, সংরক্ষিত হয় না। */
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ROW = 1;
+
+    /** একটা এন্ট্রি + সেই পর্যন্ত রানিং ব্যালেন্স — শুধু UI-এর জন্য, সংরক্ষিত হয় না। */
     public static class Row {
         public final LedgerEntry entry;
         public final double balanceAfter; // ধনাত্মক = ব্যক্তি আপনাকে দেবে (পাওনা), ঋণাত্মক = আপনি তাকে দেবেন (দেনা)
@@ -40,42 +48,97 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<PersonLedgerAdapte
 
     public interface OnRowClick { void onClick(LedgerEntry entry); }
 
+    // অভ্যন্তরীণ তালিকা: String (তারিখ হেডার) অথবা Row (লেনদেন) মিশিয়ে
+    private final List<Object> items = new ArrayList<>();
     private final Context ctx;
-    private final List<Row> rows;
     private final OnRowClick clickListener;
     private int lastAnimatedPosition = -1;
 
+    /** rows অবশ্যই নতুন-থেকে-পুরনো (তারিখ অনুযায়ী descending) ক্রমে সাজানো থাকতে হবে। */
     public PersonLedgerAdapter(Context ctx, List<Row> rows, OnRowClick clickListener) {
         this.ctx = ctx;
-        this.rows = rows;
         this.clickListener = clickListener;
+        buildItems(rows);
     }
 
-    @NonNull @Override
-    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(ctx).inflate(R.layout.item_person_ledger, parent, false);
-        return new VH(v);
+    private void buildItems(List<Row> rows) {
+        items.clear();
+        String lastDate = null;
+        for (Row r : rows) {
+            String d = r.entry.getDate();
+            if (d == null) d = "";
+            if (!d.equals(lastDate)) {
+                items.add(dateHeaderLabel(d));
+                lastDate = d;
+            }
+            items.add(r);
+        }
+    }
+
+    private String dateHeaderLabel(String isoDate) {
+        try {
+            SimpleDateFormat iso = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            java.util.Date d = iso.parse(isoDate);
+            Calendar target = Calendar.getInstance();
+            target.setTime(d);
+
+            Calendar today = Calendar.getInstance();
+            Calendar yesterday = Calendar.getInstance();
+            yesterday.add(Calendar.DAY_OF_YEAR, -1);
+
+            if (sameDay(target, today)) return "আজ";
+            if (sameDay(target, yesterday)) return "গতকাল";
+            return DatabaseManager.formatDateDisplay(isoDate);
+        } catch (Exception e) {
+            return DatabaseManager.formatDateDisplay(isoDate);
+        }
+    }
+
+    private boolean sameDay(Calendar a, Calendar b) {
+        return a.get(Calendar.YEAR) == b.get(Calendar.YEAR)
+                && a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VH h, int position) {
-        Row row = rows.get(position);
+    public int getItemViewType(int position) {
+        return items.get(position) instanceof String ? TYPE_HEADER : TYPE_ROW;
+    }
+
+    @NonNull @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == TYPE_HEADER) {
+            View v = LayoutInflater.from(ctx).inflate(R.layout.item_person_ledger_date_header, parent, false);
+            return new HeaderVH(v);
+        }
+        View v = LayoutInflater.from(ctx).inflate(R.layout.item_person_ledger, parent, false);
+        return new RowVH(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Object item = items.get(position);
+        if (holder instanceof HeaderVH) {
+            ((HeaderVH) holder).tv.setText((String) item);
+            return;
+        }
+        bindRow((RowVH) holder, (Row) item, position);
+    }
+
+    private void bindRow(RowVH h, Row row, int position) {
         LedgerEntry e = row.entry;
         boolean isDena = e.isDena();
 
-        // দেনা এন্ট্রি (আমি দেব) থেকে হয়েছে "দিলাম" বাটন, পাওনা এন্ট্রি (আমি পাব) থেকে হয়েছে "পেলাম" বাটন
+        // দেনা এন্ট্রি (আমি দেব) → "দিলাম" বাটন থেকে, পাওনা এন্ট্রি (আমি পাব) → "পেলাম" বাটন থেকে
         h.tvRowType.setText(isDena ? " দিলাম" : " পেলাম");
         h.tvRowType.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.denaColor : R.color.pabonaColor));
 
         h.ivRowIcon.setImageResource(isDena ? R.drawable.emoji_book_red : R.drawable.emoji_book_green);
-        h.ivRowIcon.setBackground(ctx.getResources().getDrawable(
-                isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable));
+        h.ivRowIcon.setBackgroundResource(isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable);
 
         h.tvRowAmount.setText(DatabaseManager.formatAmount(e.getAmount()));
         h.tvRowAmount.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.denaColor : R.color.pabonaColor));
 
-        h.tvRowDate.setText(DatabaseManager.formatDateDisplay(e.getDate())
-                + "  •  " + DatabaseManager.formatTimeDisplay(e.getTime()));
+        h.tvRowDate.setText(DatabaseManager.formatTimeDisplay(e.getTime()));
 
         String note = "";
         if (e.getCategory() != null && !e.getCategory().isEmpty()) note = e.getCategory();
@@ -92,7 +155,6 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<PersonLedgerAdapte
         if (e.isPaid()) {
             h.tvRowPaidBadge.setVisibility(View.VISIBLE);
             h.tvRowAmount.setPaintFlags(h.tvRowAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            // পরিশোধিত এন্ট্রি রানিং হিসাবে যোগ হয় না, তাই আলাদা চিপ না দেখিয়ে ✓ পরিশোধিত badge-ই যথেষ্ট
             h.tvRowBalanceChip.setVisibility(View.GONE);
         } else {
             h.tvRowPaidBadge.setVisibility(View.GONE);
@@ -133,19 +195,24 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<PersonLedgerAdapte
     }
 
     @Override
-    public int getItemCount() { return rows.size(); }
+    public int getItemCount() { return items.size(); }
 
-    static class VH extends RecyclerView.ViewHolder {
+    static class HeaderVH extends RecyclerView.ViewHolder {
+        TextView tv;
+        HeaderVH(@NonNull View v) { super(v); tv = (TextView) v; }
+    }
+
+    static class RowVH extends RecyclerView.ViewHolder {
         ImageView ivRowIcon;
         TextView tvRowType, tvRowPaidBadge, tvRowNote, tvRowDate, tvRowAmount, tvRowBalanceChip;
-        VH(@NonNull View v) {
+        RowVH(@NonNull View v) {
             super(v);
-            ivRowIcon       = v.findViewById(R.id.ivRowIcon);
-            tvRowType       = v.findViewById(R.id.tvRowType);
-            tvRowPaidBadge  = v.findViewById(R.id.tvRowPaidBadge);
-            tvRowNote       = v.findViewById(R.id.tvRowNote);
-            tvRowDate       = v.findViewById(R.id.tvRowDate);
-            tvRowAmount     = v.findViewById(R.id.tvRowAmount);
+            ivRowIcon        = v.findViewById(R.id.ivRowIcon);
+            tvRowType        = v.findViewById(R.id.tvRowType);
+            tvRowPaidBadge   = v.findViewById(R.id.tvRowPaidBadge);
+            tvRowNote        = v.findViewById(R.id.tvRowNote);
+            tvRowDate        = v.findViewById(R.id.tvRowDate);
+            tvRowAmount      = v.findViewById(R.id.tvRowAmount);
             tvRowBalanceChip = v.findViewById(R.id.tvRowBalanceChip);
         }
     }

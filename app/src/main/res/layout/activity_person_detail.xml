@@ -162,54 +162,273 @@
             android:focusable="true"/>
     </LinearLayout>
 
-    <!-- নিট হিসাব সামারি বার — এই ব্যক্তির বর্তমান বকেয়া (আপনি পাবেন/দেবেন) -->
+    <!-- স্ক্রল-না-হওয়া টপ ব্লক: হিরো ব্যালেন্স কার্ড + সার্চ + ফিল্টার চিপ -->
     <LinearLayout
-        android:id="@+id/summaryBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_margin="12dp"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="14dp"
-        android:background="@drawable/bg_type_active_pabona"
-        android:visibility="gone">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <!-- হিরো ব্যালেন্স কার্ড — নিট হিসাব + মোট পেলাম/দিলাম গ্লাস চিপ -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/heroCard"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_margin="12dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="6dp"
+            app:cardPreventCornerOverlap="false"
+            android:visibility="gone">
 
-            <TextView
-                android:id="@+id/tvSummaryLabel"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/heroCardInner"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12.5sp"
-                android:textColor="@color/white"
-                android:alpha="0.92"/>
+                android:orientation="vertical"
+                android:padding="18dp"
+                android:background="@drawable/card_receivable_summary">
 
-            <TextView
-                android:id="@+id/tvSummaryAmount"
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvHeroLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="12.5sp"
+                            android:textColor="@color/white"
+                            android:alpha="0.9"/>
+
+                        <TextView
+                            android:id="@+id/tvHeroAmount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textSize="30sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"/>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:src="@drawable/ic_nav_dena_pawna"
+                        app:tint="@color/white"
+                        android:alpha="0.85"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="14dp">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:paddingVertical="8dp"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/bg_summary_glass">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="মোট পেলাম"
+                            android:textSize="11sp"
+                            android:textColor="@color/white"
+                            android:alpha="0.88"/>
+
+                        <TextView
+                            android:id="@+id/tvHeroTotalGot"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textSize="14.5sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:paddingVertical="8dp"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_summary_glass">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="মোট দিলাম"
+                            android:textSize="11sp"
+                            android:textColor="@color/white"
+                            android:alpha="0.88"/>
+
+                        <TextView
+                            android:id="@+id/tvHeroTotalGave"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textSize="14.5sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="12dp">
+
+                    <TextView
+                        android:id="@+id/tvHeroSub"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="11sp"
+                        android:textColor="@color/white"
+                        android:alpha="0.85"/>
+
+                    <ImageView
+                        android:id="@+id/btnShareStatement"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_share"
+                        app:tint="@color/white"
+                        android:background="@drawable/bg_summary_glass"
+                        android:clickable="true"
+                        android:focusable="true"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- সার্চ — নোট/কারণ অনুযায়ী খুঁজুন -->
+        <LinearLayout
+            android:id="@+id/personSearchBox"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_search_premium"
+            android:paddingStart="14dp"
+            android:paddingEnd="10dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_search"
+                android:layout_marginEnd="10dp"
+                android:alpha="0.7"/>
+
+            <EditText
+                android:id="@+id/etPersonLedgerSearch"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:layout_weight="1"
+                android:inputType="text"
+                android:hint="নোট বা কারণ খুঁজুন..."
+                android:textSize="13.5sp"
+                android:textColor="@color/searchTextColor"
+                android:textColorHint="@color/searchHintColor"
+                android:background="@android:color/transparent"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:imeOptions="actionSearch"/>
+
+            <ImageView
+                android:id="@+id/ivClearPersonSearch"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_clear"
+                android:layout_marginStart="6dp"
+                android:visibility="gone"
+                android:alpha="0.6"
+                android:padding="2dp"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvSummarySub"
-            android:layout_width="wrap_content"
+        <!-- ফিল্টার চিপ — সব / অপরিশোধিত / পরিশোধিত -->
+        <HorizontalScrollView
+            android:id="@+id/personFilterScroll"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="11sp"
-            android:textColor="@color/white"
-            android:alpha="0.9"
-            android:gravity="end"/>
+            android:scrollbars="none"
+            android:paddingHorizontal="12dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/chipPersonAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:text="সব"
+                    android:textSize="11.5sp"
+                    android:gravity="center"
+                    android:paddingHorizontal="15dp"
+                    android:background="@drawable/bg_chip_selected"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="7dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/chipPersonUnpaid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:text="অপরিশোধিত"
+                    android:textSize="11.5sp"
+                    android:gravity="center"
+                    android:paddingHorizontal="15dp"
+                    android:background="@drawable/bg_chip_unselected"
+                    android:textColor="@color/chipUnselectedText"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="7dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/chipPersonPaid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:text="পরিশোধিত"
+                    android:textSize="11.5sp"
+                    android:gravity="center"
+                    android:paddingHorizontal="15dp"
+                    android:background="@drawable/bg_chip_unselected"
+                    android:textColor="@color/chipUnselectedText"
+                    android:textStyle="bold"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+        </HorizontalScrollView>
     </LinearLayout>
 
-    <!-- লেনদেন তালিকা -->
+    <!-- লেনদেন তালিকা (তারিখ অনুযায়ী গ্রুপ করা) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPersonLedger"
         android:layout_width="match_parent"
@@ -219,7 +438,7 @@
         android:paddingBottom="6dp"
         android:visibility="gone"/>
 
-    <!-- খালি অবস্থা — কোনো লেনদেন নেই -->
+    <!-- খালি অবস্থা — কোনো লেনদেন নেই (বা সার্চ/ফিল্টারে কিছু মিলছে না) -->
     <LinearLayout
         android:id="@+id/emptyLedgerState"
         android:layout_width="match_parent"
@@ -230,6 +449,7 @@
         android:paddingHorizontal="40dp">
 
         <ImageView
+            android:id="@+id/ivEmptyLedger"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:src="@drawable/ic_nav_dena_pawna"
@@ -237,6 +457,7 @@
             android:layout_marginBottom="14dp"/>
 
         <TextView
+            android:id="@+id/tvEmptyLedgerTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="এই ব্যক্তির সাথে এখনও কোনো লেনদেন যোগ করা হয়নি"
@@ -246,6 +467,7 @@
             android:gravity="center"/>
 
         <TextView
+            android:id="@+id/tvEmptyLedgerSub"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"

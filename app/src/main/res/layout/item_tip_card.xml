@@ -1,45 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- এক টুকরো AI পরামর্শ কার্ড — HomeFragment.java থেকে tipFlipper-এ ইনফ্লেট করা হয় -->
+<!-- AI পরামর্শ কার্ড — "স্মার্ট পরামর্শ" টাইটেল লেবেল সরানো, শুধু কন্টেন্ট দেখায় বড় ফন্টে -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:paddingHorizontal="16dp"
-    android:paddingVertical="14dp">
+    android:paddingVertical="12dp">
 
     <ImageView
         android:id="@+id/tipIcon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:src="@drawable/emoji_bulb"
         android:layout_marginEnd="12dp"/>
 
-    <LinearLayout
+    <!-- শুধু subtitle/content — বড় ফন্টে, কোনো title label নেই -->
+    <TextView
+        android:id="@+id/tipSubtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:text="আজই সঞ্চয় শুরু করুন"
+        android:textSize="14.5sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:lineSpacingExtra="2dp"/>
 
-        <TextView
-            android:id="@+id/tipTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="স্মার্ট পরামর্শ"
-            android:textSize="15.5sp" android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:maxLines="1" android:ellipsize="end"/>
-
-        <TextView
-            android:id="@+id/tipSubtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="আজই সঞ্চয় শুরু করুন"
-            android:textSize="12.5sp"
-            android:textColor="#E6FFFFFF"
-            android:layout_marginTop="2dp"
-            android:maxLines="2" android:ellipsize="end"/>
-    </LinearLayout>
+    <!-- hidden, kept for backward compat so Java code doesn't crash calling setText on tipTitle -->
+    <TextView
+        android:id="@+id/tipTitle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/tipAction"
@@ -50,6 +45,6 @@
         android:textColor="#FFFFFF"
         android:background="@drawable/bg_ai_pill"
         android:paddingHorizontal="10dp" android:paddingVertical="5dp"
-        android:layout_marginStart="8dp"/>
+        android:layout_marginStart="10dp"/>
 
 </LinearLayout>

@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="0dp"
+        android:paddingHorizontal="3dp"
         android:paddingTop="0dp"
         android:paddingBottom="20dp">
 
@@ -30,6 +30,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
             <ViewFlipper
@@ -66,11 +67,19 @@
             android:background="@drawable/bg_balance_pink"
             android:elevation="1dp">
 
+            <!-- বাম পাশে সাদা accent line — সোজা left edge-এর সাথে মিলে সুন্দর দেখায় -->
+            <View
+                android:layout_width="5dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="#66FFFFFF"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingHorizontal="18dp"
+                android:paddingStart="22dp"
+                android:paddingEnd="18dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="16dp">
 
@@ -167,10 +176,6 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical" android:paddingHorizontal="14dp">
-                    <ImageView
-                        android:layout_width="20dp" android:layout_height="20dp"
-                        android:src="@drawable/ic_widget_income"
-                        android:layout_marginEnd="10dp"/>
                     <LinearLayout
                         android:layout_width="0dp" android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -207,10 +212,6 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:gravity="center_vertical" android:paddingHorizontal="14dp">
-                    <ImageView
-                        android:layout_width="20dp" android:layout_height="20dp"
-                        android:src="@drawable/ic_widget_expense"
-                        android:layout_marginEnd="10dp"/>
                     <LinearLayout
                         android:layout_width="0dp" android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -395,10 +396,10 @@
                 <FrameLayout
                     android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
-                    android:backgroundTint="#EEF2FF"
+                    android:backgroundTint="#F5F6FF"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="20dp" android:layout_height="20dp"
+                        android:layout_width="26dp" android:layout_height="26dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_robot"/>
                 </FrameLayout>
@@ -425,10 +426,10 @@
                 <FrameLayout
                     android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
-                    android:backgroundTint="#EFF6FF"
+                    android:backgroundTint="#F4F9FF"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="20dp" android:layout_height="20dp"
+                        android:layout_width="26dp" android:layout_height="26dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_chart_up"/>
                 </FrameLayout>
@@ -454,10 +455,10 @@
                 <FrameLayout
                     android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
-                    android:backgroundTint="#FFFBEB"
+                    android:backgroundTint="#FFFDF2"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="20dp" android:layout_height="20dp"
+                        android:layout_width="26dp" android:layout_height="26dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_ledger"/>
                 </FrameLayout>
@@ -490,10 +491,10 @@
                 <FrameLayout
                     android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
-                    android:backgroundTint="#F0FDFA"
+                    android:backgroundTint="#F5FFFD"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="20dp" android:layout_height="20dp"
+                        android:layout_width="26dp" android:layout_height="26dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_abacus"/>
                 </FrameLayout>
@@ -520,10 +521,10 @@
                 <FrameLayout
                     android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
-                    android:backgroundTint="#FDF2F8"
+                    android:backgroundTint="#FEF6FB"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="20dp" android:layout_height="20dp"
+                        android:layout_width="26dp" android:layout_height="26dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_memo"/>
                 </FrameLayout>
@@ -549,10 +550,10 @@
                 <FrameLayout
                     android:layout_width="40dp" android:layout_height="40dp"
                     android:background="@drawable/bg_menu_icon_circle"
-                    android:backgroundTint="#ECFDF5"
+                    android:backgroundTint="#F2FEF8"
                     android:layout_marginBottom="6dp">
                     <ImageView
-                        android:layout_width="20dp" android:layout_height="20dp"
+                        android:layout_width="26dp" android:layout_height="26dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_bank"/>
                 </FrameLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ব্যক্তির সব দেনা-পাওনা পরিশোধিত থাকলে হিরো কার্ডে এই সবুজ গ্র্যাডিয়েন্ট দেখানো হয়।
+     আলাদা কালার না বানিয়ে অ্যাপের বিদ্যমান "income card" গ্র্যাডিয়েন্ট পুনর্ব্যবহার করা হলো। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:type="linear" android:angle="135"
+        android:startColor="@color/incomeCardGradStart"
+        android:centerColor="@color/incomeCardGradMid"
+        android:endColor="@color/incomeCardGradEnd"/>
+    <corners android:radius="16dp"/>
+</shape>

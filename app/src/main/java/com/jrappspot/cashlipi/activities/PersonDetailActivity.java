@@ -8,7 +8,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -69,12 +74,23 @@ public class PersonDetailActivity extends AppCompatActivity {
     private ImageView btnWhatsapp, btnCall, btnMail;
 
     // দেনা-পাওনা লেনদেন অংশ
-    private LinearLayout summaryBar, emptyLedgerState;
-    private TextView tvSummaryLabel, tvSummaryAmount, tvSummarySub;
+    private androidx.cardview.widget.CardView heroCard;
+    private LinearLayout heroCardInner, emptyLedgerState, personSearchBox;
+    private TextView tvHeroLabel, tvHeroAmount, tvHeroTotalGot, tvHeroTotalGave, tvHeroSub;
+    private ImageView btnShareStatement, ivClearPersonSearch;
+    private EditText etPersonLedgerSearch;
+    private HorizontalScrollView personFilterScroll;
+    private TextView chipPersonAll, chipPersonUnpaid, chipPersonPaid;
+    private TextView tvEmptyLedgerTitle, tvEmptyLedgerSub;
     private RecyclerView rvPersonLedger;
     private Button btnAddPelam, btnAddDilam;
     private PersonLedgerAdapter ledgerAdapter;
-    private final List<PersonLedgerAdapter.Row> ledgerRows = new ArrayList<>();
+
+    /** পুরো ব্যক্তির ledger (রানিং ব্যালেন্স সহ, নতুন-থেকে-পুরনো) — সার্চ/ফিল্টার এখান থেকে চালানো হয়। */
+    private final List<PersonLedgerAdapter.Row> allRows = new ArrayList<>();
+    private List<LedgerEntry> allRawEntries = new ArrayList<>();
+    private String currentFilter = "all"; // all | unpaid | paid
+    private String currentQuery = "";
 
     // Quick-add bottom sheet-এর জন্য অস্থায়ী state
     private String sheetDate = "", sheetTime = "";
@@ -97,14 +113,29 @@ public class PersonDetailActivity extends AppCompatActivity {
         btnCall = findViewById(R.id.btnCall);
         btnMail = findViewById(R.id.btnMail);
 
-        summaryBar       = findViewById(R.id.summaryBar);
-        tvSummaryLabel   = findViewById(R.id.tvSummaryLabel);
-        tvSummaryAmount  = findViewById(R.id.tvSummaryAmount);
-        tvSummarySub     = findViewById(R.id.tvSummarySub);
-        rvPersonLedger   = findViewById(R.id.rvPersonLedger);
-        emptyLedgerState = findViewById(R.id.emptyLedgerState);
-        btnAddPelam      = findViewById(R.id.btnAddPelam);
-        btnAddDilam      = findViewById(R.id.btnAddDilam);
+        heroCard          = findViewById(R.id.heroCard);
+        heroCardInner     = findViewById(R.id.heroCardInner);
+        tvHeroLabel       = findViewById(R.id.tvHeroLabel);
+        tvHeroAmount      = findViewById(R.id.tvHeroAmount);
+        tvHeroTotalGot    = findViewById(R.id.tvHeroTotalGot);
+        tvHeroTotalGave   = findViewById(R.id.tvHeroTotalGave);
+        tvHeroSub         = findViewById(R.id.tvHeroSub);
+        btnShareStatement = findViewById(R.id.btnShareStatement);
+
+        personSearchBox      = findViewById(R.id.personSearchBox);
+        etPersonLedgerSearch = findViewById(R.id.etPersonLedgerSearch);
+        ivClearPersonSearch  = findViewById(R.id.ivClearPersonSearch);
+        personFilterScroll   = findViewById(R.id.personFilterScroll);
+        chipPersonAll        = findViewById(R.id.chipPersonAll);
+        chipPersonUnpaid     = findViewById(R.id.chipPersonUnpaid);
+        chipPersonPaid       = findViewById(R.id.chipPersonPaid);
+
+        rvPersonLedger    = findViewById(R.id.rvPersonLedger);
+        emptyLedgerState  = findViewById(R.id.emptyLedgerState);
+        tvEmptyLedgerTitle = findViewById(R.id.tvEmptyLedgerTitle);
+        tvEmptyLedgerSub   = findViewById(R.id.tvEmptyLedgerSub);
+        btnAddPelam       = findViewById(R.id.btnAddPelam);
+        btnAddDilam       = findViewById(R.id.btnAddDilam);
         rvPersonLedger.setLayoutManager(new LinearLayoutManager(this));
 
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
@@ -117,6 +148,22 @@ public class PersonDetailActivity extends AppCompatActivity {
         // colloquial লেবেল, বাকি অ্যাপের দেনা/পাওনা মডেলই অক্ষত থাকে
         btnAddPelam.setOnClickListener(v -> showAddLedgerSheet("pabona"));
         btnAddDilam.setOnClickListener(v -> showAddLedgerSheet("dena"));
+        btnShareStatement.setOnClickListener(v -> shareStatement());
+
+        etPersonLedgerSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                currentQuery = s.toString().trim();
+                ivClearPersonSearch.setVisibility(currentQuery.isEmpty() ? View.GONE : View.VISIBLE);
+                applyFiltersAndRender();
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+        ivClearPersonSearch.setOnClickListener(v -> etPersonLedgerSearch.setText(""));
+
+        chipPersonAll.setOnClickListener(v -> setPersonFilter("all"));
+        chipPersonUnpaid.setOnClickListener(v -> setPersonFilter("unpaid"));
+        chipPersonPaid.setOnClickListener(v -> setPersonFilter("paid"));
     }
 
     @Override
@@ -165,13 +212,14 @@ public class PersonDetailActivity extends AppCompatActivity {
 
     /**
      * এই ব্যক্তির নামে থাকা সব LedgerEntry (person নাম মিলিয়ে) লোড করে, পুরনো থেকে নতুন সাজিয়ে
-     * প্রতিটার পর রানিং ব্যালেন্স হিসাব করে, তারপর নতুন থেকে পুরনো ক্রমে (উপরে সর্বশেষ) দেখায়।
+     * প্রতিটার পর রানিং ব্যালেন্স হিসাব করে allRows-এ (নতুন-থেকে-পুরনো) রাখে, হিরো কার্ড আপডেট
+     * করে, তারপর সার্চ/ফিল্টার প্রয়োগ করে তালিকা রেন্ডার করে।
      */
     private void loadLedger() {
         if (person == null) return;
-        List<LedgerEntry> raw = db.getLedgerForPersonName(person.getName());
+        allRawEntries = db.getLedgerForPersonName(person.getName());
 
-        List<LedgerEntry> chrono = new ArrayList<>(raw);
+        List<LedgerEntry> chrono = new ArrayList<>(allRawEntries);
         Collections.sort(chrono, (a, b) -> {
             String ka = a.getDate() + " " + a.getTime();
             String kb = b.getDate() + " " + b.getTime();
@@ -180,55 +228,140 @@ public class PersonDetailActivity extends AppCompatActivity {
             return a.getCreatedAt().compareTo(b.getCreatedAt());
         });
 
-        ledgerRows.clear();
-        double running = 0;
+        allRows.clear();
+        double running = 0, totalGot = 0, totalGave = 0;
+        int unpaidCount = 0;
         for (LedgerEntry e : chrono) {
             if (!e.isPaid()) {
                 running += e.isPabona() ? e.getAmount() : -e.getAmount();
+                unpaidCount++;
             }
-            ledgerRows.add(new PersonLedgerAdapter.Row(e, running));
+            if (e.isPabona()) totalGot += e.getAmount(); else totalGave += e.getAmount();
+            allRows.add(new PersonLedgerAdapter.Row(e, running));
         }
-        Collections.reverse(ledgerRows); // সর্বশেষ লেনদেন উপরে
+        Collections.reverse(allRows); // সর্বশেষ লেনদেন উপরে
 
-        int unpaidCount = 0;
-        for (LedgerEntry e : raw) if (!e.isPaid()) unpaidCount++;
-
-        // সামারি বার
-        if (raw.isEmpty()) {
-            summaryBar.setVisibility(View.GONE);
+        // হিরো কার্ড
+        if (allRawEntries.isEmpty()) {
+            heroCard.setVisibility(View.GONE);
+            personSearchBox.setVisibility(View.GONE);
+            personFilterScroll.setVisibility(View.GONE);
         } else {
-            summaryBar.setVisibility(View.VISIBLE);
-            double net = ledgerRows.isEmpty() ? 0 : ledgerRows.get(0).balanceAfter;
+            heroCard.setVisibility(View.VISIBLE);
+            personSearchBox.setVisibility(View.VISIBLE);
+            personFilterScroll.setVisibility(View.VISIBLE);
+
+            double net = allRows.isEmpty() ? 0 : allRows.get(0).balanceAfter;
             if (net > 0.5) {
-                summaryBar.setBackgroundResource(R.drawable.bg_type_active_pabona);
-                tvSummaryLabel.setText("আপনি পাবেন");
-                tvSummaryAmount.setText(DatabaseManager.formatAmount(net));
+                heroCardInner.setBackgroundResource(R.drawable.card_receivable_summary);
+                tvHeroLabel.setText("আপনি পাবেন");
+                tvHeroAmount.setText(DatabaseManager.formatAmount(net));
             } else if (net < -0.5) {
-                summaryBar.setBackgroundResource(R.drawable.bg_type_active_dena);
-                tvSummaryLabel.setText("আপনি দেবেন");
-                tvSummaryAmount.setText(DatabaseManager.formatAmount(Math.abs(net)));
+                heroCardInner.setBackgroundResource(R.drawable.card_debt_summary);
+                tvHeroLabel.setText("আপনি দেবেন");
+                tvHeroAmount.setText(DatabaseManager.formatAmount(Math.abs(net)));
             } else {
-                summaryBar.setBackgroundResource(R.drawable.bg_type_settled);
-                tvSummaryLabel.setText("হিসাব");
-                tvSummaryAmount.setText("সব পরিশোধিত ✓");
+                heroCardInner.setBackgroundResource(R.drawable.card_settled_summary);
+                tvHeroLabel.setText("নিট হিসাব");
+                tvHeroAmount.setText("সব পরিশোধিত ✓");
             }
-            tvSummarySub.setText("মোট " + raw.size() + " টি লেনদেন\n" + unpaidCount + " টি বাকি");
+            tvHeroTotalGot.setText(DatabaseManager.formatAmount(totalGot));
+            tvHeroTotalGave.setText(DatabaseManager.formatAmount(totalGave));
+            tvHeroSub.setText("মোট " + allRawEntries.size() + " টি লেনদেন  •  " + unpaidCount + " টি বাকি");
         }
 
-        // তালিকা বনাম খালি অবস্থা
-        if (ledgerRows.isEmpty()) {
+        applyFiltersAndRender();
+    }
+
+    /** ফিল্টার চিপ (সব/অপরিশোধিত/পরিশোধিত) নির্বাচন করলে তার স্টাইল আপডেট করে তালিকা রিফ্রেশ করে। */
+    private void setPersonFilter(String filter) {
+        currentFilter = filter;
+        TextView[] chips = {chipPersonAll, chipPersonUnpaid, chipPersonPaid};
+        String[] keys = {"all", "unpaid", "paid"};
+        for (int i = 0; i < chips.length; i++) {
+            boolean selected = keys[i].equals(filter);
+            chips[i].setBackgroundResource(selected ? R.drawable.bg_chip_selected : R.drawable.bg_chip_unselected);
+            chips[i].setTextColor(selected ? ContextCompat.getColor(this, R.color.white)
+                    : ContextCompat.getColor(this, R.color.chipUnselectedText));
+        }
+        applyFiltersAndRender();
+    }
+
+    /** currentFilter ও currentQuery অনুযায়ী allRows থেকে ফিল্টার করে RecyclerView-এ দেখায়। */
+    private void applyFiltersAndRender() {
+        if (person == null) return;
+
+        List<PersonLedgerAdapter.Row> filtered = new ArrayList<>();
+        String q = currentQuery.toLowerCase(java.util.Locale.US);
+        for (PersonLedgerAdapter.Row row : allRows) {
+            LedgerEntry e = row.entry;
+            if ("unpaid".equals(currentFilter) && e.isPaid()) continue;
+            if ("paid".equals(currentFilter) && !e.isPaid()) continue;
+            if (!q.isEmpty()) {
+                String hay = ((e.getNote() == null ? "" : e.getNote()) + " "
+                        + (e.getCategory() == null ? "" : e.getCategory()) + " "
+                        + DatabaseManager.formatAmount(e.getAmount())).toLowerCase(java.util.Locale.US);
+                if (!hay.contains(q)) continue;
+            }
+            filtered.add(row);
+        }
+
+        if (allRawEntries.isEmpty()) {
             rvPersonLedger.setVisibility(View.GONE);
             emptyLedgerState.setVisibility(View.VISIBLE);
+            tvEmptyLedgerTitle.setText("এই ব্যক্তির সাথে এখনও কোনো লেনদেন যোগ করা হয়নি");
+            tvEmptyLedgerSub.setText("নিচের বাটনে চেপে প্রথম দিলাম বা পেলাম যোগ করুন");
+        } else if (filtered.isEmpty()) {
+            rvPersonLedger.setVisibility(View.GONE);
+            emptyLedgerState.setVisibility(View.VISIBLE);
+            tvEmptyLedgerTitle.setText("কোনো লেনদেন খুঁজে পাওয়া যায়নি");
+            tvEmptyLedgerSub.setText("সার্চ বা ফিল্টার পাল্টে আবার চেষ্টা করুন");
         } else {
             rvPersonLedger.setVisibility(View.VISIBLE);
             emptyLedgerState.setVisibility(View.GONE);
-            ledgerAdapter = new PersonLedgerAdapter(this, ledgerRows,
+            ledgerAdapter = new PersonLedgerAdapter(this, filtered,
                     entry -> TransactionSheetHelper.showLedgerSheet(this, db, entry, () -> {
                         loadLedger();
                         com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
                         FirestoreSyncManager.getInstance(this).uploadAllData(null);
                     }));
             rvPersonLedger.setAdapter(ledgerAdapter);
+        }
+    }
+
+    /** পুরো লেনদেন বিবরণী সহজ টেক্সট আকারে শেয়ার করে (WhatsApp/মেসেজ/ইমেইল ইত্যাদিতে)। */
+    private void shareStatement() {
+        if (person == null || allRawEntries.isEmpty()) {
+            Toast.makeText(this, "শেয়ার করার মতো কোনো লেনদেন নেই", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(person.getName()).append(" — দেনা-পাওনা বিবরণী\n");
+        sb.append("তৈরি: CashLipi অ্যাপ দিয়ে\n\n");
+
+        double net = allRows.isEmpty() ? 0 : allRows.get(0).balanceAfter;
+        if (net > 0.5) sb.append("নিট হিসাব: আপনি পাবেন ৳").append(DatabaseManager.formatAmount(net)).append("\n\n");
+        else if (net < -0.5) sb.append("নিট হিসাব: আপনি দেবেন ৳").append(DatabaseManager.formatAmount(Math.abs(net))).append("\n\n");
+        else sb.append("নিট হিসাব: সব পরিশোধিত\n\n");
+
+        for (PersonLedgerAdapter.Row row : allRows) {
+            LedgerEntry e = row.entry;
+            sb.append(DatabaseManager.formatDateDisplay(e.getDate())).append(", ").append(DatabaseManager.formatTimeDisplay(e.getTime()))
+              .append(" — ").append(e.isDena() ? "দিলাম" : "পেলাম")
+              .append(" ৳").append(DatabaseManager.formatAmount(e.getAmount()));
+            if (e.isPaid()) sb.append(" (পরিশোধিত)");
+            if (e.getNote() != null && !e.getNote().isEmpty()) sb.append(" — ").append(e.getNote());
+            sb.append("\n");
+        }
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, person.getName() + " — দেনা-পাওনা বিবরণী");
+        intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
+        try {
+            startActivity(Intent.createChooser(intent, "বিবরণী শেয়ার করুন"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "শেয়ার করার কোনো অ্যাপ পাওয়া যায়নি", Toast.LENGTH_SHORT).show();
         }
     }
 

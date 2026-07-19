@@ -1,12 +1,15 @@
 package com.jrappspot.cashlipi.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -14,11 +17,13 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,7 +64,8 @@ public class DenaPawnaFragment extends Fragment {
     private TextView tvPersonCount;
     private EditText etSearch;
     private ImageView ivClearSearch;
-    private TextView chipAll, chipUnpaid, chipPaid;
+    private FrameLayout btnFilter, btnThemeChange;
+    private View filterActiveDot;
 
     private FrameLayout bannerContainer;
     private ViewFlipper debtFlipper;
@@ -73,6 +79,14 @@ public class DenaPawnaFragment extends Fragment {
     private String currentQuery = "";
     private int currentFilter = 0; // 0 = সব, 1 = অপরিশোধিত, 2 = পরিশোধিত
 
+    private static final String PREFS_NAME = "cashlipi_dena_pawna_prefs";
+    private static final String KEY_CARD_STYLE = "card_style";
+    private static final String[] STYLE_NAMES = {
+            "ক্লাসিক", "মিনিমাল", "গ্র্যাডিয়েন্ট", "বোল্ড", "কমপ্যাক্ট"
+    };
+    private SharedPreferences prefs;
+    private int cardStyle = PersonAdapter.STYLE_CLASSIC;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -84,6 +98,8 @@ public class DenaPawnaFragment extends Fragment {
     public void onViewCreated(@NonNull View root, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(root, savedInstanceState);
         db = DatabaseManager.getInstance(requireContext());
+        prefs = requireContext().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE);
+        cardStyle = prefs.getInt(KEY_CARD_STYLE, PersonAdapter.STYLE_CLASSIC);
 
         rvList = root.findViewById(R.id.rvPersonList);
         emptyState = root.findViewById(R.id.emptyState);
@@ -91,9 +107,9 @@ public class DenaPawnaFragment extends Fragment {
         tvPersonCount = root.findViewById(R.id.tvPersonCount);
         etSearch = root.findViewById(R.id.etSearch);
         ivClearSearch = root.findViewById(R.id.ivClearSearch);
-        chipAll = root.findViewById(R.id.chipAll);
-        chipUnpaid = root.findViewById(R.id.chipUnpaid);
-        chipPaid = root.findViewById(R.id.chipPaid);
+        btnFilter = root.findViewById(R.id.btnFilter);
+        btnThemeChange = root.findViewById(R.id.btnThemeChange);
+        filterActiveDot = root.findViewById(R.id.filterActiveDot);
         bannerContainer = root.findViewById(R.id.bannerContainer);
         debtFlipper = root.findViewById(R.id.debtFlipper);
         debtDots = root.findViewById(R.id.debtDots);
@@ -104,7 +120,7 @@ public class DenaPawnaFragment extends Fragment {
                 startActivity(new Intent(requireContext(), AddPersonActivity.class)));
 
         setupSearch();
-        setupFilters();
+        setupFilterAndTheme();
 
         loadData();
     }
@@ -135,22 +151,48 @@ public class DenaPawnaFragment extends Fragment {
         ivClearSearch.setOnClickListener(v -> etSearch.setText(""));
     }
 
-    // ── ফিল্টার চিপ ─────────────────────────────────────────────────
-    private void setupFilters() {
-        chipAll.setOnClickListener(v -> selectFilter(0));
-        chipUnpaid.setOnClickListener(v -> selectFilter(1));
-        chipPaid.setOnClickListener(v -> selectFilter(2));
+    // ── ফিল্টার আইকন — পপআপ মেনুতে সব / অপরিশোধিত / পরিশোধিত ────────
+    // ── থিম-চেঞ্জ আইকন — কার্ডের ৫টি ভিজুয়াল স্টাইলের একটা বাছাই ─────
+    private void setupFilterAndTheme() {
+        btnFilter.setOnClickListener(this::showFilterMenu);
+        btnThemeChange.setOnClickListener(v -> showThemeDialog());
+        updateFilterDot();
+    }
+
+    private void showFilterMenu(View anchor) {
+        PopupMenu menu = new PopupMenu(requireContext(), anchor);
+        Menu m = menu.getMenu();
+        m.add(Menu.NONE, 0, 0, "সব");
+        m.add(Menu.NONE, 1, 1, "অপরিশোধিত");
+        m.add(Menu.NONE, 2, 2, "পরিশোধিত");
+        menu.setOnMenuItemClickListener((MenuItem item) -> {
+            selectFilter(item.getItemId());
+            return true;
+        });
+        menu.show();
     }
 
     private void selectFilter(int filter) {
         currentFilter = filter;
-        chipAll.setBackgroundResource(filter == 0 ? R.drawable.bg_chip_selected : R.drawable.bg_chip_unselected);
-        chipAll.setTextColor(getResources().getColor(filter == 0 ? R.color.white : R.color.chipUnselectedText));
-        chipUnpaid.setBackgroundResource(filter == 1 ? R.drawable.bg_chip_selected : R.drawable.bg_chip_unselected);
-        chipUnpaid.setTextColor(getResources().getColor(filter == 1 ? R.color.white : R.color.chipUnselectedText));
-        chipPaid.setBackgroundResource(filter == 2 ? R.drawable.bg_chip_selected : R.drawable.bg_chip_unselected);
-        chipPaid.setTextColor(getResources().getColor(filter == 2 ? R.color.white : R.color.chipUnselectedText));
+        updateFilterDot();
         applyFilters();
+    }
+
+    private void updateFilterDot() {
+        filterActiveDot.setVisibility(currentFilter != 0 ? View.VISIBLE : View.GONE);
+    }
+
+    private void showThemeDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("কার্ডের থিম বেছে নিন")
+                .setSingleChoiceItems(STYLE_NAMES, cardStyle, (dialog, which) -> {
+                    cardStyle = which;
+                    prefs.edit().putInt(KEY_CARD_STYLE, cardStyle).apply();
+                    applyFilters();
+                    dialog.dismiss();
+                })
+                .setNegativeButton("বাতিল", null)
+                .show();
     }
 
     // ── ডেটা লোড + প্রতি-ব্যক্তি সারসংক্ষেপ হিসাব ───────────────────
@@ -175,10 +217,15 @@ public class DenaPawnaFragment extends Fragment {
             }
         }
 
+        int totalTxn = 0;
+        for (PersonStat s : statsMap.values()) totalTxn += s.totalCount;
+
         if (allPersons.isEmpty()) {
-            tvPersonCount.setText("যাদের সাথে হিসাব রাখবেন, তাদের যোগ করুন");
+            tvPersonCount.setText("যোগ নেই");
+        } else if (totalTxn == 0) {
+            tvPersonCount.setText("· কোনো লেনদেন নেই");
         } else {
-            tvPersonCount.setText(allPersons.size() + " জন যুক্ত আছে");
+            tvPersonCount.setText("· " + totalTxn + " টা লেনদেন");
         }
 
         setupBanner();
@@ -316,7 +363,7 @@ public class DenaPawnaFragment extends Fragment {
         rvList.setVisibility(View.VISIBLE);
 
         PersonAdapter adapter = new PersonAdapter(requireContext(), filtered,
-                (person, position) -> openPerson(person), statsMap);
+                (person, position) -> openPerson(person), statsMap, cardStyle);
         rvList.setAdapter(adapter);
         rvList.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.layout_animation_fall_down));
         rvList.scheduleLayoutAnimation();

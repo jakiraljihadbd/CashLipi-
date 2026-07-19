@@ -15,32 +15,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- হেডার -->
+        <!-- চিকন হেডার — অ্যাপ বার কালারে, একটাই লাইনে টাইটেল + লেনদেন সংখ্যা -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="18dp"
-            android:paddingTop="18dp"
-            android:paddingBottom="10dp">
+            android:layout_height="42dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/m3HomeBalanceContainer"
+            android:paddingHorizontal="18dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="দেনা পাওনা"
-                android:textSize="22sp"
+                android:text="দেনা পাওনা ব্যক্তি ও প্রতিষ্ঠান"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="@color/textPrimary"/>
+                android:textColor="@color/white"
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/tvPersonCount"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="যাদের সাথে হিসাব রাখবেন, তাদের যোগ করুন"
-                android:textSize="13sp"
-                android:textColor="@color/textSecondary"/>
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:text="যোগ নেই"
+                android:textSize="12sp"
+                android:textColor="#D9FFFFFF"
+                android:maxLines="1"
+                android:ellipsize="end"/>
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="14dp"/>
 
         <!-- অটো-স্লাইড ব্যানার — কার টাকা এখনও পরিশোধ হয়নি, রঙিনভাবে পালা করে দেখায় -->
         <FrameLayout
@@ -69,111 +78,104 @@
                 android:gravity="center"/>
         </FrameLayout>
 
-        <!-- Search -->
+        <!-- Search + ফিল্টার + থিম চেঞ্জ — এক লাইনে, প্রোফেশনাল লেভেল -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="18dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="12dp"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/bg_search_premium"
-            android:paddingStart="14dp"
-            android:paddingEnd="10dp">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_search"
-                android:layout_marginEnd="10dp"
-                android:alpha="0.7"/>
-
-            <EditText
-                android:id="@+id/etSearch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="text"
-                android:hint="নাম বা ফোন নম্বর খুঁজুন..."
-                android:textSize="14sp"
-                android:textColor="@color/searchTextColor"
-                android:textColorHint="@color/searchHintColor"
-                android:background="@android:color/transparent"
-                android:singleLine="true"
-                android:maxLines="1"
-                android:imeOptions="actionSearch"
-                android:cursorVisible="true"/>
-
-            <ImageView
-                android:id="@+id/ivClearSearch"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/ic_clear"
-                android:layout_marginStart="6dp"
-                android:visibility="gone"
-                android:alpha="0.6"
-                android:padding="2dp"/>
-        </LinearLayout>
-
-        <!-- ফিল্টার চিপ — সব / অপরিশোধিত / পরিশোধিত -->
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:paddingHorizontal="18dp"
-            android:layout_marginBottom="10dp">
+            android:gravity="center_vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_search_premium"
+                android:paddingStart="14dp"
+                android:paddingEnd="10dp">
 
-                <TextView
-                    android:id="@+id/chipAll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:text="সব"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:paddingHorizontal="16dp"
-                    android:background="@drawable/bg_chip_selected"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="7dp"
-                    android:clickable="true"
-                    android:focusable="true"/>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_search"
+                    android:layout_marginEnd="10dp"
+                    android:alpha="0.7"/>
 
-                <TextView
-                    android:id="@+id/chipUnpaid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:text="অপরিশোধিত"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:paddingHorizontal="16dp"
-                    android:background="@drawable/bg_chip_unselected"
-                    android:textColor="@color/chipUnselectedText"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="7dp"
-                    android:clickable="true"
-                    android:focusable="true"/>
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="text"
+                    android:hint="নাম বা ফোন নম্বর খুঁজুন..."
+                    android:textSize="14sp"
+                    android:textColor="@color/searchTextColor"
+                    android:textColorHint="@color/searchHintColor"
+                    android:background="@android:color/transparent"
+                    android:singleLine="true"
+                    android:maxLines="1"
+                    android:imeOptions="actionSearch"
+                    android:cursorVisible="true"/>
 
-                <TextView
-                    android:id="@+id/chipPaid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:text="পরিশোধিত"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:paddingHorizontal="16dp"
-                    android:background="@drawable/bg_chip_unselected"
-                    android:textColor="@color/chipUnselectedText"
-                    android:textStyle="bold"
-                    android:clickable="true"
-                    android:focusable="true"/>
+                <ImageView
+                    android:id="@+id/ivClearSearch"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_clear"
+                    android:layout_marginStart="6dp"
+                    android:visibility="gone"
+                    android:alpha="0.6"
+                    android:padding="2dp"/>
             </LinearLayout>
-        </HorizontalScrollView>
+
+            <!-- ফিল্টার আইকন — সব / অপরিশোধিত / পরিশোধিত (পপআপ মেনু) -->
+            <FrameLayout
+                android:id="@+id/btnFilter"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_icon_action_btn"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_filter"
+                    app:tint="@color/colorPrimary"/>
+
+                <View
+                    android:id="@+id/filterActiveDot"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/dot_filter_active"
+                    android:visibility="gone"/>
+            </FrameLayout>
+
+            <!-- থিম চেঞ্জ আইকন — কার্ড ৪-৫ স্টাইলে দেখানোর অপশন -->
+            <FrameLayout
+                android:id="@+id/btnThemeChange"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_icon_action_btn"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_theme_palette"
+                    app:tint="@color/colorPrimary"/>
+            </FrameLayout>
+        </LinearLayout>
 
         <!-- তালিকা -->
         <androidx.recyclerview.widget.RecyclerView

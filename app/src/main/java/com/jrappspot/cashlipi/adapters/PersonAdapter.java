@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.models.Person;
 import com.jrappspot.cashlipi.models.PersonStat;
@@ -24,6 +25,9 @@ import java.util.Map;
 /**
  * দেনা-পাওনা পেজের ব্যক্তি তালিকার অ্যাডাপ্টার — ছবি/নাম/সম্পর্ক/ফোন/ঠিকানার পাশাপাশি
  * প্রতিটা ব্যক্তির মোট লেনদেন ও অপরিশোধিত এন্ট্রির সংখ্যা ব্যাজ আকারে দেখায় (statsMap থেকে, ঐচ্ছিক)।
+ *
+ * cardStyle (0-4) কার্ডের ভিজুয়াল থিম বদলায় — "থিম চেঞ্জ" আইকন থেকে বাছাই করা হয়।
+ * অ্যাভাটার সবসময় গোল না হয়ে বড়, রাউন্ডেড-স্কয়ার আকারে দেখানো হয়।
  */
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
 
@@ -31,26 +35,45 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
         void onClick(Person person, int position);
     }
 
+    // কার্ড স্টাইল আইডি — থিম-চেঞ্জ ডায়ালগের ইনডেক্সের সাথে মিলে
+    public static final int STYLE_CLASSIC = 0;
+    public static final int STYLE_MINIMAL = 1;
+    public static final int STYLE_GRADIENT = 2;
+    public static final int STYLE_BOLD = 3;
+    public static final int STYLE_COMPACT = 4;
+
     private static final int[] AVATAR_BGS = {
-            R.drawable.bg_avatar_circle_1, R.drawable.bg_avatar_circle_2,
-            R.drawable.bg_avatar_circle_3, R.drawable.bg_avatar_circle_4,
-            R.drawable.bg_avatar_circle_5
+            R.drawable.bg_avatar_square_1, R.drawable.bg_avatar_square_2,
+            R.drawable.bg_avatar_square_3, R.drawable.bg_avatar_square_4,
+            R.drawable.bg_avatar_square_5
+    };
+
+    private static final int[] CARD_BGS = {
+            R.drawable.bg_card_style_classic, R.drawable.bg_card_style_minimal,
+            R.drawable.bg_card_style_gradient, R.drawable.bg_card_style_bold,
+            R.drawable.bg_card_style_compact
     };
 
     private final Context ctx;
     private final List<Person> items;
     private final OnPersonClick listener;
     private final Map<String, PersonStat> statsMap; // key: person.getName().trim().toLowerCase() — nullable
+    private final int cardStyle;
 
     public PersonAdapter(Context ctx, List<Person> items, OnPersonClick listener) {
-        this(ctx, items, listener, null);
+        this(ctx, items, listener, null, STYLE_CLASSIC);
     }
 
     public PersonAdapter(Context ctx, List<Person> items, OnPersonClick listener, Map<String, PersonStat> statsMap) {
+        this(ctx, items, listener, statsMap, STYLE_CLASSIC);
+    }
+
+    public PersonAdapter(Context ctx, List<Person> items, OnPersonClick listener, Map<String, PersonStat> statsMap, int cardStyle) {
         this.ctx = ctx;
         this.items = items;
         this.listener = listener;
         this.statsMap = statsMap;
+        this.cardStyle = (cardStyle >= 0 && cardStyle < CARD_BGS.length) ? cardStyle : STYLE_CLASSIC;
     }
 
     @NonNull
@@ -63,6 +86,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull VH h, int position) {
         Person p = items.get(position);
+
+        applyCardStyle(h);
 
         h.tvName.setText(p.getName().isEmpty() ? "নাম নেই" : p.getName());
 
@@ -92,7 +117,8 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
         if (p.hasPhoto() && new File(p.getPhotoPath()).exists()) {
             h.avatarInitial.setVisibility(View.GONE);
             h.ivPhoto.setVisibility(View.VISIBLE);
-            Glide.with(ctx).load(new File(p.getPhotoPath())).transform(new CircleCrop()).into(h.ivPhoto);
+            int radiusPx = (int) (18 * ctx.getResources().getDisplayMetrics().density);
+            Glide.with(ctx).load(new File(p.getPhotoPath())).transform(new RoundedCorners(radiusPx)).into(h.ivPhoto);
         } else {
             h.ivPhoto.setVisibility(View.GONE);
             h.avatarInitial.setVisibility(View.VISIBLE);
@@ -128,13 +154,64 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
     @Override
     public int getItemCount() { return items.size(); }
 
+    // ── থিম-চেঞ্জ: কার্ডের ব্যাকগ্রাউন্ড/এলিভেশন/প্যাডিং/অ্যাভাটার সাইজ বাছাই করা স্টাইল অনুযায়ী বসায় ──
+    private void applyCardStyle(VH h) {
+        h.itemView.setBackgroundResource(CARD_BGS[cardStyle]);
+
+        float density = ctx.getResources().getDisplayMetrics().density;
+        int padDefault = (int) (16 * density);
+        int padCompact = (int) (12 * density);
+        int avatarDefault = (int) (66 * density);
+        int avatarCompact = (int) (52 * density);
+
+        switch (cardStyle) {
+            case STYLE_MINIMAL:
+                h.itemView.setElevation(0f);
+                h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
+                setAvatarSize(h, avatarDefault);
+                break;
+            case STYLE_COMPACT:
+                h.itemView.setElevation((int) (3 * density));
+                h.itemView.setPadding(padCompact, padCompact, padCompact, padCompact);
+                setAvatarSize(h, avatarCompact);
+                break;
+            case STYLE_GRADIENT:
+            case STYLE_BOLD:
+            case STYLE_CLASSIC:
+            default:
+                h.itemView.setElevation((int) (6 * density));
+                h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
+                setAvatarSize(h, avatarDefault);
+                break;
+        }
+    }
+
+    private void setAvatarSize(VH h, int sizePx) {
+        ViewGroup.LayoutParams frameLp = h.avatarFrame.getLayoutParams();
+        frameLp.width = sizePx;
+        frameLp.height = sizePx;
+        h.avatarFrame.setLayoutParams(frameLp);
+
+        ViewGroup.LayoutParams photoLp = h.ivPhoto.getLayoutParams();
+        photoLp.width = sizePx;
+        photoLp.height = sizePx;
+        h.ivPhoto.setLayoutParams(photoLp);
+
+        ViewGroup.LayoutParams initialLp = h.avatarInitial.getLayoutParams();
+        initialLp.width = sizePx;
+        initialLp.height = sizePx;
+        h.avatarInitial.setLayoutParams(initialLp);
+    }
+
     static class VH extends RecyclerView.ViewHolder {
+        FrameLayout avatarFrame;
         ImageView ivPhoto;
         LinearLayout avatarInitial, rowPhone, rowAddress, rowStats;
         TextView tvInitial, tvName, tvDot, tvRelation, tvPhone, tvAddress, tvTxnCount, tvUnpaidBadge;
 
         VH(@NonNull View itemView) {
             super(itemView);
+            avatarFrame = itemView.findViewById(R.id.avatarFrame);
             ivPhoto = itemView.findViewById(R.id.ivPersonPhoto);
             avatarInitial = itemView.findViewById(R.id.avatarInitial);
             tvInitial = itemView.findViewById(R.id.tvInitial);

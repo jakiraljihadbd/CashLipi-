@@ -267,8 +267,40 @@ public class HomeFragment extends Fragment {
         root.findViewById(R.id.balanceCardClick).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AnalysisActivity.class)));
 
-        root.findViewById(R.id.tipFlipper).setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), AiChatActivity.class)));
+        // Tip carousel: ক্লিক = AiChat, সোয়াইপ বাম/ডান = পরের/আগের স্লাইড
+        android.view.GestureDetector tipGesture = new android.view.GestureDetector(
+                requireContext(), new android.view.GestureDetector.SimpleOnGestureListener() {
+            private static final int SWIPE_MIN_DISTANCE = 80;
+            private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+            @Override
+            public boolean onFling(android.view.MotionEvent e1, android.view.MotionEvent e2,
+                                   float velocityX, float velocityY) {
+                if (e1 == null || e2 == null) return false;
+                float diffX = e1.getX() - e2.getX();
+                if (Math.abs(diffX) > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    if (diffX > 0) { // সোয়াইপ বামে → পরের স্লাইড
+                        tipFlipper.showNext();
+                    } else {         // সোয়াইপ ডানে → আগের স্লাইড
+                        tipFlipper.showPrevious();
+                    }
+                    updateDots(tipFlipper.getDisplayedChild());
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onSingleTapUp(android.view.MotionEvent e) {
+                startActivity(new Intent(requireContext(), AiChatActivity.class));
+                return true;
+            }
+        });
+
+        root.findViewById(R.id.tipFlipper).setOnTouchListener((v, event) -> {
+            tipGesture.onTouchEvent(event);
+            return true;
+        });
 
         // Quick menu grid
         root.findViewById(R.id.menuAiChat).setOnClickListener(v ->

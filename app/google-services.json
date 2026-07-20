@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "736034334486",
+    "firebase_url": "https://cashlipi-default-rtdb.firebaseio.com",
     "project_id": "cashlipi",
     "storage_bucket": "cashlipi.firebasestorage.app"
   },

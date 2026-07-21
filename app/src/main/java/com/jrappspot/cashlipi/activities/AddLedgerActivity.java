@@ -2,7 +2,6 @@ package com.jrappspot.cashlipi.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +19,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.utils.FontUtils;
 import com.jrappspot.cashlipi.adapters.LedgerListAdapter;
+import com.jrappspot.cashlipi.adapters.MainPagerAdapter;
 import com.jrappspot.cashlipi.models.LedgerEntry;
 import com.jrappspot.cashlipi.utils.AmountInputHelper;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
@@ -150,8 +150,11 @@ public class AddLedgerActivity extends BaseActivity {
             }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();
         });
         findViewById(R.id.btnSaveLedger).setOnClickListener(v -> saveLedger());
-        findViewById(R.id.tvViewAllLedger).setOnClickListener(v ->
-                startActivity(new Intent(this, LedgerListActivity.class)));
+        findViewById(R.id.tvViewAllLedger).setOnClickListener(v -> {
+            // পুরনো LedgerListActivity আর নেই — নতুন নেভ-বারের "দেনা-পাওনা" পেজে ফিরে যায়
+            DashboardActivity.pendingTargetPage = MainPagerAdapter.POSITION_DENA_PAWNA;
+            finish();
+        });
     }
 
     private void saveLedger() {
@@ -189,7 +192,11 @@ public class AddLedgerActivity extends BaseActivity {
                 typeLabel + " যোগ সফল হয়েছে!",
                 "আপনার " + typeLabel + " তালিকা সফলভাবে আপডেট হয়েছে।",
                 () -> etPerson.requestFocus(),
-                () -> startActivity(new Intent(this, LedgerListActivity.class)));
+                () -> {
+                    // পুরনো LedgerListActivity আর নেই — নতুন নেভ-বারের "দেনা-পাওনা" পেজে ফিরে যায়
+                    DashboardActivity.pendingTargetPage = MainPagerAdapter.POSITION_DENA_PAWNA;
+                    finish();
+                });
         etPerson.setText(""); etCategory.setText(""); etAmount.setText(""); etNote.setText("");
         setDefaultDateTime();
         loadRecentLedger();

@@ -95,7 +95,7 @@
     <!-- Search Bar -->
     <color name="searchBarBg">#FFFFFF</color>
     <color name="searchBarBorder">#C8D3E0</color>
-    <color name="searchIconTint">#6B7A8D</color>
+    <color name="searchIconTint">#3A4657</color>
     <color name="searchTextColor">#0A0F1E</color>
     <color name="searchHintColor">#8896AA</color>
 

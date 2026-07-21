@@ -32,11 +32,8 @@ import com.jrappspot.cashlipi.utils.NavBarStyler;
 
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * DashboardActivity — এখন এই Activity শুধু "হোস্ট" হিসেবে কাজ করে:
@@ -55,11 +52,10 @@ public class DashboardActivity extends BaseActivity {
     // ── নেভিগেশন ড্রয়ার ──────────────────────────────────────────────
     private androidx.drawerlayout.widget.DrawerLayout drawerLayout;
 
-    // ── টপ আইডেন্টিটি বার (হ্যামবার্গার/সালাম-নাম-সময়-তারিখ স্লাইড/নোটিফিকেশন/প্রোফাইল) ──
+    // ── টপ আইডেন্টিটি বার (হ্যামবার্গার/CashLipi টেক্সট/নোটিফিকেশন/প্রোফাইল) ──
     private ImageButton headerMenuBtn, headerNotifBtn, headerProfileBtn;
     private ViewFlipper headerIdentityFlipper;
     private ViewFlipper headerAiFlipper;
-    private final Handler identityHandler = new Handler(Looper.getMainLooper());
     private final Handler aiAdviceHandler = new Handler(Looper.getMainLooper());
 
     // ── নেভিগেশন-কন্ট্রোলার ──────────────────────────────────────────
@@ -91,6 +87,18 @@ public class DashboardActivity extends BaseActivity {
     private String currentNavStyle = NavBarStyler.STYLE_CLASSIC;
 
     private static final String STATE_CURRENT_PAGE = "state_current_page";
+
+    // ── অন্য Activity (যেমন AddTransactionActivity/AddLedgerActivity) থেকে ফিরে এসে
+    //    নির্দিষ্ট নেভ-পেজে যাওয়ার জন্য — সেই Activity finish() করার আগে এই ভ্যালু সেট করে দেয় ──
+    public static int pendingTargetPage = -1;
+
+    /** ViewPager2-এর ভেতরে থাকা যেকোনো Fragment (যেমন HomeFragment) থেকে সরাসরি নির্দিষ্ট
+     *  নেভ-পেজে যাওয়ার জন্য — ((DashboardActivity) requireActivity()).goToPage(position) */
+    public void goToPage(int position) {
+        if (viewPager != null) {
+            viewPager.setCurrentItem(position, true);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,22 +138,31 @@ public class DashboardActivity extends BaseActivity {
         // সেটিং থেকে ফিরে এলে নেভিগেশন মেন্যুর সাইজ/রং/পজিশন/সোয়াইপ তাৎক্ষণিক আপডেট হয়
         applyNavCustomization();
         refreshAiAdviceTips();
-        startIdentityAutoSlide();
         startAiAdviceAutoSlide();
         refreshDrawerHeader();
+        refreshHeaderProfileIcon();
+
+        // AddTransactionActivity/AddLedgerActivity থেকে ফিরে এসে নির্দিষ্ট নেভ-পেজে যাওয়া
+        if (pendingTargetPage >= 0) {
+            int target = pendingTargetPage;
+            pendingTargetPage = -1;
+            goToPage(target);
+            updateNavSelection(target);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         if (fabMenuOpen) closeFabMenu();
-        identityHandler.removeCallbacksAndMessages(null);
         aiAdviceHandler.removeCallbacksAndMessages(null);
     }
 
     // ══════════════════════════════════════════════════════════════
     //  ০. টপ আইডেন্টিটি বার — হ্যামবার্গার + সালাম/নাম/সময়/তারিখ স্লাইড + নোটিফিকেশন/প্রোফাইল
     // ══════════════════════════════════════════════════════════════
+    private static final String DEFAULT_HEADER_TEXT = "CashLipi-ক্যাশলিপি";
+
     private void setupTopIdentityBar() {
         headerMenuBtn    = findViewById(R.id.headerMenuBtn);
         headerNotifBtn   = findViewById(R.id.headerNotifBtn);
@@ -166,7 +183,14 @@ public class DashboardActivity extends BaseActivity {
         headerProfileBtn.setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class)));
 
-        buildIdentityFlipper();
+        // ডিফল্ট টেক্সট — পরে অ্যাডমিন অ্যাপ থেকে app_config/global ডকুমেন্টের "headerBarText"
+        // ফিল্ডে লিখলেই রিয়েলটাইম এখানে বদলে যাবে (নিচের লিসেনারে)
+        setIdentityText(DEFAULT_HEADER_TEXT);
+        firestoreSync.listenForHeaderBarText(text ->
+                runOnUiThread(() -> setIdentityText(
+                        (text != null && !text.trim().isEmpty()) ? text : DEFAULT_HEADER_TEXT)));
+
+        refreshHeaderProfileIcon();
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -300,60 +324,47 @@ public class DashboardActivity extends BaseActivity {
         }
     }
 
-    // সালাম (সময়ভিত্তিক) → CashLipi → সময় → তারিখ — একের পর এক স্লাইড
-    private void buildIdentityFlipper() {
+    // টপ বারে একটাই লেখা দেখায় — সালাম/সময়/তারিখ স্লাইড বাদ দেওয়া হয়েছে, এখন শুধু "CashLipi-ক্যাশলিপি"
+    // (বা ফায়ারবেজ থেকে পাঠানো টেক্সট)
+    private void setIdentityText(String text) {
+        if (headerIdentityFlipper == null) return;
         headerIdentityFlipper.removeAllViews();
-        List<String> slides = new ArrayList<>();
-        slides.add(greetingByTime());
-        slides.add("CashLipi");
-        slides.add(currentTimeText());
-        slides.add(currentDateText());
+        TextView tv = new TextView(this);
+        tv.setText(text);
+        tv.setTextColor(Color.WHITE);
+        tv.setTextSize(14.5f);
+        tv.setTypeface(tv.getTypeface(), android.graphics.Typeface.BOLD);
+        tv.setMaxLines(1);
+        tv.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        tv.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+        tv.setLayoutParams(new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        headerIdentityFlipper.addView(tv);
+    }
 
-        for (String text : slides) {
-            TextView tv = new TextView(this);
-            tv.setText(text);
-            tv.setTextColor(Color.WHITE);
-            tv.setTextSize(13.5f);
-            tv.setTypeface(tv.getTypeface(), android.graphics.Typeface.BOLD);
-            tv.setMaxLines(1);
-            tv.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-            tv.setLayoutParams(new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            headerIdentityFlipper.addView(tv);
+    // টপ বারের প্রোফাইল আইকনে লগইন করা একাউন্টের আসল ছবি দেখায় (ড্রয়ার হেডারের একই সোর্স ব্যবহার করে)
+    private void refreshHeaderProfileIcon() {
+        if (headerProfileBtn == null || db == null) return;
+        String photoSource = db.getEffectivePhotoSource();
+        if (photoSource != null && !photoSource.isEmpty()) {
+            Object loadFrom = photoSource.startsWith("http")
+                    ? photoSource : new java.io.File(photoSource);
+            headerProfileBtn.setPadding(0, 0, 0, 0);
+            headerProfileBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            headerProfileBtn.setImageTintList(null);
+            Glide.with(this)
+                    .load(loadFrom)
+                    .transform(new com.bumptech.glide.load.resource.bitmap.CircleCrop())
+                    .placeholder(R.drawable.ic_person_circle)
+                    .error(R.drawable.ic_person_circle)
+                    .into(headerProfileBtn);
+        } else {
+            int pad = dp(8);
+            headerProfileBtn.setPadding(pad, pad, pad, pad);
+            headerProfileBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            headerProfileBtn.setImageResource(R.drawable.ic_person_circle);
+            headerProfileBtn.setImageTintList(android.content.res.ColorStateList.valueOf(Color.WHITE));
         }
-    }
-
-    private String greetingByTime() {
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        if (hour < 12) return "সুপ্রভাত!";
-        if (hour < 16) return "শুভ দুপুর!";
-        if (hour < 19) return "শুভ বিকাল!";
-        return "শুভ সন্ধ্যা!";
-    }
-
-    private String currentTimeText() {
-        return new SimpleDateFormat("hh:mm a", new Locale("bn")).format(new java.util.Date());
-    }
-
-    private String currentDateText() {
-        return new SimpleDateFormat("dd MMM, yyyy", new Locale("bn")).format(new java.util.Date());
-    }
-
-    private void startIdentityAutoSlide() {
-        identityHandler.removeCallbacksAndMessages(null);
-        identityHandler.postDelayed(new Runnable() {
-            @Override public void run() {
-                if (headerIdentityFlipper != null) {
-                    // সময়/তারিখ স্লাইড দেখানোর ঠিক আগে টেক্সট রিফ্রেশ করা হয় যাতে সবসময় বর্তমান সময় দেখায়
-                    int next = (headerIdentityFlipper.getDisplayedChild() + 1) % headerIdentityFlipper.getChildCount();
-                    if (next == 2 && headerIdentityFlipper.getChildAt(2) instanceof TextView) {
-                        ((TextView) headerIdentityFlipper.getChildAt(2)).setText(currentTimeText());
-                    }
-                    headerIdentityFlipper.showNext();
-                }
-                identityHandler.postDelayed(this, 2600);
-            }
-        }, 2600);
     }
 
     // ══════════════════════════════════════════════════════════════

@@ -25,25 +25,18 @@
         android:paddingBottom="20dp">
 
         <!-- ══════════════════════════════
-             AUTO-SLIDING AI TIP CAROUSEL
+             AUTO-SLIDING AI TIP CAROUSEL — Material 3 ViewPager2 (হাত দিয়ে সোয়াইপ + অটো-স্লাইড)
         ══════════════════════════════ -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
 
-            <ViewFlipper
-                android:id="@+id/tipFlipper"
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/tipPager"
                 android:layout_width="match_parent"
-                android:layout_height="76dp"
-                android:flipInterval="4000"
-                android:inAnimation="@anim/slide_in_right"
-                android:outAnimation="@anim/slide_out_left"
-                android:clickable="true" android:focusable="true"
-                android:foreground="?attr/selectableItemBackground">
-                <!-- child cards are added dynamically in HomeFragment.java based on real data -->
-            </ViewFlipper>
+                android:layout_height="80dp"/>
 
             <!-- dot indicators, overlaid bottom-center -->
             <LinearLayout
@@ -67,19 +60,12 @@
             android:background="@drawable/bg_balance_pink"
             android:elevation="1dp">
 
-            <!-- বাম পাশে সাদা accent line — সোজা left edge-এর সাথে মিলে সুন্দর দেখায় -->
-            <View
-                android:layout_width="5dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="#66FFFFFF"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingStart="22dp"
-                android:paddingEnd="18dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:paddingTop="10dp"
                 android:paddingBottom="16dp">
 
@@ -158,12 +144,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="6dp">
 
             <FrameLayout
                 android:id="@+id/cardIncome"
                 android:layout_width="0dp"
-                android:layout_height="72dp"
+                android:layout_height="90dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/bg_summary_income"
@@ -199,7 +185,7 @@
             <FrameLayout
                 android:id="@+id/cardExpense"
                 android:layout_width="0dp"
-                android:layout_height="72dp"
+                android:layout_height="90dp"
                 android:layout_weight="1"
                 android:layout_marginStart="5dp"
                 android:background="@drawable/bg_summary_expense"
@@ -364,16 +350,45 @@
         </FrameLayout>
 
         <!-- ══════════════════════════════
-             কুইক মেনু গ্রিড
+             নোটিশ বার — রেফারেন্স স্ক্রিনশট থেকে কপি করা সিস্টেম
         ══════════════════════════════ -->
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="কুইক মেনু"
-            android:textSize="13sp" android:textStyle="bold"
-            android:textColor="@color/textPrimary"
-            android:layout_marginBottom="8dp"
-            android:letterSpacing="0.02"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_notice_bar"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="11dp"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="18dp" android:layout_height="18dp"
+                android:src="@drawable/ic_bell_notification"
+                app:tint="@color/ieEditBlue"
+                android:layout_marginEnd="8dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="নোটিশঃ"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/ieEditBlue"
+                android:layout_marginEnd="6dp"/>
+            <TextView
+                android:id="@+id/tvHomeNotice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ব্যক্তিগত কিংবা ব্যবসার সকল হিসাব রাখুন সহজে"
+                android:textSize="12sp"
+                android:textColor="@color/ieEditBlue"
+                android:maxLines="1"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:selected="true"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -392,9 +407,9 @@
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="0dp">
+                android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_width="44dp" android:layout_height="44dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F5F6FF"
                     android:layout_marginBottom="6dp">
@@ -422,9 +437,9 @@
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="0dp">
+                android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_width="44dp" android:layout_height="44dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F4F9FF"
                     android:layout_marginBottom="6dp">
@@ -451,9 +466,9 @@
                 android:paddingVertical="10dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="0dp">
+                android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_width="44dp" android:layout_height="44dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#FFFDF2"
                     android:layout_marginBottom="6dp">
@@ -487,9 +502,9 @@
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="0dp">
+                android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_width="44dp" android:layout_height="44dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F5FFFD"
                     android:layout_marginBottom="6dp">
@@ -517,9 +532,9 @@
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="0dp">
+                android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_width="44dp" android:layout_height="44dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#FEF6FB"
                     android:layout_marginBottom="6dp">
@@ -546,9 +561,9 @@
                 android:paddingVertical="10dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:elevation="0dp">
+                android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="40dp" android:layout_height="40dp"
+                    android:layout_width="44dp" android:layout_height="44dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F2FEF8"
                     android:layout_marginBottom="6dp">

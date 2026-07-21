@@ -26,6 +26,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jrappspot.cashlipi.R;
+import com.jrappspot.cashlipi.adapters.MainPagerAdapter;
 import com.jrappspot.cashlipi.models.Transaction;
 import com.jrappspot.cashlipi.utils.AmountInputHelper;
 import com.jrappspot.cashlipi.utils.BackupManager;
@@ -671,8 +672,12 @@ public class AddTransactionActivity extends BaseActivity {
                 isIncome ? "আয় যোগ সফল হয়েছে!" : "ব্যয় যোগ সফল হয়েছে!",
                 isIncome ? "আপনার আয় তালিকা সফলভাবে আপডেট হয়েছে।" : "আপনার ব্যয় তালিকা সফলভাবে আপডেট হয়েছে।",
                 () -> etAmount.requestFocus(),
-                () -> startActivity(new Intent(this,
-                        isIncome ? IncomeListActivity.class : ExpenseListActivity.class)));
+                () -> {
+                    // পুরনো IncomeListActivity/ExpenseListActivity আর নেই — নতুন নেভ-বারের
+                    // "আয়-ব্যয়" পেজে ফিরে যায়
+                    DashboardActivity.pendingTargetPage = MainPagerAdapter.POSITION_INCOME_EXPENSE;
+                    finish();
+                });
 
         // Reset form
         etAmount.setText("");

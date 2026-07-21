@@ -52,8 +52,9 @@
                 android:id="@+id/tvItemTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
                 android:letterSpacing="0.01"
                 android:paddingHorizontal="11dp"
                 android:paddingVertical="4dp"
@@ -85,8 +86,9 @@
             android:id="@+id/tvItemAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
+            android:fontFamily="sans-serif-black"
             android:textColor="@color/amountIncome"
             android:layout_marginStart="10dp"/>
 

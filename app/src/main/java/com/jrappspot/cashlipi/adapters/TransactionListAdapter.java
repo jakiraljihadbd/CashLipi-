@@ -136,11 +136,20 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         return gd;
     }
 
-    // উপরে-নিচের দাগ — বাম দাগের একই রঙ, কিন্তু প্রায় অদৃশ্য (~১২% স্বচ্ছতা), দুই প্রান্ত বাঁকানো
+    // উপরে-নিচের সোজা দাগ — একই থাকবে, শুধু প্রান্ত দুটো হালকা বাঁকানো (রেডিয়াস বেশি নয়)
+    private android.graphics.drawable.GradientDrawable roundedEdgeBar(int color) {
+        android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+        gd.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
+        gd.setColor(color);
+        gd.setCornerRadius(3f * ctx.getResources().getDisplayMetrics().density);
+        return gd;
+    }
+
+    // উপরে-নিচের দাগ — বাম দাগের একই রঙ, কিন্তু প্রায় অদৃশ্য (~১২% স্বচ্ছতা), হালকা বাঁকানো প্রান্ত
     private void setEdgeBarColor(VH h, int color) {
         int lightColor = (31 << 24) | (color & 0x00FFFFFF); // 31/255 ≈ 12% alpha
-        if (h.viewColorBarTop != null) h.viewColorBarTop.setBackground(roundedBar(lightColor));
-        if (h.viewColorBarBottom != null) h.viewColorBarBottom.setBackground(roundedBar(lightColor));
+        if (h.viewColorBarTop != null) h.viewColorBarTop.setBackground(roundedEdgeBar(lightColor));
+        if (h.viewColorBarBottom != null) h.viewColorBarBottom.setBackground(roundedEdgeBar(lightColor));
     }
 
     @Override

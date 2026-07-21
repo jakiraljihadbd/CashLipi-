@@ -13,7 +13,20 @@
           "package_name": "com.jrappspot.cashlipi"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "736034334486-c10nct4fig04olov42i4245qufmr4vjk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jrappspot.cashlipi",
+            "certificate_hash": "1479abb2be43c2505108f9a93c9915da2e19b11b"
+          }
+        },
+        {
+          "client_id": "736034334486-gu4keqsupj6v7tfeqproacubfvrjfj73.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDo3NUf6-_xPuuBbF2EYL-9DlDIio9_NqY"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736034334486-gu4keqsupj6v7tfeqproacubfvrjfj73.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -13,11 +13,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.activities.AccountingActivity;
@@ -25,10 +26,9 @@ import com.jrappspot.cashlipi.activities.AddSavingsActivity;
 import com.jrappspot.cashlipi.activities.AiChatActivity;
 import com.jrappspot.cashlipi.activities.AnalysisActivity;
 import com.jrappspot.cashlipi.activities.CalculatorActivity;
-import com.jrappspot.cashlipi.activities.ExpenseListActivity;
-import com.jrappspot.cashlipi.activities.IncomeListActivity;
-import com.jrappspot.cashlipi.activities.LedgerListActivity;
+import com.jrappspot.cashlipi.activities.DashboardActivity;
 import com.jrappspot.cashlipi.activities.NotesActivity;
+import com.jrappspot.cashlipi.adapters.MainPagerAdapter;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 
 import java.util.ArrayList;
@@ -50,8 +50,9 @@ public class HomeFragment extends Fragment {
     private TextView tvMainBalance, tvTotalIncome, tvTotalExpense;
     private TextView tvTotalDena, tvTotalPabona, tvTotalSavings;
 
-    private ViewFlipper tipFlipper;
+    private ViewPager2 tipPager;
     private LinearLayout tipDots;
+    private TipPagerAdapter tipAdapter;
 
     // ── ব্যালেন্স দেখা/লুকানো (চোখ আইকন) ───────────────────────────────
     private ImageView balanceEyeToggle;
@@ -109,7 +110,7 @@ public class HomeFragment extends Fragment {
         tvTotalDena    = view.findViewById(R.id.tvTotalDena);
         tvTotalPabona  = view.findViewById(R.id.tvTotalPabona);
         tvTotalSavings = view.findViewById(R.id.tvTotalSavings);
-        tipFlipper     = view.findViewById(R.id.tipFlipper);
+        tipPager       = view.findViewById(R.id.tipPager);
         tipDots        = view.findViewById(R.id.tipDots);
         balanceEyeToggle = view.findViewById(R.id.balanceEyeToggle);
 
@@ -203,18 +204,8 @@ public class HomeFragment extends Fragment {
             tips.add(new TipData("স্মার্ট পরামর্শ লোড হচ্ছে...",
                     R.drawable.emoji_bulb, R.drawable.bg_tip_card_purple));
 
-        tipFlipper.removeAllViews();
         tipDots.removeAllViews();
-
-        LayoutInflater inflater = LayoutInflater.from(requireContext());
-        for (TipData tip : tips) {
-            View card = inflater.inflate(R.layout.item_tip_card, tipFlipper, false);
-            card.setBackgroundResource(tip.bgRes);
-            ((ImageView) card.findViewById(R.id.tipIcon)).setImageResource(tip.iconRes);
-            ((TextView) card.findViewById(R.id.tipTitle)).setText("স্মার্ট পরামর্শ");
-            ((TextView) card.findViewById(R.id.tipSubtitle)).setText(tip.subtitle);
-            tipFlipper.addView(card);
-
+        for (int i = 0; i < tips.size(); i++) {
             View dot = new View(requireContext());
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -225,8 +216,50 @@ public class HomeFragment extends Fragment {
         }
 
         tipCount = tips.size();
-        tipFlipper.setDisplayedChild(0);
+        tipAdapter = new TipPagerAdapter(tips);
+        tipPager.setAdapter(tipAdapter);
+        tipPager.setOffscreenPageLimit(1);
+        // পাতার মাঝে সামান্য পিক-আ-বু ও ফেড — Material 3 style ট্রানজিশন
+        tipPager.setPageTransformer((page, position) -> {
+            page.setAlpha(0.55f + (1 - Math.abs(position)) * 0.45f);
+            page.setScaleY(0.94f + (1 - Math.abs(position)) * 0.06f);
+        });
+        tipPager.unregisterOnPageChangeCallback(pageChangeCallback);
+        tipPager.registerOnPageChangeCallback(pageChangeCallback);
+        tipPager.setCurrentItem(0, false);
         updateDots(0);
+    }
+
+    private final ViewPager2.OnPageChangeCallback pageChangeCallback = new ViewPager2.OnPageChangeCallback() {
+        @Override public void onPageSelected(int position) {
+            updateDots(position);
+        }
+    };
+
+    // ── RecyclerView adapter — ViewPager2-এর জন্য, প্রতিটা পেজ একটা tip card ──
+    private class TipPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private final List<TipData> data;
+        TipPagerAdapter(List<TipData> data) { this.data = data; }
+
+        @NonNull @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View card = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_tip_card, parent, false);
+            return new RecyclerView.ViewHolder(card) {};
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            TipData tip = data.get(position);
+            View card = holder.itemView;
+            card.setBackgroundResource(tip.bgRes);
+            ((ImageView) card.findViewById(R.id.tipIcon)).setImageResource(tip.iconRes);
+            ((TextView) card.findViewById(R.id.tipTitle)).setText("স্মার্ট পরামর্শ");
+            ((TextView) card.findViewById(R.id.tipSubtitle)).setText(tip.subtitle);
+            card.setOnClickListener(v -> startActivity(new Intent(requireContext(), AiChatActivity.class)));
+        }
+
+        @Override public int getItemCount() { return data.size(); }
     }
 
     private void updateDots(int activeIndex) {
@@ -236,71 +269,36 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    // ── AUTO-SLIDE — advances the tip carousel every 4 seconds ────────
+    // ── AUTO-SLIDE — প্রতি ৩ সেকেন্ডে পরের পেজে যায় (হাত দিয়ে সোয়াইপ করলেও চলবে) ────
     private void startAutoSlide() {
         tipHandler.removeCallbacksAndMessages(null);
         tipHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (tipFlipper != null && tipCount > 1) {
-                    tipFlipper.showNext();
-                    updateDots(tipFlipper.getDisplayedChild());
+                if (tipPager != null && tipCount > 1) {
+                    int next = (tipPager.getCurrentItem() + 1) % tipCount;
+                    tipPager.setCurrentItem(next, true);
                 }
-                tipHandler.postDelayed(this, 4000);
+                tipHandler.postDelayed(this, 3000);
             }
-        }, 4000);
+        }, 3000);
     }
 
     // ── CLICK LISTENERS ──────────────────────────────────────────────
     private void setupClickListeners(View root) {
         root.findViewById(R.id.cardIncome).setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), IncomeListActivity.class)));
+                goToNavPage(MainPagerAdapter.POSITION_INCOME_EXPENSE));
         root.findViewById(R.id.cardExpense).setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), ExpenseListActivity.class)));
+                goToNavPage(MainPagerAdapter.POSITION_INCOME_EXPENSE));
         root.findViewById(R.id.cardDena).setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), LedgerListActivity.class)));
+                goToNavPage(MainPagerAdapter.POSITION_DENA_PAWNA));
         root.findViewById(R.id.cardPabona).setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), LedgerListActivity.class)));
+                goToNavPage(MainPagerAdapter.POSITION_DENA_PAWNA));
         root.findViewById(R.id.cardSavings).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AddSavingsActivity.class)));
 
         root.findViewById(R.id.balanceCardClick).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AnalysisActivity.class)));
-
-        // Tip carousel: ক্লিক = AiChat, সোয়াইপ বাম/ডান = পরের/আগের স্লাইড
-        android.view.GestureDetector tipGesture = new android.view.GestureDetector(
-                requireContext(), new android.view.GestureDetector.SimpleOnGestureListener() {
-            private static final int SWIPE_MIN_DISTANCE = 80;
-            private static final int SWIPE_THRESHOLD_VELOCITY = 200;
-
-            @Override
-            public boolean onFling(android.view.MotionEvent e1, android.view.MotionEvent e2,
-                                   float velocityX, float velocityY) {
-                if (e1 == null || e2 == null) return false;
-                float diffX = e1.getX() - e2.getX();
-                if (Math.abs(diffX) > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    if (diffX > 0) { // সোয়াইপ বামে → পরের স্লাইড
-                        tipFlipper.showNext();
-                    } else {         // সোয়াইপ ডানে → আগের স্লাইড
-                        tipFlipper.showPrevious();
-                    }
-                    updateDots(tipFlipper.getDisplayedChild());
-                    return true;
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onSingleTapUp(android.view.MotionEvent e) {
-                startActivity(new Intent(requireContext(), AiChatActivity.class));
-                return true;
-            }
-        });
-
-        root.findViewById(R.id.tipFlipper).setOnTouchListener((v, event) -> {
-            tipGesture.onTouchEvent(event);
-            return true;
-        });
 
         // Quick menu grid
         root.findViewById(R.id.menuAiChat).setOnClickListener(v ->
@@ -308,12 +306,20 @@ public class HomeFragment extends Fragment {
         root.findViewById(R.id.menuAnalysis).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AnalysisActivity.class)));
         root.findViewById(R.id.menuLedger).setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), LedgerListActivity.class)));
+                goToNavPage(MainPagerAdapter.POSITION_BAKIR_KHATA));
         root.findViewById(R.id.menuCalculator).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), CalculatorActivity.class)));
         root.findViewById(R.id.menuNotes).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), NotesActivity.class)));
         root.findViewById(R.id.menuAccounting).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AccountingActivity.class)));
+    }
+
+    // ── হোম থেকে সরাসরি নেভ-বারের কোনো পেজে (ViewPager2) সুইচ করা — পুরনো
+    //    IncomeListActivity/ExpenseListActivity/LedgerListActivity আর ব্যবহার হয় না ──
+    private void goToNavPage(int position) {
+        if (getActivity() instanceof DashboardActivity) {
+            ((DashboardActivity) getActivity()).goToPage(position);
+        }
     }
 }

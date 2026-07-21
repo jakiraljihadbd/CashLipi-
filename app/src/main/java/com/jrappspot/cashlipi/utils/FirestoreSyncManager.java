@@ -636,6 +636,29 @@ public class FirestoreSyncManager {
     }
 
     // ─────────────────────────────────────────────
+    //  🏷️ টপ আইডেন্টিটি বার টেক্সট (রিমোট-কন্ট্রোলড)
+    // ─────────────────────────────────────────────
+
+    /**
+     * ড্যাশবোর্ডের একদম উপরের চিকন বারে "CashLipi-ক্যাশলিপি"-র বদলে অ্যাডমিন অ্যাপ থেকে
+     * app_config/global ডকুমেন্টের "headerBarText" ফিল্ডে যেকোনো টেক্সট লিখলে সেটাই
+     * রিয়েলটাইমে দেখাবে। ফিল্ড খালি/অনুপস্থিত থাকলে অ্যাপ নিজে ডিফল্ট টেক্সট দেখাবে।
+     */
+    public void listenForHeaderBarText(HeaderTextListener listener) {
+        db.collection("app_config")
+                .document("global")
+                .addSnapshotListener((doc, error) -> {
+                    if (error != null || doc == null || !doc.exists()) return;
+                    String text = doc.getString("headerBarText");
+                    if (listener != null) listener.onTextReceived(text);
+                });
+    }
+
+    public interface HeaderTextListener {
+        void onTextReceived(String text);
+    }
+
+    // ─────────────────────────────────────────────
     //  🛠️ Utility Methods
     // ─────────────────────────────────────────────
 

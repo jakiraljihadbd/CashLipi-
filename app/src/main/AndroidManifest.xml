@@ -102,18 +102,6 @@
             android:exported="false" android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".activities.IncomeListActivity"
-            android:exported="false" android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity android:name=".activities.ExpenseListActivity"
-            android:exported="false" android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity android:name=".activities.LedgerListActivity"
-            android:exported="false" android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-
         <activity android:name=".activities.SavingsListActivity"
             android:exported="false" android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />

@@ -143,6 +143,12 @@ public class DatabaseManager {
     public double getTotalIncome() {
         double total = 0;
         for (Transaction t : getIncomeList()) total += t.getAmount();
+        // পাওনা পরিশোধের সময় "আয় হিসেবে" বেছে নেওয়া এন্ট্রিগুলোও আয়ের মোটে যোগ হয়
+        for (LedgerEntry e : getLedgerList()) {
+            if (e.isPaid() && e.isPabona() && "incomeExpense".equals(e.getSettleTo())) {
+                total += e.getAmount();
+            }
+        }
         return total;
     }
 
@@ -185,6 +191,12 @@ public class DatabaseManager {
     public double getTotalExpense() {
         double total = 0;
         for (Transaction t : getExpenseList()) total += t.getAmount();
+        // দেনা পরিশোধের সময় "ব্যয় হিসেবে" বেছে নেওয়া এন্ট্রিগুলোও ব্যয়ের মোটে যোগ হয়
+        for (LedgerEntry e : getLedgerList()) {
+            if (e.isPaid() && e.isDena() && "incomeExpense".equals(e.getSettleTo())) {
+                total += e.getAmount();
+            }
+        }
         return total;
     }
 
@@ -227,6 +239,13 @@ public class DatabaseManager {
     public double getTotalSavings() {
         double total = 0;
         for (Transaction t : getSavingsList()) total += t.getAmount();
+        // দেনা-পাওনা পরিশোধের সময় "সঞ্চয়ে/থেকে" বেছে নেওয়া এন্ট্রিগুলোও সঞ্চয়ের হিসাবে যোগ হয়:
+        // পাওনা পরিশোধ (টাকা পেয়ে সঞ্চয়ে রাখা হয়েছে) → বাড়ে, দেনা পরিশোধ (সঞ্চয় থেকে দেওয়া হয়েছে) → কমে
+        for (LedgerEntry e : getLedgerList()) {
+            if (e.isPaid() && "savings".equals(e.getSettleTo())) {
+                total += e.isPabona() ? e.getAmount() : -e.getAmount();
+            }
+        }
         return total;
     }
 
@@ -721,7 +740,10 @@ public class DatabaseManager {
         double savings = getTotalSavings();
         double paidPabona = 0, paidDena = 0;
         for (LedgerEntry e : getLedgerList()) {
-            if (e.isPaid()) {
+            // শুধু "ব্যালেন্স" ধরে পরিশোধিত এন্ট্রিই মূল ব্যালেন্সে যোগ/বিয়োগ হয়; "সঞ্চয়"-এ পরিশোধিত
+            // এন্ট্রি getTotalSavings()-এ আলাদাভাবে হিসাব হয়, আর "কোথাও না" শুধু বুককিপিং, কোনো
+            // হিসাবে প্রভাব ফেলে না
+            if (e.isPaid() && "balance".equals(e.getSettleTo())) {
                 if ("pabona".equals(e.getType())) paidPabona += e.getAmount();
                 else paidDena += e.getAmount();
             }

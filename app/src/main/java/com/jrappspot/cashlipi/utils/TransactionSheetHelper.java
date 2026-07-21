@@ -9,6 +9,8 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -324,10 +326,15 @@ public class TransactionSheetHelper {
         }
         togglePaid.setOnClickListener(x -> {
             dialog.dismiss();
-            List<LedgerEntry> list = db.getLedgerList();
-            int idx = findLedgerIndex(list, item);
-            if (idx >= 0) db.toggleLedgerPaid(idx);
-            if (onChange != null) onChange.run();
+            if (item.isPaid()) {
+                // ইতিমধ্যে পরিশোধিত → অপরিশোধিত করতে সরাসরি টগল, কোনো প্রশ্ন করার দরকার নেই
+                List<LedgerEntry> list = db.getLedgerList();
+                int idx = findLedgerIndex(list, item);
+                if (idx >= 0) db.toggleLedgerPaid(idx);
+                if (onChange != null) onChange.run();
+            } else {
+                showSettleSourceDialog(act, db, item, onChange);
+            }
         });
 
         v.findViewById(R.id.actionEdit).setOnClickListener(x -> {
@@ -361,6 +368,94 @@ public class TransactionSheetHelper {
             if (targetId != null && !targetId.isEmpty() && targetId.equals(e.getId())) return i;
         }
         return -1;
+    }
+
+    /**
+     * কোনো দেনা-পাওনা এন্ট্রি "পরিশোধিত" করার আগে জিজ্ঞাসা করে টাকাটা কোথা থেকে এলো/গেল —
+     * ব্যালেন্স, সঞ্চয়, আয়/ব্যয় হিসেবে, নাকি কোথাও প্রভাব ছাড়াই শুধু বুককিপিং। প্রতিটা অপশনে
+     * "বর্তমান → এই লেনদেনের পর" লাইভ প্রিভিউ দেখায়, যাতে নিশ্চিত হয়ে বেছে নেওয়া যায়। এই
+     * পছন্দ অনুযায়ী DatabaseManager.getBalance()/getTotalSavings()/getTotalIncome()/
+     * getTotalExpense() সঠিকভাবে হিসাব করে।
+     */
+    private static void showSettleSourceDialog(Activity act, DatabaseManager db,
+                                                 LedgerEntry item, Refresh onChange) {
+        boolean isDena = item.isDena();
+        double amount = item.getAmount();
+
+        View v = LayoutInflater.from(act).inflate(R.layout.dialog_settle_source, null);
+        TextView tvQuestion = v.findViewById(R.id.tvSettleQuestion);
+        RadioGroup rg = v.findViewById(R.id.rgSettleOptions);
+        RadioButton rbBalance = v.findViewById(R.id.rbSettleBalance);
+        RadioButton rbSavings = v.findViewById(R.id.rbSettleSavings);
+        RadioButton rbIncomeExpense = v.findViewById(R.id.rbSettleIncomeExpense);
+        RadioButton rbNone = v.findViewById(R.id.rbSettleNone);
+        TextView tvBefore = v.findViewById(R.id.tvSettleBefore);
+        TextView tvAfter = v.findViewById(R.id.tvSettleAfter);
+
+        tvQuestion.setText(isDena
+                ? "এই " + DatabaseManager.formatAmount(amount) + " টাকা কোথা থেকে দিলেন?"
+                : "এই " + DatabaseManager.formatAmount(amount) + " টাকা কোথায় রাখলেন?");
+
+        rbBalance.setText(isDena ? "ব্যালেন্স থেকে (মূল হিসাব থেকে কমবে)" : "ব্যালেন্সে (মূল হিসাবে যোগ হবে)");
+        rbSavings.setText(isDena ? "সঞ্চয় থেকে (সঞ্চয়ের হিসাব থেকে কমবে)" : "সঞ্চয়ে (সঞ্চয়ের হিসাবে যোগ হবে)");
+        rbIncomeExpense.setText(isDena ? "ব্যয় হিসেবে যোগ হবে" : "আয় হিসেবে যোগ হবে");
+        rbNone.setText(isDena ? "কোথাও থেকে না (শুধু হিসাব থেকে বাদ)" : "কোথাও না (শুধু হিসাব থেকে বাদ)");
+
+        double curBalance = db.getBalance();
+        double curSavings = db.getTotalSavings();
+        double curIncome = db.getTotalIncome();
+        double curExpense = db.getTotalExpense();
+
+        Runnable updatePreview = () -> {
+            int checked = rg.getCheckedRadioButtonId();
+            if (checked == R.id.rbSettleBalance) {
+                double after = isDena ? curBalance - amount : curBalance + amount;
+                tvBefore.setText("ব্যালেন্স ৳" + DatabaseManager.formatAmount(curBalance));
+                tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
+            } else if (checked == R.id.rbSettleSavings) {
+                double after = isDena ? curSavings - amount : curSavings + amount;
+                tvBefore.setText("সঞ্চয় ৳" + DatabaseManager.formatAmount(curSavings));
+                tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
+            } else if (checked == R.id.rbSettleIncomeExpense) {
+                if (isDena) {
+                    double after = curExpense + amount;
+                    tvBefore.setText("ব্যয় ৳" + DatabaseManager.formatAmount(curExpense));
+                    tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
+                } else {
+                    double after = curIncome + amount;
+                    tvBefore.setText("আয় ৳" + DatabaseManager.formatAmount(curIncome));
+                    tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
+                }
+            } else {
+                tvBefore.setText("ব্যালেন্স ৳" + DatabaseManager.formatAmount(curBalance));
+                tvAfter.setText("৳" + DatabaseManager.formatAmount(curBalance) + " (অপরিবর্তিত)");
+            }
+        };
+        rg.setOnCheckedChangeListener((group, checkedId) -> updatePreview.run());
+        updatePreview.run();
+
+        new AlertDialog.Builder(act, R.style.PremiumDialog)
+                .setView(v)
+                .setPositiveButton("পরিশোধ নিশ্চিত করুন", (d, w) -> {
+                    String settleTo;
+                    int checked = rg.getCheckedRadioButtonId();
+                    if (checked == R.id.rbSettleBalance) settleTo = "balance";
+                    else if (checked == R.id.rbSettleSavings) settleTo = "savings";
+                    else if (checked == R.id.rbSettleIncomeExpense) settleTo = "incomeExpense";
+                    else settleTo = "none";
+
+                    List<LedgerEntry> list = db.getLedgerList();
+                    int idx = findLedgerIndex(list, item);
+                    if (idx >= 0) {
+                        LedgerEntry updated = list.get(idx);
+                        updated.setSettleTo(settleTo);
+                        db.updateLedger(idx, updated);
+                        db.toggleLedgerPaid(idx);
+                    }
+                    if (onChange != null) onChange.run();
+                })
+                .setNegativeButton("বাতিল", null)
+                .show();
     }
 
     private static void confirmDeleteLedger(Activity act, DatabaseManager db,

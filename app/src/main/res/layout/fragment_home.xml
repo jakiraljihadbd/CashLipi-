@@ -46,7 +46,8 @@
                 android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:visibility="gone"/>
         </FrameLayout>
 
         <!-- ══════════════════════════════
@@ -370,8 +371,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="নোটিশঃ"
-                android:textSize="12sp" android:textStyle="bold"
-                android:textColor="@color/ieEditBlue"
+                android:textSize="13.5sp" android:textStyle="bold"
+                android:textColor="@color/ieNoticeTextLight"
                 android:layout_marginEnd="6dp"/>
             <TextView
                 android:id="@+id/tvHomeNotice"
@@ -379,8 +380,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="ব্যক্তিগত কিংবা ব্যবসার সকল হিসাব রাখুন সহজে"
-                android:textSize="12sp"
-                android:textColor="@color/ieEditBlue"
+                android:textSize="13.5sp"
+                android:textColor="@color/ieNoticeTextLight"
                 android:maxLines="1"
                 android:ellipsize="marquee"
                 android:singleLine="true"

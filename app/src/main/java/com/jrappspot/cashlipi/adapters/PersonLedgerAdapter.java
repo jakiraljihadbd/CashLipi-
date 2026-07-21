@@ -128,8 +128,7 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         LedgerEntry e = row.entry;
         boolean isDena = e.isDena();
 
-        // দেনা এন্ট্রি (আমি দেব) → "দিলাম" বাটন থেকে, পাওনা এন্ট্রি (আমি পাব) → "পেলাম" বাটন থেকে
-        h.tvRowType.setText(isDena ? " দিলাম" : " পেলাম");
+        h.tvRowType.setText(isDena ? " দেনা" : " পাওনা");
         h.tvRowType.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.denaColor : R.color.pabonaColor));
 
         h.ivRowIcon.setImageResource(isDena ? R.drawable.emoji_book_red : R.drawable.emoji_book_green);

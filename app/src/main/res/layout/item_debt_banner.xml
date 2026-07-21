@@ -8,7 +8,7 @@
     android:paddingHorizontal="18dp"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/bg_type_active_dena"
+    android:background="@drawable/bg_debt_banner_solid"
     android:foreground="?attr/selectableItemBackground">
 
     <!-- initial বৃত্ত -->

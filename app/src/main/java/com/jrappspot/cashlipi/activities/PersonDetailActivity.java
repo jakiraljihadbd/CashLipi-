@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,9 +50,9 @@ import java.util.List;
 
 /**
  * একজন ব্যক্তির বিস্তারিত পেজ — কমপ্যাক্ট হেডারে পরিচিতি (ছবি/নাম/সম্পর্ক, হোয়াটসঅ্যাপ/কল/মেইল
- * বাটন, ⋮ মেনুতে এডিট/মুছুন) এবং নিচে এই ব্যক্তির সাথে থাকা সব দিলাম/পেলাম (LedgerEntry, নাম
+ * বাটন, ⋮ মেনুতে এডিট/মুছুন) এবং নিচে এই ব্যক্তির সাথে থাকা সব দেনা/পাওনা (LedgerEntry, নাম
  * মিলিয়ে) লেনদেন — নিট বকেয়ার সামারি বার, প্রতিটা এন্ট্রির পাশে রানিং ব্যালেন্স, এবং নিচে
- * পেলাম/দিলাম বাটনে চেপে দ্রুত নতুন এন্ট্রি যোগ করার বটম শিট। আইটেমে ট্যাপ করলে বিদ্যমান
+ * পাওনা/দেনা বাটনে চেপে দ্রুত নতুন এন্ট্রি যোগ করার বটম শিট। আইটেমে ট্যাপ করলে বিদ্যমান
  * TransactionSheetHelper.showLedgerSheet() (সম্পাদনা/বিস্তারিত/শেয়ার/পরিশোধ/মুছুন) খোলে।
  */
 public class PersonDetailActivity extends AppCompatActivity {
@@ -75,16 +76,19 @@ public class PersonDetailActivity extends AppCompatActivity {
 
     // দেনা-পাওনা লেনদেন অংশ
     private androidx.cardview.widget.CardView heroCard;
-    private LinearLayout heroCardInner, emptyLedgerState, personSearchBox;
-    private TextView tvHeroLabel, tvHeroAmount, tvHeroTotalGot, tvHeroTotalGave, tvHeroSub;
-    private ImageView btnShareStatement, ivClearPersonSearch;
+    private LinearLayout heroCardInner, emptyLedgerState, personSearchBox, personToolsRow;
+    private TextView tvHeroLabel, tvHeroAmount, tvHeroSub;
+    private ImageView btnShareStatement, ivClearPersonSearch, btnToggleView;
     private EditText etPersonLedgerSearch;
     private HorizontalScrollView personFilterScroll;
     private TextView chipPersonAll, chipPersonUnpaid, chipPersonPaid;
     private TextView tvEmptyLedgerTitle, tvEmptyLedgerSub;
     private RecyclerView rvPersonLedger;
+    private LinearLayout tableViewContainer, tableRowsContainer;
+    private TextView tvTableTotalDena, tvTableTotalPabona;
     private Button btnAddPelam, btnAddDilam;
     private PersonLedgerAdapter ledgerAdapter;
+    private String viewMode = "card"; // card | table
 
     /** পুরো ব্যক্তির ledger (রানিং ব্যালেন্স সহ, নতুন-থেকে-পুরনো) — সার্চ/ফিল্টার এখান থেকে চালানো হয়। */
     private final List<PersonLedgerAdapter.Row> allRows = new ArrayList<>();
@@ -117,25 +121,29 @@ public class PersonDetailActivity extends AppCompatActivity {
         heroCardInner     = findViewById(R.id.heroCardInner);
         tvHeroLabel       = findViewById(R.id.tvHeroLabel);
         tvHeroAmount      = findViewById(R.id.tvHeroAmount);
-        tvHeroTotalGot    = findViewById(R.id.tvHeroTotalGot);
-        tvHeroTotalGave   = findViewById(R.id.tvHeroTotalGave);
         tvHeroSub         = findViewById(R.id.tvHeroSub);
         btnShareStatement = findViewById(R.id.btnShareStatement);
 
-        personSearchBox      = findViewById(R.id.personSearchBox);
-        etPersonLedgerSearch = findViewById(R.id.etPersonLedgerSearch);
-        ivClearPersonSearch  = findViewById(R.id.ivClearPersonSearch);
-        personFilterScroll   = findViewById(R.id.personFilterScroll);
-        chipPersonAll        = findViewById(R.id.chipPersonAll);
-        chipPersonUnpaid     = findViewById(R.id.chipPersonUnpaid);
-        chipPersonPaid       = findViewById(R.id.chipPersonPaid);
+        personToolsRow        = findViewById(R.id.personToolsRow);
+        personSearchBox       = findViewById(R.id.personSearchBox);
+        etPersonLedgerSearch  = findViewById(R.id.etPersonLedgerSearch);
+        ivClearPersonSearch   = findViewById(R.id.ivClearPersonSearch);
+        personFilterScroll    = findViewById(R.id.personFilterScroll);
+        chipPersonAll         = findViewById(R.id.chipPersonAll);
+        chipPersonUnpaid      = findViewById(R.id.chipPersonUnpaid);
+        chipPersonPaid        = findViewById(R.id.chipPersonPaid);
+        btnToggleView         = findViewById(R.id.btnToggleView);
 
-        rvPersonLedger    = findViewById(R.id.rvPersonLedger);
-        emptyLedgerState  = findViewById(R.id.emptyLedgerState);
-        tvEmptyLedgerTitle = findViewById(R.id.tvEmptyLedgerTitle);
-        tvEmptyLedgerSub   = findViewById(R.id.tvEmptyLedgerSub);
-        btnAddPelam       = findViewById(R.id.btnAddPelam);
-        btnAddDilam       = findViewById(R.id.btnAddDilam);
+        rvPersonLedger      = findViewById(R.id.rvPersonLedger);
+        tableViewContainer  = findViewById(R.id.tableViewContainer);
+        tableRowsContainer  = findViewById(R.id.tableRowsContainer);
+        tvTableTotalDena    = findViewById(R.id.tvTableTotalDena);
+        tvTableTotalPabona  = findViewById(R.id.tvTableTotalPabona);
+        emptyLedgerState    = findViewById(R.id.emptyLedgerState);
+        tvEmptyLedgerTitle  = findViewById(R.id.tvEmptyLedgerTitle);
+        tvEmptyLedgerSub    = findViewById(R.id.tvEmptyLedgerSub);
+        btnAddPelam         = findViewById(R.id.btnAddPelam);
+        btnAddDilam         = findViewById(R.id.btnAddDilam);
         rvPersonLedger.setLayoutManager(new LinearLayoutManager(this));
 
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
@@ -144,11 +152,15 @@ public class PersonDetailActivity extends AppCompatActivity {
         btnMail.setOnClickListener(v -> sendMail());
         findViewById(R.id.btnMorePerson).setOnClickListener(this::showMoreMenu);
 
-        // পেলাম → পাওনা (আমি পাব) এন্ট্রি, দিলাম → দেনা (আমি দেব) এন্ট্রি — এই পেজের জন্য শুধু
-        // colloquial লেবেল, বাকি অ্যাপের দেনা/পাওনা মডেলই অক্ষত থাকে
+        // পাওনা (+) → পাওনা এন্ট্রি (আমি পাব), দেনা (−) → দেনা এন্ট্রি (আমি দেব)
         btnAddPelam.setOnClickListener(v -> showAddLedgerSheet("pabona"));
         btnAddDilam.setOnClickListener(v -> showAddLedgerSheet("dena"));
         btnShareStatement.setOnClickListener(v -> shareStatement());
+        btnToggleView.setOnClickListener(v -> {
+            viewMode = "card".equals(viewMode) ? "table" : "card";
+            btnToggleView.setImageResource("card".equals(viewMode) ? R.drawable.ic_view_grid : R.drawable.ic_nav_dena_pawna);
+            applyFiltersAndRender();
+        });
 
         etPersonLedgerSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
@@ -241,33 +253,31 @@ public class PersonDetailActivity extends AppCompatActivity {
         }
         Collections.reverse(allRows); // সর্বশেষ লেনদেন উপরে
 
-        // হিরো কার্ড
+        // হিরো কার্ড — কম্প্যাক্ট: নিট হিসাব + মোট লেনদেন/বাকি/পাওনা/দেনা এক জায়গায়
         if (allRawEntries.isEmpty()) {
             heroCard.setVisibility(View.GONE);
-            personSearchBox.setVisibility(View.GONE);
-            personFilterScroll.setVisibility(View.GONE);
+            personToolsRow.setVisibility(View.GONE);
         } else {
             heroCard.setVisibility(View.VISIBLE);
-            personSearchBox.setVisibility(View.VISIBLE);
-            personFilterScroll.setVisibility(View.VISIBLE);
+            personToolsRow.setVisibility(View.VISIBLE);
 
             double net = allRows.isEmpty() ? 0 : allRows.get(0).balanceAfter;
             if (net > 0.5) {
-                heroCardInner.setBackgroundResource(R.drawable.card_receivable_summary);
+                heroCardInner.setBackgroundResource(R.drawable.bg_hero_flat_pabona);
                 tvHeroLabel.setText("আপনি পাবেন");
                 tvHeroAmount.setText(DatabaseManager.formatAmount(net));
             } else if (net < -0.5) {
-                heroCardInner.setBackgroundResource(R.drawable.card_debt_summary);
+                heroCardInner.setBackgroundResource(R.drawable.bg_hero_flat_dena);
                 tvHeroLabel.setText("আপনি দেবেন");
                 tvHeroAmount.setText(DatabaseManager.formatAmount(Math.abs(net)));
             } else {
-                heroCardInner.setBackgroundResource(R.drawable.card_settled_summary);
+                heroCardInner.setBackgroundResource(R.drawable.bg_hero_flat_settled);
                 tvHeroLabel.setText("নিট হিসাব");
                 tvHeroAmount.setText("সব পরিশোধিত ✓");
             }
-            tvHeroTotalGot.setText(DatabaseManager.formatAmount(totalGot));
-            tvHeroTotalGave.setText(DatabaseManager.formatAmount(totalGave));
-            tvHeroSub.setText("মোট " + allRawEntries.size() + " টি লেনদেন  •  " + unpaidCount + " টি বাকি");
+            tvHeroSub.setText("মোট " + allRawEntries.size() + " টি লেনদেন  •  " + unpaidCount + " টি বাকি\n"
+                    + "মোট পাওনা ৳" + DatabaseManager.formatAmount(totalGot)
+                    + "  •  মোট দেনা ৳" + DatabaseManager.formatAmount(totalGave));
         }
 
         applyFiltersAndRender();
@@ -287,7 +297,10 @@ public class PersonDetailActivity extends AppCompatActivity {
         applyFiltersAndRender();
     }
 
-    /** currentFilter ও currentQuery অনুযায়ী allRows থেকে ফিল্টার করে RecyclerView-এ দেখায়। */
+    /**
+     * currentFilter ও currentQuery অনুযায়ী allRows থেকে ফিল্টার করে viewMode অনুযায়ী
+     * কার্ড-লিস্ট (RecyclerView) অথবা ছক (টেবিল) — যেটা সক্রিয় সেটাতে দেখায়।
+     */
     private void applyFiltersAndRender() {
         if (person == null) return;
 
@@ -308,25 +321,99 @@ public class PersonDetailActivity extends AppCompatActivity {
 
         if (allRawEntries.isEmpty()) {
             rvPersonLedger.setVisibility(View.GONE);
+            tableViewContainer.setVisibility(View.GONE);
             emptyLedgerState.setVisibility(View.VISIBLE);
             tvEmptyLedgerTitle.setText("এই ব্যক্তির সাথে এখনও কোনো লেনদেন যোগ করা হয়নি");
-            tvEmptyLedgerSub.setText("নিচের বাটনে চেপে প্রথম দিলাম বা পেলাম যোগ করুন");
+            tvEmptyLedgerSub.setText("নিচের বাটনে চেপে প্রথম দেনা বা পাওনা যোগ করুন");
         } else if (filtered.isEmpty()) {
             rvPersonLedger.setVisibility(View.GONE);
+            tableViewContainer.setVisibility(View.GONE);
             emptyLedgerState.setVisibility(View.VISIBLE);
             tvEmptyLedgerTitle.setText("কোনো লেনদেন খুঁজে পাওয়া যায়নি");
             tvEmptyLedgerSub.setText("সার্চ বা ফিল্টার পাল্টে আবার চেষ্টা করুন");
         } else {
-            rvPersonLedger.setVisibility(View.VISIBLE);
             emptyLedgerState.setVisibility(View.GONE);
-            ledgerAdapter = new PersonLedgerAdapter(this, filtered,
-                    entry -> TransactionSheetHelper.showLedgerSheet(this, db, entry, () -> {
-                        loadLedger();
-                        com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
-                        FirestoreSyncManager.getInstance(this).uploadAllData(null);
-                    }));
-            rvPersonLedger.setAdapter(ledgerAdapter);
+            if ("table".equals(viewMode)) {
+                rvPersonLedger.setVisibility(View.GONE);
+                tableViewContainer.setVisibility(View.VISIBLE);
+                renderTableView(filtered);
+            } else {
+                tableViewContainer.setVisibility(View.GONE);
+                rvPersonLedger.setVisibility(View.VISIBLE);
+                ledgerAdapter = new PersonLedgerAdapter(this, filtered,
+                        entry -> TransactionSheetHelper.showLedgerSheet(this, db, entry, () -> {
+                            loadLedger();
+                            com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
+                            FirestoreSyncManager.getInstance(this).uploadAllData(null);
+                        }));
+                rvPersonLedger.setAdapter(ledgerAdapter);
+            }
         }
+    }
+
+    /**
+     * ছক (টেবিল) ভিউ — বিবরণ/দেনা/পাওনা কলামে সাজিয়ে দেখায়, প্রতিটা সারিতে ট্যাপ করলে একই
+     * TransactionSheetHelper.showLedgerSheet() খোলে, নিচে মোট দেনা/পাওনার যোগফল দেখায়।
+     */
+    private void renderTableView(List<PersonLedgerAdapter.Row> filtered) {
+        tableRowsContainer.removeAllViews();
+        double sumDena = 0, sumPabona = 0;
+
+        for (PersonLedgerAdapter.Row row : filtered) {
+            LedgerEntry e = row.entry;
+            boolean isDena = e.isDena();
+            if (isDena) sumDena += e.getAmount(); else sumPabona += e.getAmount();
+
+            View rowView = LayoutInflater.from(this).inflate(R.layout.item_person_ledger_table_row, tableRowsContainer, false);
+            TextView tvTitle = rowView.findViewById(R.id.tvTRowTitle);
+            TextView tvDateTime = rowView.findViewById(R.id.tvTRowDateTime);
+            TextView tvChip = rowView.findViewById(R.id.tvTRowChip);
+            TextView tvDena = rowView.findViewById(R.id.tvTRowDena);
+            TextView tvPabona = rowView.findViewById(R.id.tvTRowPabona);
+
+            String note = e.getNote() != null && !e.getNote().isEmpty() ? e.getNote()
+                    : (e.getCategory() != null ? e.getCategory() : "");
+            tvTitle.setText(note.isEmpty() ? (isDena ? "দেনা" : "পাওনা") : note);
+            tvDateTime.setText(DatabaseManager.formatDateDisplay(e.getDate()) + ", " + DatabaseManager.formatTimeDisplay(e.getTime()));
+
+            tvDena.setText(isDena ? DatabaseManager.formatAmount(e.getAmount()) : "");
+            tvPabona.setText(isDena ? "" : DatabaseManager.formatAmount(e.getAmount()));
+
+            if (e.isPaid()) {
+                tvChip.setVisibility(View.VISIBLE);
+                tvChip.setText("পরিশোধিত");
+                tvChip.setTextColor(ContextCompat.getColor(this, R.color.amountIncome));
+                DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()),
+                        ContextCompat.getColor(this, R.color.dividerColor));
+            } else {
+                double bal = row.balanceAfter;
+                tvChip.setVisibility(View.VISIBLE);
+                if (bal > 0.5) {
+                    tvChip.setText("পাবেন " + DatabaseManager.formatAmount(bal));
+                    tvChip.setTextColor(ContextCompat.getColor(this, R.color.pabonaColor));
+                    DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()), ContextCompat.getColor(this, R.color.pabonaLight));
+                } else if (bal < -0.5) {
+                    tvChip.setText("দেবেন " + DatabaseManager.formatAmount(Math.abs(bal)));
+                    tvChip.setTextColor(ContextCompat.getColor(this, R.color.denaColor));
+                    DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()), ContextCompat.getColor(this, R.color.denaLight));
+                } else {
+                    tvChip.setText("সমান");
+                    tvChip.setTextColor(ContextCompat.getColor(this, R.color.textSecondary));
+                    DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()), ContextCompat.getColor(this, R.color.dividerColor));
+                }
+            }
+
+            rowView.setOnClickListener(v -> TransactionSheetHelper.showLedgerSheet(this, db, e, () -> {
+                loadLedger();
+                com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
+                FirestoreSyncManager.getInstance(this).uploadAllData(null);
+            }));
+
+            tableRowsContainer.addView(rowView);
+        }
+
+        tvTableTotalDena.setText(DatabaseManager.formatAmount(sumDena));
+        tvTableTotalPabona.setText(DatabaseManager.formatAmount(sumPabona));
     }
 
     /** পুরো লেনদেন বিবরণী সহজ টেক্সট আকারে শেয়ার করে (WhatsApp/মেসেজ/ইমেইল ইত্যাদিতে)। */
@@ -347,7 +434,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         for (PersonLedgerAdapter.Row row : allRows) {
             LedgerEntry e = row.entry;
             sb.append(DatabaseManager.formatDateDisplay(e.getDate())).append(", ").append(DatabaseManager.formatTimeDisplay(e.getTime()))
-              .append(" — ").append(e.isDena() ? "দিলাম" : "পেলাম")
+              .append(" — ").append(e.isDena() ? "দেনা" : "পাওনা")
               .append(" ৳").append(DatabaseManager.formatAmount(e.getAmount()));
             if (e.isPaid()) sb.append(" (পরিশোধিত)");
             if (e.getNote() != null && !e.getNote().isEmpty()) sb.append(" — ").append(e.getNote());
@@ -365,7 +452,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         }
     }
 
-    /** নিচের পেলাম/দিলাম বাটনে চাপলে এই ব্যক্তির নাম প্রি-ফিল করে দ্রুত এন্ট্রি যোগ করার শিট। */
+    /** নিচের পাওনা/দেনা বাটনে চাপলে এই ব্যক্তির নাম প্রি-ফিল করে দ্রুত এন্ট্রি যোগ করার শিট। */
     private void showAddLedgerSheet(String type) {
         if (person == null) return;
         boolean isDena = "dena".equals(type);
@@ -383,10 +470,10 @@ public class PersonDetailActivity extends AppCompatActivity {
         TextView tvTime = v.findViewById(R.id.tvSheetTime);
         Button btnSave = v.findViewById(R.id.btnSheetSave);
 
-        tvTitle.setText(isDena ? " দিলাম যোগ করুন" : " পেলাম যোগ করুন");
+        tvTitle.setText(isDena ? " দেনা যোগ করুন" : " পাওনা যোগ করুন");
         tvPersonChip.setText(person.getName());
         btnSave.setBackgroundResource(isDena ? R.drawable.bg_type_active_dena : R.drawable.bg_type_active_pabona);
-        btnSave.setText(isDena ? " দিলাম সংরক্ষণ করুন" : " পেলাম সংরক্ষণ করুন");
+        btnSave.setText(isDena ? " দেনা সংরক্ষণ করুন" : " পাওনা সংরক্ষণ করুন");
 
         AmountInputHelper.attach(this, etAmount);
 
@@ -459,7 +546,7 @@ public class PersonDetailActivity extends AppCompatActivity {
 
             SuccessPopup.Category cat = isDena ? SuccessPopup.Category.DENA : SuccessPopup.Category.PABONA;
             SuccessPopup.show(this, cat,
-                    (isDena ? "দিলাম" : "পেলাম") + " যোগ সফল হয়েছে!",
+                    (isDena ? "দেনা" : "পাওনা") + " যোগ সফল হয়েছে!",
                     person.getName() + "-এর হিসাব আপডেট হয়েছে।",
                     null, null);
         });

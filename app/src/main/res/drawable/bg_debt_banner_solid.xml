@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- দেনা-পাওনা পেজের অটো-স্লাইড ব্যানারের জন্য একটাই স্থির, সুন্দর রং (ইনডিগো গ্রেডিয়েন্ট) —
+     আগে দেনা/পাওনা টাইপ অনুযায়ী রং পাল্টানো হতো (রানটাইমে setBackgroundResource), যেটা
+     মাঝে মাঝে ফাঁকা/সাদা দেখাচ্ছিল। এখন XML-এই স্থায়ীভাবে বসানো, তাই কখনও ফাঁকা দেখাবে না। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="#4F46E5" android:endColor="#4338CA" android:angle="135"/>
+    <corners android:radius="12dp"/>
+</shape>

@@ -265,7 +265,9 @@ public class DenaPawnaFragment extends Fragment {
             if (s == null) s = new PersonStat();
 
             View card = inflater.inflate(R.layout.item_debt_banner, debtFlipper, false);
-            View root = card.findViewById(R.id.bannerCardRoot);
+            // bannerCardRoot-এর background এখন item_debt_banner.xml-এই স্থায়ীভাবে সেট করা (এক
+            // রং, ইনডিগো গ্রেডিয়েন্ট) — আগে এখানে রানটাইমে setBackgroundResource() দিয়ে
+            // দেনা/পাওনা টাইপ অনুযায়ী পাল্টানো হতো, যা মাঝে মাঝে ফাঁকা/সাদা দেখাচ্ছিল
             ((TextView) card.findViewById(R.id.tvBannerInitial)).setText(p.getInitial());
             ((TextView) card.findViewById(R.id.tvBannerName)).setText(
                     p.getName().isEmpty() ? "নাম নেই" : p.getName());
@@ -273,7 +275,6 @@ public class DenaPawnaFragment extends Fragment {
                     s.unpaidCount + " টি অপরিশোধিত এন্ট্রি" + (p.hasRelation() ? " • " + p.getRelation() : ""));
 
             boolean isDena = s.isNetDena();
-            root.setBackgroundResource(isDena ? R.drawable.bg_type_active_dena : R.drawable.bg_type_active_pabona);
             ((TextView) card.findViewById(R.id.tvBannerLabel)).setText(isDena ? "আপনি দেবেন" : "আপনি পাবেন");
             double amount = s.getNetAmount() > 0 ? s.getNetAmount() : Math.max(s.unpaidDena, s.unpaidPabona);
             ((TextView) card.findViewById(R.id.tvBannerAmount)).setText(DatabaseManager.formatAmount(amount));

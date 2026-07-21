@@ -49,15 +49,18 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="14dp"/>
+            android:layout_height="8dp"/>
 
-        <!-- অটো-স্লাইড ব্যানার — কার টাকা এখনও পরিশোধ হয়নি, রঙিনভাবে পালা করে দেখায় -->
+        <!-- অটো-স্লাইড ব্যানার — কার টাকা এখনও পরিশোধ হয়নি, একটাই স্থির সুন্দর রঙে দেখায়।
+             background এখানেও (bg_debt_banner_solid) সেফটি-নেট হিসেবে সেট করা, যাতে ভুলবশত
+             ভেতরের কার্ড না বসলেও এই কন্টেইনারটা কখনও ফাঁকা/সাদা দেখাবে না। -->
         <FrameLayout
             android:id="@+id/bannerContainer"
             android:layout_width="match_parent"
             android:layout_height="78dp"
             android:layout_marginHorizontal="18dp"
-            android:layout_marginBottom="14dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_debt_banner_solid"
             android:visibility="gone">
 
             <ViewFlipper

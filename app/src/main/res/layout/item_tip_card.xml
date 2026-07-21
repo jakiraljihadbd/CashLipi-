@@ -44,13 +44,8 @@
 
     <TextView
         android:id="@+id/tipAction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AI"
-        android:textSize="10sp" android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:background="@drawable/bg_ai_pill"
-        android:paddingHorizontal="10dp" android:paddingVertical="5dp"
-        android:layout_marginStart="10dp"/>
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"/>
 
 </LinearLayout>

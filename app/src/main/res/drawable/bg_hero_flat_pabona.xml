@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- হিরো কার্ড ফ্ল্যাট/স্কয়ার ভার্সন — গ্র্যাডিয়েন্টের বদলে একরঙা, কম রাউন্ড কর্নার। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/pabonaColor"/>
+    <corners android:radius="8dp"/>
+</shape>

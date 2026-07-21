@@ -166,6 +166,7 @@
                 android:src="@drawable/ic_pdf"
                 android:scaleType="centerInside"
                 android:background="@drawable/ie_icon_btn_income"
+                app:tint="@color/ieWhite"
                 android:elevation="3dp"
                 android:clickable="true"
                 android:focusable="true"/>

@@ -679,6 +679,7 @@
     <color name="ieDarkText">#1A1A1A</color>
     <color name="ieEditBlue">#1565C0</color>
     <color name="ieEditBlueLightBg">#E3F2FD</color>
+    <color name="ieNoticeTextLight">#5B94D6</color>
 
     <!-- ══════════════════════════════════════════════════════════
          Material 3 — Home screen tonal container roles (Light)

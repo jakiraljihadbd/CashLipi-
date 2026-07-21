@@ -1,5 +1,6 @@
 package com.jrappspot.cashlipi.fragments;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,6 +55,9 @@ public class HomeFragment extends Fragment {
     private ViewPager2 tipPager;
     private LinearLayout tipDots;
     private TipPagerAdapter tipAdapter;
+    private final List<View> tipSegmentFills = new ArrayList<>();
+    private ObjectAnimator tipSegmentAnimator;
+    private static final int TIP_SLIDE_DURATION_MS = 3000;
 
     // ── ব্যালেন্স দেখা/লুকানো (চোখ আইকন) ───────────────────────────────
     private ImageView balanceEyeToggle;
@@ -101,6 +106,9 @@ public class HomeFragment extends Fragment {
     public void onPause() {
         super.onPause();
         tipHandler.removeCallbacksAndMessages(null);
+        if (tipSegmentAnimator != null) {
+            tipSegmentAnimator.cancel();
+        }
     }
 
     private void initViews(View view) {
@@ -205,24 +213,38 @@ public class HomeFragment extends Fragment {
                     R.drawable.emoji_bulb, R.drawable.bg_tip_card_purple));
 
         tipDots.removeAllViews();
+        tipSegmentFills.clear();
         for (int i = 0; i < tips.size(); i++) {
-            View dot = new View(requireContext());
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(5, 0, 5, 0);
-            dot.setLayoutParams(lp);
-            dot.setBackgroundResource(R.drawable.dot_inactive);
-            tipDots.addView(dot);
+            FrameLayout track = new FrameLayout(requireContext());
+            LinearLayout.LayoutParams trackLp = new LinearLayout.LayoutParams(
+                    0, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+            trackLp.setMarginEnd(i == tips.size() - 1 ? 0 : dp(4));
+            track.setLayoutParams(trackLp);
+            track.setBackgroundResource(R.drawable.bg_tip_segment_track);
+
+            View fill = new View(requireContext());
+            fill.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            fill.setBackgroundResource(R.drawable.bg_tip_segment_fill);
+            fill.setPivotX(0f);
+            fill.setScaleX(0f);
+
+            track.addView(fill);
+            tipDots.addView(track);
+            tipSegmentFills.add(fill);
         }
 
         tipCount = tips.size();
         tipAdapter = new TipPagerAdapter(tips);
         tipPager.setAdapter(tipAdapter);
         tipPager.setOffscreenPageLimit(1);
-        // পাতার মাঝে সামান্য পিক-আ-বু ও ফেড — Material 3 style ট্রানজিশন
+        // পাতার মাঝে মসৃণ ফেড + স্কেল + প্যারালাক্স — Material 3 style ট্রানজিশন
         tipPager.setPageTransformer((page, position) -> {
-            page.setAlpha(0.55f + (1 - Math.abs(position)) * 0.45f);
-            page.setScaleY(0.94f + (1 - Math.abs(position)) * 0.06f);
+            float abs = Math.abs(position);
+            page.setAlpha(0.45f + (1 - abs) * 0.55f);
+            page.setScaleY(0.92f + (1 - abs) * 0.08f);
+            page.setScaleX(0.96f + (1 - abs) * 0.04f);
+            page.setTranslationX(-position * page.getWidth() * 0.12f);
         });
         tipPager.unregisterOnPageChangeCallback(pageChangeCallback);
         tipPager.registerOnPageChangeCallback(pageChangeCallback);
@@ -263,10 +285,30 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateDots(int activeIndex) {
-        for (int i = 0; i < tipDots.getChildCount(); i++) {
-            tipDots.getChildAt(i).setBackgroundResource(
-                    i == activeIndex ? R.drawable.dot_active : R.drawable.dot_inactive);
+        if (tipSegmentAnimator != null) {
+            tipSegmentAnimator.cancel();
+            tipSegmentAnimator = null;
         }
+        for (int i = 0; i < tipSegmentFills.size(); i++) {
+            View fill = tipSegmentFills.get(i);
+            if (i < activeIndex) {
+                fill.setScaleX(1f);
+            } else if (i > activeIndex) {
+                fill.setScaleX(0f);
+            }
+        }
+        if (activeIndex >= 0 && activeIndex < tipSegmentFills.size()) {
+            View activeFill = tipSegmentFills.get(activeIndex);
+            activeFill.setScaleX(0f);
+            tipSegmentAnimator = ObjectAnimator.ofFloat(activeFill, View.SCALE_X, 0f, 1f);
+            tipSegmentAnimator.setDuration(TIP_SLIDE_DURATION_MS);
+            tipSegmentAnimator.setInterpolator(new LinearInterpolator());
+            tipSegmentAnimator.start();
+        }
+    }
+
+    private int dp(int value) {
+        return (int) (value * getResources().getDisplayMetrics().density);
     }
 
     // ── AUTO-SLIDE — প্রতি ৩ সেকেন্ডে পরের পেজে যায় (হাত দিয়ে সোয়াইপ করলেও চলবে) ────
@@ -279,9 +321,9 @@ public class HomeFragment extends Fragment {
                     int next = (tipPager.getCurrentItem() + 1) % tipCount;
                     tipPager.setCurrentItem(next, true);
                 }
-                tipHandler.postDelayed(this, 3000);
+                tipHandler.postDelayed(this, TIP_SLIDE_DURATION_MS);
             }
-        }, 3000);
+        }, TIP_SLIDE_DURATION_MS);
     }
 
     // ── CLICK LISTENERS ──────────────────────────────────────────────

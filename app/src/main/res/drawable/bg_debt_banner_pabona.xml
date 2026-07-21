@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- দেনা-পাওনা ব্যানারের "আপনি পাবেন" (পাওনা) কার্ডের রং — নীল গ্র্যাডিয়েন্ট,
+     pabonaActiveGradStart/End-এর সাথে মিলিয়ে, যাতে পুরো অ্যাপে পাওনার রং একই থাকে। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="@color/pabonaActiveGradStart" android:endColor="@color/pabonaActiveGradEnd" android:angle="135"/>
+    <corners android:radius="12dp"/>
+</shape>

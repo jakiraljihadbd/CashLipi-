@@ -18,21 +18,21 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- হেডার -->
+            <!-- হেডার — চিকন বার, অ্যাপের মূল গোলাপি রঙে -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:background="@drawable/bg_header_ledger"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="12dp">
+                android:background="@drawable/bg_header_add_person_pink"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="6dp">
 
                 <ImageView
                     android:id="@+id/btnBack"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:padding="10dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:padding="9dp"
                     android:src="@drawable/ic_arrow_back"
                     app:tint="@color/white"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -45,7 +45,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
                     android:text="নতুন ব্যক্তি"
-                    android:textSize="19sp"
+                    android:textSize="16.5sp"
                     android:textStyle="bold"
                     android:textColor="@color/white"/>
             </LinearLayout>

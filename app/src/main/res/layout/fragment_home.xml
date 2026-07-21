@@ -27,28 +27,23 @@
         <!-- ══════════════════════════════
              AUTO-SLIDING AI TIP CAROUSEL — Material 3 ViewPager2 (হাত দিয়ে সোয়াইপ + অটো-স্লাইড)
         ══════════════════════════════ -->
-        <FrameLayout
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/tipPager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp">
+            android:layout_height="80dp"
+            android:layout_marginTop="4dp"/>
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/tipPager"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"/>
-
-            <!-- dot indicators, overlaid bottom-center -->
-            <LinearLayout
-                android:id="@+id/tipDots"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:visibility="gone"/>
-        </FrameLayout>
+        <!-- স্লাইড প্রোগ্রেস — Instagram-story-style সেগমেন্ট বার, ভরাট হয়ে পরের স্লাইডে বদলায় -->
+        <LinearLayout
+            android:id="@+id/tipDots"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"/>
 
         <!-- ══════════════════════════════
              BALANCE CARD (PINK)
@@ -170,7 +165,7 @@
                         <TextView
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="আয়"
-                            android:textSize="13sp" android:textStyle="bold"
+                            android:textSize="14.5sp" android:textStyle="bold"
                             android:textColor="@color/m3OnIncomeContainer"
                             android:alpha="0.8"/>
                         <TextView
@@ -206,7 +201,7 @@
                         <TextView
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="ব্যয়"
-                            android:textSize="13sp" android:textStyle="bold"
+                            android:textSize="14.5sp" android:textStyle="bold"
                             android:textColor="@color/m3OnExpenseContainer"
                             android:alpha="0.8"/>
                         <TextView
@@ -256,7 +251,7 @@
                         <TextView
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="দেনা"
-                            android:textSize="12.5sp" android:textStyle="bold"
+                            android:textSize="13.5sp" android:textStyle="bold"
                             android:textColor="@color/m3OnDenaContainer"
                             android:alpha="0.8"/>
                         <TextView
@@ -296,7 +291,7 @@
                         <TextView
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="পাওনা"
-                            android:textSize="12.5sp" android:textStyle="bold"
+                            android:textSize="13.5sp" android:textStyle="bold"
                             android:textColor="@color/m3OnPabonaContainer"
                             android:alpha="0.8"/>
                         <TextView
@@ -335,7 +330,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="সঞ্চয়"
-                    android:textSize="14.5sp" android:textStyle="bold"
+                    android:textSize="15.5sp" android:textStyle="bold"
                     android:textColor="@color/m3OnSavingsContainer"
                     android:alpha="0.85"
                     android:letterSpacing="0.04"/>
@@ -360,7 +355,7 @@
             android:gravity="center_vertical"
             android:background="@drawable/bg_notice_bar"
             android:paddingHorizontal="14dp"
-            android:paddingVertical="11dp"
+            android:paddingVertical="6dp"
             android:layout_marginBottom="10dp">
             <ImageView
                 android:layout_width="18dp" android:layout_height="18dp"
@@ -394,7 +389,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="6dp">
 
             <!-- 1. AI Chat -->
             <LinearLayout
@@ -403,25 +398,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="10dp"
+                android:paddingVertical="8dp"
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="44dp" android:layout_height="44dp"
+                    android:layout_width="48dp" android:layout_height="48dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F5F6FF"
-                    android:layout_marginBottom="6dp">
+                    android:layout_marginBottom="4dp">
                     <ImageView
-                        android:layout_width="26dp" android:layout_height="26dp"
+                        android:layout_width="30dp" android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_robot"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="AI Chat"
-                    android:textSize="11sp" android:textStyle="bold"
+                    android:textSize="12.5sp" android:textStyle="bold"
                     android:maxLines="1" android:ellipsize="end"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
@@ -433,25 +428,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="10dp"
+                android:paddingVertical="8dp"
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="44dp" android:layout_height="44dp"
+                    android:layout_width="48dp" android:layout_height="48dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F4F9FF"
-                    android:layout_marginBottom="6dp">
+                    android:layout_marginBottom="4dp">
                     <ImageView
-                        android:layout_width="26dp" android:layout_height="26dp"
+                        android:layout_width="30dp" android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_chart_up"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="এনালাইসিস"
-                    android:textSize="11sp" android:textStyle="bold"
+                    android:textSize="12.5sp" android:textStyle="bold"
                     android:maxLines="1" android:ellipsize="end"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
@@ -463,24 +458,24 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="10dp"
+                android:paddingVertical="8dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="44dp" android:layout_height="44dp"
+                    android:layout_width="48dp" android:layout_height="48dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#FFFDF2"
-                    android:layout_marginBottom="6dp">
+                    android:layout_marginBottom="4dp">
                     <ImageView
-                        android:layout_width="26dp" android:layout_height="26dp"
+                        android:layout_width="30dp" android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_ledger"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="বাকির খাতা"
-                    android:textSize="11sp" android:textStyle="bold"
+                    android:textSize="12.5sp" android:textStyle="bold"
                     android:maxLines="1" android:ellipsize="end"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
@@ -498,25 +493,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="10dp"
+                android:paddingVertical="8dp"
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="44dp" android:layout_height="44dp"
+                    android:layout_width="48dp" android:layout_height="48dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F5FFFD"
-                    android:layout_marginBottom="6dp">
+                    android:layout_marginBottom="4dp">
                     <ImageView
-                        android:layout_width="26dp" android:layout_height="26dp"
+                        android:layout_width="30dp" android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_abacus"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="ক্যালকুলেটর"
-                    android:textSize="11sp" android:textStyle="bold"
+                    android:textSize="12.5sp" android:textStyle="bold"
                     android:maxLines="1" android:ellipsize="end"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
@@ -528,25 +523,25 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="10dp"
+                android:paddingVertical="8dp"
                 android:layout_marginEnd="6dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="44dp" android:layout_height="44dp"
+                    android:layout_width="48dp" android:layout_height="48dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#FEF6FB"
-                    android:layout_marginBottom="6dp">
+                    android:layout_marginBottom="4dp">
                     <ImageView
-                        android:layout_width="26dp" android:layout_height="26dp"
+                        android:layout_width="30dp" android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_memo"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="নোট"
-                    android:textSize="11sp" android:textStyle="bold"
+                    android:textSize="12.5sp" android:textStyle="bold"
                     android:maxLines="1" android:ellipsize="end"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>
@@ -558,24 +553,24 @@
                 android:layout_weight="1"
                 android:orientation="vertical" android:gravity="center"
                 android:background="@drawable/bg_menu_item_card"
-                android:paddingVertical="10dp"
+                android:paddingVertical="8dp"
                 android:clickable="true" android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
                 android:elevation="1dp">
                 <FrameLayout
-                    android:layout_width="44dp" android:layout_height="44dp"
+                    android:layout_width="48dp" android:layout_height="48dp"
                     android:background="@drawable/bg_menu_icon_circle"
                     android:backgroundTint="#F2FEF8"
-                    android:layout_marginBottom="6dp">
+                    android:layout_marginBottom="4dp">
                     <ImageView
-                        android:layout_width="26dp" android:layout_height="26dp"
+                        android:layout_width="30dp" android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:src="@drawable/emoji_bank"/>
                 </FrameLayout>
                 <TextView
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:text="একাউন্টিং"
-                    android:textSize="11sp" android:textStyle="bold"
+                    android:textSize="12.5sp" android:textStyle="bold"
                     android:maxLines="1" android:ellipsize="end"
                     android:textColor="@color/textPrimary"/>
             </LinearLayout>

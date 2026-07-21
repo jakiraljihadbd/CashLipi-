@@ -701,9 +701,9 @@
     <color name="m3PabonaContainer">#8FB0FF</color>
     <color name="m3OnPabonaContainer">#0B3A85</color>
 
-    <color name="m3SavingsContainer">#D19CFF</color>
+    <color name="m3SavingsContainer">#F8CFE3</color>
     <color name="m3OnSavingsContainer">#4E1F8F</color>
 
-    <color name="m3MenuCardSurface">#FFFFFF</color>
+    <color name="m3MenuCardSurface">#F8FAFD</color>
     <color name="m3MenuCardOutline">#E1E7F0</color>
 </resources>

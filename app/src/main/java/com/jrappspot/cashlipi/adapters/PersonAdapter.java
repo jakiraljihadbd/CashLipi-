@@ -133,8 +133,12 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
             h.tvTxnCount.setText(stat.totalCount + " টি লেনদেন");
             if (stat.hasUnpaid()) {
                 h.tvUnpaidBadge.setVisibility(View.VISIBLE);
-                h.tvUnpaidBadge.setBackgroundResource(R.drawable.bg_badge_unpaid);
-                h.tvUnpaidBadge.setTextColor(ctx.getResources().getColor(R.color.denaActiveGradEnd));
+                // নেট বকেয়া দেনা না পাওনা তার উপর ভিত্তি করে ব্যাজের রং বদলায় — আগে সবসময়
+                // দেনার (অ্যাম্বার) রং দেখাতো, এখন পাওনা বেশি হলে নীল রং দেখাবে।
+                boolean netDena = stat.isNetDena();
+                h.tvUnpaidBadge.setBackgroundResource(netDena ? R.drawable.bg_badge_unpaid : R.drawable.bg_badge_unpaid_pabona);
+                h.tvUnpaidBadge.setTextColor(ctx.getResources().getColor(
+                        netDena ? R.color.denaActiveGradEnd : R.color.pabonaActiveGradEnd));
                 h.tvUnpaidBadge.setText(stat.unpaidCount + " টি অপরিশোধিত");
             } else {
                 h.tvUnpaidBadge.setVisibility(View.VISIBLE);

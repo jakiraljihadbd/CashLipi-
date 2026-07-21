@@ -6,9 +6,4 @@
             <corners android:radius="18dp"/>
         </shape>
     </item>
-    <item android:left="260dp" android:top="-18dp" android:bottom="-18dp" android:right="-18dp">
-        <shape android:shape="oval">
-            <solid android:color="#1AFFFFFF"/>
-        </shape>
-    </item>
 </layer-list>

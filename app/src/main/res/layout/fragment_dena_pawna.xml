@@ -15,20 +15,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- চিকন হেডার — অ্যাপ বার কালারে, একটাই লাইনে টাইটেল + লেনদেন সংখ্যা -->
+        <!-- আরও চিকন হেডার — অ্যাপ বার কালারে, একই লাইনে ব্যক্তি সংখ্যা + মোট লেনদেন (ছোট করে) -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="42dp"
+            android:layout_height="32dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:background="@color/m3HomeBalanceContainer"
             android:paddingHorizontal="18dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvHeaderTitle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="দেনা পাওনা ব্যক্তি ও প্রতিষ্ঠান"
-                android:textSize="14sp"
+                android:layout_weight="1"
+                android:text="ব্যক্তি ও প্রতিষ্ঠান"
+                android:textSize="12.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:maxLines="1"
@@ -36,12 +38,11 @@
 
             <TextView
                 android:id="@+id/tvPersonCount"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="6dp"
-                android:text="যোগ নেই"
-                android:textSize="12sp"
+                android:text="মোট লেনদেন নেই"
+                android:textSize="10.5sp"
                 android:textColor="#D9FFFFFF"
                 android:maxLines="1"
                 android:ellipsize="end"/>
@@ -67,7 +68,7 @@
                 android:id="@+id/debtFlipper"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:flipInterval="3000"
+                android:flipInterval="5000"
                 android:inAnimation="@anim/slide_in_right"
                 android:outAnimation="@anim/slide_out_left"/>
 

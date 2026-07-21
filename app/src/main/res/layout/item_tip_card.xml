@@ -9,14 +9,13 @@
     android:paddingVertical="12dp">
 
     <FrameLayout
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:background="@drawable/bg_tip_icon_circle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginEnd="12dp">
         <ImageView
             android:id="@+id/tipIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:layout_gravity="center"
             android:src="@drawable/emoji_bulb"/>
     </FrameLayout>
@@ -28,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="আজই সঞ্চয় শুরু করুন"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
         android:maxLines="2"

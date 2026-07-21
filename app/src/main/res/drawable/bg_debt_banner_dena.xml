@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- দেনা-পাওনা ব্যানারের "আপনি দেবেন" (দেনা) কার্ডের রং — অ্যাম্বার গ্র্যাডিয়েন্ট,
+     denaActiveGradStart/End-এর সাথে মিলিয়ে, যাতে পুরো অ্যাপে দেনার রং একই থাকে। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="@color/denaActiveGradStart" android:endColor="@color/denaActiveGradEnd" android:angle="135"/>
+    <corners android:radius="12dp"/>
+</shape>

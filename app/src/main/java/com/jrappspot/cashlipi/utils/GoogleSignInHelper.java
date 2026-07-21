@@ -19,7 +19,7 @@ public class GoogleSignInHelper {
     private static final String TAG = "GoogleSignInHelper";
     //  FIX: Web Client ID (OAuth 2.0 → Web application type থেকে নিন)
     private static final String WEB_CLIENT_ID =
-        "736034334486-gu4keqsupj6v7tfeqproacubfvrjfj73.apps.googleusercontent.com";
+        "65351462715-dhm0a8k60fd356ifn6sq40m8fa00u99c.apps.googleusercontent.com";
 
     public interface SignInCallback {
         void onSuccess(String name, String email, String photoUrl);

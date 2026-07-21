@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- নতুন ব্যক্তি যোগ পেজের হেডার — অ্যাপের মূল গোলাপি (brandPink) রঙে, নিচের কিনারা গোল। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="@color/brandPink" android:endColor="@color/brandPinkDeep" android:angle="135"/>
+    <corners android:bottomLeftRadius="24dp" android:bottomRightRadius="24dp"/>
+</shape>

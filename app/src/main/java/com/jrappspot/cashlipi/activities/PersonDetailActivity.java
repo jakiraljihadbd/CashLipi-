@@ -78,7 +78,7 @@ public class PersonDetailActivity extends AppCompatActivity {
     private androidx.cardview.widget.CardView heroCard;
     private LinearLayout heroCardInner, emptyLedgerState, personSearchBox, personToolsRow;
     private TextView tvHeroLabel, tvHeroAmount, tvHeroSub;
-    private ImageView btnShareStatement, ivClearPersonSearch, btnToggleView;
+    private ImageView btnShareStatement, ivClearPersonSearch, btnToggleView, btnExportPdf;
     private EditText etPersonLedgerSearch;
     private HorizontalScrollView personFilterScroll;
     private TextView chipPersonAll, chipPersonUnpaid, chipPersonPaid;
@@ -133,6 +133,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         chipPersonUnpaid      = findViewById(R.id.chipPersonUnpaid);
         chipPersonPaid        = findViewById(R.id.chipPersonPaid);
         btnToggleView         = findViewById(R.id.btnToggleView);
+        btnExportPdf          = findViewById(R.id.btnExportPdf);
 
         rvPersonLedger      = findViewById(R.id.rvPersonLedger);
         tableViewContainer  = findViewById(R.id.tableViewContainer);
@@ -161,6 +162,8 @@ public class PersonDetailActivity extends AppCompatActivity {
             btnToggleView.setImageResource("card".equals(viewMode) ? R.drawable.ic_view_grid : R.drawable.ic_nav_dena_pawna);
             applyFiltersAndRender();
         });
+        // PDF এক্সপোর্ট বাটন — আপাতত শুধু UI, ফাংশন পরে যোগ হবে
+        btnExportPdf.setOnClickListener(v -> Toast.makeText(this, "PDF এক্সপোর্ট শীঘ্রই আসছে", Toast.LENGTH_SHORT).show());
 
         etPersonLedgerSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
@@ -370,6 +373,8 @@ public class PersonDetailActivity extends AppCompatActivity {
             TextView tvChip = rowView.findViewById(R.id.tvTRowChip);
             TextView tvDena = rowView.findViewById(R.id.tvTRowDena);
             TextView tvPabona = rowView.findViewById(R.id.tvTRowPabona);
+            View colorBar = rowView.findViewById(R.id.tvTRowColorBar);
+            colorBar.setBackgroundColor(ContextCompat.getColor(this, isDena ? R.color.denaColor : R.color.pabonaColor));
 
             String note = e.getNote() != null && !e.getNote().isEmpty() ? e.getNote()
                     : (e.getCategory() != null ? e.getCategory() : "");
@@ -403,11 +408,8 @@ public class PersonDetailActivity extends AppCompatActivity {
                 }
             }
 
-            rowView.setOnClickListener(v -> TransactionSheetHelper.showLedgerSheet(this, db, e, () -> {
-                loadLedger();
-                com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
-                FirestoreSyncManager.getInstance(this).uploadAllData(null);
-            }));
+            // ছক ভিউতে এন্ট্রি ট্যাপ করে এডিট করা যাবে না — এটা শুধু দেখার জন্য (রিড-অনলি)।
+            // এডিট করতে হলে কার্ড ভিউতে গিয়ে করতে হবে।
 
             tableRowsContainer.addView(rowView);
         }

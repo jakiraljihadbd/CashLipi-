@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- সক্রিয় সেগমেন্টের ফিল — লোডিং হয়ে পরিবর্তনের অ্যানিমেশন এখান থেকে চলে -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/ieEditBlue"/>
+    <corners android:radius="3dp"/>
+</shape>

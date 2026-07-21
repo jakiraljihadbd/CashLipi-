@@ -61,7 +61,7 @@ public class DenaPawnaFragment extends Fragment {
     private DatabaseManager db;
     private RecyclerView rvList;
     private LinearLayout emptyState, noResultState;
-    private TextView tvPersonCount;
+    private TextView tvHeaderTitle, tvPersonCount;
     private EditText etSearch;
     private ImageView ivClearSearch;
     private FrameLayout btnFilter, btnThemeChange;
@@ -104,6 +104,7 @@ public class DenaPawnaFragment extends Fragment {
         rvList = root.findViewById(R.id.rvPersonList);
         emptyState = root.findViewById(R.id.emptyState);
         noResultState = root.findViewById(R.id.noResultState);
+        tvHeaderTitle = root.findViewById(R.id.tvHeaderTitle);
         tvPersonCount = root.findViewById(R.id.tvPersonCount);
         etSearch = root.findViewById(R.id.etSearch);
         ivClearSearch = root.findViewById(R.id.ivClearSearch);
@@ -220,12 +221,11 @@ public class DenaPawnaFragment extends Fragment {
         int totalTxn = 0;
         for (PersonStat s : statsMap.values()) totalTxn += s.totalCount;
 
-        if (allPersons.isEmpty()) {
-            tvPersonCount.setText("যোগ নেই");
-        } else if (totalTxn == 0) {
-            tvPersonCount.setText("· কোনো লেনদেন নেই");
+        tvHeaderTitle.setText("ব্যক্তি ও প্রতিষ্ঠান: " + allPersons.size());
+        if (totalTxn == 0) {
+            tvPersonCount.setText("মোট লেনদেন নেই");
         } else {
-            tvPersonCount.setText("· " + totalTxn + " টা লেনদেন");
+            tvPersonCount.setText("মোট লেনদেন: " + totalTxn);
         }
 
         setupBanner();
@@ -265,16 +265,19 @@ public class DenaPawnaFragment extends Fragment {
             if (s == null) s = new PersonStat();
 
             View card = inflater.inflate(R.layout.item_debt_banner, debtFlipper, false);
-            // bannerCardRoot-এর background এখন item_debt_banner.xml-এই স্থায়ীভাবে সেট করা (এক
-            // রং, ইনডিগো গ্রেডিয়েন্ট) — আগে এখানে রানটাইমে setBackgroundResource() দিয়ে
-            // দেনা/পাওনা টাইপ অনুযায়ী পাল্টানো হতো, যা মাঝে মাঝে ফাঁকা/সাদা দেখাচ্ছিল
+            // bannerCardRoot-এর background XML-এ ডিফল্ট (bg_debt_banner_solid) হিসেবে থাকে,
+            // তারপর এখানে ইনফ্লেট হওয়ার সাথে সাথেই দেনা/পাওনা অনুযায়ী নির্দিষ্ট রং বসানো
+            // হয় — তাই কখনও ফাঁকা/সাদা দেখা যায় না, view যোগ হওয়ার আগেই রং ঠিক থাকে।
+            boolean isDena = s.isNetDena();
+            View bannerCardRoot = card.findViewById(R.id.bannerCardRoot);
+            bannerCardRoot.setBackgroundResource(isDena ? R.drawable.bg_debt_banner_dena : R.drawable.bg_debt_banner_pabona);
+
             ((TextView) card.findViewById(R.id.tvBannerInitial)).setText(p.getInitial());
             ((TextView) card.findViewById(R.id.tvBannerName)).setText(
                     p.getName().isEmpty() ? "নাম নেই" : p.getName());
             ((TextView) card.findViewById(R.id.tvBannerSub)).setText(
                     s.unpaidCount + " টি অপরিশোধিত এন্ট্রি" + (p.hasRelation() ? " • " + p.getRelation() : ""));
 
-            boolean isDena = s.isNetDena();
             ((TextView) card.findViewById(R.id.tvBannerLabel)).setText(isDena ? "আপনি দেবেন" : "আপনি পাবেন");
             double amount = s.getNetAmount() > 0 ? s.getNetAmount() : Math.max(s.unpaidDena, s.unpaidPabona);
             ((TextView) card.findViewById(R.id.tvBannerAmount)).setText(DatabaseManager.formatAmount(amount));
@@ -314,9 +317,9 @@ public class DenaPawnaFragment extends Fragment {
                     debtFlipper.showNext();
                     updateBannerDots(debtFlipper.getDisplayedChild());
                 }
-                bannerHandler.postDelayed(this, 3000);
+                bannerHandler.postDelayed(this, 5000);
             }
-        }, 3000);
+        }, 5000);
     }
 
     private void openPerson(Person person) {

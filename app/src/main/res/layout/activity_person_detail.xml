@@ -364,6 +364,18 @@
             android:background="@drawable/bg_card_white"
             android:clickable="true"
             android:focusable="true"/>
+
+        <ImageView
+            android:id="@+id/btnExportPdf"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="6dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_pdf"
+            app:tint="@color/textPrimary"
+            android:background="@drawable/bg_card_white"
+            android:clickable="true"
+            android:focusable="true"/>
     </LinearLayout>
 
     <!-- কার্ড-লিস্ট ভিউ (ডিফল্ট) -->
@@ -391,7 +403,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="14dp"
             android:paddingVertical="9dp"
-            android:background="@color/dividerColor">
+            android:background="@drawable/bg_table_header_grid">
 
             <TextView
                 android:layout_width="0dp"
@@ -402,20 +414,33 @@
                 android:textStyle="bold"
                 android:textColor="@color/textSecondary"/>
 
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/dividerColor"/>
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginStart="8dp"
                 android:text="দেনা"
                 android:gravity="end"
                 android:textSize="11.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/denaColor"/>
 
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:background="@color/dividerColor"/>
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginStart="8dp"
                 android:text="পাওনা"
                 android:gravity="end"
                 android:textSize="11.5sp"
@@ -454,21 +479,34 @@
                 android:textStyle="bold"
                 android:textColor="@color/textPrimary"/>
 
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/dividerColor"/>
+
             <TextView
                 android:id="@+id/tvTableTotalDena"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginStart="8dp"
                 android:gravity="end"
                 android:textSize="12.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/denaColor"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:background="@color/dividerColor"/>
 
             <TextView
                 android:id="@+id/tvTableTotalPabona"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginStart="8dp"
                 android:gravity="end"
                 android:textSize="12.5sp"
                 android:textStyle="bold"

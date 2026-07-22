@@ -5,9 +5,9 @@
             <solid android:color="@color/cardBg"/>
         </shape>
     </item>
-    <item android:gravity="bottom" android:height="1dp">
+    <item android:gravity="bottom" android:height="1.75dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/dividerColor"/>
+            <solid android:color="@color/textSecondary"/>
         </shape>
     </item>
 </layer-list>

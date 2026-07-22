@@ -153,6 +153,9 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (e.isPaid()) {
             h.tvRowPaidBadge.setVisibility(View.VISIBLE);
+            // পাওনা পরিশোধ হলে "পেলাম" (টাকা পাওয়া হয়েছে), দেনা পরিশোধ হলে "দিলাম" (টাকা দেওয়া হয়েছে) —
+            // উপরের tvRowType-এর দেনা/পাওনা লেবেল অপরিবর্তিত থাকে, শুধু এই স্ট্যাটাস ব্যাজ পাল্টায়
+            h.tvRowPaidBadge.setText(isDena ? " দিলাম" : " পেলাম");
             h.tvRowAmount.setPaintFlags(h.tvRowAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             h.tvRowBalanceChip.setVisibility(View.GONE);
         } else {

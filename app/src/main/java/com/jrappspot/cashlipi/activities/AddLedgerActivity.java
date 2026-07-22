@@ -105,13 +105,13 @@ public class AddLedgerActivity extends BaseActivity {
         if ("dena".equals(selectedType)) {
             btnTypeDena.setBackground(getResources().getDrawable(R.drawable.bg_type_active_dena));
             btnTypeDena.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.white));
-            btnTypePabona.setBackground(getResources().getDrawable(R.drawable.bg_type_inactive));
-            btnTypePabona.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.textSecondary));
+            btnTypePabona.setBackground(getResources().getDrawable(R.drawable.bg_type_inactive_pabona));
+            btnTypePabona.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.pabonaColor));
         } else {
             btnTypePabona.setBackground(getResources().getDrawable(R.drawable.bg_type_active_pabona));
             btnTypePabona.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.white));
-            btnTypeDena.setBackground(getResources().getDrawable(R.drawable.bg_type_inactive));
-            btnTypeDena.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.textSecondary));
+            btnTypeDena.setBackground(getResources().getDrawable(R.drawable.bg_type_inactive_dena));
+            btnTypeDena.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.denaColor));
         }
     }
 

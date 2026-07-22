@@ -12,7 +12,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -80,8 +79,8 @@ public class PersonDetailActivity extends AppCompatActivity {
     private TextView tvHeroLabel, tvHeroAmount, tvHeroSub;
     private ImageView btnShareStatement, ivClearPersonSearch, btnToggleView, btnExportPdf;
     private EditText etPersonLedgerSearch;
-    private HorizontalScrollView personFilterScroll;
-    private TextView chipPersonAll, chipPersonUnpaid, chipPersonPaid;
+    private ImageView btnPersonFilter;
+    private View personFilterActiveDot;
     private TextView tvEmptyLedgerTitle, tvEmptyLedgerSub;
     private RecyclerView rvPersonLedger;
     private LinearLayout tableViewContainer, tableRowsContainer;
@@ -128,10 +127,8 @@ public class PersonDetailActivity extends AppCompatActivity {
         personSearchBox       = findViewById(R.id.personSearchBox);
         etPersonLedgerSearch  = findViewById(R.id.etPersonLedgerSearch);
         ivClearPersonSearch   = findViewById(R.id.ivClearPersonSearch);
-        personFilterScroll    = findViewById(R.id.personFilterScroll);
-        chipPersonAll         = findViewById(R.id.chipPersonAll);
-        chipPersonUnpaid      = findViewById(R.id.chipPersonUnpaid);
-        chipPersonPaid        = findViewById(R.id.chipPersonPaid);
+        btnPersonFilter       = findViewById(R.id.btnPersonFilter);
+        personFilterActiveDot = findViewById(R.id.personFilterActiveDot);
         btnToggleView         = findViewById(R.id.btnToggleView);
         btnExportPdf          = findViewById(R.id.btnExportPdf);
 
@@ -176,9 +173,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         });
         ivClearPersonSearch.setOnClickListener(v -> etPersonLedgerSearch.setText(""));
 
-        chipPersonAll.setOnClickListener(v -> setPersonFilter("all"));
-        chipPersonUnpaid.setOnClickListener(v -> setPersonFilter("unpaid"));
-        chipPersonPaid.setOnClickListener(v -> setPersonFilter("paid"));
+        btnPersonFilter.setOnClickListener(this::showPersonFilterMenu);
     }
 
     @Override
@@ -286,17 +281,25 @@ public class PersonDetailActivity extends AppCompatActivity {
         applyFiltersAndRender();
     }
 
-    /** ফিল্টার চিপ (সব/অপরিশোধিত/পরিশোধিত) নির্বাচন করলে তার স্টাইল আপডেট করে তালিকা রিফ্রেশ করে। */
+    /** ফিল্টার আইকনে ট্যাপ করলে সব/অপরিশোধিত/পরিশোধিত অপশনসহ পপ-আপ মেনু দেখায়। */
+    private void showPersonFilterMenu(View anchor) {
+        android.widget.PopupMenu menu = new android.widget.PopupMenu(this, anchor);
+        menu.getMenu().add(0, 0, 0, "সব");
+        menu.getMenu().add(0, 1, 1, "অপরিশোধিত");
+        menu.getMenu().add(0, 2, 2, "পরিশোধিত");
+        menu.setOnMenuItemClickListener(item -> {
+            String[] keys = {"all", "unpaid", "paid"};
+            setPersonFilter(keys[item.getItemId()]);
+            return true;
+        });
+        menu.show();
+    }
+
+    /** ফিল্টার নির্বাচন করলে সেটা মনে রাখে ও তালিকা রিফ্রেশ করে; ডিফল্ট ("সব") ছাড়া অন্য কিছু
+     *  বাছাই করা থাকলে ফিল্টার আইকনের কোণায় একটা ছোট ডট দেখায়, যাতে বোঝা যায় ফিল্টার সক্রিয়। */
     private void setPersonFilter(String filter) {
         currentFilter = filter;
-        TextView[] chips = {chipPersonAll, chipPersonUnpaid, chipPersonPaid};
-        String[] keys = {"all", "unpaid", "paid"};
-        for (int i = 0; i < chips.length; i++) {
-            boolean selected = keys[i].equals(filter);
-            chips[i].setBackgroundResource(selected ? R.drawable.bg_chip_selected : R.drawable.bg_chip_unselected);
-            chips[i].setTextColor(selected ? ContextCompat.getColor(this, R.color.white)
-                    : ContextCompat.getColor(this, R.color.chipUnselectedText));
-        }
+        personFilterActiveDot.setVisibility("all".equals(filter) ? View.GONE : View.VISIBLE);
         applyFiltersAndRender();
     }
 
@@ -386,7 +389,9 @@ public class PersonDetailActivity extends AppCompatActivity {
 
             if (e.isPaid()) {
                 tvChip.setVisibility(View.VISIBLE);
-                tvChip.setText("পরিশোধিত");
+                // পাওনা পরিশোধ হলে "পেলাম", দেনা পরিশোধ হলে "দিলাম" — বাম পাশের দেনা/পাওনা রঙিন
+                // বার/কলাম অপরিবর্তিত থাকে, শুধু এই ডান পাশের স্ট্যাটাস চিপ পাল্টায়
+                tvChip.setText(isDena ? "দিলাম" : "পেলাম");
                 tvChip.setTextColor(ContextCompat.getColor(this, R.color.amountIncome));
                 DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()),
                         ContextCompat.getColor(this, R.color.dividerColor));
@@ -438,7 +443,7 @@ public class PersonDetailActivity extends AppCompatActivity {
             sb.append(DatabaseManager.formatDateDisplay(e.getDate())).append(", ").append(DatabaseManager.formatTimeDisplay(e.getTime()))
               .append(" — ").append(e.isDena() ? "দেনা" : "পাওনা")
               .append(" ৳").append(DatabaseManager.formatAmount(e.getAmount()));
-            if (e.isPaid()) sb.append(" (পরিশোধিত)");
+            if (e.isPaid()) sb.append(" (").append(e.isDena() ? "দিলাম" : "পেলাম").append(")");
             if (e.getNote() != null && !e.getNote().isEmpty()) sb.append(" — ").append(e.getNote());
             sb.append("\n");
         }

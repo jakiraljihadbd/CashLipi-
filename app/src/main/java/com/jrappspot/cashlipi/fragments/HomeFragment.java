@@ -332,10 +332,8 @@ public class HomeFragment extends Fragment {
                 goToNavPage(MainPagerAdapter.POSITION_INCOME_EXPENSE));
         root.findViewById(R.id.cardExpense).setOnClickListener(v ->
                 goToNavPage(MainPagerAdapter.POSITION_INCOME_EXPENSE));
-        root.findViewById(R.id.cardDena).setOnClickListener(v ->
-                goToNavPage(MainPagerAdapter.POSITION_DENA_PAWNA));
-        root.findViewById(R.id.cardPabona).setOnClickListener(v ->
-                goToNavPage(MainPagerAdapter.POSITION_DENA_PAWNA));
+        root.findViewById(R.id.cardDena).setOnClickListener(v -> openMostRecentLedgerPerson("dena"));
+        root.findViewById(R.id.cardPabona).setOnClickListener(v -> openMostRecentLedgerPerson("pabona"));
         root.findViewById(R.id.cardSavings).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AddSavingsActivity.class)));
 
@@ -355,6 +353,22 @@ public class HomeFragment extends Fragment {
                 startActivity(new Intent(requireContext(), NotesActivity.class)));
         root.findViewById(R.id.menuAccounting).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AccountingActivity.class)));
+    }
+
+    /**
+     * হোম পেজের দেনা/পাওনা কার্ডে চাপলে দেনা-পাওনা তালিকা পেজে না নিয়ে গিয়ে, সরাসরি সর্বশেষ
+     * (সবচেয়ে নতুন) দেনা/পাওনা এন্ট্রি যার নামে সেই ব্যক্তির পেজে নিয়ে যায়। কোনো এন্ট্রি না
+     * থাকলে (বা ব্যক্তি খুঁজে না পেলে) আগের মতো দেনা-পাওনা তালিকা পেজেই নিয়ে যায়।
+     */
+    private void openMostRecentLedgerPerson(String type) {
+        com.jrappspot.cashlipi.models.Person person = db.getMostRecentLedgerPerson(type);
+        if (person != null) {
+            Intent i = new Intent(requireContext(), com.jrappspot.cashlipi.activities.PersonDetailActivity.class);
+            i.putExtra(com.jrappspot.cashlipi.activities.PersonDetailActivity.EXTRA_PERSON_ID, person.getId());
+            startActivity(i);
+        } else {
+            goToNavPage(MainPagerAdapter.POSITION_DENA_PAWNA);
+        }
     }
 
     // ── হোম থেকে সরাসরি নেভ-বারের কোনো পেজে (ViewPager2) সুইচ করা — পুরনো

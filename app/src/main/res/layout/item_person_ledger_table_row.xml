@@ -51,9 +51,9 @@
     </LinearLayout>
 
     <View
-        android:layout_width="1dp"
+        android:layout_width="2dp"
         android:layout_height="match_parent"
-        android:background="@color/dividerColor"/>
+        android:background="@color/textSecondary"/>
 
     <TextView
         android:id="@+id/tvTRowDena"
@@ -68,9 +68,9 @@
         android:textColor="@color/denaColor"/>
 
     <View
-        android:layout_width="1dp"
+        android:layout_width="2dp"
         android:layout_height="match_parent"
-        android:background="@color/dividerColor"/>
+        android:background="@color/textSecondary"/>
 
     <TextView
         android:id="@+id/tvTRowPabona"

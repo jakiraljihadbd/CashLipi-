@@ -140,14 +140,22 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
                 h.tvUnpaidBadge.setTextColor(ctx.getResources().getColor(
                         netDena ? R.color.denaActiveGradEnd : R.color.pabonaActiveGradEnd));
                 h.tvUnpaidBadge.setText(stat.unpaidCount + " টি অপরিশোধিত");
+
+                // অ্যাভাটারের কোণায় ছোট রঙিন ডট — এক নজরে বোঝা যায় দেনা না পাওনা, লিস্ট
+                // স্ক্যান করা সহজ হয়।
+                h.statusDot.setVisibility(View.VISIBLE);
+                h.statusDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                        ctx.getResources().getColor(netDena ? R.color.denaColor : R.color.pabonaColor)));
             } else {
                 h.tvUnpaidBadge.setVisibility(View.VISIBLE);
                 h.tvUnpaidBadge.setBackgroundResource(R.drawable.bg_badge_paid);
                 h.tvUnpaidBadge.setTextColor(ctx.getResources().getColor(R.color.successColor));
                 h.tvUnpaidBadge.setText("সব পরিশোধিত");
+                h.statusDot.setVisibility(View.GONE);
             }
         } else {
             h.rowStats.setVisibility(View.GONE);
+            h.statusDot.setVisibility(View.GONE);
         }
 
         h.itemView.setOnClickListener(v -> {
@@ -212,6 +220,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
         ImageView ivPhoto;
         LinearLayout avatarInitial, rowPhone, rowAddress, rowStats;
         TextView tvInitial, tvName, tvDot, tvRelation, tvPhone, tvAddress, tvTxnCount, tvUnpaidBadge;
+        View statusDot;
 
         VH(@NonNull View itemView) {
             super(itemView);
@@ -229,6 +238,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
             rowStats = itemView.findViewById(R.id.rowStats);
             tvTxnCount = itemView.findViewById(R.id.tvTxnCount);
             tvUnpaidBadge = itemView.findViewById(R.id.tvUnpaidBadge);
+            statusDot = itemView.findViewById(R.id.ivPersonStatusDot);
         }
     }
 }

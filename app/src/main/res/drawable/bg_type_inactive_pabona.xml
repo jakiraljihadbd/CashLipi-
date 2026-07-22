@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "যোগ" পেজে পাওনা টগল বাটনের নিষ্ক্রিয় অবস্থা — হালকা নীল ব্যাকগ্রাউন্ড ও বর্ডার,
+     যাতে সিলেক্ট না করা অবস্থাতেও বোঝা যায় এটা পাওনার বাটন। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#EAF2FE"/>
+    <corners android:radius="12dp"/>
+    <stroke android:width="1.5dp" android:color="@color/pabonaColor"/>
+</shape>

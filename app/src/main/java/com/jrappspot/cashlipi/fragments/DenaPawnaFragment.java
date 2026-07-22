@@ -264,13 +264,14 @@ public class DenaPawnaFragment extends Fragment {
             PersonStat s = statsMap.get(p.getName().trim().toLowerCase(Locale.ROOT));
             if (s == null) s = new PersonStat();
 
-            View card = inflater.inflate(R.layout.item_debt_banner, debtFlipper, false);
-            // bannerCardRoot-এর background XML-এ ডিফল্ট (bg_debt_banner_solid) হিসেবে থাকে,
-            // তারপর এখানে ইনফ্লেট হওয়ার সাথে সাথেই দেনা/পাওনা অনুযায়ী নির্দিষ্ট রং বসানো
-            // হয় — তাই কখনও ফাঁকা/সাদা দেখা যায় না, view যোগ হওয়ার আগেই রং ঠিক থাকে।
             boolean isDena = s.isNetDena();
-            View bannerCardRoot = card.findViewById(R.id.bannerCardRoot);
-            bannerCardRoot.setBackgroundResource(isDena ? R.drawable.bg_debt_banner_dena : R.drawable.bg_debt_banner_pabona);
+            // দেনা ও পাওনার জন্য দুইটা আলাদা লে-আউট ফাইল (item_debt_banner_dena / _pabona) —
+            // প্রতিটাতে সঠিক রং XML-এই বেক করা, রানটাইমে setBackgroundResource() দিয়ে রং
+            // পাল্টানো লাগে না। এতে ভিউ যোগ হওয়ার প্রথম মুহূর্ত থেকেই সঠিক রং দেখাবে,
+            // কখনও সাদা/ফাঁকা দেখাবে না।
+            View card = inflater.inflate(
+                    isDena ? R.layout.item_debt_banner_dena : R.layout.item_debt_banner_pabona,
+                    debtFlipper, false);
 
             ((TextView) card.findViewById(R.id.tvBannerInitial)).setText(p.getInitial());
             ((TextView) card.findViewById(R.id.tvBannerName)).setText(

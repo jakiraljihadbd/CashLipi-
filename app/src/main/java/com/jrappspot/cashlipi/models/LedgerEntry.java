@@ -35,7 +35,10 @@ public class LedgerEntry {
     private String paidDate;
 
     @SerializedName("settleTo")
-    private String settleTo;    // পরিশোধ করার সময় কোথায় হিসাব হবে: "balance" | "savings" | "none"
+    private String settleTo;    // পরিশোধ করার সময় কোথায় হিসাব হবে: "balance" | "savings" | "incomeExpense" | "none"
+
+    @SerializedName("settleTxnId")
+    private String settleTxnId; // "incomeExpense"-এ পরিশোধ হলে তৈরি হওয়া আসল আয়/ব্যয় Transaction-এর id
 
     @SerializedName("favorite")
     private boolean favorite;
@@ -76,6 +79,7 @@ public class LedgerEntry {
     public boolean isPaid() { return paid; }
     public String getPaidDate() { return paidDate != null ? paidDate : ""; }
     public String getSettleTo() { return settleTo != null && !settleTo.isEmpty() ? settleTo : "balance"; }
+    public String getSettleTxnId() { return settleTxnId != null ? settleTxnId : ""; }
     public boolean isFavorite() { return favorite; }
     public String getCreatedAt() { return createdAt != null ? createdAt : ""; }
     public String getUpdatedAt() { return updatedAt != null ? updatedAt : ""; }
@@ -92,6 +96,7 @@ public class LedgerEntry {
     public void setPaid(boolean paid) { this.paid = paid; }
     public void setPaidDate(String paidDate) { this.paidDate = paidDate; }
     public void setSettleTo(String settleTo) { this.settleTo = settleTo; }
+    public void setSettleTxnId(String settleTxnId) { this.settleTxnId = settleTxnId; }
     public void setFavorite(boolean favorite) { this.favorite = favorite; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }

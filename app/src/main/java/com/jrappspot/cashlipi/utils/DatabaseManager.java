@@ -140,12 +140,32 @@ public class DatabaseManager {
         return true;
     }
 
+    /** id দিয়ে সরাসরি একটা আয় এন্ট্রি মুছে ফেলে (ট্র্যাশে পাঠায় না) — দেনা-পাওনা "অপরিশোধিত"-এ
+     *  ফিরিয়ে নিলে তার সাথে লিংক করা অটো-তৈরি আয়ের এন্ট্রি পরিষ্কার করতে ব্যবহৃত। */
+    public boolean deleteIncomeById(String id) {
+        if (id == null || id.isEmpty()) return false;
+        List<Transaction> list = getIncomeList();
+        for (int i = 0; i < list.size(); i++) {
+            if (id.equals(list.get(i).getId())) {
+                list.remove(i);
+                saveList(KEY_INCOME, list);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public double getTotalIncome() {
         double total = 0;
         for (Transaction t : getIncomeList()) total += t.getAmount();
-        // পাওনা পরিশোধের সময় "আয় হিসেবে" বেছে নেওয়া এন্ট্রিগুলোও আয়ের মোটে যোগ হয়
+        // পাওনা পরিশোধের সময় "আয় হিসেবে" বেছে নেওয়া এন্ট্রিগুলোও আয়ের মোটে যোগ হয় — তবে শুধু
+        // পুরনো (আপডেটের আগের) এন্ট্রি, যাদের জন্য এখনও কোনো প্রকৃত Transaction তৈরি হয়নি।
+        // নতুন এন্ট্রির জন্য showSettleSourceDialog() ইতিমধ্যেই আয় তালিকায় একটা আসল লেনদেন যোগ
+        // করে (settleTxnId দিয়ে লিংক করা), তাই সেটা getIncomeList() থেকেই গোনা হয়ে যায় — এখানে
+        // আবার যোগ করলে দ্বিগুণ হয়ে যাবে।
         for (LedgerEntry e : getLedgerList()) {
-            if (e.isPaid() && e.isPabona() && "incomeExpense".equals(e.getSettleTo())) {
+            if (e.isPaid() && e.isPabona() && "incomeExpense".equals(e.getSettleTo())
+                    && (e.getSettleTxnId() == null || e.getSettleTxnId().isEmpty())) {
                 total += e.getAmount();
             }
         }
@@ -188,12 +208,29 @@ public class DatabaseManager {
         return true;
     }
 
+    /** id দিয়ে সরাসরি একটা ব্যয় এন্ট্রি মুছে ফেলে (ট্র্যাশে পাঠায় না) — দেনা-পাওনা "অপরিশোধিত"-এ
+     *  ফিরিয়ে নিলে তার সাথে লিংক করা অটো-তৈরি ব্যয়ের এন্ট্রি পরিষ্কার করতে ব্যবহৃত। */
+    public boolean deleteExpenseById(String id) {
+        if (id == null || id.isEmpty()) return false;
+        List<Transaction> list = getExpenseList();
+        for (int i = 0; i < list.size(); i++) {
+            if (id.equals(list.get(i).getId())) {
+                list.remove(i);
+                saveList(KEY_EXPENSE, list);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public double getTotalExpense() {
         double total = 0;
         for (Transaction t : getExpenseList()) total += t.getAmount();
-        // দেনা পরিশোধের সময় "ব্যয় হিসেবে" বেছে নেওয়া এন্ট্রিগুলোও ব্যয়ের মোটে যোগ হয়
+        // দেনা পরিশোধের সময় "ব্যয় হিসেবে" বেছে নেওয়া এন্ট্রিগুলোও ব্যয়ের মোটে যোগ হয় — তবে শুধু
+        // পুরনো এন্ট্রি, যাদের জন্য এখনও কোনো প্রকৃত Transaction তৈরি হয়নি (দেখুন getTotalIncome())।
         for (LedgerEntry e : getLedgerList()) {
-            if (e.isPaid() && e.isDena() && "incomeExpense".equals(e.getSettleTo())) {
+            if (e.isPaid() && e.isDena() && "incomeExpense".equals(e.getSettleTo())
+                    && (e.getSettleTxnId() == null || e.getSettleTxnId().isEmpty())) {
                 total += e.getAmount();
             }
         }
@@ -356,12 +393,37 @@ public class DatabaseManager {
         return true;
     }
 
+    /**
+     * ব্যক্তি মুছে ফেলার সাথে সাথে তার নামে থাকা সব দেনা-পাওনা এন্ট্রিও (LedgerEntry) মুছে দেয়।
+     * আগে শুধু Person মুছে যেত কিন্তু তার লেজার এন্ট্রি থেকে যেত — ফলে হোম পেজের মোট দেনা/পাওনা/
+     * ব্যালেন্স হিসাবে (যা লাইভ getLedgerList() থেকে হিসাব হয়) সেই ব্যক্তির টাকাটা রয়েই যেত।
+     */
     public boolean deletePerson(int index) {
         List<Person> list = getPersonList();
         if (index < 0 || index >= list.size()) return false;
-        list.remove(index);
+        Person removed = list.remove(index);
         saveList(KEY_PERSON, list);
+        deleteLedgerEntriesForPersonName(removed.getName());
         return true;
+    }
+
+    /** কোনো ব্যক্তির নামে থাকা সব লেজার এন্ট্রি মুছে ট্র্যাশে পাঠায়; কতগুলো মুছল তা রিটার্ন করে। */
+    public int deleteLedgerEntriesForPersonName(String personName) {
+        if (personName == null || personName.trim().isEmpty()) return 0;
+        String target = personName.trim().toLowerCase(Locale.ROOT);
+        List<LedgerEntry> list = getLedgerList();
+        List<LedgerEntry> kept = new ArrayList<>();
+        int removedCount = 0;
+        for (LedgerEntry e : list) {
+            if (e.getPerson().trim().toLowerCase(Locale.ROOT).equals(target)) {
+                addToTrashFromLedger(e);
+                removedCount++;
+            } else {
+                kept.add(e);
+            }
+        }
+        if (removedCount > 0) saveList(KEY_LEDGER, kept);
+        return removedCount;
     }
 
     public Person getPersonById(String id) {
@@ -379,6 +441,37 @@ public class DatabaseManager {
             if (id.equals(list.get(i).getId())) return i;
         }
         return -1;
+    }
+
+    /** নাম মিলিয়ে (case/space insensitive) ব্যক্তি খোঁজে — হোম পেজ থেকে সরাসরি সর্বশেষ ব্যক্তির পেজে নেওয়ার জন্য। */
+    public Person getPersonByName(String name) {
+        if (name == null || name.trim().isEmpty()) return null;
+        String target = name.trim().toLowerCase(Locale.ROOT);
+        for (Person p : getPersonList()) {
+            if (p.getName().trim().toLowerCase(Locale.ROOT).equals(target)) return p;
+        }
+        return null;
+    }
+
+    /**
+     * "dena" বা "pabona" টাইপের সর্বশেষ (সবচেয়ে নতুন) লেজার এন্ট্রিটা কার নামে — সেই Person
+     * রিটার্ন করে। হোম পেজের দেনা/পাওনা কার্ডে চাপলে সরাসরি সেই ব্যক্তির পেজে নিয়ে যেতে ব্যবহৃত।
+     */
+    public Person getMostRecentLedgerPerson(String type) {
+        List<LedgerEntry> all = getLedgerList();
+        LedgerEntry latest = null;
+        for (LedgerEntry e : all) {
+            if (!type.equals(e.getType())) continue;
+            if (latest == null || recencyKey(e).compareTo(recencyKey(latest)) > 0) latest = e;
+        }
+        if (latest == null) return null;
+        return getPersonByName(latest.getPerson());
+    }
+
+    private static String recencyKey(LedgerEntry e) {
+        String createdAt = e.getCreatedAt();
+        if (createdAt != null && !createdAt.isEmpty()) return createdAt;
+        return e.getDate() + " " + e.getTime();
     }
 
     // ═══════════════════════════════════════════

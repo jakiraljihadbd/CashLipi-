@@ -311,7 +311,7 @@ public class TransactionSheetHelper {
         sheetTitle.setText(item.getPerson());
         sheetSubtitle.setText(DatabaseManager.formatDateDisplay(item.getDate())
                 + "  •  " + DatabaseManager.formatTimeDisplay(item.getTime())
-                + (item.isPaid() ? "  •   পরিশোধিত" : "  •   বাকি"));
+                + (item.isPaid() ? ("  •   " + (isDena ? "দিলাম" : "পেলাম")) : "  •   বাকি"));
         sheetAmount.setText(DatabaseManager.formatAmount(item.getAmount()));
         sheetAmount.setTextColor(androidx.core.content.ContextCompat.getColor(act, isDena ? R.color.amountDebt : R.color.amountReceivable));
 
@@ -322,15 +322,27 @@ public class TransactionSheetHelper {
         if (item.isPaid()) {
             togglePaidLabel.setText("↩️ অপরিশোধিত করুন");
         } else {
-            togglePaidLabel.setText("✅ পরিশোধ করুন");
+            // পাওনার পরিশোধে "পেলাম" (টাকা পেয়েছি), দেনার পরিশোধে "দিলাম" (টাকা দিয়েছি)
+            togglePaidLabel.setText(isDena ? "✅ দিলাম" : "✅ পেলাম");
         }
         togglePaid.setOnClickListener(x -> {
             dialog.dismiss();
             if (item.isPaid()) {
-                // ইতিমধ্যে পরিশোধিত → অপরিশোধিত করতে সরাসরি টগল, কোনো প্রশ্ন করার দরকার নেই
+                // ইতিমধ্যে পরিশোধিত → অপরিশোধিত করতে সরাসরি টগল, কোনো প্রশ্ন করার দরকার নেই।
+                // তবে "আয়/ব্যয় হিসেবে" পরিশোধ করা থাকলে, সাথে অটো-তৈরি হওয়া আয়/ব্যয় এন্ট্রিটাও
+                // মুছে দেয় — নাহলে পরে আবার পরিশোধ করলে ডুপ্লিকেট লেনদেন তৈরি হয়ে যাবে।
                 List<LedgerEntry> list = db.getLedgerList();
                 int idx = findLedgerIndex(list, item);
-                if (idx >= 0) db.toggleLedgerPaid(idx);
+                if (idx >= 0) {
+                    LedgerEntry entry = list.get(idx);
+                    if ("incomeExpense".equals(entry.getSettleTo()) && !entry.getSettleTxnId().isEmpty()) {
+                        if (entry.isPabona()) db.deleteIncomeById(entry.getSettleTxnId());
+                        else db.deleteExpenseById(entry.getSettleTxnId());
+                        entry.setSettleTxnId("");
+                        db.updateLedger(idx, entry);
+                    }
+                    db.toggleLedgerPaid(idx);
+                }
                 if (onChange != null) onChange.run();
             } else {
                 showSettleSourceDialog(act, db, item, onChange);
@@ -384,6 +396,9 @@ public class TransactionSheetHelper {
 
         View v = LayoutInflater.from(act).inflate(R.layout.dialog_settle_source, null);
         TextView tvQuestion = v.findViewById(R.id.tvSettleQuestion);
+        android.widget.ImageView ivIcon = v.findViewById(R.id.ivSettleIcon);
+        ivIcon.setBackground(act.getResources().getDrawable(
+                isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable));
         RadioGroup rg = v.findViewById(R.id.rgSettleOptions);
         RadioButton rbBalance = v.findViewById(R.id.rbSettleBalance);
         RadioButton rbSavings = v.findViewById(R.id.rbSettleSavings);
@@ -449,6 +464,31 @@ public class TransactionSheetHelper {
                     if (idx >= 0) {
                         LedgerEntry updated = list.get(idx);
                         updated.setSettleTo(settleTo);
+
+                        // "আয়/ব্যয় হিসেবে" বেছে নিলে শুধু ব্যালেন্সে যোগ-বিয়োগ না করে, আয়/ব্যয়
+                        // তালিকায় একটা আসল, দেখা যাওয়ার মতো লেনদেনও তৈরি করে — নাম, তারিখ ইত্যাদি
+                        // বিবরণ নোটে অটো বসিয়ে দেয়, যাতে পরে কোন পাওনা/দেনার বিপরীতে এই আয়/ব্যয়
+                        // যোগ হয়েছে তা স্পষ্ট বোঝা যায়।
+                        if ("incomeExpense".equals(settleTo)) {
+                            String personName = updated.getPerson();
+                            String entryDate = DatabaseManager.formatDateDisplay(updated.getDate());
+                            Transaction txn = new Transaction();
+                            txn.setDate(DatabaseManager.nowDate());
+                            txn.setTime(DatabaseManager.nowTime());
+                            if (updated.isPabona()) {
+                                txn.setType("income");
+                                txn.setSource("পাওনা প্রাপ্তি");
+                                txn.setNote(personName + " এর কাছ থেকে " + entryDate + " তারিখের পাওনা আদায় করা হয়েছে");
+                            } else {
+                                txn.setType("expense");
+                                txn.setCategory("দেনা পরিশোধ");
+                                txn.setNote(personName + " কে " + entryDate + " তারিখের দেনা পরিশোধ করা হয়েছে");
+                            }
+                            txn.setAmount(updated.getAmount());
+                            Transaction saved = updated.isPabona() ? db.addIncome(txn) : db.addExpense(txn);
+                            updated.setSettleTxnId(saved.getId());
+                        }
+
                         db.updateLedger(idx, updated);
                         db.toggleLedgerPaid(idx);
                     }
@@ -482,7 +522,7 @@ public class TransactionSheetHelper {
                 + "পরিমাণ: " + DatabaseManager.formatAmount(item.getAmount()) + "\n"
                 + "তারিখ: " + DatabaseManager.formatDateDisplay(item.getDate()) + "\n"
                 + "সময়: " + DatabaseManager.formatTimeDisplay(item.getTime()) + "\n"
-                + "স্ট্যাটাস: " + (item.isPaid() ? " পরিশোধিত" : " বাকি")
+                + "স্ট্যাটাস: " + (item.isPaid() ? (" " + (item.isDena() ? "দিলাম" : "পেলাম")) : " বাকি")
                 + (item.getCategory() != null && !item.getCategory().isEmpty() ? "\nক্যাটাগরি: " + item.getCategory() : "")
                 + (item.getNote() != null && !item.getNote().isEmpty() ? "\nনোট: " + item.getNote() : "");
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -505,7 +545,8 @@ public class TransactionSheetHelper {
         ((TextView) v.findViewById(R.id.tvDetailPerson)).setText(item.getTypeDisplay());
         ((TextView) v.findViewById(R.id.tvDetailDate)).setText(DatabaseManager.formatDateDisplay(item.getDate()));
         ((TextView) v.findViewById(R.id.tvDetailTime)).setText(DatabaseManager.formatTimeDisplay(item.getTime()));
-        ((TextView) v.findViewById(R.id.tvDetailStatus)).setText(item.isPaid() ? " পরিশোধিত" : " বাকি");
+        ((TextView) v.findViewById(R.id.tvDetailStatus)).setText(
+                item.isPaid() ? (" " + (item.isDena() ? "দিলাম" : "পেলাম")) : " বাকি");
 
         if (item.getNote() != null && !item.getNote().isEmpty()) {
             ((TextView) v.findViewById(R.id.tvDetailNote)).setText(item.getNote());

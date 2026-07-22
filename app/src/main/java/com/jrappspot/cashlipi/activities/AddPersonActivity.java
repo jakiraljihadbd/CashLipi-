@@ -51,8 +51,7 @@ public class AddPersonActivity extends AppCompatActivity {
     private ImageView ivPhoto;
     private View photoRing, photoPlaceholder;
     private EditText etName, etRelation, etPhone, etAddress, etEmail;
-    private LinearLayout tvDate, tvTime, btnSavePerson;
-    private TextView tvDateText, tvTimeText;
+    private LinearLayout btnSavePerson;
 
     private String pendingPhotoPath = "";
     private String selectedDate;
@@ -88,10 +87,6 @@ public class AddPersonActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.etPhone);
         etAddress = findViewById(R.id.etAddress);
         etEmail = findViewById(R.id.etEmail);
-        tvDate = findViewById(R.id.tvDate);
-        tvTime = findViewById(R.id.tvTime);
-        tvDateText = findViewById(R.id.tvDateText);
-        tvTimeText = findViewById(R.id.tvTimeText);
         btnSavePerson = findViewById(R.id.btnSavePerson);
     }
 
@@ -115,11 +110,12 @@ public class AddPersonActivity extends AppCompatActivity {
     }
 
     private void setupDefaults() {
+        // তারিখ ও সময় পেজে দেখানো হয় না (ইউজারের অনুরোধে সরানো হয়েছে) — তবে সংরক্ষণের
+        // সময় Person রেকর্ডে টাইমস্ট্যাম্প থাকা দরকার, তাই ব্যাকগ্রাউন্ডে বর্তমান
+        // তারিখ-সময় ধরে রাখা হচ্ছে।
         Calendar c = Calendar.getInstance();
         selectedDate = String.format("%04d-%02d-%02d", c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH));
         selectedTime = String.format("%02d:%02d", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE));
-        tvDateText.setText(DatabaseManager.formatDateDisplay(selectedDate));
-        tvTimeText.setText(DatabaseManager.formatTimeDisplay(selectedTime));
         refreshSaveEnabled();
     }
 
@@ -137,22 +133,6 @@ public class AddPersonActivity extends AppCompatActivity {
         };
         etName.addTextChangedListener(watcher);
         etPhone.addTextChangedListener(watcher);
-
-        tvDate.setOnClickListener(v -> {
-            Calendar c = Calendar.getInstance();
-            new DatePickerDialog(this, (view, y, m, d) -> {
-                selectedDate = String.format("%04d-%02d-%02d", y, m + 1, d);
-                tvDateText.setText(DatabaseManager.formatDateDisplay(selectedDate));
-            }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
-        });
-
-        tvTime.setOnClickListener(v -> {
-            Calendar c = Calendar.getInstance();
-            new TimePickerDialog(this, (view, h, min) -> {
-                selectedTime = String.format("%02d:%02d", h, min);
-                tvTimeText.setText(DatabaseManager.formatTimeDisplay(selectedTime));
-            }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();
-        });
 
         btnSavePerson.setOnClickListener(v -> savePerson());
     }
@@ -244,8 +224,8 @@ public class AddPersonActivity extends AppCompatActivity {
         etPhone.setText(p.getPhone());
         etAddress.setText(p.getAddress());
         etEmail.setText(p.getEmail());
-        if (!p.getDate().isEmpty()) { selectedDate = p.getDate(); tvDateText.setText(DatabaseManager.formatDateDisplay(selectedDate)); }
-        if (!p.getTime().isEmpty()) { selectedTime = p.getTime(); tvTimeText.setText(DatabaseManager.formatTimeDisplay(selectedTime)); }
+        if (!p.getDate().isEmpty()) { selectedDate = p.getDate(); }
+        if (!p.getTime().isEmpty()) { selectedTime = p.getTime(); }
         if (p.hasPhoto() && new File(p.getPhotoPath()).exists()) applyPhoto(p.getPhotoPath());
         refreshSaveEnabled();
     }

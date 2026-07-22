@@ -76,8 +76,8 @@
                             android:text=" পাওনা (আমি পাব)"
                             android:textSize="13sp" android:textStyle="bold"
                             android:textAllCaps="false"
-                            android:textColor="@color/textSecondary"
-                            android:background="@drawable/bg_type_inactive"/>
+                            android:textColor="@color/pabonaColor"
+                            android:background="@drawable/bg_type_inactive_pabona"/>
                     </LinearLayout>
 
                     <!-- Person Name -->

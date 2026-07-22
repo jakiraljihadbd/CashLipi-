@@ -49,6 +49,14 @@
                     android:textStyle="bold"
                     android:textColor="@color/white"/>
             </LinearLayout>
+
+            <View
+                android:id="@+id/ivPersonStatusDot"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|end"
+                android:background="@drawable/dot_status_ring"
+                android:visibility="gone"/>
         </FrameLayout>
 
         <!-- নাম, সম্পর্ক, ফোন, ঠিকানা -->

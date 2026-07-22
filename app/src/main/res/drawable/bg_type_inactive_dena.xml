@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "যোগ" পেজে দেনা টগল বাটনের নিষ্ক্রিয় অবস্থা — হালকা অ্যাম্বার ব্যাকগ্রাউন্ড ও বর্ডার,
+     যাতে সিলেক্ট না করা অবস্থাতেও বোঝা যায় এটা দেনার বাটন। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FEF3E2"/>
+    <corners android:radius="12dp"/>
+    <stroke android:width="1.5dp" android:color="@color/denaColor"/>
+</shape>

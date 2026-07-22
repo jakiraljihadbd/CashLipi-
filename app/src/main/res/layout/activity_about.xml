@@ -7,25 +7,40 @@
      android:background="@color/bgColor"
      android:orientation="vertical">
 
-    <LinearLayout
-         android:layout_height="wrap_content"
-         android:layout_width="match_parent"
-         android:background="@drawable/bg_header_generic"
-         android:gravity="center_vertical"
-         android:orientation="horizontal"
-         android:paddingBottom="14dp"
-         android:paddingHorizontal="16dp"
-         android:paddingTop="12dp">
+    <FrameLayout
+         android:layout_width="match_parent" android:layout_height="wrap_content"
+         android:clipChildren="false" android:clipToPadding="false">
 
-        <TextView
-             android:layout_height="wrap_content"
-             android:layout_width="wrap_content"
-             android:textSize="18sp"
-             android:textColor="@color/white"
-             android:text="ℹ️ সম্পর্কে"
-             android:textStyle="bold" />
+        <LinearLayout
+             android:layout_height="96dp"
+             android:layout_width="match_parent"
+             android:background="@drawable/bg_settings_hero_gradient"
+             android:gravity="center_vertical"
+             android:orientation="vertical"
+             android:paddingHorizontal="18dp">
 
-    </LinearLayout>
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:textSize="19sp"
+                 android:textColor="@color/white"
+                 android:text="অ্যাপ ও ডেভেলপার"
+                 android:textStyle="bold" />
+
+            <TextView
+                 android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:layout_marginTop="3dp"
+                 android:textSize="12sp"
+                 android:textColor="@color/white20"
+                 android:text="তথ্য, সহায়তা ও সরাসরি যোগাযোগ" />
+
+        </LinearLayout>
+
+        <View android:layout_width="80dp" android:layout_height="80dp"
+            android:layout_gravity="top|end" android:layout_marginTop="-26dp" android:layout_marginEnd="-16dp"
+            android:background="@drawable/bg_glass_dot"/>
+    </FrameLayout>
 
     <androidx.core.widget.NestedScrollView
          android:layout_height="match_parent"
@@ -248,7 +263,112 @@
                                  android:layout_width="wrap_content"
                                  android:textSize="13.5sp"
                                  android:textColor="@color/textSecondary"
-                                 android:text="01300168630" />
+                                 android:text="+880 1737-930168" />
+
+                        </LinearLayout>
+
+                        <!-- Contact buttons: WhatsApp / IMO / সরাসরি কল -->
+                        <LinearLayout
+                             android:layout_height="wrap_content"
+                             android:layout_width="match_parent"
+                             android:orientation="horizontal"
+                             android:layout_marginBottom="16dp">
+
+                            <LinearLayout
+                                 android:id="@+id/btnDevWhatsapp"
+                                 android:layout_height="wrap_content"
+                                 android:layout_width="0dp"
+                                 android:layout_weight="1"
+                                 android:orientation="vertical"
+                                 android:gravity="center"
+                                 android:clickable="true" android:focusable="true"
+                                 android:background="?attr/selectableItemBackground">
+
+                                <com.google.android.material.card.MaterialCardView
+                                     android:layout_height="52dp"
+                                     android:layout_width="52dp"
+                                     app:cardCornerRadius="26dp"
+                                     app:cardBackgroundColor="@color/devWhatsappColor"
+                                     app:cardElevation="3dp">
+                                    <ImageView
+                                         android:layout_height="24dp"
+                                         android:layout_width="24dp"
+                                         android:layout_gravity="center"
+                                         android:src="@drawable/ic_whatsapp" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <TextView
+                                     android:layout_height="wrap_content"
+                                     android:layout_width="wrap_content"
+                                     android:layout_marginTop="6dp"
+                                     android:textSize="11.5sp"
+                                     android:textColor="@color/textSecondary"
+                                     android:text="WhatsApp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                 android:id="@+id/btnDevImo"
+                                 android:layout_height="wrap_content"
+                                 android:layout_width="0dp"
+                                 android:layout_weight="1"
+                                 android:orientation="vertical"
+                                 android:gravity="center"
+                                 android:clickable="true" android:focusable="true"
+                                 android:background="?attr/selectableItemBackground">
+
+                                <com.google.android.material.card.MaterialCardView
+                                     android:layout_height="52dp"
+                                     android:layout_width="52dp"
+                                     app:cardCornerRadius="26dp"
+                                     app:cardBackgroundColor="@color/devImoColor"
+                                     app:cardElevation="3dp">
+                                    <ImageView
+                                         android:layout_height="24dp"
+                                         android:layout_width="24dp"
+                                         android:layout_gravity="center"
+                                         android:src="@drawable/ic_imo" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <TextView
+                                     android:layout_height="wrap_content"
+                                     android:layout_width="wrap_content"
+                                     android:layout_marginTop="6dp"
+                                     android:textSize="11.5sp"
+                                     android:textColor="@color/textSecondary"
+                                     android:text="IMO" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                 android:id="@+id/btnDevCall"
+                                 android:layout_height="wrap_content"
+                                 android:layout_width="0dp"
+                                 android:layout_weight="1"
+                                 android:orientation="vertical"
+                                 android:gravity="center"
+                                 android:clickable="true" android:focusable="true"
+                                 android:background="?attr/selectableItemBackground">
+
+                                <com.google.android.material.card.MaterialCardView
+                                     android:layout_height="52dp"
+                                     android:layout_width="52dp"
+                                     app:cardCornerRadius="26dp"
+                                     app:cardBackgroundColor="@color/devCallColor"
+                                     app:cardElevation="3dp">
+                                    <ImageView
+                                         android:layout_height="22dp"
+                                         android:layout_width="22dp"
+                                         android:layout_gravity="center"
+                                         android:src="@drawable/ic_call_filled" />
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <TextView
+                                     android:layout_height="wrap_content"
+                                     android:layout_width="wrap_content"
+                                     android:layout_marginTop="6dp"
+                                     android:textSize="11.5sp"
+                                     android:textColor="@color/textSecondary"
+                                     android:text="সরাসরি কল" />
+                            </LinearLayout>
 
                         </LinearLayout>
 

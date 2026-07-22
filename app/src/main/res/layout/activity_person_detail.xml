@@ -368,29 +368,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="14dp"
             android:paddingVertical="9dp"
             android:background="@drawable/bg_table_header_grid">
+
+            <!-- সারির বাম পাশের ৩dp রঙিন বার-এর সাথে কলাম-অ্যালাইনমেন্ট মেলাতে একই চওড়ার
+                 অদৃশ্য স্পেসার — এটা না থাকলে হেডারের "|" দাগ আর সারির ভেতরের দাগ ৩dp
+                 এদিক-ওদিক হয়ে যেত। -->
+            <View
+                android:layout_width="3dp"
+                android:layout_height="match_parent"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+                android:paddingStart="11dp"
                 android:text="বিবরণ"
                 android:textSize="11.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/textSecondary"/>
 
             <View
-                android:layout_width="2dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/textSecondary"/>
+                android:background="@color/dividerColor"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:paddingHorizontal="8dp"
                 android:text="দেনা"
                 android:gravity="end"
                 android:textSize="11.5sp"
@@ -398,16 +405,15 @@
                 android:textColor="@color/denaColor"/>
 
             <View
-                android:layout_width="2dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:background="@color/textSecondary"/>
+                android:background="@color/dividerColor"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:paddingHorizontal="8dp"
                 android:text="পাওনা"
                 android:gravity="end"
                 android:textSize="11.5sp"
@@ -434,7 +440,7 @@
             android:orientation="horizontal"
             android:paddingHorizontal="14dp"
             android:paddingVertical="10dp"
-            android:background="@color/cardBg"
+            android:background="@color/dialogFieldBg"
             android:elevation="4dp">
 
             <TextView
@@ -447,33 +453,32 @@
                 android:textColor="@color/textPrimary"/>
 
             <View
-                android:layout_width="2dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/textSecondary"/>
+                android:background="@color/dividerColor"/>
 
             <TextView
                 android:id="@+id/tvTableTotalDena"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:paddingHorizontal="8dp"
                 android:gravity="end"
                 android:textSize="12.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/denaColor"/>
 
             <View
-                android:layout_width="2dp"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:background="@color/textSecondary"/>
+                android:background="@color/dividerColor"/>
 
             <TextView
                 android:id="@+id/tvTableTotalPabona"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
+                android:paddingHorizontal="8dp"
                 android:gravity="end"
                 android:textSize="12.5sp"
                 android:textStyle="bold"
@@ -530,7 +535,7 @@
         android:paddingVertical="10dp"
         android:elevation="6dp">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddPelam"
             android:layout_width="0dp"
             android:layout_height="@dimen/btn_height"
@@ -541,9 +546,10 @@
             android:textStyle="bold"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            android:backgroundTint="@null"
             android:background="@drawable/bg_type_active_pabona"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddDilam"
             android:layout_width="0dp"
             android:layout_height="@dimen/btn_height"
@@ -554,6 +560,7 @@
             android:textStyle="bold"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            android:backgroundTint="@null"
             android:background="@drawable/bg_type_active_dena"/>
     </LinearLayout>
 

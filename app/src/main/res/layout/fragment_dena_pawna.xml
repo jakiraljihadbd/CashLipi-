@@ -52,25 +52,22 @@
             android:layout_width="match_parent"
             android:layout_height="8dp"/>
 
-        <!-- অটো-স্লাইড ব্যানার — কার টাকা এখনও পরিশোধ হয়নি, একটাই স্থির সুন্দর রঙে দেখায়।
-             background এখানেও (bg_debt_banner_solid) সেফটি-নেট হিসেবে সেট করা, যাতে ভুলবশত
-             ভেতরের কার্ড না বসলেও এই কন্টেইনারটা কখনও ফাঁকা/সাদা দেখাবে না। -->
+        <!-- অটো-স্লাইড ব্যানার — কার টাকা এখনও পরিশোধ হয়নি, সেটা একটাই কার্ডে (দেনা হলে কমলা,
+             পাওনা হলে নীল ব্যাকগ্রাউন্ড) দেখায় এবং ৫ সেকেন্ড পরপর মসৃণ ফেড দিয়ে পরের ব্যক্তিতে
+             বদলায়। কন্টেইনারের নিজস্ব কোনো background নেই (transparent) — ভেতরের একমাত্র কার্ডই
+             পুরো জায়গা ঢেকে রাখে, তাই মাঝে কখনও ফাঁকা/সাদা দেখা যাওয়ার সুযোগ নেই। -->
         <FrameLayout
             android:id="@+id/bannerContainer"
             android:layout_width="match_parent"
             android:layout_height="78dp"
             android:layout_marginHorizontal="18dp"
             android:layout_marginBottom="12dp"
-            android:background="@drawable/bg_debt_banner_solid"
             android:visibility="gone">
 
-            <ViewFlipper
-                android:id="@+id/debtFlipper"
+            <FrameLayout
+                android:id="@+id/bannerCardHolder"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:flipInterval="5000"
-                android:inAnimation="@anim/slide_in_right"
-                android:outAnimation="@anim/slide_out_left"/>
+                android:layout_height="match_parent"/>
 
             <LinearLayout
                 android:id="@+id/debtDots"

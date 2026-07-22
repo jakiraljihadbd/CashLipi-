@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -68,10 +67,11 @@ public class DenaPawnaFragment extends Fragment {
     private View filterActiveDot;
 
     private FrameLayout bannerContainer;
-    private ViewFlipper debtFlipper;
+    private FrameLayout bannerCardHolder;
     private LinearLayout debtDots;
     private final Handler bannerHandler = new Handler(Looper.getMainLooper());
-    private int bannerCount = 0;
+    private final List<Person> bannerPersons = new ArrayList<>();
+    private int bannerIndex = 0;
 
     private final List<Person> allPersons = new ArrayList<>();
     private final Map<String, PersonStat> statsMap = new HashMap<>();
@@ -112,7 +112,7 @@ public class DenaPawnaFragment extends Fragment {
         btnThemeChange = root.findViewById(R.id.btnThemeChange);
         filterActiveDot = root.findViewById(R.id.filterActiveDot);
         bannerContainer = root.findViewById(R.id.bannerContainer);
-        debtFlipper = root.findViewById(R.id.debtFlipper);
+        bannerCardHolder = root.findViewById(R.id.bannerCardHolder);
         debtDots = root.findViewById(R.id.debtDots);
 
         rvList.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -236,13 +236,13 @@ public class DenaPawnaFragment extends Fragment {
     private void setupBanner() {
         bannerHandler.removeCallbacksAndMessages(null);
 
-        List<Person> unpaidPersons = new ArrayList<>();
+        bannerPersons.clear();
         for (Person p : allPersons) {
             PersonStat s = statsMap.get(p.getName().trim().toLowerCase(Locale.ROOT));
-            if (s != null && s.hasUnpaid()) unpaidPersons.add(p);
+            if (s != null && s.hasUnpaid()) bannerPersons.add(p);
         }
         // যার বকেয়া সবচেয়ে বেশি সে আগে দেখাবে
-        unpaidPersons.sort((a, b) -> {
+        bannerPersons.sort((a, b) -> {
             PersonStat sa = statsMap.get(a.getName().trim().toLowerCase(Locale.ROOT));
             PersonStat sb = statsMap.get(b.getName().trim().toLowerCase(Locale.ROOT));
             double na = sa != null ? sa.getNetAmount() : 0;
@@ -250,43 +250,14 @@ public class DenaPawnaFragment extends Fragment {
             return Double.compare(nb, na);
         });
 
-        if (unpaidPersons.isEmpty()) {
+        if (bannerPersons.isEmpty()) {
             bannerContainer.setVisibility(View.GONE);
             return;
         }
 
         bannerContainer.setVisibility(View.VISIBLE);
-        debtFlipper.removeAllViews();
         debtDots.removeAllViews();
-
-        LayoutInflater inflater = LayoutInflater.from(requireContext());
-        for (Person p : unpaidPersons) {
-            PersonStat s = statsMap.get(p.getName().trim().toLowerCase(Locale.ROOT));
-            if (s == null) s = new PersonStat();
-
-            boolean isDena = s.isNetDena();
-            // দেনা ও পাওনার জন্য দুইটা আলাদা লে-আউট ফাইল (item_debt_banner_dena / _pabona) —
-            // প্রতিটাতে সঠিক রং XML-এই বেক করা, রানটাইমে setBackgroundResource() দিয়ে রং
-            // পাল্টানো লাগে না। এতে ভিউ যোগ হওয়ার প্রথম মুহূর্ত থেকেই সঠিক রং দেখাবে,
-            // কখনও সাদা/ফাঁকা দেখাবে না।
-            View card = inflater.inflate(
-                    isDena ? R.layout.item_debt_banner_dena : R.layout.item_debt_banner_pabona,
-                    debtFlipper, false);
-
-            ((TextView) card.findViewById(R.id.tvBannerInitial)).setText(p.getInitial());
-            ((TextView) card.findViewById(R.id.tvBannerName)).setText(
-                    p.getName().isEmpty() ? "নাম নেই" : p.getName());
-            ((TextView) card.findViewById(R.id.tvBannerSub)).setText(
-                    s.unpaidCount + " টি অপরিশোধিত এন্ট্রি" + (p.hasRelation() ? " • " + p.getRelation() : ""));
-
-            ((TextView) card.findViewById(R.id.tvBannerLabel)).setText(isDena ? "আপনি দেবেন" : "আপনি পাবেন");
-            double amount = s.getNetAmount() > 0 ? s.getNetAmount() : Math.max(s.unpaidDena, s.unpaidPabona);
-            ((TextView) card.findViewById(R.id.tvBannerAmount)).setText(DatabaseManager.formatAmount(amount));
-
-            Person finalP = p;
-            card.setOnClickListener(v -> openPerson(finalP));
-            debtFlipper.addView(card);
-
+        for (int i = 0; i < bannerPersons.size(); i++) {
             View dot = new View(requireContext());
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -296,10 +267,65 @@ public class DenaPawnaFragment extends Fragment {
             debtDots.addView(dot);
         }
 
-        bannerCount = unpaidPersons.size();
-        debtFlipper.setDisplayedChild(0);
-        updateBannerDots(0);
-        if (bannerCount > 1) startBannerAutoSlide();
+        bannerIndex = 0;
+        showBannerCard(bannerIndex, false);
+        updateBannerDots(bannerIndex);
+        if (bannerPersons.size() > 1) startBannerAutoSlide();
+    }
+
+    /**
+     * bannerCardHolder-এ ঠিক একটাই কার্ড থাকে — প্রতিবার আগেরটা সরিয়ে নতুনটা বসানো হয়, তাই
+     * ভেতরে-বাইরে দুইটা ভিউ ওভারল্যাপ করে স্লাইড করার (এবং মাঝে মাঝে ফাঁকা/সাদা দেখানোর) কোনো
+     * সুযোগ নেই। animate=true হলে আগে হালকা ফেড-আউট, তারপর কার্ড পাল্টে ফেড-ইন — পরিষ্কার,
+     * একরঙা ক্রসফেড, কোনো তির্যক/স্কিউড স্লাইড নেই।
+     */
+    private void showBannerCard(int index, boolean animate) {
+        if (bannerCardHolder == null || index < 0 || index >= bannerPersons.size()) return;
+        View newCard = buildBannerCard(bannerPersons.get(index));
+
+        if (!animate || bannerCardHolder.getChildCount() == 0) {
+            bannerCardHolder.removeAllViews();
+            bannerCardHolder.addView(newCard);
+            return;
+        }
+
+        // পুরনো কার্ডটা পুরোপুরি অস্বচ্ছ (alpha=1) রেখেই তার উপরে নতুন কার্ড বসিয়ে ফেড-ইন করানো
+        // হয় — কখনও পুরো হোল্ডারটা অস্বচ্ছতা ০-তে নামানো হয় না। ফলে ট্রানজিশনের প্রতি মুহূর্তেই
+        // অন্তত একটা রঙিন (দেনা/পাওনা) কার্ড পুরো জায়গা ঢেকে রাখে — পেছনের সাদা/হালকা
+        // ব্যাকগ্রাউন্ড কখনও এক ফ্রেমের জন্যও উঁকি দেয় না।
+        newCard.setAlpha(0f);
+        bannerCardHolder.addView(newCard); // এখন দুইটা কার্ড স্ট্যাক করা: পুরনোটা নিচে, নতুনটা উপরে
+        newCard.animate().alpha(1f).setDuration(220).withEndAction(() -> {
+            while (bannerCardHolder.getChildCount() > 1) {
+                bannerCardHolder.removeViewAt(0); // ফেড শেষে পুরনো কার্ড(গুলো) সরিয়ে দেওয়া
+            }
+        }).start();
+    }
+
+    private View buildBannerCard(Person p) {
+        PersonStat s = statsMap.get(p.getName().trim().toLowerCase(Locale.ROOT));
+        if (s == null) s = new PersonStat();
+        boolean isDena = s.isNetDena();
+
+        // দেনা ও পাওনার জন্য দুইটা আলাদা লে-আউট ফাইল (item_debt_banner_dena / _pabona) —
+        // প্রতিটাতে সঠিক রং XML-এই বেক করা এবং কার্ডটা bannerCardHolder-এর পুরো জায়গা জুড়ে
+        // বসে, তাই bg কালার সবসময় দেনা/পাওনা অনুযায়ীই দেখাবে।
+        View card = LayoutInflater.from(requireContext()).inflate(
+                isDena ? R.layout.item_debt_banner_dena : R.layout.item_debt_banner_pabona,
+                bannerCardHolder, false);
+
+        ((TextView) card.findViewById(R.id.tvBannerInitial)).setText(p.getInitial());
+        ((TextView) card.findViewById(R.id.tvBannerName)).setText(
+                p.getName().isEmpty() ? "নাম নেই" : p.getName());
+        ((TextView) card.findViewById(R.id.tvBannerSub)).setText(
+                s.unpaidCount + " টি অপরিশোধিত এন্ট্রি" + (p.hasRelation() ? " • " + p.getRelation() : ""));
+
+        ((TextView) card.findViewById(R.id.tvBannerLabel)).setText(isDena ? "আপনি দেবেন" : "আপনি পাবেন");
+        double amount = s.getNetAmount() > 0 ? s.getNetAmount() : Math.max(s.unpaidDena, s.unpaidPabona);
+        ((TextView) card.findViewById(R.id.tvBannerAmount)).setText(DatabaseManager.formatAmount(amount));
+
+        card.setOnClickListener(v -> openPerson(p));
+        return card;
     }
 
     private void updateBannerDots(int activeIndex) {
@@ -314,9 +340,10 @@ public class DenaPawnaFragment extends Fragment {
         bannerHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (debtFlipper != null && bannerCount > 1) {
-                    debtFlipper.showNext();
-                    updateBannerDots(debtFlipper.getDisplayedChild());
+                if (bannerCardHolder != null && bannerPersons.size() > 1) {
+                    bannerIndex = (bannerIndex + 1) % bannerPersons.size();
+                    showBannerCard(bannerIndex, true);
+                    updateBannerDots(bannerIndex);
                 }
                 bannerHandler.postDelayed(this, 5000);
             }

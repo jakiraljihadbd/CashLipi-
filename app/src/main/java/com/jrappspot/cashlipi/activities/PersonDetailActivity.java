@@ -239,14 +239,20 @@ public class PersonDetailActivity extends AppCompatActivity {
         });
 
         allRows.clear();
-        double running = 0, totalGot = 0, totalGave = 0;
+        double running = 0, totalGot = 0, totalGave = 0, totalReceived = 0, totalGiven = 0;
         int unpaidCount = 0;
         for (LedgerEntry e : chrono) {
             if (!e.isPaid()) {
                 running += e.isPabona() ? e.getAmount() : -e.getAmount();
                 unpaidCount++;
             }
-            if (e.isPabona()) totalGot += e.getAmount(); else totalGave += e.getAmount();
+            if (e.isPabona()) {
+                totalGot += e.getAmount();
+                if (e.isPaid()) totalReceived += e.getAmount(); // পাওনা থেকে পেলাম
+            } else {
+                totalGave += e.getAmount();
+                if (e.isPaid()) totalGiven += e.getAmount(); // দেনা থেকে দিলাম
+            }
             allRows.add(new PersonLedgerAdapter.Row(e, running));
         }
         Collections.reverse(allRows); // সর্বশেষ লেনদেন উপরে
@@ -274,8 +280,10 @@ public class PersonDetailActivity extends AppCompatActivity {
                 tvHeroAmount.setText("সব পরিশোধিত ✓");
             }
             tvHeroSub.setText("মোট " + allRawEntries.size() + " টি লেনদেন  •  " + unpaidCount + " টি বাকি\n"
-                    + "মোট পাওনা ৳" + DatabaseManager.formatAmount(totalGot)
-                    + "  •  মোট দেনা ৳" + DatabaseManager.formatAmount(totalGave));
+                    + "মোট পাওনা " + DatabaseManager.formatAmount(totalGot)
+                    + "  •  মোট দেনা " + DatabaseManager.formatAmount(totalGave) + "\n"
+                    + "মোট পেলাম " + DatabaseManager.formatAmount(totalReceived)
+                    + "  •  মোট দিলাম " + DatabaseManager.formatAmount(totalGiven));
         }
 
         applyFiltersAndRender();

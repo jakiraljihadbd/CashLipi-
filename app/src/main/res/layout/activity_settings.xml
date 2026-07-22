@@ -4,60 +4,72 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical" android:background="@color/bgColor">
 
-    <!-- Header -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="@drawable/bg_header_generic" android:orientation="vertical"
-        android:paddingTop="12dp" android:paddingBottom="18dp" android:paddingHorizontal="16dp">
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="horizontal" android:gravity="center_vertical">
+    <!-- ═══════════ Hero Header — gradient backdrop, NO "সেটিংস" title text ═══════════ -->
+    <FrameLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:clipChildren="false" android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="118dp"
+            android:background="@drawable/bg_settings_hero_gradient"
+            android:orientation="vertical" android:gravity="center_vertical"
+            android:paddingHorizontal="20dp">
+
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text=" সেটিংস"
-                android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white"/>
+                android:text="আপনার অ্যাকাউন্ট ও প্রেফারেন্স"
+                android:textSize="12sp" android:textColor="@color/white20"
+                android:letterSpacing="0.02" android:layout_marginBottom="2dp"/>
         </LinearLayout>
-    </LinearLayout>
+
+        <!-- decorative glass dots -->
+        <View android:layout_width="86dp" android:layout_height="86dp"
+            android:layout_gravity="top|end" android:layout_marginTop="-30dp" android:layout_marginEnd="-20dp"
+            android:background="@drawable/bg_glass_dot"/>
+        <View android:layout_width="40dp" android:layout_height="40dp"
+            android:layout_gravity="bottom|start" android:layout_marginStart="70dp" android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_glass_dot"/>
+    </FrameLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent" android:layout_height="match_parent"
         android:overScrollMode="never">
 
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="vertical" android:padding="12dp">
+            android:orientation="vertical" android:paddingHorizontal="14dp"
+            android:paddingBottom="110dp">
 
-            <!-- ── Profile Card (tap করলে ProfileActivity যাবে) ── -->
+            <!-- ── Floating Profile Card (overlaps hero) ── -->
             <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
-                app:cardCornerRadius="20dp" app:cardElevation="4dp"
+                android:layout_height="wrap_content" android:layout_marginTop="-34dp"
+                android:layout_marginBottom="14dp"
+                app:cardCornerRadius="20dp" app:cardElevation="6dp"
                 app:cardBackgroundColor="@color/cardBg">
 
                 <LinearLayout android:id="@+id/cardProfile"
                     android:layout_width="match_parent" android:layout_height="wrap_content"
                     android:orientation="horizontal" android:gravity="center_vertical"
-                    android:padding="16dp"
+                    android:padding="14dp"
                     android:clickable="true" android:focusable="true"
                     android:foreground="?attr/selectableItemBackground">
 
-                    <!-- Profile photo -->
-                    <FrameLayout android:layout_width="56dp" android:layout_height="56dp"
+                    <FrameLayout android:layout_width="58dp" android:layout_height="58dp"
                         android:layout_marginEnd="14dp">
                         <ImageView android:id="@+id/ivSettingsPhoto"
-                            android:layout_width="56dp" android:layout_height="56dp"
+                            android:layout_width="58dp" android:layout_height="58dp"
                             android:background="@drawable/bg_profile_photo_circle"
-                            android:src="@android:drawable/ic_menu_myplaces"
+                            android:src="@drawable/ic_person_circle"
                             android:scaleType="centerCrop"
                             android:clipToOutline="true"/>
                     </FrameLayout>
 
-                    <!-- Name + subtitle -->
                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
                         android:layout_weight="1" android:orientation="vertical">
-
                         <TextView android:id="@+id/tvSettingsName"
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="ব্যবহারকারী"
                             android:textSize="16sp" android:textStyle="bold"
                             android:textColor="@color/textPrimary"
                             android:layout_marginBottom="3dp"/>
-
                         <TextView android:id="@+id/tvSettingsSubtitle"
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="প্রোফাইল দেখুন ও সম্পাদনা করুন"
@@ -65,22 +77,34 @@
                             android:textColor="@color/textSecondary"/>
                     </LinearLayout>
 
-                    <!-- Arrow -->
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="›" android:textSize="24sp" android:textColor="@color/textHint"/>
+                    <FrameLayout android:layout_width="30dp" android:layout_height="30dp"
+                        android:background="@drawable/bg_chevron_circle">
+                        <ImageView android:layout_width="14dp" android:layout_height="14dp"
+                            android:layout_gravity="center" android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/textHint"/>
+                    </FrameLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ── Dark Mode ── -->
+            <!-- ── ডার্ক মোড কুইক টগল ── -->
             <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
-                app:cardCornerRadius="16dp" app:cardElevation="3dp"
+                android:layout_height="wrap_content" android:layout_marginBottom="16dp"
+                app:cardCornerRadius="18dp" app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/cardBg">
-                <LinearLayout android:layout_width="match_parent" android:layout_height="56dp"
+                <LinearLayout android:layout_width="match_parent" android:layout_height="66dp"
                     android:orientation="horizontal" android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
+                    android:paddingHorizontal="14dp">
+
+                    <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                        android:layout_marginEnd="14dp"
+                        android:background="@drawable/bg_icon_tile_round"
+                        android:backgroundTint="@color/colorSecondary">
+                        <ImageView android:layout_width="21dp" android:layout_height="21dp"
+                            android:layout_gravity="center" android:src="@drawable/ic_moon"/>
+                    </FrameLayout>
+
                     <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                        android:layout_weight="1" android:text=" ডার্ক মোড"
+                        android:layout_weight="1" android:text="ডার্ক মোড"
                         android:textSize="14sp" android:textStyle="bold"
                         android:textColor="@color/textPrimary"/>
                     <Switch android:id="@+id/switchDarkMode"
@@ -88,183 +112,294 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- ── SECTION: কাস্টমাইজেশন ── -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="কাস্টমাইজেশন" android:letterSpacing="0.04"
+                android:textSize="12sp" android:textStyle="bold" android:textColor="@color/colorPrimary"
+                android:paddingStart="6dp" android:layout_marginBottom="8dp"/>
 
             <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
-                app:cardCornerRadius="16dp" app:cardElevation="3dp"
+                android:layout_height="wrap_content" android:layout_marginBottom="16dp"
+                app:cardCornerRadius="18dp" app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/cardBg">
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:padding="8dp">
-
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text=" ডেটা ব্যবস্থাপনা"
-                        android:textSize="13sp" android:textStyle="bold"
-                        android:textColor="@color/colorPrimary"
-                        android:paddingHorizontal="8dp" android:paddingVertical="6dp"/>
+                    android:orientation="vertical">
 
                     <!-- নেভিগেশন মেন্যু কাস্টমাইজ -->
                     <LinearLayout android:id="@+id/menuNavCustomize"
-                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:layout_width="match_parent" android:layout_height="64dp"
                         android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp"
+                        android:paddingHorizontal="14dp"
                         android:clickable="true" android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground">
+                        android:foreground="?attr/selectableItemBackground"
+                        android:background="@drawable/bg_settings_menu_row">
+                        <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_icon_tile_round"
+                            android:backgroundTint="@color/colorPrimary">
+                            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_apps_grid"/>
+                        </FrameLayout>
                         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                             android:layout_weight="1" android:text="@string/nav_customize_title"
-                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
+                            android:textSize="14sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
+                        <FrameLayout android:layout_width="28dp" android:layout_height="28dp"
+                            android:background="@drawable/bg_chevron_circle">
+                            <ImageView android:layout_width="13dp" android:layout_height="13dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_chevron_right"
+                                android:tint="@color/textHint"/>
+                        </FrameLayout>
                     </LinearLayout>
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
+                        android:background="@color/dividerColor" android:layout_marginStart="70dp"/>
 
                     <!-- অ্যাপ লক -->
                     <LinearLayout android:id="@+id/menuAppLock"
-                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:layout_width="match_parent" android:layout_height="64dp"
                         android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp"
+                        android:paddingHorizontal="14dp"
                         android:clickable="true" android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground">
+                        android:foreground="?attr/selectableItemBackground"
+                        android:background="@drawable/bg_settings_menu_row">
+                        <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_icon_tile_round"
+                            android:backgroundTint="@color/applockPrimary">
+                            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_applock_lock"/>
+                        </FrameLayout>
                         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text=" অ্যাপ লক"
-                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
+                            android:layout_weight="1" android:text="অ্যাপ লক"
+                            android:textSize="14sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
+                        <FrameLayout android:layout_width="28dp" android:layout_height="28dp"
+                            android:background="@drawable/bg_chevron_circle">
+                            <ImageView android:layout_width="13dp" android:layout_height="13dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_chevron_right"
+                                android:tint="@color/textHint"/>
+                        </FrameLayout>
                     </LinearLayout>
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
+                        android:background="@color/dividerColor" android:layout_marginStart="70dp"/>
 
-                    <!-- ক্যাটাগরি -->
+                    <!-- স্থায়ী ক্যাটাগরি -->
                     <LinearLayout android:id="@+id/menuCategories"
-                        android:layout_width="match_parent" android:layout_height="52dp"
+                        android:layout_width="match_parent" android:layout_height="64dp"
                         android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp"
+                        android:paddingHorizontal="14dp"
                         android:clickable="true" android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground">
+                        android:foreground="?attr/selectableItemBackground"
+                        android:background="@drawable/bg_settings_menu_row">
+                        <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_icon_tile_round"
+                            android:backgroundTint="@color/navSwatchTeal">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_tag"
+                                android:tint="@color/white"/>
+                        </FrameLayout>
                         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text=" স্থায়ী ক্যাটাগরি"
-                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
-
-                    <!-- ট্র্যাশ -->
-                    <LinearLayout android:id="@+id/menuTrash"
-                        android:layout_width="match_parent" android:layout_height="52dp"
-                        android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp"
-                        android:clickable="true" android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text=" ট্র্যাশ ম্যানেজার"
-                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
-
-                    <!-- ব্যাকআপ -->
-                    <LinearLayout android:id="@+id/menuBackup"
-                        android:layout_width="match_parent" android:layout_height="52dp"
-                        android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp"
-                        android:clickable="true" android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text=" ব্যাকআপ ও রিস্টোর"
-                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
-                    </LinearLayout>
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
-
-                    <!-- সব ডেটা মুছুন -->
-                    <LinearLayout android:id="@+id/menuClearData"
-                        android:layout_width="match_parent" android:layout_height="52dp"
-                        android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp"
-                        android:clickable="true" android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text=" সব ডেটা মুছুন"
-                            android:textSize="13sp" android:textColor="@color/errorColor"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="›" android:textSize="20sp" android:textColor="@color/errorColor"/>
+                            android:layout_weight="1" android:text="স্থায়ী ক্যাটাগরি"
+                            android:textSize="14sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
+                        <FrameLayout android:layout_width="28dp" android:layout_height="28dp"
+                            android:background="@drawable/bg_chevron_circle">
+                            <ImageView android:layout_width="13dp" android:layout_height="13dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_chevron_right"
+                                android:tint="@color/textHint"/>
+                        </FrameLayout>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ── Advanced Features ── -->
-            <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginBottom="10dp"
-                app:cardCornerRadius="16dp" app:cardElevation="3dp"
-                app:cardBackgroundColor="@color/cardBg">
-                <LinearLayout android:id="@+id/menuAdvancedFeatures"
-                    android:layout_width="match_parent" android:layout_height="56dp"
-                    android:orientation="horizontal" android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp"
-                    android:clickable="true" android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground">
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="⚙️ অ্যাডভান্স সেটিংস"
-                        android:textSize="14sp" android:textStyle="bold"
-                        android:textColor="@color/textPrimary"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="›" android:textSize="24sp" android:textColor="@color/textHint"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            <!-- ── SECTION: ডেটা ও ব্যাকআপ ── -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="ডেটা ও ব্যাকআপ" android:letterSpacing="0.04"
+                android:textSize="12sp" android:textStyle="bold" android:textColor="@color/colorPrimary"
+                android:paddingStart="6dp" android:layout_marginBottom="8dp"/>
 
-            <!-- ── অ্যাপ তথ্য ── -->
             <androidx.cardview.widget.CardView android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp" app:cardElevation="3dp"
+                app:cardCornerRadius="18dp" app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/cardBg">
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:padding="8dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="ℹ️ অ্যাপ তথ্য"
-                        android:textSize="13sp" android:textStyle="bold"
-                        android:textColor="@color/colorPrimary"
-                        android:paddingHorizontal="8dp" android:paddingVertical="6dp"/>
-                    <LinearLayout android:id="@+id/menuAbout"
-                        android:layout_width="match_parent" android:layout_height="52dp"
+                    android:orientation="vertical">
+
+                    <!-- ট্র্যাশ ম্যানেজার -->
+                    <LinearLayout android:id="@+id/menuTrash"
+                        android:layout_width="match_parent" android:layout_height="64dp"
                         android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp"
+                        android:paddingHorizontal="14dp"
                         android:clickable="true" android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground">
+                        android:foreground="?attr/selectableItemBackground"
+                        android:background="@drawable/bg_settings_menu_row">
+                        <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_icon_tile_round"
+                            android:backgroundTint="@color/warningColor">
+                            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_trash_bin"
+                                android:tint="@color/white"/>
+                        </FrameLayout>
                         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="ℹ️ অ্যাপ সম্পর্কে"
-                            android:textSize="13sp" android:textColor="@color/textPrimary"/>
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="›" android:textSize="20sp" android:textColor="@color/textHint"/>
+                            android:layout_weight="1" android:text="ট্র্যাশ ম্যানেজার"
+                            android:textSize="14sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
+                        <FrameLayout android:layout_width="28dp" android:layout_height="28dp"
+                            android:background="@drawable/bg_chevron_circle">
+                            <ImageView android:layout_width="13dp" android:layout_height="13dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_chevron_right"
+                                android:tint="@color/textHint"/>
+                        </FrameLayout>
                     </LinearLayout>
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="@color/dividerColor" android:layout_marginHorizontal="8dp"/>
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+                        android:background="@color/dividerColor" android:layout_marginStart="70dp"/>
+
+                    <!-- ব্যাকআপ ও রিস্টোর -->
+                    <LinearLayout android:id="@+id/menuBackup"
+                        android:layout_width="match_parent" android:layout_height="64dp"
                         android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp">
+                        android:paddingHorizontal="14dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:background="@drawable/bg_settings_menu_row">
+                        <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_icon_tile_round"
+                            android:backgroundTint="@color/bkAccentBlue">
+                            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_backup_cloud"
+                                android:tint="@color/white"/>
+                        </FrameLayout>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="ব্যাকআপ ও রিস্টোর"
+                            android:textSize="14sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
+                        <FrameLayout android:layout_width="28dp" android:layout_height="28dp"
+                            android:background="@drawable/bg_chevron_circle">
+                            <ImageView android:layout_width="13dp" android:layout_height="13dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_chevron_right"
+                                android:tint="@color/textHint"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginStart="70dp"/>
+
+                    <!-- অ্যাডভান্স সেটিংস -->
+                    <LinearLayout android:id="@+id/menuAdvancedFeatures"
+                        android:layout_width="match_parent" android:layout_height="64dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="14dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:background="@drawable/bg_settings_menu_row">
+                        <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_icon_tile_round"
+                            android:backgroundTint="@color/navSwatchCharcoal">
+                            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_settings"/>
+                        </FrameLayout>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="অ্যাডভান্স সেটিংস"
+                            android:textSize="14sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
+                        <FrameLayout android:layout_width="28dp" android:layout_height="28dp"
+                            android:background="@drawable/bg_chevron_circle">
+                            <ImageView android:layout_width="13dp" android:layout_height="13dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_chevron_right"
+                                android:tint="@color/textHint"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ── SECTION: অ্যাপ তথ্য ── -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="অ্যাপ তথ্য" android:letterSpacing="0.04"
+                android:textSize="12sp" android:textStyle="bold" android:textColor="@color/colorPrimary"
+                android:paddingStart="6dp" android:layout_marginBottom="8dp"/>
+
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="16dp"
+                app:cardCornerRadius="18dp" app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/cardBg">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- অ্যাপ সম্পর্কে -->
+                    <LinearLayout android:id="@+id/menuAbout"
+                        android:layout_width="match_parent" android:layout_height="64dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="14dp"
+                        android:clickable="true" android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:background="@drawable/bg_settings_menu_row">
+                        <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_icon_tile_round"
+                            android:backgroundTint="@color/infoColor">
+                            <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_info_circle"/>
+                        </FrameLayout>
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="অ্যাপ সম্পর্কে"
+                            android:textSize="14sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
+                        <FrameLayout android:layout_width="28dp" android:layout_height="28dp"
+                            android:background="@drawable/bg_chevron_circle">
+                            <ImageView android:layout_width="13dp" android:layout_height="13dp"
+                                android:layout_gravity="center" android:src="@drawable/ic_chevron_right"
+                                android:tint="@color/textHint"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginStart="70dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp"
+                        android:orientation="horizontal" android:gravity="center_vertical"
+                        android:paddingHorizontal="14dp">
                         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                             android:layout_weight="1" android:text="ভার্সন"
                             android:textSize="13sp" android:textColor="@color/textSecondary"/>
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="1.0.0"
-                            android:textSize="13sp" android:textColor="@color/textHint"/>
+                            android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
                     </LinearLayout>
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="44dp"
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="@color/dividerColor" android:layout_marginStart="14dp" android:layout_marginEnd="14dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="46dp"
                         android:orientation="horizontal" android:gravity="center_vertical"
-                        android:paddingHorizontal="8dp">
+                        android:paddingHorizontal="14dp">
                         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                             android:layout_weight="1" android:text="ডেভেলপার"
                             android:textSize="13sp" android:textColor="@color/textSecondary"/>
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="Jakir Al Jihad"
-                            android:textSize="13sp" android:textColor="@color/textHint"/>
+                            android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
                     </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ── DANGER ZONE: সব ডেটা মুছুন ── -->
+            <androidx.cardview.widget.CardView android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="8dp"
+                app:cardCornerRadius="18dp" app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/expenseLight">
+                <LinearLayout android:id="@+id/menuClearData"
+                    android:layout_width="match_parent" android:layout_height="64dp"
+                    android:orientation="horizontal" android:gravity="center_vertical"
+                    android:paddingHorizontal="14dp"
+                    android:clickable="true" android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+                    <FrameLayout android:layout_width="42dp" android:layout_height="42dp"
+                        android:layout_marginEnd="14dp"
+                        android:background="@drawable/bg_icon_tile_round"
+                        android:backgroundTint="@color/errorColor">
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                            android:layout_gravity="center" android:src="@drawable/ic_trash_bin"
+                            android:tint="@color/white"/>
+                    </FrameLayout>
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="সব ডেটা মুছুন"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="@color/errorColor"/>
+                    <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right" android:tint="@color/errorColor"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

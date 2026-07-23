@@ -333,12 +333,6 @@
     <color name="devCallDark">#4338CA</color>
 
     <!-- Developer contact card — brand accents -->
-    <color name="devWhatsappColor">#25D366</color>
-    <color name="devWhatsappDark">#1DA851</color>
-    <color name="devImoColor">#12B4F5</color>
-    <color name="devImoDark">#0D93C9</color>
-    <color name="devCallColor">#4F46E5</color>
-    <color name="devCallDark">#4338CA</color>
 
     <!-- Google brand -->
     <color name="googleBlue">#4285F4</color>

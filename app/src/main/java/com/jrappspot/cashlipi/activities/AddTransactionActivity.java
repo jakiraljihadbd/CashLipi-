@@ -39,12 +39,6 @@ import com.jrappspot.cashlipi.utils.SuccessPopup;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -237,7 +231,11 @@ public class AddTransactionActivity extends BaseActivity {
         }
     }
 
-    /** Pollinations AI (কোনো key লাগে না) দিয়ে ভয়েস টেক্সট থেকে লেনদেনের তথ্য বের করা */
+    /** Pollinations AI (কোনো key লাগে না) দিয়ে ভয়েস টেক্সট থেকে লেনদেনের তথ্য বের করা।
+     *  আগে GET রিকোয়েস্টে পুরো প্রম্পট (ক্যাটাগরি তালিকাসহ) URL-এ এনকোড করে পাঠানো হতো —
+     *  ক্যাটাগরি তালিকা বড় হলে URL অনেক লম্বা হয়ে যায় এবং কেটে যাওয়া/৪xx এরর হওয়ার ঝুঁকি থাকে,
+     *  যার ফলে "AI বুঝতে পারেনি" দেখাতো। এখন POST + JSON body ব্যবহার করা হচ্ছে (openai-compatible
+     *  এন্ডপয়েন্ট) — এতে URL দৈর্ঘ্যের কোনো সীমাবদ্ধতা থাকে না, এবং এরর হলে প্রকৃত কারণ লগ করা হয়। */
     private void parseWithAi(String spokenText) {
         showAiThinking(spokenText);
         aiExecutor.execute(() -> {
@@ -258,31 +256,14 @@ public class AddTransactionActivity extends BaseActivity {
                         + "মাধ্যম উল্লেখ না থাকলে \"cash\" ধরে নাও। "
                         + "ইউজার বলেছে: \"" + spokenText + "\"";
 
-                String encoded = URLEncoder.encode(prompt, "UTF-8");
-                URL url = new URL("https://text.pollinations.ai/" + encoded + "?model=openai&json=true");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setConnectTimeout(15000);
-                conn.setReadTimeout(30000);
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) sb.append(line);
-                br.close();
-
-                String raw = sb.toString().trim();
-                raw = raw.replaceAll("(?s)```json|```", "").trim();
-                int start = raw.indexOf('{');
-                int end = raw.lastIndexOf('}');
-                if (start < 0 || end <= start) throw new IllegalStateException("AI থেকে সঠিক উত্তর আসেনি");
-                JSONObject obj = new JSONObject(raw.substring(start, end + 1));
+                JSONObject obj = com.jrappspot.cashlipi.utils.PollinationsAiHelper.callJson(prompt);
 
                 runOnUiThread(() -> {
                     hideAiThinking();
                     showAiPreview(spokenText, obj);
                 });
             } catch (Exception e) {
+                android.util.Log.e("CashLipiAI", "parseWithAi ব্যর্থ হয়েছে", e);
                 runOnUiThread(() -> {
                     hideAiThinking();
                     Toast.makeText(this,

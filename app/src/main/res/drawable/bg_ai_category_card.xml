@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "AI দিয়ে ক্যাটাগরি বানান" কার্ডের ব্যাকগ্রাউন্ড — হালকা টোনাল ইন্ডিগো, লগইন পেজের
+     info-box টোকেন পুনর্ব্যবহার করা হয়েছে যাতে নতুন কালার বানাতে না হয় ও ডার্কমুডেও ঠিকভাবে কাজ করে। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/loginInfoBoxBg"/>
+    <corners android:radius="18dp"/>
+    <stroke android:width="1.2dp" android:color="@color/loginInfoBoxBorder"/>
+</shape>

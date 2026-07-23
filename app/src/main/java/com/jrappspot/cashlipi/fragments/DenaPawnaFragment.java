@@ -196,7 +196,20 @@ public class DenaPawnaFragment extends Fragment {
                 .show();
     }
 
-    // ── ডেটা লোড + প্রতি-ব্যক্তি সারসংক্ষেপ হিসাব ───────────────────
+    // ── Person ও LedgerEntry দুইটা আলাদা মডেল, নাম মিলিয়ে জোড়া লাগানো হয় (person.id
+    //    সংযোগ নেই) — তাই সাধারণ trim/lowercase যথেষ্ট না, কারণ ইউজার মাঝে মাঝে একাধিক
+    //    স্পেস দেয় বা non-breaking space (\u00A0) কিবোর্ড থেকে ঢুকে যায়, যেটা .trim() মুছে
+    //    না। এসব normalize না করলে ব্যক্তির নাম আর লেনদেনের নাম না মেলায় ব্যানার/ব্যাজে
+    //    ভুল (খালি/সাদা) ফলাফল দেখা যায়। সব জায়গায় এই একই ফাংশন দিয়ে key বানানো হয়।
+    private static String normalizeKey(String raw) {
+        if (raw == null) return "";
+        return raw.replace('\u00A0', ' ')      // non-breaking space → সাধারণ স্পেস
+                .trim()
+                .replaceAll("\\s+", " ")        // একাধিক স্পেস → একটা
+                .toLowerCase(Locale.ROOT);
+    }
+
+
     private void loadData() {
         allPersons.clear();
         allPersons.addAll(db.getPersonList());
@@ -204,11 +217,11 @@ public class DenaPawnaFragment extends Fragment {
 
         List<LedgerEntry> allLedger = db.getLedgerList();
         for (Person p : allPersons) {
-            String key = p.getName().trim().toLowerCase(Locale.ROOT);
+            String key = normalizeKey(p.getName());
             PersonStat stat = statsMap.get(key);
             if (stat == null) { stat = new PersonStat(); statsMap.put(key, stat); }
             for (LedgerEntry e : allLedger) {
-                if (!e.getPerson().trim().toLowerCase(Locale.ROOT).equals(key)) continue;
+                if (!normalizeKey(e.getPerson()).equals(key)) continue;
                 stat.totalCount++;
                 if (!e.isPaid()) {
                     stat.unpaidCount++;
@@ -238,13 +251,13 @@ public class DenaPawnaFragment extends Fragment {
 
         bannerPersons.clear();
         for (Person p : allPersons) {
-            PersonStat s = statsMap.get(p.getName().trim().toLowerCase(Locale.ROOT));
+            PersonStat s = statsMap.get(normalizeKey(p.getName()));
             if (s != null && s.hasUnpaid()) bannerPersons.add(p);
         }
         // যার বকেয়া সবচেয়ে বেশি সে আগে দেখাবে
         bannerPersons.sort((a, b) -> {
-            PersonStat sa = statsMap.get(a.getName().trim().toLowerCase(Locale.ROOT));
-            PersonStat sb = statsMap.get(b.getName().trim().toLowerCase(Locale.ROOT));
+            PersonStat sa = statsMap.get(normalizeKey(a.getName()));
+            PersonStat sb = statsMap.get(normalizeKey(b.getName()));
             double na = sa != null ? sa.getNetAmount() : 0;
             double nb = sb != null ? sb.getNetAmount() : 0;
             return Double.compare(nb, na);
@@ -303,7 +316,7 @@ public class DenaPawnaFragment extends Fragment {
     }
 
     private View buildBannerCard(Person p) {
-        PersonStat s = statsMap.get(p.getName().trim().toLowerCase(Locale.ROOT));
+        PersonStat s = statsMap.get(normalizeKey(p.getName()));
         if (s == null) s = new PersonStat();
         boolean isDena = s.isNetDena();
 
@@ -374,7 +387,7 @@ public class DenaPawnaFragment extends Fragment {
                     || p.getRelation().toLowerCase(Locale.ROOT).contains(q);
             if (!matchesQuery) continue;
 
-            PersonStat stat = statsMap.get(p.getName().trim().toLowerCase(Locale.ROOT));
+            PersonStat stat = statsMap.get(normalizeKey(p.getName()));
             boolean matchesFilter;
             if (currentFilter == 1) matchesFilter = stat != null && stat.hasUnpaid();
             else if (currentFilter == 2) matchesFilter = stat != null && stat.isFullyPaid();

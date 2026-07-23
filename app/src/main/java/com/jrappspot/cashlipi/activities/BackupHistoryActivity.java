@@ -28,7 +28,8 @@ public class BackupHistoryActivity extends BaseActivity {
     private BackupHistoryAdapter adapter;
 
     private CardView chipAll, chipTelegram, chipGDrive, chipLocal;
-    private TextView tvEmptyHistory, tvHistoryCount;
+    private View tvEmptyHistory;
+    private TextView tvHistoryCount;
     private RecyclerView rvHistory;
 
     private String currentFilter = "all";

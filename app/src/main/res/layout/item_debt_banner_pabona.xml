@@ -15,7 +15,7 @@
     <LinearLayout
         android:layout_width="46dp"
         android:layout_height="46dp"
-        android:background="@drawable/bg_header_icon_circle"
+        android:background="@drawable/bg_banner_avatar_plain"
         android:gravity="center"
         android:layout_marginEnd="12dp">
 

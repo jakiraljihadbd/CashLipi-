@@ -180,4 +180,15 @@
 
     <color name="m3MenuCardSurface">#131C2E</color>
     <color name="m3MenuCardOutline">#26324A</color>
+    <!-- ── আয়-ব্যয় (Income/Expense) পেজ — এই "ie" রংগুলোর আগে কোনো নাইট-মোড ভ্যারিয়েন্ট
+         ছিল না, ফলে সিস্টেম ডার্ক মোডেও সার্চ বার/ট্যাব/সামারি কার্ড উজ্জ্বল সাদা বা হালকা
+         রঙেই থেকে যেত। এখানে প্রতিটার জন্য একটা ডার্ক-উপযোগী সংস্করণ দেওয়া হলো। -->
+    <color name="ieWhite">#131C2E</color>
+    <color name="ieGreyBg">#1E293B</color>
+    <color name="ieDarkText">#F8FAFC</color>
+    <color name="ieIncomeLightBg">#12271B</color>
+    <color name="ieExpenseLightBg">#2A1414</color>
+    <color name="ieEditBlueLightBg">#12233A</color>
+    <color name="ieNoticeTextLight">#7FA8DE</color>
+
 </resources>

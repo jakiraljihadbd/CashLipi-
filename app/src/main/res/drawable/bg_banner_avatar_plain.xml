@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ব্যানার কার্ডের ইনিশিয়াল ব্যাজ — আগে ছিল গোল (oval), এখন প্লেন হালকা রঙের
+     রাউন্ড-স্কয়ার, bg_header_icon_circle-এর মতো একই স্বচ্ছ সাদা রং কিন্তু বৃত্ত ছাড়া। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/glassPill"/>
+    <corners android:radius="12dp"/>
+</shape>

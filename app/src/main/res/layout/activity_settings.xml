@@ -4,32 +4,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical" android:background="@color/bgColor">
 
-    <!-- ═══════════ Hero Header — gradient backdrop, NO "সেটিংস" title text ═══════════ -->
-    <FrameLayout
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:clipChildren="false" android:clipToPadding="false">
-
-        <LinearLayout
-            android:layout_width="match_parent" android:layout_height="118dp"
-            android:background="@drawable/bg_settings_hero_gradient"
-            android:orientation="vertical" android:gravity="center_vertical"
-            android:paddingHorizontal="20dp">
-
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="আপনার অ্যাকাউন্ট ও প্রেফারেন্স"
-                android:textSize="12sp" android:textColor="@color/white20"
-                android:letterSpacing="0.02" android:layout_marginBottom="2dp"/>
-        </LinearLayout>
-
-        <!-- decorative glass dots -->
-        <View android:layout_width="86dp" android:layout_height="86dp"
-            android:layout_gravity="top|end" android:layout_marginTop="-30dp" android:layout_marginEnd="-20dp"
-            android:background="@drawable/bg_glass_dot"/>
-        <View android:layout_width="40dp" android:layout_height="40dp"
-            android:layout_gravity="bottom|start" android:layout_marginStart="70dp" android:layout_marginBottom="8dp"
-            android:background="@drawable/bg_glass_dot"/>
-    </FrameLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent" android:layout_height="match_parent"
         android:overScrollMode="never">
@@ -38,9 +12,9 @@
             android:orientation="vertical" android:paddingHorizontal="14dp"
             android:paddingBottom="110dp">
 
-            <!-- ── Floating Profile Card (overlaps hero) ── -->
+            <!-- ── Profile Card ── -->
             <androidx.cardview.widget.CardView android:layout_width="match_parent"
-                android:layout_height="wrap_content" android:layout_marginTop="-34dp"
+                android:layout_height="wrap_content" android:layout_marginTop="14dp"
                 android:layout_marginBottom="14dp"
                 app:cardCornerRadius="20dp" app:cardElevation="6dp"
                 app:cardBackgroundColor="@color/cardBg">

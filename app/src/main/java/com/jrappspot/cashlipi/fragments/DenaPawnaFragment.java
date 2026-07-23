@@ -287,32 +287,43 @@ public class DenaPawnaFragment extends Fragment {
     }
 
     /**
-     * bannerCardHolder-এ ঠিক একটাই কার্ড থাকে — প্রতিবার আগেরটা সরিয়ে নতুনটা বসানো হয়, তাই
-     * ভেতরে-বাইরে দুইটা ভিউ ওভারল্যাপ করে স্লাইড করার (এবং মাঝে মাঝে ফাঁকা/সাদা দেখানোর) কোনো
-     * সুযোগ নেই। animate=true হলে আগে হালকা ফেড-আউট, তারপর কার্ড পাল্টে ফেড-ইন — পরিষ্কার,
-     * একরঙা ক্রসফেড, কোনো তির্যক/স্কিউড স্লাইড নেই।
+     * আগে alpha crossfade ব্যবহার করা হতো (নতুন কার্ড alpha ০ থেকে ১-এ ফেড করত), কিন্তু কিছু
+     * ডিভাইসে alpha animation-এর মাঝের ফ্রেমে view-টা hardware layer-এ কম্পোজিট হওয়ায়
+     * এক মুহূর্তের জন্য পেছনের সাদা ব্যাকগ্রাউন্ড দেখা যাচ্ছিল। তাই এখন alpha পুরোপুরি বাদ —
+     * দুইটা কার্ডই সবসময় alpha=1 (পুরোপুরি অস্বচ্ছ) থাকে, শুধু translationX দিয়ে একটা বাম দিকে
+     * বেরিয়ে যায় আর নতুনটা ডান দিক থেকে ঢুকে পুরনোটার জায়গা নেয়। যেকোনো মুহূর্তে দুইটা কার্ড
+     * মিলে পুরো প্রস্থটা ফাঁক ছাড়াই ঢেকে রাখে, তাই সাদা/ফাঁকা ফ্রেম দেখানোর কোনো সুযোগই নেই।
      */
     private void showBannerCard(int index, boolean animate) {
         if (bannerCardHolder == null || index < 0 || index >= bannerPersons.size()) return;
         View newCard = buildBannerCard(bannerPersons.get(index));
 
-        if (!animate || bannerCardHolder.getChildCount() == 0) {
+        View oldCard = bannerCardHolder.getChildCount() > 0
+                ? bannerCardHolder.getChildAt(bannerCardHolder.getChildCount() - 1) : null;
+
+        if (!animate || oldCard == null) {
             bannerCardHolder.removeAllViews();
+            newCard.setAlpha(1f);
+            newCard.setTranslationX(0f);
             bannerCardHolder.addView(newCard);
             return;
         }
 
-        // পুরনো কার্ডটা পুরোপুরি অস্বচ্ছ (alpha=1) রেখেই তার উপরে নতুন কার্ড বসিয়ে ফেড-ইন করানো
-        // হয় — কখনও পুরো হোল্ডারটা অস্বচ্ছতা ০-তে নামানো হয় না। ফলে ট্রানজিশনের প্রতি মুহূর্তেই
-        // অন্তত একটা রঙিন (দেনা/পাওনা) কার্ড পুরো জায়গা ঢেকে রাখে — পেছনের সাদা/হালকা
-        // ব্যাকগ্রাউন্ড কখনও এক ফ্রেমের জন্যও উঁকি দেয় না।
-        newCard.setAlpha(0f);
-        bannerCardHolder.addView(newCard); // এখন দুইটা কার্ড স্ট্যাক করা: পুরনোটা নিচে, নতুনটা উপরে
-        newCard.animate().alpha(1f).setDuration(220).withEndAction(() -> {
-            while (bannerCardHolder.getChildCount() > 1) {
-                bannerCardHolder.removeViewAt(0); // ফেড শেষে পুরনো কার্ড(গুলো) সরিয়ে দেওয়া
-            }
-        }).start();
+        int width = bannerCardHolder.getWidth();
+        newCard.setAlpha(1f);
+        newCard.setTranslationX(width);
+        bannerCardHolder.addView(newCard); // পুরনোটা নিচে, নতুনটা উপরে — দুইটাই সম্পূর্ণ অস্বচ্ছ
+
+        oldCard.animate().translationX(-width).setDuration(260)
+                .setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator())
+                .start();
+        newCard.animate().translationX(0f).setDuration(260)
+                .setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator())
+                .withEndAction(() -> {
+                    while (bannerCardHolder.getChildCount() > 1) {
+                        bannerCardHolder.removeViewAt(0); // স্লাইড শেষে পুরনো কার্ড সরিয়ে দেওয়া
+                    }
+                }).start();
     }
 
     private View buildBannerCard(Person p) {

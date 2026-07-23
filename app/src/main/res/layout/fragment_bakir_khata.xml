@@ -37,7 +37,7 @@
                 android:ellipsize="end"/>
 
             <TextView
-                android:id="@+id/tvPersonCount"
+                android:id="@+id/tvKhataCustomerCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
@@ -48,22 +48,95 @@
                 android:ellipsize="end"/>
         </LinearLayout>
 
+        <!-- বিজনেস ওয়ালেট চিপ + দ্রুত অ্যাকশন (খরচ/জমা) — মূল একাউন্ট থেকে সম্পূর্ণ আলাদা পকেট -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/cardBackground"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="8dp">
+
+            <LinearLayout
+                android:id="@+id/chipKhataWallet"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_dialog_field"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ওয়ালেট"
+                    android:textSize="11.5sp"
+                    android:textColor="@color/textSecondary"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvKhataWalletBalance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="৳০"
+                    android:textSize="13.5sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/khataWalletColor"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btnKhataAddExpense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="9dp"
+                android:text="+ খরচ"
+                android:textSize="12.5sp"
+                android:textStyle="bold"
+                android:textColor="@color/bakiColor"
+                android:background="@drawable/bg_dialog_field"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <TextView
+                android:id="@+id/btnKhataAddJoma"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="9dp"
+                android:text="+ জমা"
+                android:textSize="12.5sp"
+                android:textStyle="bold"
+                android:textColor="@color/jomaColor"
+                android:background="@drawable/bg_dialog_field"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="8dp"/>
 
-        <!-- অটো-স্লাইড ব্যানার — কার টাকা এখনও পরিশোধ হয়নি, সেটা একটাই কার্ডে (দেনা হলে কমলা,
-             পাওনা হলে নীল ব্যাকগ্রাউন্ড) দেখায় এবং ৫ সেকেন্ড পরপর মসৃণ ফেড দিয়ে পরের ব্যক্তিতে
-             বদলায়।
+        <!-- অটো-স্লাইড ব্যানার — কার বাকি এখনও আদায় হয়নি, সেটা একটাই কার্ডে (বাকি হলে লাল,
+             অগ্রিম হলে সবুজ ব্যাকগ্রাউন্ড) দেখায় এবং ৫ সেকেন্ড পরপর পরের গ্রাহকে বদলায়।
 
              আগে এখানে একটা খালি FrameLayout (bannerCardHolder) ছিল, যার ভেতরে কোডে
-             ডাইনামিকভাবে item_debt_banner_dena/pabona ইনফ্লেট করে addView/removeView করা
-             হতো। কিছু ডিভাইসে সেই inflate+addView এর মাঝামাঝি মুহূর্তে (বা container
-             VISIBLE হওয়ার সাথে সাথে চাইল্ড যোগ হওয়ার আগের এক ফ্রেমে) কার্ডটা খালি/সাদা
-             দেখা যাচ্ছিল। এখন সমাধান হিসেবে ব্যানারের কার্ডটা এখানে সরাসরি স্ট্যাটিকভাবে
-             লেখা — bannerCardRoot সবসময় বিদ্যমান এবং সবসময় একটা background (ডিফল্ট অ্যাম্বার)
-             নিয়েই তৈরি হয়, কোডে শুধু setBackgroundResource() ও টেক্সট বদলানো হয় — কখনও
-             কোনো ভিউ যোগ/বাদ দেওয়া হয় না, তাই কখনও খালি/সাদা ফ্রেম দেখানোর সুযোগই নেই। -->
+             ডাইনামিকভাবে item_debt_banner_khata/khata_joma ইনফ্লেট করে addView/removeView
+             করা হতো — কিছু ডিভাইসে সেই মুহূর্তে কার্ডটা খালি/সাদা দেখা যাচ্ছিল (দেনা-পাওনা
+             পেজেও একই বাগ ছিল, ওখানে ঠিক করার সময় এখানেও একইভাবে ঠিক করা হলো)। এখন
+             কার্ডটা সরাসরি স্ট্যাটিকভাবে লেখা — bannerCardRoot সবসময় বিদ্যমান এবং সবসময় একটা
+             background নিয়েই তৈরি হয়, কোডে শুধু setBackgroundResource() ও টেক্সট বদলানো
+             হয়, কখনও কোনো ভিউ যোগ/বাদ দেওয়া হয় না। -->
         <FrameLayout
             android:id="@+id/bannerContainer"
             android:layout_width="match_parent"
@@ -81,7 +154,7 @@
                 android:paddingHorizontal="18dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="@drawable/bg_debt_banner_dena"
+                android:background="@drawable/bg_debt_banner_khata"
                 android:foreground="?attr/selectableItemBackground">
 
                 <LinearLayout
@@ -265,7 +338,7 @@
 
         <!-- তালিকা -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPersonList"
+            android:id="@+id/rvKhataCustomerList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -346,10 +419,10 @@
 
     <!-- ফ্লোটিং + বাটন -->
     <LinearLayout
-        android:id="@+id/btnAddPerson"
+        android:id="@+id/btnAddKhataCustomer"
         android:layout_width="62dp"
         android:layout_height="62dp"
-        android:background="@drawable/bg_fab_dena_pawna"
+        android:background="@drawable/bg_fab_bakir_khata"
         android:gravity="center"
         android:elevation="10dp"
         android:clickable="true"

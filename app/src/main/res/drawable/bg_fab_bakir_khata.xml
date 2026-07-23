@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- বাকির খাতা FAB-এর রং — ইন্ডিগো, যাতে দেনা-পাওনার গোলাপি FAB থেকে আলাদা দেখায়। -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="#55FFFFFF">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#4F46E5"/>
+        </shape>
+    </item>
+</ripple>

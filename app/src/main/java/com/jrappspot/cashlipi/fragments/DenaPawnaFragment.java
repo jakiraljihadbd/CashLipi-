@@ -67,7 +67,8 @@ public class DenaPawnaFragment extends Fragment {
     private View filterActiveDot;
 
     private FrameLayout bannerContainer;
-    private FrameLayout bannerCardHolder;
+    private LinearLayout bannerCardRoot;
+    private TextView tvBannerInitial, tvBannerName, tvBannerSub, tvBannerAmount, tvBannerLabel;
     private LinearLayout debtDots;
     private final Handler bannerHandler = new Handler(Looper.getMainLooper());
     private final List<Person> bannerPersons = new ArrayList<>();
@@ -112,7 +113,12 @@ public class DenaPawnaFragment extends Fragment {
         btnThemeChange = root.findViewById(R.id.btnThemeChange);
         filterActiveDot = root.findViewById(R.id.filterActiveDot);
         bannerContainer = root.findViewById(R.id.bannerContainer);
-        bannerCardHolder = root.findViewById(R.id.bannerCardHolder);
+        bannerCardRoot = root.findViewById(R.id.bannerCardRoot);
+        tvBannerInitial = root.findViewById(R.id.tvBannerInitial);
+        tvBannerName = root.findViewById(R.id.tvBannerName);
+        tvBannerSub = root.findViewById(R.id.tvBannerSub);
+        tvBannerAmount = root.findViewById(R.id.tvBannerAmount);
+        tvBannerLabel = root.findViewById(R.id.tvBannerLabel);
         debtDots = root.findViewById(R.id.debtDots);
 
         rvList.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -287,69 +293,51 @@ public class DenaPawnaFragment extends Fragment {
     }
 
     /**
-     * আগে alpha crossfade ব্যবহার করা হতো (নতুন কার্ড alpha ০ থেকে ১-এ ফেড করত), কিন্তু কিছু
-     * ডিভাইসে alpha animation-এর মাঝের ফ্রেমে view-টা hardware layer-এ কম্পোজিট হওয়ায়
-     * এক মুহূর্তের জন্য পেছনের সাদা ব্যাকগ্রাউন্ড দেখা যাচ্ছিল। তাই এখন alpha পুরোপুরি বাদ —
-     * দুইটা কার্ডই সবসময় alpha=1 (পুরোপুরি অস্বচ্ছ) থাকে, শুধু translationX দিয়ে একটা বাম দিকে
-     * বেরিয়ে যায় আর নতুনটা ডান দিক থেকে ঢুকে পুরনোটার জায়গা নেয়। যেকোনো মুহূর্তে দুইটা কার্ড
-     * মিলে পুরো প্রস্থটা ফাঁক ছাড়াই ঢেকে রাখে, তাই সাদা/ফাঁকা ফ্রেম দেখানোর কোনো সুযোগই নেই।
+     * bannerCardRoot XML-এই স্ট্যাটিকভাবে ডিফাইন করা এবং সবসময় বিদ্যমান — এখানে শুধু তার
+     * background ও টেক্সট বদলানো হয়, কখনও কোনো ভিউ যোগ/বাদ দেওয়া হয় না। তাই কোনো অবস্থাতেই
+     * কার্ডটা খালি/সাদা দেখানোর সুযোগ নেই। পরিবর্তনের সময় (animate=true) শুধু একটা হালকা
+     * scale/translate "পপ" ইফেক্ট হয় — background/content কখনও অস্বচ্ছতা হারায় না।
      */
     private void showBannerCard(int index, boolean animate) {
-        if (bannerCardHolder == null || index < 0 || index >= bannerPersons.size()) return;
-        View newCard = buildBannerCard(bannerPersons.get(index));
+        if (bannerCardRoot == null || index < 0 || index >= bannerPersons.size()) return;
+        Person p = bannerPersons.get(index);
 
-        View oldCard = bannerCardHolder.getChildCount() > 0
-                ? bannerCardHolder.getChildAt(bannerCardHolder.getChildCount() - 1) : null;
+        Runnable applyContent = () -> bindBannerCard(p);
 
-        if (!animate || oldCard == null) {
-            bannerCardHolder.removeAllViews();
-            newCard.setAlpha(1f);
-            newCard.setTranslationX(0f);
-            bannerCardHolder.addView(newCard);
+        if (!animate) {
+            applyContent.run();
             return;
         }
 
-        int width = bannerCardHolder.getWidth();
-        newCard.setAlpha(1f);
-        newCard.setTranslationX(width);
-        bannerCardHolder.addView(newCard); // পুরনোটা নিচে, নতুনটা উপরে — দুইটাই সম্পূর্ণ অস্বচ্ছ
-
-        oldCard.animate().translationX(-width).setDuration(260)
-                .setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator())
-                .start();
-        newCard.animate().translationX(0f).setDuration(260)
-                .setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator())
+        bannerCardRoot.animate().cancel();
+        bannerCardRoot.animate()
+                .translationY(-6f)
+                .setDuration(120)
                 .withEndAction(() -> {
-                    while (bannerCardHolder.getChildCount() > 1) {
-                        bannerCardHolder.removeViewAt(0); // স্লাইড শেষে পুরনো কার্ড সরিয়ে দেওয়া
-                    }
+                    applyContent.run();
+                    bannerCardRoot.setTranslationY(-6f);
+                    bannerCardRoot.animate().translationY(0f).setDuration(160).start();
                 }).start();
     }
 
-    private View buildBannerCard(Person p) {
+    private void bindBannerCard(Person p) {
         PersonStat s = statsMap.get(normalizeKey(p.getName()));
         if (s == null) s = new PersonStat();
         boolean isDena = s.isNetDena();
 
-        // দেনা ও পাওনার জন্য দুইটা আলাদা লে-আউট ফাইল (item_debt_banner_dena / _pabona) —
-        // প্রতিটাতে সঠিক রং XML-এই বেক করা এবং কার্ডটা bannerCardHolder-এর পুরো জায়গা জুড়ে
-        // বসে, তাই bg কালার সবসময় দেনা/পাওনা অনুযায়ীই দেখাবে।
-        View card = LayoutInflater.from(requireContext()).inflate(
-                isDena ? R.layout.item_debt_banner_dena : R.layout.item_debt_banner_pabona,
-                bannerCardHolder, false);
+        // দেনা ও পাওনার জন্য সঠিক ব্যাকগ্রাউন্ড সরাসরি bannerCardRoot-এ সেট করা হয় — এটা
+        // সবসময়ই বিদ্যমান কোনো একটা background নিয়ে থাকে (কখনও transparent/blank নয়)।
+        bannerCardRoot.setBackgroundResource(
+                isDena ? R.drawable.bg_debt_banner_dena : R.drawable.bg_debt_banner_pabona);
 
-        ((TextView) card.findViewById(R.id.tvBannerInitial)).setText(p.getInitial());
-        ((TextView) card.findViewById(R.id.tvBannerName)).setText(
-                p.getName().isEmpty() ? "নাম নেই" : p.getName());
-        ((TextView) card.findViewById(R.id.tvBannerSub)).setText(
-                s.unpaidCount + " টি অপরিশোধিত এন্ট্রি" + (p.hasRelation() ? " • " + p.getRelation() : ""));
-
-        ((TextView) card.findViewById(R.id.tvBannerLabel)).setText(isDena ? "আপনি দেবেন" : "আপনি পাবেন");
+        tvBannerInitial.setText(p.getInitial());
+        tvBannerName.setText(p.getName().isEmpty() ? "নাম নেই" : p.getName());
+        tvBannerSub.setText(s.unpaidCount + " টি অপরিশোধিত এন্ট্রি" + (p.hasRelation() ? " • " + p.getRelation() : ""));
+        tvBannerLabel.setText(isDena ? "আপনি দেবেন" : "আপনি পাবেন");
         double amount = s.getNetAmount() > 0 ? s.getNetAmount() : Math.max(s.unpaidDena, s.unpaidPabona);
-        ((TextView) card.findViewById(R.id.tvBannerAmount)).setText(DatabaseManager.formatAmount(amount));
+        tvBannerAmount.setText(DatabaseManager.formatAmount(amount));
 
-        card.setOnClickListener(v -> openPerson(p));
-        return card;
+        bannerCardRoot.setOnClickListener(v -> openPerson(p));
     }
 
     private void updateBannerDots(int activeIndex) {
@@ -364,7 +352,7 @@ public class DenaPawnaFragment extends Fragment {
         bannerHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (bannerCardHolder != null && bannerPersons.size() > 1) {
+                if (bannerCardRoot != null && bannerPersons.size() > 1) {
                     bannerIndex = (bannerIndex + 1) % bannerPersons.size();
                     showBannerCard(bannerIndex, true);
                     updateBannerDots(bannerIndex);

@@ -71,6 +71,23 @@
     <color name="pabonaColor">#3B82F6</color>
     <color name="pabonaLight">#DBEAFE</color>
 
+    <!-- বাকির খাতা (Bakir Khata) — বাকি (due) লাল, জমা (paid/advance) সবুজ, ওয়ালেট ইন্ডিগো -->
+    <color name="bakiColor">#DC2626</color>
+    <color name="bakiLight">#FEE2E2</color>
+    <color name="jomaColor">#059669</color>
+    <color name="jomaLight">#D1FAE5</color>
+    <color name="khataWalletColor">#4F46E5</color>
+    <color name="khataWalletLight">#E0E7FF</color>
+    <color name="bakiActiveGradStart">#EF4444</color>
+    <color name="bakiActiveGradEnd">#DC2626</color>
+    <color name="jomaActiveGradStart">#10B981</color>
+    <color name="jomaActiveGradEnd">#059669</color>
+    <color name="labelOnJoma">#D1FAE5</color>
+    <color name="m3BakiContainer">#F8A8A0</color>
+    <color name="m3OnBakiContainer">#7A0E0E</color>
+    <color name="m3JomaContainer">#8FE0BE</color>
+    <color name="m3OnJomaContainer">#04432B</color>
+
     <!-- Savings -->
     <color name="savingsColor">#7C3AED</color>
     <color name="savingsDark">#9D174D</color>
@@ -306,6 +323,14 @@
     <color name="glassSummaryFill">#1AFFFFFF</color>
     <color name="glassSummaryStroke">#33FFFFFF</color>
     <color name="glassTranslucentBtn">#40000000</color>
+
+    <!-- Developer contact card — brand accents -->
+    <color name="devWhatsappColor">#25D366</color>
+    <color name="devWhatsappDark">#1DA851</color>
+    <color name="devImoColor">#12B4F5</color>
+    <color name="devImoDark">#0D93C9</color>
+    <color name="devCallColor">#4F46E5</color>
+    <color name="devCallDark">#4338CA</color>
 
     <!-- Developer contact card — brand accents -->
     <color name="devWhatsappColor">#25D366</color>

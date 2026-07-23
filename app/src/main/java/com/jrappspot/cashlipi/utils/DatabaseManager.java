@@ -11,6 +11,10 @@ import com.jrappspot.cashlipi.models.Note;
 import com.jrappspot.cashlipi.models.Person;
 import com.jrappspot.cashlipi.models.TrashItem;
 import com.jrappspot.cashlipi.models.Transaction;
+import com.jrappspot.cashlipi.models.KhataCustomer;
+import com.jrappspot.cashlipi.models.KhataEntry;
+import com.jrappspot.cashlipi.models.KhataExpense;
+import com.jrappspot.cashlipi.models.KhataWalletTxn;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -39,6 +43,14 @@ public class DatabaseManager {
     private static final String KEY_SETTINGS = "settings";
     private static final String KEY_CATEGORIES = "permanentCategories";
     private static final String KEY_USER_NAME = "_da_user_name";
+
+    // ── বাকির খাতা (Bakir Khata) মডিউল ──
+    private static final String KEY_KHATA_CUSTOMERS = "bakir_khata_customers";
+    private static final String KEY_KHATA_ENTRIES = "bakir_khata_entries";
+    private static final String KEY_KHATA_EXPENSES = "bakir_khata_expenses";
+    private static final String KEY_KHATA_EXPENSE_CATEGORIES = "bakir_khata_expense_categories";
+    private static final String KEY_KHATA_WALLET_BALANCE = "bakir_khata_wallet_balance";
+    private static final String KEY_KHATA_WALLET_TXNS = "bakir_khata_wallet_txns";
 
     private static DatabaseManager instance;
     private final SharedPreferences prefs;
@@ -1254,6 +1266,359 @@ public class DatabaseManager {
     }
 
     public void saveLastDriveSyncTime(long time) {
+    }
+
+    // ═══════════════════════════════════════════
+    //  বাকির খাতা — CUSTOMER CRUD
+    // ═══════════════════════════════════════════
+    public List<KhataCustomer> getKhataCustomerList() {
+        Type t = new TypeToken<List<KhataCustomer>>() {}.getType();
+        return loadList(KEY_KHATA_CUSTOMERS, t);
+    }
+
+    public KhataCustomer addKhataCustomer(KhataCustomer c) {
+        List<KhataCustomer> list = getKhataCustomerList();
+        c.setId(generateId());
+        c.setCreatedAt(nowIso());
+        if (c.getDate().isEmpty()) c.setDate(nowDate());
+        if (c.getTime().isEmpty()) c.setTime(nowTime());
+        list.add(0, c);
+        saveList(KEY_KHATA_CUSTOMERS, list);
+
+        // পূর্বের জের (opening balance) থাকলে সেটার জন্য একটা প্রাথমিক "বাকি" এন্ট্রি তৈরি হয়,
+        // যাতে গ্রাহকের হিসাব থেকে প্রথম দিনই তার আগের বকেয়া দেখা যায়।
+        if (Math.abs(c.getOpeningBalance()) > 0.004) {
+            KhataEntry opening = new KhataEntry(
+                    c.getOpeningBalance() > 0 ? "baki" : "joma",
+                    c.getId(), c.getName(), Math.abs(c.getOpeningBalance()),
+                    c.getDate().isEmpty() ? nowDate() : c.getDate(),
+                    c.getTime().isEmpty() ? nowTime() : c.getTime());
+            opening.setNote("পূর্বের জের (ওপেনিং ব্যালেন্স)");
+            addKhataEntry(opening);
+        }
+        return c;
+    }
+
+    public boolean updateKhataCustomer(int index, KhataCustomer updated) {
+        List<KhataCustomer> list = getKhataCustomerList();
+        if (index < 0 || index >= list.size()) return false;
+        updated.setUpdatedAt(nowIso());
+        list.set(index, updated);
+        saveList(KEY_KHATA_CUSTOMERS, list);
+        return true;
+    }
+
+    public boolean deleteKhataCustomer(int index) {
+        List<KhataCustomer> list = getKhataCustomerList();
+        if (index < 0 || index >= list.size()) return false;
+        KhataCustomer removed = list.remove(index);
+        saveList(KEY_KHATA_CUSTOMERS, list);
+        deleteKhataEntriesForCustomerId(removed.getId());
+        return true;
+    }
+
+    public KhataCustomer getKhataCustomerById(String id) {
+        if (id == null) return null;
+        for (KhataCustomer c : getKhataCustomerList()) {
+            if (id.equals(c.getId())) return c;
+        }
+        return null;
+    }
+
+    public int getKhataCustomerIndexById(String id) {
+        if (id == null) return -1;
+        List<KhataCustomer> list = getKhataCustomerList();
+        for (int i = 0; i < list.size(); i++) {
+            if (id.equals(list.get(i).getId())) return i;
+        }
+        return -1;
+    }
+
+    // ═══════════════════════════════════════════
+    //  বাকির খাতা — ENTRY (বাকি/জমা) CRUD
+    // ═══════════════════════════════════════════
+    public List<KhataEntry> getKhataEntryList() {
+        Type t = new TypeToken<List<KhataEntry>>() {}.getType();
+        return loadList(KEY_KHATA_ENTRIES, t);
+    }
+
+    public List<KhataEntry> getKhataEntriesForCustomerId(String customerId) {
+        List<KhataEntry> result = new ArrayList<>();
+        if (customerId == null || customerId.isEmpty()) return result;
+        for (KhataEntry e : getKhataEntryList()) {
+            if (customerId.equals(e.getCustomerId())) result.add(e);
+        }
+        return result;
+    }
+
+    /** নাম মিলিয়ে (case/space insensitive) — customerId না থাকা পুরোনো এন্ট্রির জন্য ফলব্যাক। */
+    public List<KhataEntry> getKhataEntriesForCustomerName(String name) {
+        List<KhataEntry> result = new ArrayList<>();
+        if (name == null || name.trim().isEmpty()) return result;
+        String target = name.trim().toLowerCase(Locale.ROOT);
+        for (KhataEntry e : getKhataEntryList()) {
+            if (e.getCustomerName().trim().toLowerCase(Locale.ROOT).equals(target)) result.add(e);
+        }
+        return result;
+    }
+
+    public KhataEntry addKhataEntry(KhataEntry entry) {
+        List<KhataEntry> list = getKhataEntryList();
+        entry.setId(generateId());
+        entry.setCreatedAt(nowIso());
+        if (entry.getDate().isEmpty()) entry.setDate(nowDate());
+        if (entry.getTime().isEmpty()) entry.setTime(nowTime());
+        list.add(0, entry);
+        saveList(KEY_KHATA_ENTRIES, list);
+
+        // "জমা" এন্ট্রি হলে টাকাটা কোথায় জমা হবে সেটা routing করা হয় — ওয়ালেটে বা মূল ব্যালেন্সে।
+        if (entry.isJoma()) {
+            String custName = entry.getCustomerName().isEmpty() ? "গ্রাহক" : entry.getCustomerName();
+            if ("balance".equals(entry.getDepositTo())) {
+                Transaction income = new Transaction();
+                income.setAmount(entry.getAmount());
+                income.setCategory("বাকির খাতা জমা");
+                income.setNote(custName + " থেকে জমা নেওয়া হয়েছে");
+                income.setDate(entry.getDate());
+                income.setTime(entry.getTime());
+                addIncome(income);
+            } else {
+                adjustKhataWalletBalance(entry.getAmount());
+                logKhataWalletTxn("joma_in", entry.getAmount(), custName + " থেকে জমা", entry.getDate(), entry.getTime());
+            }
+        }
+        return entry;
+    }
+
+    public boolean updateKhataEntry(int index, KhataEntry updated) {
+        List<KhataEntry> list = getKhataEntryList();
+        if (index < 0 || index >= list.size()) return false;
+        updated.setUpdatedAt(nowIso());
+        list.set(index, updated);
+        saveList(KEY_KHATA_ENTRIES, list);
+        return true;
+    }
+
+    public boolean deleteKhataEntry(int index) {
+        List<KhataEntry> list = getKhataEntryList();
+        if (index < 0 || index >= list.size()) return false;
+        list.remove(index);
+        saveList(KEY_KHATA_ENTRIES, list);
+        return true;
+    }
+
+    public int getKhataEntryIndexById(String id) {
+        if (id == null) return -1;
+        List<KhataEntry> list = getKhataEntryList();
+        for (int i = 0; i < list.size(); i++) {
+            if (id.equals(list.get(i).getId())) return i;
+        }
+        return -1;
+    }
+
+    /** সর্বশেষ n টি এন্ট্রি — তালিকা সবসময় নতুন-প্রথম ক্রমে সংরক্ষিত হয় (addKhataEntry দেখুন)। */
+    public List<KhataEntry> getRecentKhataEntry(int n) {
+        List<KhataEntry> list = getKhataEntryList();
+        if (list.size() <= n) return list;
+        return new ArrayList<>(list.subList(0, n));
+    }
+
+    /** "বাকি" এন্ট্রি আদায়/অনাদায় টগল করে (index হচ্ছে getKhataEntryList()-এর ইনডেক্স)। */
+    public boolean toggleKhataEntryPaid(int index) {
+        List<KhataEntry> list = getKhataEntryList();
+        if (index < 0 || index >= list.size()) return false;
+        KhataEntry e = list.get(index);
+        e.setPaid(!e.isPaid());
+        e.setPaidDate(e.isPaid() ? nowDate() : "");
+        list.set(index, e);
+        saveList(KEY_KHATA_ENTRIES, list);
+        return true;
+    }
+
+    public int deleteKhataEntriesForCustomerId(String customerId) {
+        if (customerId == null || customerId.isEmpty()) return 0;
+        List<KhataEntry> list = getKhataEntryList();
+        List<KhataEntry> kept = new ArrayList<>();
+        int removedCount = 0;
+        for (KhataEntry e : list) {
+            if (customerId.equals(e.getCustomerId())) removedCount++;
+            else kept.add(e);
+        }
+        if (removedCount > 0) saveList(KEY_KHATA_ENTRIES, kept);
+        return removedCount;
+    }
+
+    /** সব গ্রাহকের মোট বাকি (এখনও আদায় হয়নি) — বাকির খাতা ফ্র্যাগমেন্টের উপরের সামারিতে ব্যবহৃত। */
+    public double getTotalKhataBaki() {
+        double totalBaki = 0, totalJoma = 0;
+        for (KhataEntry e : getKhataEntryList()) {
+            if (e.isBaki()) totalBaki += e.getAmount(); else totalJoma += e.getAmount();
+        }
+        return Math.max(0, totalBaki - totalJoma);
+    }
+
+    /** এ পর্যন্ত মোট জমা নেওয়া টাকার যোগফল (সব গ্রাহক মিলিয়ে)। */
+    public double getTotalKhataJoma() {
+        double total = 0;
+        for (KhataEntry e : getKhataEntryList()) {
+            if (e.isJoma()) total += e.getAmount();
+        }
+        return total;
+    }
+
+    public double getTotalKhataJomaToday() {
+        String today = nowDate();
+        double total = 0;
+        for (KhataEntry e : getKhataEntryList()) {
+            if (e.isJoma() && today.equals(e.getDate())) total += e.getAmount();
+        }
+        return total;
+    }
+
+    // ═══════════════════════════════════════════
+    //  বাকির খাতা — বিজনেস ওয়ালেট
+    //  (মূল একাউন্টের ব্যালেন্স থেকে সম্পূর্ণ আলাদা রাখা একটা পকেট — চাইলে মূল ব্যালেন্স থেকে
+    //   কিছু বা পুরো টাকা এখানে আনা যায়, আবার ফেরতও নেওয়া যায়।)
+    // ═══════════════════════════════════════════
+    public double getKhataWalletBalance() {
+        return (double) prefs.getFloat(KEY_KHATA_WALLET_BALANCE, 0f);
+    }
+
+    private void setKhataWalletBalance(double value) {
+        prefs.edit().putFloat(KEY_KHATA_WALLET_BALANCE, (float) value).apply();
+    }
+
+    private void adjustKhataWalletBalance(double delta) {
+        setKhataWalletBalance(getKhataWalletBalance() + delta);
+    }
+
+    public List<KhataWalletTxn> getKhataWalletTxnList() {
+        Type t = new TypeToken<List<KhataWalletTxn>>() {}.getType();
+        return loadList(KEY_KHATA_WALLET_TXNS, t);
+    }
+
+    private void logKhataWalletTxn(String type, double amount, String note, String date, String time) {
+        List<KhataWalletTxn> list = getKhataWalletTxnList();
+        KhataWalletTxn txn = new KhataWalletTxn(type, amount, note);
+        txn.setId(generateId());
+        txn.setDate(date.isEmpty() ? nowDate() : date);
+        txn.setTime(time.isEmpty() ? nowTime() : time);
+        txn.setCreatedAt(nowIso());
+        list.add(0, txn);
+        saveList(KEY_KHATA_WALLET_TXNS, list);
+    }
+
+    /** মূল ব্যালেন্স থেকে (কিছু বা পুরো) ওয়ালেটে টাকা আনে — মূল হিসাবে এটা একটা "ব্যয়" হিসেবে গণ্য হয়। */
+    public boolean fundWalletFromMainBalance(double amount, String note) {
+        if (amount <= 0) return false;
+        Transaction expense = new Transaction();
+        expense.setAmount(amount);
+        expense.setCategory("বাকির খাতা ওয়ালেট");
+        expense.setNote(note == null || note.isEmpty() ? "মূল ব্যালেন্স থেকে ওয়ালেটে স্থানান্তর" : note);
+        expense.setDate(nowDate());
+        expense.setTime(nowTime());
+        addExpense(expense);
+        adjustKhataWalletBalance(amount);
+        logKhataWalletTxn("fund_in", amount, "মূল ব্যালেন্স থেকে জমা", nowDate(), nowTime());
+        return true;
+    }
+
+    /** ওয়ালেট থেকে (কিছু বা পুরো) টাকা মূল ব্যালেন্সে ফেরত নেয় — মূল হিসাবে এটা একটা "আয়" হিসেবে গণ্য হয়। */
+    public boolean withdrawWalletToMainBalance(double amount, String note) {
+        if (amount <= 0 || amount > getKhataWalletBalance() + 0.004) return false;
+        Transaction income = new Transaction();
+        income.setAmount(amount);
+        income.setCategory("বাকির খাতা ওয়ালেট");
+        income.setNote(note == null || note.isEmpty() ? "ওয়ালেট থেকে মূল ব্যালেন্সে ফেরত" : note);
+        income.setDate(nowDate());
+        income.setTime(nowTime());
+        addIncome(income);
+        adjustKhataWalletBalance(-amount);
+        logKhataWalletTxn("fund_out", amount, "মূল ব্যালেন্সে ফেরত", nowDate(), nowTime());
+        return true;
+    }
+
+    // ═══════════════════════════════════════════
+    //  বাকির খাতা — ব্যবসায়িক খরচ (Expense) ম্যানেজমেন্ট
+    // ═══════════════════════════════════════════
+    public List<KhataExpense> getKhataExpenseList() {
+        Type t = new TypeToken<List<KhataExpense>>() {}.getType();
+        return loadList(KEY_KHATA_EXPENSES, t);
+    }
+
+    public KhataExpense addKhataExpense(KhataExpense e) {
+        List<KhataExpense> list = getKhataExpenseList();
+        e.setId(generateId());
+        e.setCreatedAt(nowIso());
+        if (e.getDate().isEmpty()) e.setDate(nowDate());
+        if (e.getTime().isEmpty()) e.setTime(nowTime());
+        list.add(0, e);
+        saveList(KEY_KHATA_EXPENSES, list);
+
+        if (e.isPayFromWallet()) {
+            adjustKhataWalletBalance(-e.getAmount());
+            logKhataWalletTxn("expense_out", e.getAmount(), e.getCategory(), e.getDate(), e.getTime());
+        }
+
+        List<String> cats = getKhataExpenseCategories();
+        if (!cats.contains(e.getCategory())) {
+            cats.add(e.getCategory());
+            saveList(KEY_KHATA_EXPENSE_CATEGORIES, cats);
+        }
+        return e;
+    }
+
+    public boolean deleteKhataExpense(int index) {
+        List<KhataExpense> list = getKhataExpenseList();
+        if (index < 0 || index >= list.size()) return false;
+        list.remove(index);
+        saveList(KEY_KHATA_EXPENSES, list);
+        return true;
+    }
+
+    public int getKhataExpenseIndexById(String id) {
+        if (id == null) return -1;
+        List<KhataExpense> list = getKhataExpenseList();
+        for (int i = 0; i < list.size(); i++) {
+            if (id.equals(list.get(i).getId())) return i;
+        }
+        return -1;
+    }
+
+    public List<String> getKhataExpenseCategories() {
+        Type t = new TypeToken<List<String>>() {}.getType();
+        List<String> list = loadList(KEY_KHATA_EXPENSE_CATEGORIES, t);
+        if (list.isEmpty()) {
+            list = new ArrayList<>(java.util.Arrays.asList(
+                    "দোকান ভাড়া", "কর্মচারী বেতন", "বিদ্যুৎ বিল", "পরিবহন খরচ", "মালামাল ক্রয়", "অন্যান্য"));
+            saveList(KEY_KHATA_EXPENSE_CATEGORIES, list);
+        }
+        return list;
+    }
+
+    /** ক্যাটাগরি অনুযায়ী মোট খরচ — রিপোর্টে ব্যবহারের জন্য (ক্যাটাগরি নাম → মোট টাকা)। */
+    public Map<String, Double> getKhataExpenseTotalsByCategory() {
+        Map<String, Double> totals = new java.util.LinkedHashMap<>();
+        for (KhataExpense e : getKhataExpenseList()) {
+            String cat = e.getCategory();
+            totals.put(cat, (totals.containsKey(cat) ? totals.get(cat) : 0) + e.getAmount());
+        }
+        return totals;
+    }
+
+    public double getTotalKhataExpense() {
+        double total = 0;
+        for (KhataExpense e : getKhataExpenseList()) total += e.getAmount();
+        return total;
+    }
+
+    public double getTotalKhataExpenseToday() {
+        String today = nowDate();
+        double total = 0;
+        for (KhataExpense e : getKhataExpenseList()) {
+            if (today.equals(e.getDate())) total += e.getAmount();
+        }
+        return total;
         prefs.edit().putLong(KEY_DRIVE_LAST_SYNC, time).apply();
     }
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- বাকির খাতা ব্যানারের "গ্রাহক বাকি আছেন" কার্ডের রং — লাল গ্র্যাডিয়েন্ট,
+     bakiActiveGradStart/End-এর সাথে মিলিয়ে। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="@color/bakiActiveGradStart" android:endColor="@color/bakiActiveGradEnd" android:angle="135"/>
+    <corners android:radius="12dp"/>
+</shape>

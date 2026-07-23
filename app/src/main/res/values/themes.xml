@@ -185,6 +185,14 @@
         <item name="backgroundTint">@color/expenseBg</item>
     </style>
 
+    <style name="SubmitButton.KhataEntry" parent="SubmitButton">
+        <item name="backgroundTint">#4CAF50</item>
+    </style>
+
+    <style name="SubmitButton.KhataEntry.Red" parent="SubmitButton">
+        <item name="backgroundTint">#F44336</item>
+    </style>
+
     <style name="SubmitButton.Ledger">
         <item name="backgroundTint">@color/ledgerBg</item>
     </style>

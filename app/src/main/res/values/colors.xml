@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="cardBackground">#FFFFFF</color>
     <color name="colorPrimary">#4F46E5</color>
     <color name="colorPrimaryDark">#3730A3</color>
     <!-- বিকাশ ব্র্যান্ড পিংক — অ্যাপের একদম উপরের স্ট্যাটাস বার এখন এই রঙে -->

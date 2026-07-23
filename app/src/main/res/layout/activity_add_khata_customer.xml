@@ -163,7 +163,7 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:maxLines="1"
-                            android:inputType="textKhataCustomerName|textCapWords"/>
+                            android:inputType="textPersonName|textCapWords"/>
 
                         <EditText
                             android:id="@+id/etRelation"

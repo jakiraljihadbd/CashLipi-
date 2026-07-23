@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/primaryTextDark"
-            android:inputType="textKhataCustomerName|textCapWords"/>
+            android:inputType="textPersonName|textCapWords"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Category -->

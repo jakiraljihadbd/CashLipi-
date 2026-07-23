@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -1266,6 +1267,7 @@ public class DatabaseManager {
     }
 
     public void saveLastDriveSyncTime(long time) {
+        prefs.edit().putLong(KEY_DRIVE_LAST_SYNC, time).apply();
     }
 
     // ═══════════════════════════════════════════
@@ -1619,7 +1621,6 @@ public class DatabaseManager {
             if (today.equals(e.getDate())) total += e.getAmount();
         }
         return total;
-        prefs.edit().putLong(KEY_DRIVE_LAST_SYNC, time).apply();
     }
 
     public boolean isDriveAutoSyncEnabled() {

@@ -64,12 +64,11 @@
              লেখা — bannerCardRoot সবসময় বিদ্যমান এবং সবসময় একটা background (ডিফল্ট অ্যাম্বার)
              নিয়েই তৈরি হয়, কোডে শুধু setBackgroundResource() ও টেক্সট বদলানো হয় — কখনও
              কোনো ভিউ যোগ/বাদ দেওয়া হয় না, তাই কখনও খালি/সাদা ফ্রেম দেখানোর সুযোগই নেই। -->
+        <!-- ব্যানার রিমুভ করা হয়েছে ডাটা লোডিং ডিলে এভয়েড করার জন্য -->
         <FrameLayout
             android:id="@+id/bannerContainer"
             android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:layout_marginHorizontal="18dp"
-            android:layout_marginBottom="12dp"
+            android:layout_height="0dp"
             android:visibility="gone">
 
             <LinearLayout

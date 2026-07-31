@@ -41,6 +41,10 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
     public static final int STYLE_GRADIENT = 2;
     public static final int STYLE_BOLD = 3;
     public static final int STYLE_COMPACT = 4;
+    public static final int STYLE_ROUNDED = 5;
+    public static final int STYLE_SQUARE = 6;
+    public static final int STYLE_MATTE = 7;
+    public static final int STYLE_CUSTOM = 8;
 
     private static final int[] AVATAR_BGS = {
             R.drawable.bg_avatar_square_1, R.drawable.bg_avatar_square_2,
@@ -51,7 +55,10 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
     private static final int[] CARD_BGS = {
             R.drawable.bg_card_style_classic, R.drawable.bg_card_style_minimal,
             R.drawable.bg_card_style_gradient, R.drawable.bg_card_style_bold,
-            R.drawable.bg_card_style_compact
+            R.drawable.bg_card_style_compact, // Rounded uses classic bg
+            R.drawable.bg_card_style_classic, // Square uses minimal style
+            R.drawable.bg_card_style_minimal, // Matte style
+            R.drawable.bg_card_style_classic  // Custom style
     };
 
     private final Context ctx;
@@ -59,6 +66,11 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
     private final OnPersonClick listener;
     private final Map<String, PersonStat> statsMap; // key: person.getName().trim().toLowerCase() — nullable
     private final int cardStyle;
+    private boolean customThemeEnabled = false;
+    private int customTextSize = 18;
+    private int customCardColor = 0xFFFFFFFF;
+    private int customDenaColor = 0xFFFFC107;
+    private int customPabonaColor = 0xFF2196F3;
 
     public PersonAdapter(Context ctx, List<Person> items, OnPersonClick listener) {
         this(ctx, items, listener, null, STYLE_CLASSIC);
@@ -74,6 +86,14 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
         this.listener = listener;
         this.statsMap = statsMap;
         this.cardStyle = (cardStyle >= 0 && cardStyle < CARD_BGS.length) ? cardStyle : STYLE_CLASSIC;
+    }
+
+    public void setCustomTheme(boolean enabled, int textSize, int cardColor, int denaColor, int pabonaColor) {
+        this.customThemeEnabled = enabled;
+        this.customTextSize = textSize;
+        this.customCardColor = cardColor;
+        this.customDenaColor = denaColor;
+        this.customPabonaColor = pabonaColor;
     }
 
     @NonNull
@@ -168,33 +188,62 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.VH> {
 
     // ── থিম-চেঞ্জ: কার্ডের ব্যাকগ্রাউন্ড/এলিভেশন/প্যাডিং/অ্যাভাটার সাইজ বাছাই করা স্টাইল অনুযায়ী বসায় ──
     private void applyCardStyle(VH h) {
-        h.itemView.setBackgroundResource(CARD_BGS[cardStyle]);
+        if (customThemeEnabled && cardStyle == STYLE_CUSTOM) {
+            // Custom theme — ইউজার-ডিফাইনড কালার সেট করো
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                h.itemView.setBackgroundColor(customCardColor);
+            } else {
+                h.itemView.setBackgroundColor(customCardColor);
+            }
+            h.itemView.setElevation(4f);
+            float density = ctx.getResources().getDisplayMetrics().density;
+            h.itemView.setPadding((int)(16*density), (int)(16*density), (int)(16*density), (int)(16*density));
+            setAvatarSize(h, (int)(66*density));
+        } else {
+            h.itemView.setBackgroundResource(CARD_BGS[cardStyle]);
 
-        float density = ctx.getResources().getDisplayMetrics().density;
-        int padDefault = (int) (16 * density);
-        int padCompact = (int) (12 * density);
-        int avatarDefault = (int) (66 * density);
-        int avatarCompact = (int) (52 * density);
+            float density = ctx.getResources().getDisplayMetrics().density;
+            int padDefault = (int) (16 * density);
+            int padCompact = (int) (12 * density);
+            int avatarDefault = (int) (66 * density);
+            int avatarCompact = (int) (52 * density);
+            int avatarRounded = (int) (60 * density);
 
-        switch (cardStyle) {
-            case STYLE_MINIMAL:
-                h.itemView.setElevation(0f);
-                h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
-                setAvatarSize(h, avatarDefault);
-                break;
-            case STYLE_COMPACT:
-                h.itemView.setElevation((int) (3 * density));
-                h.itemView.setPadding(padCompact, padCompact, padCompact, padCompact);
-                setAvatarSize(h, avatarCompact);
-                break;
-            case STYLE_GRADIENT:
-            case STYLE_BOLD:
-            case STYLE_CLASSIC:
-            default:
-                h.itemView.setElevation((int) (6 * density));
-                h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
-                setAvatarSize(h, avatarDefault);
-                break;
+            switch (cardStyle) {
+                case STYLE_MINIMAL:
+                    h.itemView.setElevation(0f);
+                    h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
+                    setAvatarSize(h, avatarDefault);
+                    break;
+                case STYLE_COMPACT:
+                    h.itemView.setElevation((int) (3 * density));
+                    h.itemView.setPadding(padCompact, padCompact, padCompact, padCompact);
+                    setAvatarSize(h, avatarCompact);
+                    break;
+                case STYLE_ROUNDED:
+                    h.itemView.setElevation((int) (5 * density));
+                    h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
+                    setAvatarSize(h, avatarRounded);
+                    break;
+                case STYLE_SQUARE:
+                    h.itemView.setElevation((int) (2 * density));
+                    h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
+                    setAvatarSize(h, avatarDefault);
+                    break;
+                case STYLE_MATTE:
+                    h.itemView.setElevation(0f);
+                    h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
+                    setAvatarSize(h, avatarDefault);
+                    break;
+                case STYLE_GRADIENT:
+                case STYLE_BOLD:
+                case STYLE_CLASSIC:
+                default:
+                    h.itemView.setElevation((int) (6 * density));
+                    h.itemView.setPadding(padDefault, padDefault, padDefault, padDefault);
+                    setAvatarSize(h, avatarDefault);
+                    break;
+            }
         }
     }
 

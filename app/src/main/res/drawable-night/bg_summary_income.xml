@@ -10,12 +10,6 @@
             <corners android:radius="24dp"/>
         </shape>
     </item>
-    <!-- Top-right glow orb -->
-    <item android:left="100dp" android:bottom="60dp" android:right="-20dp" android:top="-20dp">
-        <shape android:shape="oval">
-            <solid android:color="#2034D399"/>
-        </shape>
-    </item>
     <!-- Gloss top strip -->
     <item android:bottom="90dp">
         <shape android:shape="rectangle">

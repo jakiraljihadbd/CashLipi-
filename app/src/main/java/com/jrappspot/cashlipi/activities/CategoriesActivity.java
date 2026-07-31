@@ -237,10 +237,12 @@ public class CategoriesActivity extends BaseActivity {
                 });
             } catch (Exception e) {
                 android.util.Log.e("CashLipiAI", "generateCategoryWithAi ব্যর্থ হয়েছে", e);
+                String msg = (e.getMessage() != null && e.getMessage().contains("ব্যস্ত"))
+                        ? e.getMessage()
+                        : "AI বুঝতে পারেনি, আবার চেষ্টা করুন বা হাতে লিখুন";
                 runOnUiThread(() -> {
                     aiLoadingRow.setVisibility(View.GONE);
-                    Toast.makeText(this,
-                            "AI বুঝতে পারেনি, আবার চেষ্টা করুন বা হাতে লিখুন", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                 });
             }
         });

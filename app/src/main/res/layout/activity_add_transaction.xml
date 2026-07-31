@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="14dp"
-                    android:background="@drawable/bg_txn_tab_container"
+                    android:background="@drawable/bg_txn_tab_container_adaptive"
                     android:orientation="horizontal"
                     android:padding="5dp"
                     android:elevation="4dp">
@@ -116,7 +116,7 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilAmount"
-                            style="@style/AppTextInputSmooth"
+                            style="@style/AppTextInputSmooth.Adaptive"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="আয়ের পরিমাণ"
@@ -138,7 +138,7 @@
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilNote"
-                            style="@style/AppTextInputSmooth"
+                            style="@style/AppTextInputSmooth.Adaptive"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="নোট">
@@ -200,7 +200,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilCategory"
-                    style="@style/AppTextInputSmooth"
+                    style="@style/AppTextInputSmooth.Adaptive"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="ক্যাটাগরি লিখুন বা নিচ থেকে বাছুন"

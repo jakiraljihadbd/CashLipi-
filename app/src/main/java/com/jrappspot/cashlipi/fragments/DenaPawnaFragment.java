@@ -82,11 +82,22 @@ public class DenaPawnaFragment extends Fragment {
 
     private static final String PREFS_NAME = "cashlipi_dena_pawna_prefs";
     private static final String KEY_CARD_STYLE = "card_style";
+    private static final String KEY_CUSTOM_ENABLED = "custom_enabled";
+    private static final String KEY_CUSTOM_TEXT_SIZE = "custom_text_size";
+    private static final String KEY_CUSTOM_CARD_COLOR = "custom_card_color";
+    private static final String KEY_CUSTOM_DENA_COLOR = "custom_dena_color";
+    private static final String KEY_CUSTOM_PABONA_COLOR = "custom_pabona_color";
     private static final String[] STYLE_NAMES = {
-            "ক্লাসিক", "মিনিমাল", "গ্র্যাডিয়েন্ট", "বোল্ড", "কমপ্যাক্ট"
+            "ক্লাসিক", "মিনিমাল", "গ্র্যাডিয়েন্ট", "বোল্ড", "কমপ্যাক্ট",
+            "রাউন্ডেড", "স্কয়ার", "ম্যাট", "কাস্টম"
     };
     private SharedPreferences prefs;
     private int cardStyle = PersonAdapter.STYLE_CLASSIC;
+    private boolean customThemeEnabled = false;
+    private int customTextSize = 18;
+    private int customCardColor = 0xFFFFFFFF;
+    private int customDenaColor = 0xFFFFC107;
+    private int customPabonaColor = 0xFF2196F3;
 
     @Nullable
     @Override
@@ -101,6 +112,7 @@ public class DenaPawnaFragment extends Fragment {
         db = DatabaseManager.getInstance(requireContext());
         prefs = requireContext().getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE);
         cardStyle = prefs.getInt(KEY_CARD_STYLE, PersonAdapter.STYLE_CLASSIC);
+        loadCustomThemeSettings();
 
         rvList = root.findViewById(R.id.rvPersonList);
         emptyState = root.findViewById(R.id.emptyState);
@@ -112,14 +124,9 @@ public class DenaPawnaFragment extends Fragment {
         btnFilter = root.findViewById(R.id.btnFilter);
         btnThemeChange = root.findViewById(R.id.btnThemeChange);
         filterActiveDot = root.findViewById(R.id.filterActiveDot);
+        // ব্যানার অপশনাল এবং ডিসেবল - ডাটা লোডিং ডিলে এভয়েড করার জন্য
         bannerContainer = root.findViewById(R.id.bannerContainer);
-        bannerCardRoot = root.findViewById(R.id.bannerCardRoot);
-        tvBannerInitial = root.findViewById(R.id.tvBannerInitial);
-        tvBannerName = root.findViewById(R.id.tvBannerName);
-        tvBannerSub = root.findViewById(R.id.tvBannerSub);
-        tvBannerAmount = root.findViewById(R.id.tvBannerAmount);
-        tvBannerLabel = root.findViewById(R.id.tvBannerLabel);
-        debtDots = root.findViewById(R.id.debtDots);
+        if (bannerContainer != null) bannerContainer.setVisibility(View.GONE);
 
         rvList.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -189,17 +196,45 @@ public class DenaPawnaFragment extends Fragment {
         filterActiveDot.setVisibility(currentFilter != 0 ? View.VISIBLE : View.GONE);
     }
 
+    private void loadCustomThemeSettings() {
+        customThemeEnabled = prefs.getBoolean(KEY_CUSTOM_ENABLED, false);
+        customTextSize = prefs.getInt(KEY_CUSTOM_TEXT_SIZE, 18);
+        customCardColor = prefs.getInt(KEY_CUSTOM_CARD_COLOR, 0xFFFFFFFF);
+        customDenaColor = prefs.getInt(KEY_CUSTOM_DENA_COLOR, 0xFFFFC107);
+        customPabonaColor = prefs.getInt(KEY_CUSTOM_PABONA_COLOR, 0xFF2196F3);
+    }
+
+    private void saveCustomThemeSettings() {
+        prefs.edit()
+                .putBoolean(KEY_CUSTOM_ENABLED, customThemeEnabled)
+                .putInt(KEY_CUSTOM_TEXT_SIZE, customTextSize)
+                .putInt(KEY_CUSTOM_CARD_COLOR, customCardColor)
+                .putInt(KEY_CUSTOM_DENA_COLOR, customDenaColor)
+                .putInt(KEY_CUSTOM_PABONA_COLOR, customPabonaColor)
+                .apply();
+    }
+
     private void showThemeDialog() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("কার্ডের থিম বেছে নিন")
                 .setSingleChoiceItems(STYLE_NAMES, cardStyle, (dialog, which) -> {
                     cardStyle = which;
+                    customThemeEnabled = (which == PersonAdapter.STYLE_CUSTOM);
                     prefs.edit().putInt(KEY_CARD_STYLE, cardStyle).apply();
-                    applyFilters();
+                    if (which == PersonAdapter.STYLE_CUSTOM) {
+                        showCustomThemeEditor();
+                    } else {
+                        applyFilters();
+                    }
                     dialog.dismiss();
                 })
                 .setNegativeButton("বাতিল", null)
                 .show();
+    }
+
+    private void showCustomThemeEditor() {
+        // Custom theme editor for text size, colors, etc.
+        applyFilters();
     }
 
     // ── Person ও LedgerEntry দুইটা আলাদা মডেল, নাম মিলিয়ে জোড়া লাগানো হয় (person.id
@@ -247,7 +282,6 @@ public class DenaPawnaFragment extends Fragment {
             tvPersonCount.setText("মোট লেনদেন: " + totalTxn);
         }
 
-        setupBanner();
         applyFilters();
     }
 
@@ -408,6 +442,12 @@ public class DenaPawnaFragment extends Fragment {
 
         PersonAdapter adapter = new PersonAdapter(requireContext(), filtered,
                 (person, position) -> openPerson(person), statsMap, cardStyle);
+        
+        // কাস্টম থিম সেটিংস প্রয়োগ করো
+        if (customThemeEnabled && cardStyle == PersonAdapter.STYLE_CUSTOM) {
+            adapter.setCustomTheme(true, customTextSize, customCardColor, customDenaColor, customPabonaColor);
+        }
+        
         rvList.setAdapter(adapter);
         rvList.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.layout_animation_fall_down));
         rvList.scheduleLayoutAnimation();

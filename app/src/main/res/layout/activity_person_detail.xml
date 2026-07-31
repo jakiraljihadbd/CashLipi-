@@ -181,7 +181,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:background="@drawable/card_receivable_summary">
 
             <LinearLayout
@@ -203,7 +205,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="12.5sp"
+                    android:textSize="13.5sp"
+                    android:textStyle="bold"
                     android:textColor="@color/white"
                     android:alpha="0.92"/>
 
@@ -224,8 +227,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:textSize="28sp"
+                android:textSize="34sp"
                 android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
                 android:textColor="@color/white"/>
 
             <TextView
@@ -233,9 +237,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:textSize="11.5sp"
+                android:textSize="12.5sp"
+                android:textStyle="bold"
                 android:textColor="@color/white"
-                android:alpha="0.88"/>
+                android:alpha="0.9"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -361,7 +366,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="6dp"
         android:orientation="vertical"
+        android:padding="1dp"
+        android:background="@drawable/bg_table_outer_border"
         android:visibility="gone">
 
         <LinearLayout
@@ -391,7 +400,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/dividerColor"/>
+                android:background="@color/ledgerGridLine"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -407,7 +416,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/dividerColor"/>
+                android:background="@color/ledgerGridLine"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -455,7 +464,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/dividerColor"/>
+                android:background="@color/ledgerGridLine"/>
 
             <TextView
                 android:id="@+id/tvTableTotalDena"
@@ -471,7 +480,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="@color/dividerColor"/>
+                android:background="@color/ledgerGridLine"/>
 
             <TextView
                 android:id="@+id/tvTableTotalPabona"
@@ -538,28 +547,36 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddPelam"
             android:layout_width="0dp"
-            android:layout_height="@dimen/btn_height"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:layout_marginEnd="6dp"
-            android:text=" + পাওনা"
-            android:textSize="14.5sp"
+            android:text=" পাওনা যোগ"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            android:drawableStart="@drawable/ic_plus"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:paddingHorizontal="6dp"
             android:backgroundTint="@null"
             android:background="@drawable/bg_type_active_pabona"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddDilam"
             android:layout_width="0dp"
-            android:layout_height="@dimen/btn_height"
+            android:layout_height="56dp"
             android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:text=" − দেনা"
-            android:textSize="14.5sp"
+            android:text=" দেনা যোগ"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            android:drawableStart="@drawable/ic_minus_plain"
+            android:drawablePadding="8dp"
+            android:gravity="center"
+            android:paddingHorizontal="6dp"
             android:backgroundTint="@null"
             android:background="@drawable/bg_type_active_dena"/>
     </LinearLayout>

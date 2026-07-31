@@ -151,6 +151,18 @@
     <color name="denaColor">#FBBF24</color>
     <color name="savingsBg">#4A1D6B</color>
 
+    <!-- ── ব্যক্তির দেনা-পাওনা লেনদেন পেজ (PersonDetailActivity) — ডার্ক মোড ফিক্স ──
+         আগে denaLight/pabonaLight/paidBadgeBg ওভাররাইড না থাকায় হালকা প্যাস্টেল রঙ
+         সরাসরি ডার্ক ব্যাকগ্রাউন্ডে বসে যেত। এখন গাঢ়, মিউটেড টোন। -->
+    <color name="pabonaColor">#60A5FA</color>
+    <color name="amountIncome">#34D399</color>
+    <color name="denaLight">#3A2A0F</color>
+    <color name="pabonaLight">#16264A</color>
+    <color name="paidBadgeBg">#103823</color>
+    <color name="unpaidBadgeBg">#3A1715</color>
+    <!-- ছক (টেবিল) ভিউয়ের দাগ — dividerColor এর চেয়ে বেশি স্পষ্ট, cardBg থেকে আলাদা বোঝা যায় -->
+    <color name="ledgerGridLine">#33445C</color>
+
     <!-- ── App Lock — fingerprint glassmorphism tokens (dark) ───────── -->
     <color name="lockGlassCardBg">#26FFFFFF</color>
     <color name="lockGlassCardStroke">#40FFFFFF</color>
@@ -180,15 +192,34 @@
 
     <color name="m3MenuCardSurface">#131C2E</color>
     <color name="m3MenuCardOutline">#26324A</color>
-    <!-- ── আয়-ব্যয় (Income/Expense) পেজ — এই "ie" রংগুলোর আগে কোনো নাইট-মোড ভ্যারিয়েন্ট
-         ছিল না, ফলে সিস্টেম ডার্ক মোডেও সার্চ বার/ট্যাব/সামারি কার্ড উজ্জ্বল সাদা বা হালকা
-         রঙেই থেকে যেত। এখানে প্রতিটার জন্য একটা ডার্ক-উপযোগী সংস্করণ দেওয়া হলো। -->
-    <color name="ieWhite">#131C2E</color>
-    <color name="ieGreyBg">#1E293B</color>
+    <!-- ── আয়-ব্যয় (Income/Expense) পেজ — ডার্ক মোডে উজ্জ্বল, স্যাচুরেটেড কালার
+         প্রাণবন্ত এবং স্পষ্ট দৃশ্যমানতার জন্য অপটিমাইজ করা -->
+    <color name="ieIncomeDark">#22C55E</color>
+    <color name="ieIncomeDeep">#10B981</color>
+    <color name="ieIncomeBright">#22C55E</color>
+    <color name="ieIncomeLightBg">#0F2818</color>
+    <color name="ieIncomeText">#4AFF6F</color>
+    <color name="ieExpenseDark">#EF4444</color>
+    <color name="ieExpenseDeep">#DC2626</color>
+    <color name="ieExpenseBright">#EF4444</color>
+    <color name="ieExpenseLightBg">#2A1010</color>
+    <color name="ieExpenseText">#FF7A7A</color>
+    <color name="ieWhite">#1E293B</color>
+    <color name="ieGreyBg">#0D1520</color>
     <color name="ieDarkText">#F8FAFC</color>
-    <color name="ieIncomeLightBg">#12271B</color>
-    <color name="ieExpenseLightBg">#2A1414</color>
+    <color name="ieEditBlue">#60A5FA</color>
     <color name="ieEditBlueLightBg">#12233A</color>
-    <color name="ieNoticeTextLight">#7FA8DE</color>
+    <color name="ieNoticeTextLight">#93C5FD</color>
+
+    <!-- ── Add Transaction (আয়-ব্যয় যুক্ত) পেজ — ডার্ক মোড ওভাররাইড ──
+         আগে এই টোকেনগুলো শুধু light mode-এ সংজ্ঞায়িত ছিল, তাই dark mode-এও হালকা প্যাস্টেল
+         রঙ (সাদা/হালকা নীল/হালকা ধূসর) সরাসরি গাঢ় ব্যাকগ্রাউন্ডে বসে বেমানান দেখাত।
+         এখন গাঢ়, মিউটেড টোন — পেজের বাকি অংশের সাথে সামঞ্জস্যপূর্ণ। -->
+    <color name="txnChipBlueBg">#16243D</color>
+    <color name="txnChipBlueBorder">#2A4A73</color>
+    <color name="paymentItemBg">#1A2536</color>
+    <color name="paymentItemBorder">#2D3B52</color>
+    <color name="paymentItemSelectedBgGreen">#103823</color>
+    <color name="paymentItemSelectedBgRed">#3A1715</color>
 
 </resources>

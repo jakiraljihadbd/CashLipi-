@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ব্যক্তির লেনদেন তালিকার কার্ড — উপরের হিরো কার্ডের (cardCornerRadius=8dp) সাথে বক্র মিলিয়ে,
+     এবং @color/cardBg ব্যবহার করা হয়েছে (আগে @color/cardWhite থাকায় ডার্ক মোডেও কার্ড সাদা
+     দেখাচ্ছিল — এটাই সেই বাগ ফিক্স)। হালকা স্ট্রোক যোগ করা হয়েছে যাতে ডার্ক মোডে কার্ডটা
+     পেছনের ব্যাকগ্রাউন্ড থেকে আলাদা বোঝা যায়। -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/rippleDark">
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/cardBg"/>
+            <corners android:radius="8dp"/>
+            <stroke android:width="1dp" android:color="@color/borderColor"/>
+        </shape>
+    </item>
+</ripple>

@@ -964,6 +964,49 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * "yyyy-MM-dd" তারিখ থেকে "কত দিন আগে" — ব্যক্তির দেনা-পাওনা লেনদেন কার্ডে সময়ের বদলে
+     * এটা দেখানো হয় (আজ / গতকাল / X দিন আগে / X সপ্তাহ আগে / X মাস আগে / X বছর আগে)।
+     */
+    public static String formatTimeAgo(String isoDate) {
+        if (isoDate == null || isoDate.isEmpty()) return "--";
+        try {
+            Date d = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(isoDate);
+            if (d == null) return formatDateDisplay(isoDate);
+
+            Calendar today = Calendar.getInstance();
+            today.set(Calendar.HOUR_OF_DAY, 0);
+            today.set(Calendar.MINUTE, 0);
+            today.set(Calendar.SECOND, 0);
+            today.set(Calendar.MILLISECOND, 0);
+
+            Calendar target = Calendar.getInstance();
+            target.setTime(d);
+            target.set(Calendar.HOUR_OF_DAY, 0);
+            target.set(Calendar.MINUTE, 0);
+            target.set(Calendar.SECOND, 0);
+            target.set(Calendar.MILLISECOND, 0);
+
+            long diffDays = (today.getTimeInMillis() - target.getTimeInMillis()) / (24L * 60 * 60 * 1000);
+
+            if (diffDays <= 0) return "আজ";
+            if (diffDays == 1) return "গতকাল";
+            if (diffDays < 7) return diffDays + " দিন আগে";
+            if (diffDays < 30) {
+                long weeks = diffDays / 7;
+                return weeks + " সপ্তাহ আগে";
+            }
+            if (diffDays < 365) {
+                long months = diffDays / 30;
+                return months + " মাস আগে";
+            }
+            long years = diffDays / 365;
+            return years + " বছর আগে";
+        } catch (Exception e) {
+            return formatDateDisplay(isoDate);
+        }
+    }
+
     public static String formatAmount(double amount) {
         long rounded = Math.round(amount);
         if (rounded == 0) return "৳ 0";

@@ -165,6 +165,14 @@
         <item name="expandedHintEnabled">false</item>
     </style>
 
+    <!-- AppTextInputSmooth-এর থিম-সচেতন (adaptive) সংস্করণ — শুধু Add Transaction পেজের মূল ফর্মে
+         ব্যবহৃত (AI প্রিভিউ বটম-শিটে না, ওটা সবসময় সাদা কার্ড, তাই ওখানে মূল AppTextInputSmooth-ই থাকবে)।
+         boxBackgroundColor এখন @color/surfaceColor (adaptive: light-এ সাদা, dark-এ গাঢ়), যাতে পেজের
+         ব্যাকগ্রাউন্ড ডার্ক মুডে গাঢ় হলেও ইনপুট বক্স উজ্জ্বল সাদা হয়ে বেমানান না দেখায়। -->
+    <style name="AppTextInputSmooth.Adaptive">
+        <item name="boxBackgroundColor">@color/surfaceColor</item>
+    </style>
+
     <!-- Submit Button base -->
     <style name="SubmitButton" parent="Widget.MaterialComponents.Button">
         <item name="cornerRadius">14dp</item>

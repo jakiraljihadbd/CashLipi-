@@ -1,7 +1,5 @@
 package com.jrappspot.cashlipi.utils;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -24,14 +22,7 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintDocumentInfo;
 import android.print.PrintManager;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,20 +34,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * আয়/ব্যয় পেজের জন্য কালারফুল, প্রফেশনাল ইনভয়েস-স্টাইল PDF তৈরি ও প্রিন্ট করার হেল্পার।
- * কোম্পানি/প্রতিষ্ঠানের নাম, তারিখ (ডিফল্ট আজ), অ্যাকসেন্ট কালার, এবং কয়েকটি টেবিল-টেমপ্লেট —
- * সব কাস্টমাইজেবল, এবং এক্সপোর্ট করার আগেই ডায়ালগের ভেতরে লাইভ প্রিভিউ দেখা যায়।
+ * PDF ড্রইং রুটিন (drawPage/generatePdf/renderPreviewBitmap), সেভ ও প্রিন্ট লজিক এখানে থাকে;
+ * ফুল-পেজ এক্সপোর্ট স্ক্রিন (কোম্পানি নাম, টেমপ্লেট, তারিখ-রেঞ্জ, রঙ, স্বাক্ষর, লাইভ প্রিভিউ)
+ * {@link com.jrappspot.cashlipi.activities.InvoiceExportActivity}-তে থাকে।
  */
 public class InvoicePdfHelper {
 
-    private static final int[] PRESET_COLORS = {
+    public static final int[] PRESET_COLORS = {
             0xFF6366F1, // ইন্ডিগো
             0xFF10B981, // সবুজ
             0xFF2563EB, // নীল
@@ -66,172 +55,32 @@ public class InvoicePdfHelper {
     };
 
     // টেমপ্লেট: ০ = সাধারণ, ১ = লেটারহেড (শিরোনাম/সাক্ষর-প্যাড স্টাইল), ২ = কম্প্যাক্ট (শুধু নাম, ছোট হেডার)
-    private static final String[] TEMPLATE_NAMES = {"সাধারণ", "লেটারহেড", "কম্প্যাক্ট"};
+    public static final String[] TEMPLATE_NAMES = {"সাধারণ", "লেটারহেড", "কম্প্যাক্ট"};
 
-    private static final int PAGE_W = 595, PAGE_H = 842, MARGIN = 36;
+    public static final int PAGE_W = 595, PAGE_H = 842, MARGIN = 36;
 
-    // ── এক্সপোর্ট ডায়ালগ: কোম্পানি নাম + টেমপ্লেট + তারিখ + রঙ + লাইভ প্রিভিউ ──────────
-    public static void showExportDialog(Context ctx, String type, List<Transaction> list, boolean forPrint) {
-        int pad = dp(ctx, 18);
+    // ── আয়-ব্যয় লিস্ট পেজ থেকে ফুল-পেজ InvoiceExportActivity-তে লিস্ট হ্যান্ডঅফ করার ব্রিজ ──
+    // Transaction Parcelable/Serializable নয়, তাই Intent-এ না পাঠিয়ে একই প্রসেসে ইন-মেমরি
+    // স্ট্যাটিক হোল্ডারে রাখা হয় — Activity শুরু হয়েই এটা নিয়ে নেয় এবং সাথে সাথে ক্লিয়ার করে দেয়।
+    private static List<Transaction> pendingList;
 
-        ScrollView scroll = new ScrollView(ctx);
-        LinearLayout root = new LinearLayout(ctx);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(pad, pad, pad, pad);
-        scroll.addView(root);
-
-        // refreshRef — নিচের সব লিসেনার এখানে হুক করা হবে, refreshPreview তৈরির আগেই
-        // ফরওয়ার্ড-রেফারেন্স করার জন্য একটা mutable হোল্ডার
-        final Runnable[] refreshRef = new Runnable[1];
-
-        // ── লাইভ প্রিভিউ ──
-        TextView lblPreview = label(ctx, "লাইভ প্রিভিউ");
-        FrameLayout previewFrame = new FrameLayout(ctx);
-        LinearLayout.LayoutParams previewLp = new LinearLayout.LayoutParams(
-                dp(ctx, 200), dp(ctx, 283));
-        previewLp.gravity = android.view.Gravity.CENTER_HORIZONTAL;
-        previewFrame.setLayoutParams(previewLp);
-        previewFrame.setBackgroundColor(0xFFE5E7EB);
-        previewFrame.setPadding(dp(ctx, 2), dp(ctx, 2), dp(ctx, 2), dp(ctx, 2));
-        ImageView ivPreview = new ImageView(ctx);
-        ivPreview.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
-        ivPreview.setScaleType(ImageView.ScaleType.FIT_XY);
-        previewFrame.addView(ivPreview);
-
-        TextView lblCompany = label(ctx, "কোম্পানি/প্রতিষ্ঠানের নাম (খালি রাখলে শুধু \"CashLipi\")");
-        EditText etCompany = new EditText(ctx);
-        etCompany.setHint("CashLipi ক্যাশলিপি");
-        etCompany.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        TextView lblTemplate = label(ctx, "শিরোনাম/সাক্ষর-প্যাড স্টাইল বেছে নিন");
-        LinearLayout templateRow = new LinearLayout(ctx);
-        templateRow.setOrientation(LinearLayout.HORIZONTAL);
-        final int[] selectedTemplate = {0};
-        List<TextView> templateChips = new ArrayList<>();
-        for (int t = 0; t < TEMPLATE_NAMES.length; t++) {
-            TextView chip = new TextView(ctx);
-            chip.setText(TEMPLATE_NAMES[t]);
-            chip.setTextSize(11.5f);
-            chip.setTypeface(Typeface.DEFAULT_BOLD);
-            chip.setGravity(android.view.Gravity.CENTER);
-            chip.setPadding(dp(ctx, 10), dp(ctx, 8), dp(ctx, 10), dp(ctx, 8));
-            LinearLayout.LayoutParams clp = new LinearLayout.LayoutParams(
-                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-            clp.setMarginEnd(t < TEMPLATE_NAMES.length - 1 ? dp(ctx, 6) : 0);
-            chip.setLayoutParams(clp);
-            final int templateIndex = t;
-            chip.setOnClickListener(v -> {
-                selectedTemplate[0] = templateIndex;
-                for (int k = 0; k < templateChips.size(); k++) styleChip(templateChips.get(k), k == templateIndex);
-                if (refreshRef[0] != null) refreshRef[0].run();
-            });
-            templateChips.add(chip);
-            templateRow.addView(chip);
-        }
-        for (int k = 0; k < templateChips.size(); k++) styleChip(templateChips.get(k), k == 0);
-
-        TextView lblDate = label(ctx, "তারিখ");
-        EditText etDate = new EditText(ctx);
-        String today = new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(new java.util.Date());
-        etDate.setText(today); // ডিফল্ট আজকের তারিখ — না বদলালে এটাই থাকবে
-        etDate.setFocusable(false);
-        etDate.setOnClickListener(v -> {
-            Calendar c = Calendar.getInstance();
-            new DatePickerDialog(ctx, (view, y, m, d) -> {
-                        etDate.setText(String.format(Locale.US, "%02d/%02d/%04d", d, m + 1, y));
-                        if (refreshRef[0] != null) refreshRef[0].run();
-                    },
-                    c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
-        });
-
-        TextView lblColor = label(ctx, "রঙ পছন্দ করুন");
-        LinearLayout colorRow = new LinearLayout(ctx);
-        colorRow.setOrientation(LinearLayout.HORIZONTAL);
-        colorRow.setPadding(0, dp(ctx, 6), 0, 0);
-        final int[] selectedColor = {"expense".equals(type) ? PRESET_COLORS[3] : PRESET_COLORS[1]};
-        List<android.view.View> swatches = new ArrayList<>();
-        for (int c : PRESET_COLORS) {
-            android.view.View sw = new android.view.View(ctx);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(ctx, 34), dp(ctx, 34));
-            lp.setMarginEnd(dp(ctx, 10));
-            sw.setLayoutParams(lp);
-            GradientDrawable gd = new GradientDrawable();
-            gd.setShape(GradientDrawable.OVAL);
-            gd.setColor(c);
-            if (c == selectedColor[0]) gd.setStroke(dp(ctx, 3), Color.WHITE);
-            sw.setBackground(gd);
-            swatches.add(sw);
-            colorRow.addView(sw);
-        }
-        for (int idx = 0; idx < swatches.size(); idx++) {
-            android.view.View sw = swatches.get(idx);
-            int c = PRESET_COLORS[idx];
-            sw.setOnClickListener(v -> {
-                selectedColor[0] = c;
-                for (android.view.View s : swatches) ((GradientDrawable) s.getBackground()).setStroke(0, Color.TRANSPARENT);
-                ((GradientDrawable) sw.getBackground()).setStroke(dp(ctx, 3), Color.WHITE);
-                if (refreshRef[0] != null) refreshRef[0].run();
-            });
-        }
-
-        etCompany.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
-            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {}
-            @Override public void afterTextChanged(Editable s) { if (refreshRef[0] != null) refreshRef[0].run(); }
-        });
-
-        root.addView(lblPreview);
-        LinearLayout centerWrap = new LinearLayout(ctx);
-        centerWrap.setOrientation(LinearLayout.VERTICAL);
-        centerWrap.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
-        centerWrap.addView(previewFrame);
-        root.addView(centerWrap);
-        root.addView(spacer(ctx));
-        root.addView(lblCompany);
-        root.addView(etCompany);
-        root.addView(spacer(ctx));
-        root.addView(lblTemplate);
-        root.addView(templateRow);
-        root.addView(spacer(ctx));
-        root.addView(lblDate);
-        root.addView(etDate);
-        root.addView(spacer(ctx));
-        root.addView(lblColor);
-        root.addView(colorRow);
-
-        // ── প্রিভিউ রিফ্রেশ করার আসল ফাংশন — কোম্পানি/টেমপ্লেট/তারিখ/রঙ বদলালেই ওপরের সব লিসেনার এটা কল করে ──
-        refreshRef[0] = () -> {
-            String company = etCompany.getText().toString().trim();
-            if (company.isEmpty()) company = "CashLipi ক্যাশলিপি";
-            String date = etDate.getText().toString().trim();
-            if (date.isEmpty()) date = today;
-            Bitmap bmp = renderPreviewBitmap(ctx, type, list, company, date,
-                    selectedColor[0], selectedTemplate[0]);
-            ivPreview.setImageBitmap(bmp);
-        };
-        refreshRef[0].run(); // প্রথমবার ডায়ালগ খোলার সাথে সাথেই প্রিভিউ দেখাও
-
-        new AlertDialog.Builder(ctx)
-                .setTitle(forPrint ? "প্রিন্ট" : "PDF এক্সপোর্ট")
-                .setView(scroll)
-                .setPositiveButton(forPrint ? "প্রিন্ট করুন" : "PDF তৈরি করুন", (d, w) -> {
-                    String company = etCompany.getText().toString().trim();
-                    if (company.isEmpty()) company = "CashLipi ক্যাশলিপি";
-                    String date = etDate.getText().toString().trim();
-                    if (date.isEmpty()) date = today;
-                    byte[] pdf = generatePdf(type, list, company, date, selectedColor[0], selectedTemplate[0]);
-                    if (pdf == null) {
-                        Toast.makeText(ctx, "তৈরি ব্যর্থ হয়েছে", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (forPrint) printPdf(ctx, pdf, company);
-                    else savePdf(ctx, pdf);
-                })
-                .setNegativeButton("বাতিল", null)
-                .show();
+    public static List<Transaction> takePendingList() {
+        List<Transaction> l = pendingList;
+        pendingList = null;
+        return l;
     }
 
-    private static void styleChip(TextView chip, boolean active) {
+    // ── এক্সপোর্ট: আয়-ব্যয় লিস্ট পেজ থেকে কল হয় — এখন ফুল-পেজ Activity খোলে (পপ-আপ নয়) ──────
+    public static void showExportDialog(Context ctx, String type, List<Transaction> list, boolean forPrint) {
+        pendingList = list;
+        Intent i = new Intent(ctx, com.jrappspot.cashlipi.activities.InvoiceExportActivity.class);
+        i.putExtra(com.jrappspot.cashlipi.activities.InvoiceExportActivity.EXTRA_TYPE, type);
+        i.putExtra(com.jrappspot.cashlipi.activities.InvoiceExportActivity.EXTRA_FOR_PRINT, forPrint);
+        if (!(ctx instanceof android.app.Activity)) i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(i);
+    }
+
+    public static void styleChip(TextView chip, boolean active) {
         GradientDrawable gd = new GradientDrawable();
         gd.setCornerRadius(chip.getResources().getDisplayMetrics().density * 8);
         if (active) {
@@ -244,13 +93,13 @@ public class InvoicePdfHelper {
         chip.setBackground(gd);
     }
 
-    private static android.view.View spacer(Context ctx) {
+    public static android.view.View spacer(Context ctx) {
         android.view.View v = new android.view.View(ctx);
         v.setLayoutParams(new LinearLayout.LayoutParams(-1, dp(ctx, 14)));
         return v;
     }
 
-    private static TextView label(Context ctx, String text) {
+    public static TextView label(Context ctx, String text) {
         TextView tv = new TextView(ctx);
         tv.setText(text);
         tv.setTextSize(12.5f);
@@ -260,33 +109,50 @@ public class InvoicePdfHelper {
         return tv;
     }
 
-    private static int dp(Context ctx, int v) {
+    public static int dp(Context ctx, int v) {
         return (int) (v * ctx.getResources().getDisplayMetrics().density);
     }
 
+    // ── আয়-ব্যয় তালিকা কাস্টম তারিখ-রেঞ্জ (শুরু–শেষ, yyyy-MM-dd ফরম্যাট, উভয়ই ইনক্লুসিভ) দিয়ে ফিল্টার ──
+    // startYmd/endYmd null বা খালি হলে পুরো লিস্টই ব্যবহৃত হবে (আগের আচরণ অপরিবর্তিত)।
+    public static List<Transaction> filterByDateRange(List<Transaction> list, String startYmd, String endYmd) {
+        if ((startYmd == null || startYmd.isEmpty()) && (endYmd == null || endYmd.isEmpty())) return list;
+        List<Transaction> out = new ArrayList<>();
+        for (Transaction t : list) {
+            String d = t.getDate();
+            if (d == null || d.isEmpty()) continue;
+            if (startYmd != null && !startYmd.isEmpty() && d.compareTo(startYmd) < 0) continue;
+            if (endYmd != null && !endYmd.isEmpty() && d.compareTo(endYmd) > 0) continue;
+            out.add(t);
+        }
+        return out;
+    }
+
     // ── লাইভ প্রিভিউ বিটম্যাপ — একই drawPage() রুটিন ছোট স্কেলে আঁকে (PDF-এর সাথে ১০০% মিল) ──
-    private static Bitmap renderPreviewBitmap(Context ctx, String type, List<Transaction> list,
-                                               String company, String dateStr, int accentColor, int template) {
+    public static Bitmap renderPreviewBitmap(Context ctx, String type, List<Transaction> list,
+                                              String company, String dateStr, int accentColor, int template,
+                                              Bitmap signatureBitmap, String signatureText) {
         int bmpW = dp(ctx, 200), bmpH = dp(ctx, 283);
         Bitmap bmp = Bitmap.createBitmap(bmpW, bmpH, Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(bmp);
         cv.drawColor(Color.WHITE);
         cv.save();
         cv.scale(bmpW / (float) PAGE_W, bmpH / (float) PAGE_H);
-        drawPage(cv, type, list, company, dateStr, accentColor, template);
+        drawPage(cv, type, list, company, dateStr, accentColor, template, signatureBitmap, signatureText);
         cv.restore();
         return bmp;
     }
 
     // ── কালারফুল প্রফেশনাল ইনভয়েস PDF তৈরি ──────────────────────────────
-    private static byte[] generatePdf(String type, List<Transaction> list,
-                                       String company, String dateStr, int accentColor, int template) {
+    public static byte[] generatePdf(String type, List<Transaction> list,
+                                      String company, String dateStr, int accentColor, int template,
+                                      Bitmap signatureBitmap, String signatureText) {
         try {
             PdfDocument doc = new PdfDocument();
             PdfDocument.PageInfo info = new PdfDocument.PageInfo.Builder(PAGE_W, PAGE_H, 1).create();
             PdfDocument.Page page = doc.startPage(info);
             Canvas cv = page.getCanvas();
-            drawPage(cv, type, list, company, dateStr, accentColor, template);
+            drawPage(cv, type, list, company, dateStr, accentColor, template, signatureBitmap, signatureText);
             doc.finishPage(page);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             doc.writeTo(baos);
@@ -297,9 +163,17 @@ public class InvoicePdfHelper {
         }
     }
 
+    // ── PDF সেভ ও প্রিন্ট করার পাবলিক এন্ট্রি — Activity থেকে সরাসরি কল হয় ──
+    public static void savePdfPublic(Context ctx, byte[] pdf) { savePdf(ctx, pdf); }
+
+    public static void printPdfPublic(Context ctx, byte[] pdfBytes, String jobName) { printPdf(ctx, pdfBytes, jobName); }
+
     // ── মূল ড্রইং রুটিন — PDF পেজ ও লাইভ প্রিভিউ দুটোতেই এই একই ফাংশন ব্যবহার হয়, তাই প্রিভিউ = আসল ফলাফল ──
+    // signatureBitmap দেওয়া থাকলে (হাতে আঁকা) সেটাই আঁকা হয়; না থাকলে signatureText (টাইপ করা নাম) থাকলে
+    // সেটা ইটালিক/বোল্ড ফন্টে "সইয়ের মত" করে আঁকা হয়; দুটোর একটাও না থাকলে আগের মতোই ফাঁকা লাইন থাকবে।
     private static void drawPage(Canvas cv, String type, List<Transaction> list,
-                                  String company, String dateStr, int accentColor, int template) {
+                                  String company, String dateStr, int accentColor, int template,
+                                  Bitmap signatureBitmap, String signatureText) {
         int pageW = PAGE_W, pageH = PAGE_H, margin = MARGIN;
         boolean isIncome = !"expense".equals(type);
         String typeLabel = isIncome ? "আয়ের রিপোর্ট" : "ব্যয়ের রিপোর্ট";
@@ -451,10 +325,31 @@ public class InvoicePdfHelper {
 
         // ── স্বাক্ষরের জায়গা (ফুটার) — লেটারহেড টেমপ্লেটে "সিলমোহর"-সহ ──
         int sigY = pageH - (compact ? 50 : 90);
+        int sigLineStart = pageW - margin - 180, sigLineEnd = pageW - margin;
+
+        if (signatureBitmap != null) {
+            // ── হাতে আঁকা স্বাক্ষর — লাইনের ঠিক ওপরে বসানো, আকার-অনুপাত ঠিক রেখে ──
+            int boxW = sigLineEnd - sigLineStart - 10, boxH = compact ? 26 : 36;
+            float scale = Math.min(boxW / (float) signatureBitmap.getWidth(), boxH / (float) signatureBitmap.getHeight());
+            int drawW = (int) (signatureBitmap.getWidth() * scale), drawH = (int) (signatureBitmap.getHeight() * scale);
+            RectF dst = new RectF(sigLineStart + (boxW - drawW) / 2f + 5, sigY - drawH - 4,
+                    sigLineStart + (boxW - drawW) / 2f + 5 + drawW, sigY - 4);
+            cv.drawBitmap(signatureBitmap, null, dst, null);
+        } else if (signatureText != null && !signatureText.trim().isEmpty()) {
+            // ── টাইপ করা স্বাক্ষর — ইটালিক-বোল্ড ফন্টে, কলমে লেখার মত ──
+            Paint typedSig = new Paint();
+            typedSig.setAntiAlias(true);
+            typedSig.setColor(0xFF1A1A2E);
+            typedSig.setTypeface(Typeface.create(Typeface.SERIF, Typeface.BOLD_ITALIC));
+            typedSig.setTextSize(compact ? 15f : 18f);
+            typedSig.setTextAlign(Paint.Align.CENTER);
+            cv.drawText(signatureText.trim(), (sigLineStart + sigLineEnd) / 2f, sigY - 8, typedSig);
+        }
+
         Paint linePaint = new Paint();
         linePaint.setColor(0xFFD1D5DB);
         linePaint.setStrokeWidth(1.2f);
-        cv.drawLine(pageW - margin - 180, sigY, pageW - margin, sigY, linePaint);
+        cv.drawLine(sigLineStart, sigY, sigLineEnd, sigY, linePaint);
         Paint sigLabel = new Paint();
         sigLabel.setColor(0xFF6B7280);
         sigLabel.setTextSize(10.5f);

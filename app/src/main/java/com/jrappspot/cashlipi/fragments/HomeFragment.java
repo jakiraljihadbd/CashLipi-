@@ -244,7 +244,8 @@ public class HomeFragment extends Fragment {
             page.setAlpha(0.45f + (1 - abs) * 0.55f);
             page.setScaleY(0.92f + (1 - abs) * 0.08f);
             page.setScaleX(0.96f + (1 - abs) * 0.04f);
-            page.setTranslationX(-position * page.getWidth() * 0.12f);
+            // আগে এখানে setTranslationX() ছিল, যার কারণে পরের স্লাইডের কিছু অংশ (মাথা)
+            // বর্তমান স্লাইডের ডান পাশে বেরিয়ে দেখা যেত — সেটা বাদ দেওয়া হলো।
         });
         tipPager.unregisterOnPageChangeCallback(pageChangeCallback);
         tipPager.registerOnPageChangeCallback(pageChangeCallback);

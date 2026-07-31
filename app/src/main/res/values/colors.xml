@@ -120,6 +120,8 @@
     <!-- Border -->
     <color name="borderColor">#D1D9E6</color>
     <color name="dividerColor">#F3F4F6</color>
+    <!-- আসল ছকের/স্প্রেডশিটের মতো স্পষ্ট দাগের জন্য — dividerColor থেকে বেশি কনট্রাস্ট -->
+    <color name="ledgerGridLine">#C6D0E0</color>
 
     <!-- Bottom Nav -->
     <color name="bottomNavBg">#FFFFFF</color>

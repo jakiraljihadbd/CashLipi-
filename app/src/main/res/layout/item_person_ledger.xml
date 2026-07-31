@@ -7,8 +7,8 @@
     android:layout_marginHorizontal="12dp"
     android:layout_marginBottom="9dp"
     android:gravity="center_vertical"
-    android:background="@drawable/bg_card_premium_ripple"
-    android:elevation="4dp"
+    android:background="@drawable/bg_person_ledger_card"
+    android:elevation="3dp"
     android:clickable="true"
     android:focusable="true">
 
@@ -38,7 +38,7 @@
                 android:id="@+id/tvRowType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14.5sp"
+                android:textSize="15.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/textPrimary"/>
 
@@ -73,9 +73,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:textSize="11sp"
+            android:textSize="11.5sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
             android:textColor="@color/textSecondary"
-            android:alpha="0.8"/>
+            android:alpha="0.85"/>
     </LinearLayout>
 
     <LinearLayout
@@ -89,7 +91,7 @@
             android:id="@+id/tvRowAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16.5sp"
+            android:textSize="18sp"
             android:textStyle="bold"/>
 
         <TextView

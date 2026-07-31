@@ -264,10 +264,12 @@ public class AddTransactionActivity extends BaseActivity {
                 });
             } catch (Exception e) {
                 android.util.Log.e("CashLipiAI", "parseWithAi ব্যর্থ হয়েছে", e);
+                String msg = (e.getMessage() != null && e.getMessage().contains("ব্যস্ত"))
+                        ? e.getMessage()
+                        : "AI বুঝতে পারেনি, আবার চেষ্টা করুন বা নিজে হাতে লিখুন";
                 runOnUiThread(() -> {
                     hideAiThinking();
-                    Toast.makeText(this,
-                            "AI বুঝতে পারেনি, আবার চেষ্টা করুন বা নিজে হাতে লিখুন", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                 });
             }
         });

@@ -1,6 +1,7 @@
 package com.jrappspot.cashlipi.utils;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
@@ -126,6 +127,21 @@ public class NavBarStyler {
                 fillColor = baseColor;
                 if (bottomPosition) topRadius = cornerTopOnly;
                 break;
+        }
+
+        // ── ডার্ক মুডে বটম নেভ বার আশপাশের গাঢ় ব্যাকগ্রাউন্ডের সাথে মিশে গিয়ে বোঝা যাচ্ছিল না,
+        //    তাই শুধু ডার্ক মুডে (লাইট মুডে কোনো পরিবর্তন নেই) বারের চারপাশে হালকা একটা আউটলাইন
+        //    যোগ করা হলো, যাতে বার আলাদাভাবে স্পষ্ট বোঝা যায়। যে স্টাইলগুলোর নিজস্ব স্ট্রোক
+        //    আছে (যেমন glass/minimal) সেগুলো অপরিবর্তিত থাকবে।
+        boolean isNightMode = (ctx.getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        if (isNightMode && bottomPosition && strokeColor == null) {
+            strokeColor = withAlpha(Color.WHITE, 38);
+            strokeWidth = 1f * d;
+        }
+
+        if (isNightMode && bottomPosition) {
+            elevation = Math.max(elevation, 12f * d);
         }
 
         if (!cradle) {

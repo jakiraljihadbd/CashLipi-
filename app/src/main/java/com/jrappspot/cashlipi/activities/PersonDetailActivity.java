@@ -385,7 +385,6 @@ public class PersonDetailActivity extends AppCompatActivity {
             TextView tvDena = rowView.findViewById(R.id.tvTRowDena);
             TextView tvPabona = rowView.findViewById(R.id.tvTRowPabona);
             View colorBar = rowView.findViewById(R.id.tvTRowColorBar);
-            colorBar.setBackgroundColor(ContextCompat.getColor(this, isDena ? R.color.denaColor : R.color.pabonaColor));
 
             String note = e.getNote() != null && !e.getNote().isEmpty() ? e.getNote()
                     : (e.getCategory() != null ? e.getCategory() : "");
@@ -396,14 +395,26 @@ public class PersonDetailActivity extends AppCompatActivity {
             tvPabona.setText(isDena ? "" : DatabaseManager.formatAmount(e.getAmount()));
 
             if (e.isPaid()) {
+                // পরিশোধিত সারি ধূসর/হালকা দেখাবে — কার্ড ভিউয়ের মতোই
+                int mutedColor = ContextCompat.getColor(this, R.color.textHint);
+                colorBar.setBackgroundColor(mutedColor);
+                tvTitle.setTextColor(mutedColor);
+                tvDena.setTextColor(mutedColor);
+                tvPabona.setTextColor(mutedColor);
+
                 tvChip.setVisibility(View.VISIBLE);
                 // পাওনা পরিশোধ হলে "পেলাম", দেনা পরিশোধ হলে "দিলাম" — বাম পাশের দেনা/পাওনা রঙিন
                 // বার/কলাম অপরিবর্তিত থাকে, শুধু এই ডান পাশের স্ট্যাটাস চিপ পাল্টায়
                 tvChip.setText(isDena ? "দিলাম" : "পেলাম");
                 tvChip.setTextColor(ContextCompat.getColor(this, R.color.amountIncome));
                 DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()),
-                        ContextCompat.getColor(this, R.color.dividerColor));
+                        ContextCompat.getColor(this, R.color.paidBadgeBg));
             } else {
+                colorBar.setBackgroundColor(ContextCompat.getColor(this, isDena ? R.color.denaColor : R.color.pabonaColor));
+                tvTitle.setTextColor(ContextCompat.getColor(this, R.color.textPrimary));
+                tvDena.setTextColor(ContextCompat.getColor(this, R.color.denaColor));
+                tvPabona.setTextColor(ContextCompat.getColor(this, R.color.pabonaColor));
+
                 double bal = row.balanceAfter;
                 tvChip.setVisibility(View.VISIBLE);
                 if (bal > 0.5) {

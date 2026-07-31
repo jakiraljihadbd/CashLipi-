@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- মোটা − আইকন — ic_plus.xml এর সাথে ভিজ্যুয়াল মিল রেখে বানানো, বাটনে সাদা দেখায় -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path
+        android:pathData="M4,10 H20 V14 H4 Z"
+        android:fillColor="#FFFFFFFF"/>
+</vector>

@@ -18,15 +18,29 @@ import java.nio.charset.StandardCharsets;
  * জেনারেশন — দুটো ফিচারই এই একই হেল্পার ব্যবহার করে, যাতে নেটওয়ার্ক-কলিং লজিক একজায়গায়
  * কেন্দ্রীভূত থাকে (একবার ঠিক করলে সব জায়গায় কার্যকর হয়)।
  *
- * গুরুত্বপূর্ণ: আগে GET রিকোয়েস্টে পুরো প্রম্পট (ক্যাটাগরি তালিকাসহ) URL-এ এনকোড করে
- * পাঠানো হতো — ক্যাটাগরি তালিকা বড় হলে URL অনেক লম্বা হয়ে যেত, যার ফলে মাঝেমধ্যে
- * "AI বুঝতে পারেনি" এরর দেখাতো। এখন POST + JSON body ব্যবহার করা হচ্ছে বলে প্রম্পট যত
- * বড়ই হোক (ক্যাটাগরি তালিকা যতই বাড়ানো হোক), URL length limit-এর কোনো সমস্যা হয় না।
+ * আগে GET রিকোয়েস্টে পুরো প্রম্পট URL-এ এনকোড করে পাঠানো হতো — সেই বাগ আগেই POST + JSON
+ * body-তে সরিয়ে ঠিক করা হয়েছিল।
+ *
+ * এখন যে সমস্যাটা ঠিক করা হলো: Pollinations-এর অ্যানোনিমাস (কোনো referrer/token ছাড়া) টিয়ার
+ * বর্তমানে খুবই কড়াকড়ি রেট-লিমিটেড (প্রতি ১৫ সেকেন্ডে ১টা রিকোয়েস্ট) এবং মাঝে মাঝে সাময়িক
+ * সার্ভার এরর দেয় — আগের কোড এই পরিস্থিতিতে কোনো রিট্রাই ছাড়াই সাথে সাথে "AI বুঝতে পারেনি"
+ * দেখিয়ে দিত, এমনকি একটা সামান্য সাময়িক গ্লিচ হলেও। এখন:
+ *  ১) রিকোয়েস্টের সাথে একটা "referrer" পাঠানো হচ্ছে (Pollinations-এর অফিসিয়াল ডকুমেন্টেশন
+ *     অনুযায়ী, এটা অ্যাপটাকে শনাক্ত করে এবং অ্যানোনিমাস রিকোয়েস্ট আরও নির্ভরযোগ্যভাবে
+ *     প্রসেস হওয়ার সম্ভাবনা বাড়ায়)।
+ *  ২) রেট-লিমিট (HTTP 429) বা সাময়িক সার্ভার এরর (5xx) হলে একবার শর্ট ব্যাকঅফের পর
+ *     স্বয়ংক্রিয়ভাবে আবার চেষ্টা করা হয়, ব্যবহারকারীকে আবার বাটনে চাপতে হয় না।
+ *  ৩) এরর মেসেজ এখন কারণ অনুযায়ী নির্দিষ্ট (রেট-লিমিট vs নেটওয়ার্ক vs পার্স-এরর), যাতে
+ *     সমস্যাটা কী তা বোঝা সহজ হয় এবং ভবিষ্যতে ডিবাগ করা সহজ হয়।
  */
 public final class PollinationsAiHelper {
 
     private static final String TAG = "CashLipiAI";
     private static final String ENDPOINT = "https://text.pollinations.ai/openai";
+    // অ্যাপের নিজস্ব পরিচয় — anonymous রিকোয়েস্টকে চিহ্নিত করে, Pollinations-এর ডকুমেন্টেশনে
+    // সুপারিশকৃত পদ্ধতি (কোনো secret token ক্লায়েন্ট কোডে না রেখেই)।
+    private static final String REFERRER = "cashlipi.app";
+    private static final int MAX_ATTEMPTS = 2;
 
     private PollinationsAiHelper() {}
 
@@ -35,9 +49,36 @@ public final class PollinationsAiHelper {
      * কল করতে হবে (নেটওয়ার্ক কল, main thread-এ কল করা যাবে না)।
      */
     public static JSONObject callJson(String prompt) throws Exception {
+        Exception lastError = null;
+        for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+            try {
+                return callJsonOnce(prompt);
+            } catch (RateLimitedException e) {
+                lastError = e;
+                if (attempt < MAX_ATTEMPTS) {
+                    Log.w(TAG, "রেট-লিমিট হিট হয়েছে, ৪ সেকেন্ড পর আবার চেষ্টা করা হচ্ছে (attempt " + attempt + ")");
+                    Thread.sleep(4000);
+                }
+            } catch (RetryableServerException e) {
+                lastError = e;
+                if (attempt < MAX_ATTEMPTS) {
+                    Log.w(TAG, "সাময়িক সার্ভার এরর, ২ সেকেন্ড পর আবার চেষ্টা করা হচ্ছে (attempt " + attempt + ")");
+                    Thread.sleep(2000);
+                }
+            }
+        }
+        if (lastError instanceof RateLimitedException) {
+            throw new IllegalStateException("AI সার্ভার এই মুহূর্তে ব্যস্ত (অনেক বেশি রিকোয়েস্ট), কিছুক্ষণ পর আবার চেষ্টা করুন", lastError);
+        }
+        throw new IllegalStateException("AI সার্ভারে সাময়িক সমস্যা হচ্ছে, একটু পর আবার চেষ্টা করুন", lastError);
+    }
+
+    private static JSONObject callJsonOnce(String prompt) throws Exception {
         JSONObject body = new JSONObject();
         body.put("model", "openai");
         body.put("jsonMode", true);
+        body.put("response_format", new JSONObject().put("type", "json_object"));
+        body.put("referrer", REFERRER);
 
         JSONArray messages = new JSONArray();
         JSONObject sysMsg = new JSONObject();
@@ -50,10 +91,12 @@ public final class PollinationsAiHelper {
         messages.put(userMsg);
         body.put("messages", messages);
 
-        URL url = new URL(ENDPOINT);
+        URL url = new URL(ENDPOINT + "?referrer=" + REFERRER);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        conn.setRequestProperty("User-Agent", "CashLipi-Android/1.0");
+        conn.setRequestProperty("Referer", "https://" + REFERRER + "/");
         conn.setDoOutput(true);
         conn.setConnectTimeout(15000);
         conn.setReadTimeout(30000);
@@ -73,6 +116,14 @@ public final class PollinationsAiHelper {
         br.close();
         String raw = sb.toString().trim();
 
+        if (status == 429) {
+            Log.e(TAG, "Pollinations রেট-লিমিট (HTTP 429): " + raw);
+            throw new RateLimitedException("রেট-লিমিট: " + raw);
+        }
+        if (status >= 500 && status < 600) {
+            Log.e(TAG, "Pollinations সাময়িক সার্ভার এরর (HTTP " + status + "): " + raw);
+            throw new RetryableServerException("সার্ভার এরর " + status + ": " + raw);
+        }
         if (status < 200 || status >= 300) {
             Log.e(TAG, "Pollinations HTTP " + status + ": " + raw);
             throw new IllegalStateException("AI সার্ভার এরর: " + status);
@@ -100,5 +151,15 @@ public final class PollinationsAiHelper {
             throw new IllegalStateException("AI থেকে সঠিক উত্তর আসেনি");
         }
         return new JSONObject(content.substring(start, end + 1));
+    }
+
+    /** HTTP 429 — অ্যানোনিমাস রেট-লিমিট হিট হয়েছে, শর্ট ব্যাকঅফের পর রিট্রাই করার যোগ্য। */
+    private static class RateLimitedException extends Exception {
+        RateLimitedException(String message) { super(message); }
+    }
+
+    /** HTTP 5xx — সাময়িক সার্ভার সমস্যা, রিট্রাই করার যোগ্য। */
+    private static class RetryableServerException extends Exception {
+        RetryableServerException(String message) { super(message); }
     }
 }

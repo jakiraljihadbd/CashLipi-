@@ -137,7 +137,7 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         h.tvRowAmount.setText(DatabaseManager.formatAmount(e.getAmount()));
         h.tvRowAmount.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.denaColor : R.color.pabonaColor));
 
-        h.tvRowDate.setText(DatabaseManager.formatTimeDisplay(e.getTime()));
+        h.tvRowDate.setText(DatabaseManager.formatTimeAgo(e.getDate()));
 
         String note = "";
         if (e.getCategory() != null && !e.getCategory().isEmpty()) note = e.getCategory();
@@ -158,10 +158,18 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             h.tvRowPaidBadge.setText(isDena ? " দিলাম" : " পেলাম");
             h.tvRowAmount.setPaintFlags(h.tvRowAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             h.tvRowBalanceChip.setVisibility(View.GONE);
+
+            // পরিশোধিত এন্ট্রি ধূসর/হালকা দেখাবে — আর চোখে পড়বে না, বাকি (unpaid) এন্ট্রিগুলোই
+            // উজ্জ্বল রঙে চোখে পড়বে
+            int mutedColor = ContextCompat.getColor(ctx, R.color.textHint);
+            h.tvRowType.setTextColor(mutedColor);
+            h.tvRowAmount.setTextColor(mutedColor);
+            h.ivRowIcon.setAlpha(0.5f);
         } else {
             h.tvRowPaidBadge.setVisibility(View.GONE);
             h.tvRowAmount.setPaintFlags(h.tvRowAmount.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             h.tvRowBalanceChip.setVisibility(View.VISIBLE);
+            h.ivRowIcon.setAlpha(1f);
 
             double bal = row.balanceAfter;
             int chipColor, chipBg;

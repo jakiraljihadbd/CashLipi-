@@ -346,8 +346,8 @@ public class InvoicePdfHelper {
 
         if (signatureBitmap != null) {
             // ── হাতে আঁকা স্বাক্ষর — লাইনের ঠিক ওপরে বসানো, আকার-অনুপাত ঠিক রেখে ──
-            int boxW = sigLineEnd - sigLineStart - 10, boxH = compact ? 26 : 36;
-            float scale = Math.min(boxW / (float) signatureBitmap.getWidth(), boxH / (float) signatureBitmap.getHeight());
+            int boxW = sigLineEnd - sigLineStart - 10, sigBoxH = compact ? 26 : 36;
+            float scale = Math.min(boxW / (float) signatureBitmap.getWidth(), sigBoxH / (float) signatureBitmap.getHeight());
             int drawW = (int) (signatureBitmap.getWidth() * scale), drawH = (int) (signatureBitmap.getHeight() * scale);
             RectF dst = new RectF(sigLineStart + (boxW - drawW) / 2f + 5, sigY - drawH - 4,
                     sigLineStart + (boxW - drawW) / 2f + 5 + drawW, sigY - 4);

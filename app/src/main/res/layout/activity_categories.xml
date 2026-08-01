@@ -18,16 +18,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ===== হেডার ===== -->
+            <!-- ═══════════════════════════════════════════
+                 হেডার — অ্যাপের স্ট্যান্ডার্ড পিংক, চিকন, একদম সোজা (কোনো বাঁক নেই)
+                 ═══════════════════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_header_generic"
+                android:background="@drawable/bg_header_flat_pink"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingHorizontal="8dp"
+                android:paddingHorizontal="6dp"
                 android:paddingTop="10dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="12dp">
 
                 <ImageView
                     android:id="@+id/btnBack"
@@ -40,14 +42,31 @@
                     android:clickable="true"
                     android:focusable="true"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:text="স্থায়ী ক্যাটাগরি"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="স্থায়ী ক্যাটাগরি"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+
+                    <TextView
+                        android:id="@+id/tvCategoryCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="মোট ০টি ক্যাটাগরি"
+                        android:textSize="11.5sp"
+                        android:textColor="@color/white"
+                        android:alpha="0.85"
+                        android:layout_marginTop="1dp"/>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -56,46 +75,56 @@
                 android:orientation="vertical"
                 android:paddingHorizontal="14dp">
 
-                <!-- ===== আয়/ব্যয় টগল ===== -->
+                <!-- ═══════════════════════════════════════════
+                     আয়/ব্যয় টগল — আয়-ব্যয় পেজের মতোই সবুজ/লাল স্টাইল
+                     ═══════════════════════════════════════════ -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="16dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="16dp">
+                    android:background="@drawable/ie_view_tab_track"
+                    android:padding="4dp"
+                    android:elevation="2dp">
 
-                    <Button
+                    <TextView
                         android:id="@+id/btnTypeIncome"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="আয়ের ক্যাটাগরি"
-                        android:textSize="12.5sp"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
                         android:textAllCaps="false"
-                        android:background="@drawable/bg_btn_income"
-                        android:textColor="@color/white"
-                        android:layout_marginEnd="6dp"/>
+                        android:clickable="true"
+                        android:focusable="true"/>
 
-                    <Button
+                    <TextView
                         android:id="@+id/btnTypeExpense"
                         android:layout_width="0dp"
-                        android:layout_height="44dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:gravity="center"
                         android:text="ব্যয়ের ক্যাটাগরি"
-                        android:textSize="12.5sp"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
                         android:textAllCaps="false"
-                        android:background="@drawable/bg_type_inactive"
-                        android:textColor="@color/textSecondary"
-                        android:layout_marginStart="6dp"/>
+                        android:clickable="true"
+                        android:focusable="true"/>
                 </LinearLayout>
 
-                <!-- ===== AI দিয়ে ক্যাটাগরি বানান ===== -->
+                <!-- ═══════════════════════════════════════════
+                     নতুন ক্যাটাগরি যোগ করুন — প্রধান, স্পষ্ট, সহজ
+                     ═══════════════════════════════════════════ -->
                 <LinearLayout
-                    android:id="@+id/aiCategoryCard"
+                    android:id="@+id/addCategoryCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="@drawable/bg_ai_category_card"
-                    android:padding="14dp"
+                    android:background="@drawable/bg_card_square"
+                    android:padding="16dp"
                     android:layout_marginTop="16dp">
 
                     <LinearLayout
@@ -105,223 +134,135 @@
                         android:gravity="center_vertical">
 
                         <ImageView
-                            android:layout_width="34dp"
-                            android:layout_height="34dp"
-                            android:padding="6dp"
-                            android:background="@drawable/bg_mic_circle_ai"
-                            android:src="@drawable/ic_ai_sparkle"/>
+                            android:id="@+id/ivAddCategoryIcon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:padding="9dp"
+                            android:background="@drawable/bg_icon_circle_income"
+                            android:src="@drawable/ic_plus_circle"
+                            app:tint="@color/white"/>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical"
-                            android:layout_marginStart="10dp">
+                            android:layout_marginStart="12dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="AI দিয়ে ক্যাটাগরি বানান"
-                                android:textSize="14.5sp"
+                                android:text="নতুন ক্যাটাগরি যোগ করুন"
+                                android:textSize="15.5sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/textPrimary"/>
 
                             <TextView
-                                android:id="@+id/tvAiSubtitle"
+                                android:id="@+id/tvAddCategorySubtitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="আপনার পেশা বা আয়ের উৎস লিখুন বা বলুন"
-                                android:textSize="11.5sp"
-                                android:textColor="@color/textSecondary"/>
+                                android:text="আয়ের একটি নতুন খাতের নাম লিখুন"
+                                android:textSize="12sp"
+                                android:textColor="@color/textSecondary"
+                                android:layout_marginTop="1dp"/>
                         </LinearLayout>
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilAiInput"
-                        style="@style/AppTextInputSmooth"
+                        android:id="@+id/tilNewCategory"
+                        style="@style/AppTextInputSmooth.Adaptive"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:hint="যেমনঃ আমি একটি বেসরকারি কোম্পানিতে চাকরি করি">
+                        android:layout_marginTop="14dp"
+                        android:hint="যেমনঃ 🚕 রাইড শেয়ারিং আয়">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAiInput"
+                            android:id="@+id/etNewCategory"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingVertical="12dp"
-                            android:inputType="textCapSentences|textMultiLine"
-                            android:minLines="1"
-                            android:maxLines="3"
-                            android:textSize="14sp"
+                            android:inputType="textCapSentences"
+                            android:maxLines="1"
+                            android:imeOptions="actionDone"
+                            android:textSize="15sp"
                             android:textColor="@color/textPrimary"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <LinearLayout
+                    <Button
+                        android:id="@+id/btnAddCategory"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginTop="10dp">
-
-                        <ImageView
-                            android:id="@+id/btnAiMic"
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
-                            android:padding="11dp"
-                            android:background="@drawable/bg_mic_circle_ai"
-                            android:src="@drawable/ic_mic_ai"
-                            android:layout_marginEnd="10dp"
-                            android:clickable="true"
-                            android:focusable="true"/>
-
-                        <Button
-                            android:id="@+id/btnAiGenerate"
-                            android:layout_width="0dp"
-                            android:layout_height="44dp"
-                            android:layout_weight="1"
-                            android:text="✨ AI দিয়ে বানান"
-                            android:textAllCaps="false"
-                            android:textSize="13.5sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/white"
-                            android:background="@drawable/bg_ai_voice_pill"/>
-                    </LinearLayout>
-
-                    <!-- ===== AI ভাবছে... (ছোট ইনলাইন ইন্ডিকেটর) ===== -->
-                    <LinearLayout
-                        android:id="@+id/aiLoadingRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
+                        android:layout_height="52dp"
                         android:layout_marginTop="12dp"
-                        android:visibility="gone">
-
-                        <ProgressBar
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:indeterminateTint="@color/colorPrimary"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="AI বিশ্লেষণ করছে..."
-                            android:textSize="13sp"
-                            android:textColor="@color/textSecondary"/>
-                    </LinearLayout>
-
-                    <!-- ===== AI প্রস্তাবিত ক্যাটাগরি — নিশ্চিত করার আগে দেখা যাবে ===== -->
-                    <LinearLayout
-                        android:id="@+id/aiSuggestionRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:background="@drawable/bg_ai_suggestion_chip"
-                        android:padding="10dp"
-                        android:layout_marginTop="12dp"
-                        android:visibility="gone">
-
-                        <EditText
-                            android:id="@+id/etAiSuggestion"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/textPrimary"
-                            android:inputType="textCapSentences"/>
-
-                        <ImageView
-                            android:id="@+id/btnAiConfirm"
-                            android:layout_width="34dp"
-                            android:layout_height="34dp"
-                            android:padding="6dp"
-                            android:src="@drawable/ic_check_circle"
-                            app:tint="@color/successColor"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:clickable="true"
-                            android:focusable="true"/>
-
-                        <ImageView
-                            android:id="@+id/btnAiDiscard"
-                            android:layout_width="34dp"
-                            android:layout_height="34dp"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_delete"
-                            app:tint="@color/errorColor"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:clickable="true"
-                            android:focusable="true"/>
-                    </LinearLayout>
+                        android:text="＋ ক্যাটাগরি যোগ করুন"
+                        android:textAllCaps="false"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_add_cat_btn_income"
+                        android:elevation="0dp"
+                        android:stateListAnimator="@null"/>
                 </LinearLayout>
 
-                <!-- ===== ম্যানুয়ালি সরাসরি লিখুন (ঐচ্ছিক, ছোট করে) ===== -->
-                <TextView
-                    android:id="@+id/tvManualToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="+ সরাসরি হাতে লিখে যোগ করুন"
-                    android:textSize="12.5sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
-                    android:padding="4dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"/>
-
+                <!-- ═══════════════════════════════════════════
+                     বিদ্যমান ক্যাটাগরি তালিকা
+                     ═══════════════════════════════════════════ -->
                 <LinearLayout
-                    android:id="@+id/manualAddRow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="8dp"
-                    android:visibility="gone">
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="22dp"
+                    android:layout_marginBottom="10dp">
 
-                    <EditText
-                        android:id="@+id/etNewCategory"
+                    <TextView
                         android:layout_width="0dp"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/bg_card_white"
-                        android:paddingHorizontal="14dp"
-                        android:textSize="14sp"
-                        android:textColor="@color/textPrimary"
-                        android:textColorHint="@color/textSecondary"
-                        android:hint="নতুন ক্যাটাগরি লিখুন"
-                        android:inputType="textCapSentences"/>
+                        android:text="বিদ্যমান ক্যাটাগরি"
+                        android:textSize="14.5sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textPrimary"/>
 
-                    <Button
-                        android:id="@+id/btnAddCategory"
-                        style="@style/SubmitButton.Primary"
+                    <TextView
+                        android:id="@+id/tvListHint"
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:text="যোগ করুন"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white"
-                        android:paddingHorizontal="14dp"/>
+                        android:layout_height="wrap_content"
+                        android:text="সম্পাদনা করতে ✏️ চাপুন"
+                        android:textSize="11sp"
+                        android:textColor="@color/textHint"/>
                 </LinearLayout>
-
-                <!-- ===== বিদ্যমান ক্যাটাগরি তালিকা ===== -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="বিদ্যমান ক্যাটাগরি"
-                    android:textSize="13.5sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textSecondary"/>
 
                 <LinearLayout
                     android:id="@+id/categoryContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"/>
+
+                <!-- ===== খালি অবস্থা ===== -->
+                <LinearLayout
+                    android:id="@+id/emptyState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingVertical="36dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🗂️"
+                        android:textSize="40sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="এখনো কোনো ক্যাটাগরি যোগ করা হয়নি"
+                        android:textSize="13.5sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textSecondary"/>
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

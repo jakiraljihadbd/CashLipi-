@@ -207,7 +207,7 @@
                     app:startIconDrawable="@drawable/ic_plus_circle_txn"
                     app:startIconTint="@null">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
                         android:id="@+id/etCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -216,7 +216,8 @@
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="@color/textPrimary"
-                        android:imeOptions="actionDone"/>
+                        android:imeOptions="actionDone"
+                        android:completionThreshold="1"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <HorizontalScrollView

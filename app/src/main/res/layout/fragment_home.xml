@@ -165,9 +165,10 @@
                         <TextView
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="আয়"
-                            android:textSize="15.5sp" android:textStyle="bold"
+                            android:textSize="18sp" android:textStyle="bold"
                             android:textColor="@color/m3OnIncomeContainer"
-                            android:alpha="0.8"/>
+                            android:alpha="0.95"
+                            android:layout_marginBottom="1dp"/>
                         <TextView
                             android:id="@+id/tvTotalIncome"
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -201,9 +202,10 @@
                         <TextView
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="ব্যয়"
-                            android:textSize="15.5sp" android:textStyle="bold"
+                            android:textSize="18sp" android:textStyle="bold"
                             android:textColor="@color/m3OnExpenseContainer"
-                            android:alpha="0.8"/>
+                            android:alpha="0.95"
+                            android:layout_marginBottom="1dp"/>
                         <TextView
                             android:id="@+id/tvTotalExpense"
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -312,7 +314,7 @@
             android:id="@+id/cardSavings"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/bg_summary_savings"
             android:clickable="true" android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
@@ -355,18 +357,18 @@
             android:gravity="center_vertical"
             android:background="@drawable/bg_notice_bar"
             android:paddingHorizontal="14dp"
-            android:paddingVertical="4dp"
-            android:layout_marginBottom="10dp">
+            android:paddingVertical="8dp"
+            android:layout_marginBottom="4dp">
             <ImageView
                 android:layout_width="22dp" android:layout_height="22dp"
                 android:src="@drawable/ic_bell_notification"
                 app:tint="@color/ieEditBlue"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="12dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="নোটিশঃ"
-                android:textSize="13.5sp" android:textStyle="bold"
+                android:textSize="16.5sp" android:textStyle="bold"
                 android:textColor="@color/ieNoticeTextLight"
                 android:layout_marginEnd="6dp"/>
             <TextView
@@ -375,7 +377,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="ব্যক্তিগত কিংবা ব্যবসার সকল হিসাব রাখুন সহজে"
-                android:textSize="13.5sp"
+                android:textSize="16.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/ieNoticeTextLight"
                 android:maxLines="1"

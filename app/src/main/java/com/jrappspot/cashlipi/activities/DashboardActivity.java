@@ -332,7 +332,7 @@ public class DashboardActivity extends BaseActivity {
         TextView tv = new TextView(this);
         tv.setText(text);
         tv.setTextColor(Color.WHITE);
-        tv.setTextSize(14.5f);
+        tv.setTextSize(16.5f);
         tv.setTypeface(tv.getTypeface(), android.graphics.Typeface.BOLD);
         tv.setMaxLines(1);
         tv.setEllipsize(android.text.TextUtils.TruncateAt.END);
@@ -349,7 +349,11 @@ public class DashboardActivity extends BaseActivity {
         if (photoSource != null && !photoSource.isEmpty()) {
             Object loadFrom = photoSource.startsWith("http")
                     ? photoSource : new java.io.File(photoSource);
-            headerProfileBtn.setPadding(0, 0, 0, 0);
+            // পাতলা সাদা রিং বর্ডার দেখানোর জন্য সামান্য প্যাডিং রাখা হয় — ছবিটা তখন আর
+            // হেডারের রঙে মিশে যায় না, আলাদা ও পরিষ্কার দেখায়
+            int ringPad = dp(2);
+            headerProfileBtn.setPadding(ringPad, ringPad, ringPad, ringPad);
+            headerProfileBtn.setBackgroundResource(R.drawable.bg_profile_ring);
             headerProfileBtn.setScaleType(ImageView.ScaleType.CENTER_CROP);
             headerProfileBtn.setImageTintList(null);
             Glide.with(this)
@@ -360,6 +364,7 @@ public class DashboardActivity extends BaseActivity {
                     .into(headerProfileBtn);
         } else {
             int pad = dp(8);
+            headerProfileBtn.setBackground(null);
             headerProfileBtn.setPadding(pad, pad, pad, pad);
             headerProfileBtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
             headerProfileBtn.setImageResource(R.drawable.ic_person_circle);
@@ -622,7 +627,8 @@ public class DashboardActivity extends BaseActivity {
             navItems[i].setOnClickListener(v -> toggleFabMenu(bottomFab));
         } else {
             if (navIcons[i] != null) navIcons[i].setVisibility(View.VISIBLE);
-            if (navLabels[i] != null) navLabels[i].setText(R.string.nav_label_bakir_khata);
+            // এই স্লট এখন "বাজেট" বহন করে (বাকির খাতা রিপ্লেস হয়ে বাজেটের দৃশ্যমান স্লটে সরানো হয়েছে)
+            if (navLabels[i] != null) navLabels[i].setText(R.string.nav_label_budget);
             if (navIndicators[i] != null) navIndicators[i].setVisibility(View.INVISIBLE);
             navItems[i].setOnClickListener(v -> viewPager.setCurrentItem(i, true));
         }

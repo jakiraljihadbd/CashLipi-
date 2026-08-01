@@ -143,6 +143,23 @@ public class InvoicePdfHelper {
         return bmp;
     }
 
+    // ── হাই-রেজ্যুলেশন বিটম্যাপ — ফুলস্ক্রিন জুম প্রিভিউ ডায়ালগের জন্য (একই drawPage() রুটিন,
+    //    ৩ গুণ স্কেলে আঁকা হয় বলে জুম করলেও ঝাপসা হয় না, ভেক্টর-শার্প থাকে) ──
+    public static Bitmap renderHiResBitmap(Context ctx, String type, List<Transaction> list,
+                                            String company, String dateStr, int accentColor, int template,
+                                            Bitmap signatureBitmap, String signatureText) {
+        int scaleFactor = 3;
+        int bmpW = PAGE_W * scaleFactor, bmpH = PAGE_H * scaleFactor;
+        Bitmap bmp = Bitmap.createBitmap(bmpW, bmpH, Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(bmp);
+        cv.drawColor(Color.WHITE);
+        cv.save();
+        cv.scale(scaleFactor, scaleFactor);
+        drawPage(cv, type, list, company, dateStr, accentColor, template, signatureBitmap, signatureText);
+        cv.restore();
+        return bmp;
+    }
+
     // ── কালারফুল প্রফেশনাল ইনভয়েস PDF তৈরি ──────────────────────────────
     public static byte[] generatePdf(String type, List<Transaction> list,
                                       String company, String dateStr, int accentColor, int template,
@@ -329,8 +346,8 @@ public class InvoicePdfHelper {
 
         if (signatureBitmap != null) {
             // ── হাতে আঁকা স্বাক্ষর — লাইনের ঠিক ওপরে বসানো, আকার-অনুপাত ঠিক রেখে ──
-            int boxW = sigLineEnd - sigLineStart - 10, sigBoxH = compact ? 26 : 36;
-            float scale = Math.min(boxW / (float) signatureBitmap.getWidth(), sigBoxH / (float) signatureBitmap.getHeight());
+            int boxW = sigLineEnd - sigLineStart - 10, boxH = compact ? 26 : 36;
+            float scale = Math.min(boxW / (float) signatureBitmap.getWidth(), boxH / (float) signatureBitmap.getHeight());
             int drawW = (int) (signatureBitmap.getWidth() * scale), drawH = (int) (signatureBitmap.getHeight() * scale);
             RectF dst = new RectF(sigLineStart + (boxW - drawW) / 2f + 5, sigY - drawH - 4,
                     sigLineStart + (boxW - drawW) / 2f + 5 + drawW, sigY - 4);

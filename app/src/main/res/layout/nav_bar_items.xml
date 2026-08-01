@@ -2,9 +2,11 @@
 <!-- ৭-আইকন নেভ বার — DashboardActivity রানটাইমে এই ভিউটাকে topNavSlot বা bottomNavSlot-এ বসায়।
      ব্যাকগ্রাউন্ড কালার ও আইকন সাইজ সেটিং অনুযায়ী কোডে সেট করা হয় (applyNavCustomization)।
      প্রতিটা আইটেমে আইকনের নিচে একটা লেবেল আছে — শুধু "নিচে" পজিশনে ভিজিবল হয়।
-     ক্রম ইচ্ছাকৃতভাবে এভাবে সাজানো: Home, IncomeExpense, DenaPawna, BakirKhata, Savings, Budget, Settings —
-     "বাকির খাতা" এখন ৭টার ঠিক মাঝেরটা (৪র্থ), তাই নিচের পজিশনে + বাটনের ঠিক নিচে পড়ে এবং সেই স্লট
-     DashboardActivity-তে "যোগ"-গ্যাপে বদলে যায় (icon/label লুকিয়ে, ট্যাপ করলে যোগ-মেন্যু খোলে)।
+     ক্রম: Home, IncomeExpense, DenaPawna, [৪র্থ/মাঝেরটা], Savings, [৬ষ্ঠ], Settings —
+     ৪র্থ (আইডি navBakirKhata) স্লটটা + বাটনের ঠিক নিচে পড়ে বলে নিচের পজিশনে গ্যাপ-মোডে বদলে যায়
+     (icon/label লুকিয়ে "যোগ" দেখায়, ট্যাপে যোগ-মেন্যু খোলে) — তাই আসল "বাকির খাতা" পেজটা ৬ষ্ঠ স্লটে
+     (আইডি navBudget, আগে "বাজেট" ছিল) সরানো হয়েছে যাতে দৃশ্যমান/ট্যাপযোগ্য থাকে; ৪র্থ স্লট এখন
+     "বাজেট"-এর আইকন/লেবেল বহন করে (top পজিশনে দেখা যায়, bottom পজিশনে গ্যাপে ঢাকা থাকে)।
      এতে "সঞ্চয়" সবসময় স্বাভাবিক, পূর্ণ দৃশ্যমান ও ট্যাপযোগ্য থাকে। -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,12 +42,14 @@
         <View android:id="@+id/indicatorNavDenaPawna" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
-    <!-- ৪. বাকির খাতা — ঠিক মাঝেরটা; নিচের পজিশনে + বাটনের নিচে পড়ে, তাই গ্যাপ-মোডে বদলে যায় -->
+    <!-- ৪. এই স্লট ঠিক মাঝেরটা; নিচের পজিশনে + বাটনের নিচে পড়ে, তাই গ্যাপ-মোডে বদলে যায় (আইডি পুরনো
+         রাখা হলো, কোডে POSITION_BAKIR_KHATA দিয়ে রেফার হয়) — এখন এটা "বাজেট"-এর আইকন/লেবেল বহন করে,
+         যেহেতু আসল বাকির খাতা পেজ এখন নিচের দৃশ্যমান স্লটে (৬. navBudget) সরানো হয়েছে -->
     <LinearLayout android:id="@+id/navBakirKhata" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavBakirKhata" style="@style/TopNavIconStyle"
-            android:src="@drawable/ic_nav_bakir_khata"/>
+            android:src="@drawable/ic_nav_budget"/>
         <TextView android:id="@+id/labelNavBakirKhata" style="@style/TopNavLabelStyle"
-            android:text="@string/nav_label_bakir_khata"/>
+            android:text="@string/nav_label_budget"/>
         <View android:id="@+id/indicatorNavBakirKhata" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
@@ -58,12 +62,13 @@
         <View android:id="@+id/indicatorNavSavings" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 
-    <!-- ৬. বাজেট -->
+    <!-- ৬. এই দৃশ্যমান স্লটে (আইডি পুরনো navBudget রাখা হলো, কোডে POSITION_BUDGET দিয়ে রেফার হয়) এখন
+         "বাকির খাতা" দেখানো হয় — ইউজারের অনুরোধে বাজেটের জায়গা রিপ্লেস করা হয়েছে -->
     <LinearLayout android:id="@+id/navBudget" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavBudget" style="@style/TopNavIconStyle"
-            android:src="@drawable/ic_nav_budget"/>
+            android:src="@drawable/ic_nav_bakir_khata"/>
         <TextView android:id="@+id/labelNavBudget" style="@style/TopNavLabelStyle"
-            android:text="@string/nav_label_budget"/>
+            android:text="@string/nav_label_bakir_khata"/>
         <View android:id="@+id/indicatorNavBudget" style="@style/TopNavIndicatorStyle"/>
     </LinearLayout>
 

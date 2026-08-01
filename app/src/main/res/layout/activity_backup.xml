@@ -130,7 +130,7 @@
                 <!-- Last Backup Card (gradient) -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="6dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="6dp"
                     app:cardBackgroundColor="@color/bkSolidPrimary">
                     <LinearLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -173,7 +173,7 @@
                 <!-- Quick Actions Card -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/cardBg">
                     <LinearLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -251,7 +251,7 @@
                 <!-- Auto Backup Status Card -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/cardBg">
                     <LinearLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -282,7 +282,7 @@
                 <!-- Backup Methods Card -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/cardBg">
                     <LinearLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -384,7 +384,7 @@
                 <!-- Backup Summary -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/cardBg">
                     <LinearLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -476,7 +476,7 @@
                 <!-- Select Data Card -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/bkCardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="16dp">
@@ -496,7 +496,7 @@
                         <com.google.android.material.card.MaterialCardView android:id="@+id/cardDataAll"
                             android:layout_width="match_parent" android:layout_height="58dp"
                             android:layout_marginBottom="8dp"
-                            app:cardCornerRadius="18dp" app:cardElevation="2dp"
+                            app:cardCornerRadius="0dp" app:cardElevation="2dp"
                             app:cardBackgroundColor="@color/bkUnselectedBg"
                                 app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                             <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
@@ -523,7 +523,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardDataIncome"
                                 android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:layout_marginEnd="5dp"
-                                app:cardCornerRadius="16dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -541,7 +541,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardDataExpense"
                                 android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:layout_marginStart="5dp"
-                                app:cardCornerRadius="16dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -564,7 +564,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardDataDebt"
                                 android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:layout_marginEnd="5dp"
-                                app:cardCornerRadius="16dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -582,7 +582,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardDataReceivable"
                                 android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:layout_marginStart="5dp"
-                                app:cardCornerRadius="16dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -604,7 +604,7 @@
                 <!-- Select Format Card -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/bkCardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="16dp">
@@ -626,7 +626,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardFmtJson"
                                 android:layout_width="0dp" android:layout_height="56dp"
                                 android:layout_weight="1" android:layout_marginEnd="5dp"
-                                app:cardCornerRadius="14dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent"
@@ -641,7 +641,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardFmtPdf"
                                 android:layout_width="0dp" android:layout_height="56dp"
                                 android:layout_weight="1" android:layout_marginHorizontal="3dp"
-                                app:cardCornerRadius="14dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent"
@@ -656,7 +656,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardFmtDocx"
                                 android:layout_width="0dp" android:layout_height="56dp"
                                 android:layout_weight="1" android:layout_marginHorizontal="3dp"
-                                app:cardCornerRadius="14dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent"
@@ -671,7 +671,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardFmtXlsx"
                                 android:layout_width="0dp" android:layout_height="56dp"
                                 android:layout_weight="1" android:layout_marginStart="5dp"
-                                app:cardCornerRadius="14dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent"
@@ -689,7 +689,7 @@
                 <!-- Select Method Card -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/bkCardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="16dp">
@@ -710,7 +710,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardMethodTelegram"
                                 android:layout_width="0dp" android:layout_height="84dp"
                                 android:layout_weight="1" android:layout_marginEnd="5dp"
-                                app:cardCornerRadius="16dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
@@ -726,7 +726,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardMethodGDrive"
                                 android:layout_width="0dp" android:layout_height="84dp"
                                 android:layout_weight="1" android:layout_marginHorizontal="3dp"
-                                app:cardCornerRadius="16dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
@@ -742,7 +742,7 @@
                             <com.google.android.material.card.MaterialCardView android:id="@+id/cardMethodLocal"
                                 android:layout_width="0dp" android:layout_height="84dp"
                                 android:layout_weight="1" android:layout_marginStart="5dp"
-                                app:cardCornerRadius="16dp" app:cardElevation="2dp"
+                                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                                 app:cardBackgroundColor="@color/bkUnselectedBg"
                                     app:strokeWidth="1.5dp" app:strokeColor="@color/bkUnselectedBorder">
                                 <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
@@ -780,7 +780,7 @@
 
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/bkCardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="18dp">
@@ -804,7 +804,7 @@
 
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/bkCardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="18dp">
@@ -829,7 +829,7 @@
                 <!-- Warning -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="14dp" app:cardElevation="2dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="2dp"
                     app:cardBackgroundColor="@color/bkWarnBoxBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="horizontal" android:gravity="center_vertical"
@@ -858,7 +858,7 @@
 
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/bkCardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="18dp">
@@ -941,7 +941,7 @@
                 <!-- Send Now -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="20dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/bkCardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="16dp">
@@ -962,7 +962,7 @@
                 <!-- Help -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="14dp" app:cardElevation="2dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="2dp"
                     app:cardBackgroundColor="@color/bkHelpBoxBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="14dp">
@@ -1017,7 +1017,7 @@
                 <!-- Triggers Card -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="18dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/cardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="16dp">
@@ -1090,7 +1090,7 @@
                 <!-- Methods Settings -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="18dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/cardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="16dp">
@@ -1133,7 +1133,7 @@
                 <!-- Frequency -->
                 <androidx.cardview.widget.CardView android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:layout_marginBottom="14dp"
-                    app:cardCornerRadius="18dp" app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp" app:cardElevation="3dp"
                     app:cardBackgroundColor="@color/cardBg">
                     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                         android:orientation="vertical" android:padding="16dp">

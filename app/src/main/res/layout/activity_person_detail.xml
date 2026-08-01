@@ -168,10 +168,10 @@
         android:id="@+id/heroCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="12dp"
+        android:layout_marginHorizontal="6dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="8dp"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="0dp"
         app:cardElevation="5dp"
         app:cardPreventCornerOverlap="false"
         android:visibility="gone">
@@ -238,9 +238,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:textSize="12.5sp"
-                android:textStyle="bold"
                 android:textColor="@color/white"
-                android:alpha="0.9"/>
+                android:alpha="0.9"
+                android:lineSpacingExtra="2dp"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -556,7 +556,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:drawableStart="@drawable/ic_plus"
-            android:drawablePadding="8dp"
+            android:drawablePadding="4dp"
             android:gravity="center"
             android:paddingHorizontal="6dp"
             android:backgroundTint="@null"
@@ -574,7 +574,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:drawableStart="@drawable/ic_minus_plain"
-            android:drawablePadding="8dp"
+            android:drawablePadding="4dp"
             android:gravity="center"
             android:paddingHorizontal="6dp"
             android:backgroundTint="@null"

@@ -39,7 +39,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="60dp" android:layout_height="60dp"
                 android:layout_gravity="center"
-                app:cardCornerRadius="30dp"
+                app:cardCornerRadius="0dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="@android:color/transparent">
                 <ImageView
@@ -95,7 +95,7 @@
             android:visibility="gone">
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                app:cardCornerRadius="20dp" app:cardElevation="6dp"
+                app:cardCornerRadius="0dp" app:cardElevation="6dp"
                 app:cardBackgroundColor="#14FFFFFF">
                 <com.jrappspot.cashlipi.views.PatternLockView
                     android:id="@+id/patternLockView"
@@ -158,7 +158,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="56dp" android:layout_height="56dp"
                     android:layout_gravity="center"
-                    app:cardCornerRadius="28dp"
+                    app:cardCornerRadius="0dp"
                     app:cardElevation="6dp"
                     app:strokeWidth="1dp"
                     app:strokeColor="@color/lockGlassCardStroke"

@@ -289,11 +289,12 @@ public class DatabaseManager {
     public double getTotalSavings() {
         double total = 0;
         for (Transaction t : getSavingsList()) total += t.getAmount();
-        // দেনা-পাওনা পরিশোধের সময় "সঞ্চয়ে/থেকে" বেছে নেওয়া এন্ট্রিগুলোও সঞ্চয়ের হিসাবে যোগ হয়:
+        // দেনা-পাওনা পরিশোধের সময় "সঞ্চয়ে/থেকে" বেছে নেওয়া এন্ট্রিগুলোও সঞ্চয়ের হিসাবে যোগ হয় —
+        // আংশিক পরিশোধ হলে যতটুকু পরিশোধ হয়েছে (paidAmount) ততটুকুই ধরা হয়:
         // পাওনা পরিশোধ (টাকা পেয়ে সঞ্চয়ে রাখা হয়েছে) → বাড়ে, দেনা পরিশোধ (সঞ্চয় থেকে দেওয়া হয়েছে) → কমে
         for (LedgerEntry e : getLedgerList()) {
-            if (e.isPaid() && "savings".equals(e.getSettleTo())) {
-                total += e.isPabona() ? e.getAmount() : -e.getAmount();
+            if (e.getPaidAmount() > 0.009 && "savings".equals(e.getSettleTo())) {
+                total += e.isPabona() ? e.getPaidAmount() : -e.getPaidAmount();
             }
         }
         return total;
@@ -352,13 +353,72 @@ public class DatabaseManager {
         entry.setPaid(!entry.isPaid());
         if (entry.isPaid()) {
             entry.setPaidDate(nowDate());
+            entry.setPaidAmount(entry.getAmount());
         } else {
             entry.setPaidDate("");
+            entry.setPaidAmount(0);
         }
         entry.setUpdatedAt(nowIso());
         list.set(index, entry);
         saveList(KEY_LEDGER, list);
         return entry.isPaid();
+    }
+
+    /**
+     * এন্ট্রিতে আংশিক অথবা সম্পূর্ণ পরিশোধ যোগ করে (payAmount <= entry.getRemainingAmount())।
+     * বাকি সব টাকা শোধ হয়ে গেলে স্বয়ংক্রিয়ভাবে এন্ট্রিটা সম্পূর্ণ "পরিশোধিত" হয়ে যায়,
+     * নাহলে আংশিক পরিশোধিত অবস্থায় থাকে (paid=false, paidAmount > 0)। রিটার্ন করে পুরোপুরি
+     * পরিশোধিত হয়ে গেছে কিনা।
+     */
+    public boolean addPartialPayment(int index, double payAmount, String settleTo, String txnId) {
+        List<LedgerEntry> list = getLedgerList();
+        if (index < 0 || index >= list.size()) return false;
+        LedgerEntry entry = list.get(index);
+        double newPaid = entry.getPaidAmount() + payAmount;
+        boolean fullyPaid = newPaid >= entry.getAmount() - 0.01;
+        entry.setPaidAmount(fullyPaid ? entry.getAmount() : newPaid);
+        entry.setPaid(fullyPaid);
+        entry.setPaidDate(fullyPaid ? nowDate() : "");
+        entry.setSettleTo(settleTo);
+        if ("incomeExpense".equals(settleTo) && txnId != null && !txnId.isEmpty()) {
+            entry.addSettleTxnId(txnId);
+            entry.setSettleTxnId(txnId); // পুরনো ফিল্ড, একক/সর্বশেষ id সামঞ্জস্যের জন্য রাখা
+        }
+        entry.setUpdatedAt(nowIso());
+        list.set(index, entry);
+        saveList(KEY_LEDGER, list);
+        return fullyPaid;
+    }
+
+    /**
+     * কোনো এন্ট্রিতে এ পর্যন্ত করা সব পরিশোধ (আংশিক/সম্পূর্ণ) বাতিল করে একদম নতুন/সম্পূর্ণ বাকি
+     * অবস্থায় ফিরিয়ে দেয়। "আয়/ব্যয় হিসেবে" পরিশোধ করা থাকলে সাথে অটো-তৈরি হওয়া সব
+     * আয়/ব্যয় এন্ট্রিও মুছে দেয়, যাতে ডুপ্লিকেট লেনদেন না থেকে যায়।
+     */
+    public boolean resetLedgerPayment(int index) {
+        List<LedgerEntry> list = getLedgerList();
+        if (index < 0 || index >= list.size()) return false;
+        LedgerEntry entry = list.get(index);
+
+        if ("incomeExpense".equals(entry.getSettleTo())) {
+            for (String txnId : entry.getSettleTxnIds()) {
+                if (txnId == null || txnId.isEmpty()) continue;
+                if (entry.isPabona()) deleteIncomeById(txnId); else deleteExpenseById(txnId);
+            }
+            if (!entry.getSettleTxnId().isEmpty() && entry.getSettleTxnIds().isEmpty()) {
+                if (entry.isPabona()) deleteIncomeById(entry.getSettleTxnId()); else deleteExpenseById(entry.getSettleTxnId());
+            }
+        }
+
+        entry.setPaid(false);
+        entry.setPaidAmount(0);
+        entry.setPaidDate("");
+        entry.setSettleTxnId("");
+        entry.setSettleTxnIds(new java.util.ArrayList<>());
+        entry.setUpdatedAt(nowIso());
+        list.set(index, entry);
+        saveList(KEY_LEDGER, list);
+        return true;
     }
 
     public double getTotalDena() {
@@ -823,6 +883,44 @@ public class DatabaseManager {
         saveCategories(type, list);
     }
 
+    /** ক্যাটাগরির নাম পরিবর্তন করে — তালিকায় একই অবস্থানে থাকবে, এবং এই টাইপের
+     *  (income/expense) বিদ্যমান লেনদেনগুলোতে যেখানেই পুরনো নাম ব্যবহৃত হয়েছে তা নতুন
+     *  নামে হালনাগাদ করে দেয়, যাতে পুরনো তথ্য এতিম (orphan) হয়ে না যায়। */
+    public void renameCategory(String type, String oldName, String newName) {
+        if (oldName == null || newName == null || oldName.equals(newName)) return;
+
+        List<String> list = getCategories(type);
+        int idx = list.indexOf(oldName);
+        if (idx >= 0) {
+            list.set(idx, newName);
+        } else if (!list.contains(newName)) {
+            list.add(newName);
+        }
+        saveCategories(type, list);
+
+        if ("income".equals(type)) {
+            List<Transaction> incomeList = getIncomeList();
+            boolean changed = false;
+            for (Transaction t : incomeList) {
+                if (oldName.equals(t.getCategory())) {
+                    t.setCategory(newName);
+                    changed = true;
+                }
+            }
+            if (changed) saveList(KEY_INCOME, incomeList);
+        } else if ("expense".equals(type)) {
+            List<Transaction> expenseList = getExpenseList();
+            boolean changed = false;
+            for (Transaction t : expenseList) {
+                if (oldName.equals(t.getCategory())) {
+                    t.setCategory(newName);
+                    changed = true;
+                }
+            }
+            if (changed) saveList(KEY_EXPENSE, expenseList);
+        }
+    }
+
     private List<String> getDefaultCategories(String type) {
         // এখানে শুধুই সার্বজনীন (universal) ক্যাটাগরি থাকবে — কোনো ব্যক্তিগত/নির্দিষ্ট
         // ব্যক্তি বা পেশার নাম (যেমন আগে ছিল "বাবা"/"মা"/"ভাই") রাখা হয় না, যাতে যেকোনো
@@ -855,12 +953,13 @@ public class DatabaseManager {
         double savings = getTotalSavings();
         double paidPabona = 0, paidDena = 0;
         for (LedgerEntry e : getLedgerList()) {
-            // শুধু "ব্যালেন্স" ধরে পরিশোধিত এন্ট্রিই মূল ব্যালেন্সে যোগ/বিয়োগ হয়; "সঞ্চয়"-এ পরিশোধিত
-            // এন্ট্রি getTotalSavings()-এ আলাদাভাবে হিসাব হয়, আর "কোথাও না" শুধু বুককিপিং, কোনো
+            // শুধু "ব্যালেন্স" ধরে পরিশোধ করা এন্ট্রিই মূল ব্যালেন্সে যোগ/বিয়োগ হয় — আংশিক পরিশোধ
+            // হলে যতটুকু পরিশোধ হয়েছে (paidAmount) ততটুকুই ধরা হয়; "সঞ্চয়"-এ পরিশোধিত এন্ট্রি
+            // getTotalSavings()-এ আলাদাভাবে হিসাব হয়, আর "কোথাও না" শুধু বুককিপিং, কোনো
             // হিসাবে প্রভাব ফেলে না
-            if (e.isPaid() && "balance".equals(e.getSettleTo())) {
-                if ("pabona".equals(e.getType())) paidPabona += e.getAmount();
-                else paidDena += e.getAmount();
+            if (e.getPaidAmount() > 0.009 && "balance".equals(e.getSettleTo())) {
+                if ("pabona".equals(e.getType())) paidPabona += e.getPaidAmount();
+                else paidDena += e.getPaidAmount();
             }
         }
         return income - expense + paidPabona - paidDena - savings;

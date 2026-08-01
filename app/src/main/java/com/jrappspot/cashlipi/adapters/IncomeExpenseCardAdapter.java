@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.models.Transaction;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
+import com.jrappspot.cashlipi.utils.PaymentMethodUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,6 +76,10 @@ public class IncomeExpenseCardAdapter extends RecyclerView.Adapter<IncomeExpense
 
         h.tvRelative.setText(relativeDaysText(t.getDate()));
 
+        String method = t.getMethod().isEmpty() ? "cash" : t.getMethod();
+        h.ivItemMethod.setImageResource(PaymentMethodUtil.getIconRes(method));
+        h.tvItemMethod.setText(PaymentMethodUtil.getLabel(method));
+
         h.btnEdit.setOnClickListener(v -> onEdit.run(t, h.getBindingAdapterPosition()));
         h.btnDelete.setOnClickListener(v -> onDelete.run(t, h.getBindingAdapterPosition()));
         h.btnMore.setOnClickListener(v -> onMore.run(t, h.getBindingAdapterPosition()));
@@ -101,7 +106,8 @@ public class IncomeExpenseCardAdapter extends RecyclerView.Adapter<IncomeExpense
 
     static class VH extends RecyclerView.ViewHolder {
         View viewColorBar;
-        TextView tvTitle, tvAmount, tvDate, tvTime, tvNote, tvRelative;
+        TextView tvTitle, tvAmount, tvDate, tvTime, tvNote, tvRelative, tvItemMethod;
+        ImageView ivItemMethod;
         LinearLayout rowNote, btnEdit, btnDelete;
         TextView btnMore;
         VH(@NonNull View v) {
@@ -114,6 +120,8 @@ public class IncomeExpenseCardAdapter extends RecyclerView.Adapter<IncomeExpense
             rowNote = v.findViewById(R.id.rowNote);
             tvNote = v.findViewById(R.id.tvItemNote);
             tvRelative = v.findViewById(R.id.tvItemRelative);
+            ivItemMethod = v.findViewById(R.id.ivItemMethod);
+            tvItemMethod = v.findViewById(R.id.tvItemMethod);
             btnEdit = v.findViewById(R.id.btnEdit);
             btnDelete = v.findViewById(R.id.btnDelete);
             btnMore = v.findViewById(R.id.btnMore);

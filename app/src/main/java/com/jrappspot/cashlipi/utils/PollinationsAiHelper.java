@@ -76,20 +76,27 @@ public final class PollinationsAiHelper {
     private static JSONObject callJsonOnce(String prompt) throws Exception {
         JSONObject body = new JSONObject();
         body.put("model", "openai");
+        // jsonMode এবং response_format যুক্ত করে JSON কঠোরভাবে বলবে
         body.put("jsonMode", true);
-        body.put("response_format", new JSONObject().put("type", "json_object"));
+        JSONObject responseFormat = new JSONObject();
+        responseFormat.put("type", "json_object");
+        body.put("response_format", responseFormat);
         body.put("referrer", REFERRER);
 
         JSONArray messages = new JSONArray();
+        
         JSONObject sysMsg = new JSONObject();
         sysMsg.put("role", "system");
-        sysMsg.put("content", "তুমি শুধুমাত্র বিশুদ্ধ JSON আউটপুট দাও, অন্য কোনো লেখা, ব্যাখ্যা বা মার্কডাউন দাও না।");
+        sysMsg.put("content", "আপনি একজন অভিজ্ঞ JSON জেনারেটর। শুধুমাত্র বিশুদ্ধ, সঠিক JSON অবজেক্ট প্রদান করুন। কোনো মার্কডাউন, ব্যাখ্যা বা অতিরিক্ত টেক্সট নয়। শুধু JSON।");
+        
         JSONObject userMsg = new JSONObject();
         userMsg.put("role", "user");
         userMsg.put("content", prompt);
+        
         messages.put(sysMsg);
         messages.put(userMsg);
         body.put("messages", messages);
+        body.put("max_tokens", 1024);
 
         URL url = new URL(ENDPOINT + "?referrer=" + REFERRER);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -98,14 +105,20 @@ public final class PollinationsAiHelper {
         conn.setRequestProperty("User-Agent", "CashLipi-Android/1.0");
         conn.setRequestProperty("Referer", "https://" + REFERRER + "/");
         conn.setDoOutput(true);
-        conn.setConnectTimeout(15000);
-        conn.setReadTimeout(30000);
+        conn.setConnectTimeout(20000);  // বর্ধিত কানেক্ট টাইমআউট
+        conn.setReadTimeout(40000);      // বর্ধিত রিড টাইমআউট
+
+        byte[] bodyBytes = body.toString().getBytes(StandardCharsets.UTF_8);
+        conn.setFixedLengthStreamingMode(bodyBytes.length);
 
         try (OutputStream os = conn.getOutputStream()) {
-            os.write(body.toString().getBytes(StandardCharsets.UTF_8));
+            os.write(bodyBytes);
+            os.flush();
         }
 
         int status = conn.getResponseCode();
+        Log.d(TAG, "Pollinations HTTP স্ট্যাটাস: " + status);
+        
         InputStreamReader streamReader = new InputStreamReader(
                 status >= 200 && status < 300 ? conn.getInputStream() : conn.getErrorStream(),
                 StandardCharsets.UTF_8);
@@ -116,41 +129,72 @@ public final class PollinationsAiHelper {
         br.close();
         String raw = sb.toString().trim();
 
+        Log.d(TAG, "Pollinations রেসপন্স (প্রথম ২০০ অক্ষর): " + raw.substring(0, Math.min(200, raw.length())));
+
         if (status == 429) {
             Log.e(TAG, "Pollinations রেট-লিমিট (HTTP 429): " + raw);
-            throw new RateLimitedException("রেট-লিমিট: " + raw);
+            throw new RateLimitedException("রেট-লিমিট হিট");
         }
         if (status >= 500 && status < 600) {
             Log.e(TAG, "Pollinations সাময়িক সার্ভার এরর (HTTP " + status + "): " + raw);
-            throw new RetryableServerException("সার্ভার এরর " + status + ": " + raw);
+            throw new RetryableServerException("সার্ভার এরর " + status);
         }
         if (status < 200 || status >= 300) {
             Log.e(TAG, "Pollinations HTTP " + status + ": " + raw);
-            throw new IllegalStateException("AI সার্ভার এরর: " + status);
+            throw new IllegalStateException("AI সার্ভার এরর (" + status + ")");
         }
 
-        // openai-compatible রেসপন্স ফরম্যাট: {"choices":[{"message":{"content":"...json string..."}}]}
+        String content = extractJsonFromResponse(raw);
+        if (content == null || content.isEmpty()) {
+            Log.e(TAG, "JSON এক্সট্র্যাক্ট ব্যর্থ, raw: " + raw);
+            throw new IllegalStateException("AI উত্তর পার্স করতে ব্যর্থ");
+        }
+
+        try {
+            return new JSONObject(content);
+        } catch (Exception e) {
+            Log.e(TAG, "JSON পার্স ব্যর্থ: " + content, e);
+            throw new IllegalStateException("AI উত্তর বিশুদ্ধ JSON নয়", e);
+        }
+    }
+
+    /** OpenAI-compatible রেসপন্স থেকে JSON কন্টেন্ট এক্সট্র্যাক্ট করে */
+    private static String extractJsonFromResponse(String raw) {
         String content;
         try {
             JSONObject wrapper = new JSONObject(raw);
             JSONArray choices = wrapper.optJSONArray("choices");
             if (choices != null && choices.length() > 0) {
-                content = choices.getJSONObject(0).getJSONObject("message").getString("content");
+                JSONObject choice = choices.getJSONObject(0);
+                JSONObject message = choice.optJSONObject("message");
+                if (message != null) {
+                    content = message.optString("content", "");
+                } else {
+                    content = "";
+                }
             } else {
-                content = raw; // কিছু ক্ষেত্রে সরাসরি বডিই বিশুদ্ধ JSON হতে পারে
+                // সরাসরি JSON হতে পারে
+                content = raw;
             }
-        } catch (Exception ignoredWrapper) {
+        } catch (Exception e) {
+            // wrapper পার্স ব্যর্থ, সরাসরি raw ব্যবহার করুন
             content = raw;
         }
 
-        content = content.replaceAll("(?s)```json|```", "").trim();
+        if (content.isEmpty()) return null;
+
+        // মার্কডাউন ফেন্স রিমুভ করুন
+        content = content.replaceAll("(?s)```json\\s*|```\\s*", "").trim();
+        
+        // JSON অবজেক্ট এক্সট্র্যাক্ট করুন { থেকে }
         int start = content.indexOf('{');
         int end = content.lastIndexOf('}');
-        if (start < 0 || end <= start) {
-            Log.e(TAG, "JSON পার্স ব্যর্থ, raw content: " + content);
-            throw new IllegalStateException("AI থেকে সঠিক উত্তর আসেনি");
+        
+        if (start >= 0 && end > start) {
+            return content.substring(start, end + 1);
         }
-        return new JSONObject(content.substring(start, end + 1));
+        
+        return null;
     }
 
     /** HTTP 429 — অ্যানোনিমাস রেট-লিমিট হিট হয়েছে, শর্ট ব্যাকঅফের পর রিট্রাই করার যোগ্য। */

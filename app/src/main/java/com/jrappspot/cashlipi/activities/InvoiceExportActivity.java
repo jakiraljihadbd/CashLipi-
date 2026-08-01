@@ -2,16 +2,20 @@ package com.jrappspot.cashlipi.activities;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -27,6 +31,7 @@ import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.models.Transaction;
 import com.jrappspot.cashlipi.utils.InvoicePdfHelper;
 import com.jrappspot.cashlipi.views.SignaturePadView;
+import com.jrappspot.cashlipi.views.ZoomableImageView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,7 +42,9 @@ import java.util.Locale;
  * আয়-ব্যয় লিস্ট পেজের "PDF এক্সপোর্ট" / "প্রিন্ট" — ফুল-পেজ স্ক্রিন (আর পপ-আপ ডায়ালগ নয়)।
  * কোম্পানির নাম, শিরোনাম/সাক্ষর-প্যাড টেমপ্লেট, কাস্টম তারিখ-রেঞ্জ (শুরু–শেষ ক্যালেন্ডার),
  * অ্যাকসেন্ট রঙ, এবং স্বাক্ষর (হাতে আঁকা পপ-আপ পেড অথবা টাইপ করা টেক্সট) — সবকিছু এখানে
- * সেট করে লাইভ প্রিভিউ দেখা যায়, তারপর PDF তৈরি বা প্রিন্ট করা যায়।
+ * সেট করে লাইভ প্রিভিউ দেখা যায় (ট্যাপ করলে পিঞ্চ-জুম করে বড় করেও দেখা যায়), তারপর PDF
+ * তৈরি বা প্রিন্ট করা যায়। হেডার ও প্রধান বাটন আয়ে সবুজ, ব্যয়ে লাল — টাইপ অনুযায়ী রঙ পাল্টায়।
+ * পুরো UI সিস্টেম থিম-অ্যাডাপ্টিভ — ডার্ক মোডে ডার্ক, লাইট মোডে লাইট।
  */
 public class InvoiceExportActivity extends BaseActivity {
 
@@ -47,6 +54,7 @@ public class InvoiceExportActivity extends BaseActivity {
     private List<Transaction> fullList;
     private String type;
     private boolean forPrint;
+    private boolean isIncome;
 
     private ImageView ivPreview;
     private EditText etCompany;
@@ -68,7 +76,11 @@ public class InvoiceExportActivity extends BaseActivity {
     private ImageView ivSigThumb;
     private EditText etSigText;
 
-    private int darkBg, cardBg, inputBg, inputBorder, textLight, textMuted, divider;
+    // ── থিম-অ্যাডাপ্টিভ কালার (লাইট/ডার্ক মোড অনুযায়ী res/values ও values-night থেকে আসে) ──
+    private int bgRoot, cardBgC, inputBgC, inputBorderC, textPrimaryC, textMutedC, dividerC;
+
+    // ── টাইপ-ভিত্তিক অ্যাকসেন্ট: আয় হলে সবুজ, ব্যয় হলে লাল ──
+    private int accentStart, accentEnd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +89,7 @@ public class InvoiceExportActivity extends BaseActivity {
         fullList = InvoicePdfHelper.takePendingList();
         type = getIntent().getStringExtra(EXTRA_TYPE);
         forPrint = getIntent().getBooleanExtra(EXTRA_FOR_PRINT, false);
+        isIncome = !"expense".equals(type);
 
         if (fullList == null) {
             Toast.makeText(this, "তালিকা পাওয়া যায়নি, আবার চেষ্টা করুন", Toast.LENGTH_SHORT).show();
@@ -84,16 +97,19 @@ public class InvoiceExportActivity extends BaseActivity {
             return;
         }
 
-        darkBg = ContextCompat.getColor(this, R.color.darkBgDeep);
-        cardBg = ContextCompat.getColor(this, R.color.darkCard);
-        inputBg = ContextCompat.getColor(this, R.color.darkInputBg);
-        inputBorder = ContextCompat.getColor(this, R.color.darkInputBorder);
-        textLight = ContextCompat.getColor(this, R.color.textOnDark);
-        textMuted = ContextCompat.getColor(this, R.color.textHint);
-        divider = ContextCompat.getColor(this, R.color.darkInputBorder);
+        // ── থিম-অ্যাডাপ্টিভ টোকেন (values / values-night উভয়েই সংজ্ঞায়িত) ──
+        bgRoot = ContextCompat.getColor(this, R.color.bgColor);
+        cardBgC = ContextCompat.getColor(this, R.color.cardBg);
+        inputBgC = ContextCompat.getColor(this, R.color.dialogFieldBg);
+        inputBorderC = ContextCompat.getColor(this, R.color.dialogFieldBorder);
+        textPrimaryC = ContextCompat.getColor(this, R.color.textPrimary);
+        textMutedC = ContextCompat.getColor(this, R.color.textSecondary);
+        dividerC = ContextCompat.getColor(this, R.color.dividerColor);
 
-        selectedColor = "expense".equals(type)
-                ? InvoicePdfHelper.PRESET_COLORS[3] : InvoicePdfHelper.PRESET_COLORS[1];
+        accentStart = ContextCompat.getColor(this, isIncome ? R.color.incomeGradStart : R.color.expenseGradStart);
+        accentEnd = ContextCompat.getColor(this, isIncome ? R.color.incomeGradEnd : R.color.expenseGradEnd);
+
+        selectedColor = isIncome ? InvoicePdfHelper.PRESET_COLORS[1] : InvoicePdfHelper.PRESET_COLORS[3];
 
         Calendar today = Calendar.getInstance();
         singleYmd = ymd(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH));
@@ -111,60 +127,84 @@ public class InvoiceExportActivity extends BaseActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setLayoutParams(new LinearLayout.LayoutParams(-1, -1));
-        root.setBackgroundColor(darkBg);
+        root.setBackgroundColor(bgRoot);
 
         root.addView(buildHeader());
 
         ScrollView scroll = new ScrollView(this);
         scroll.setLayoutParams(new LinearLayout.LayoutParams(-1, 0, 1f));
+        scroll.setClipToPadding(false);
         LinearLayout body = new LinearLayout(this);
         body.setOrientation(LinearLayout.VERTICAL);
         int pad = dp(16);
-        body.setPadding(pad, pad, pad, dp(24));
+        body.setPadding(pad, dp(14), pad, dp(24));
         scroll.addView(body);
         root.addView(scroll);
 
         body.addView(buildPreviewCard());
-        body.addView(gap(14));
+        body.addView(gap(12));
         body.addView(buildCompanyCard());
-        body.addView(gap(14));
+        body.addView(gap(12));
         body.addView(buildTemplateCard());
-        body.addView(gap(14));
+        body.addView(gap(12));
         body.addView(buildDateCard());
-        body.addView(gap(14));
+        body.addView(gap(12));
         body.addView(buildColorCard());
-        body.addView(gap(14));
+        body.addView(gap(12));
         body.addView(buildSignatureCard());
 
         root.addView(buildBottomBar());
         return root;
     }
 
+    /** ── হেডার: সোজা/চিকন — নিচের দিকের কার্ভ বাদ, শুধু হালকা শ্যাডো দিয়ে আলাদা বোঝা যায়।
+     *  আয় হলে সবুজ গ্রেডিয়েন্ট, ব্যয় হলে লাল গ্রেডিয়েন্ট — টাইপ সাথে সাথে বোঝা যায়। */
     private View buildHeader() {
         LinearLayout header = new LinearLayout(this);
         header.setOrientation(LinearLayout.HORIZONTAL);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        header.setBackgroundResource(R.drawable.bg_header_generic);
-        int padH = dp(14), padV = dp(14);
+
+        GradientDrawable headerBg = new GradientDrawable();
+        headerBg.setColors(new int[]{accentStart, accentEnd});
+        headerBg.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+        // corner radius একদম শূন্য — বার সোজা, বাঁকানো নয়
+        header.setBackground(headerBg);
+        header.setElevation(dp(5));
+
+        int padH = dp(14), padV = dp(12);
         header.setPadding(padH, padV, padH, padV);
 
         ImageView back = new ImageView(this);
         back.setImageResource(R.drawable.ic_arrow_back);
         back.setColorFilter(Color.WHITE);
-        LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(dp(26), dp(26));
-        backLp.setMarginEnd(dp(14));
+        back.setBackground(ripple(true));
+        int touchPad = dp(6);
+        back.setPadding(touchPad, touchPad, touchPad, touchPad);
+        LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(dp(34), dp(34));
+        backLp.setMarginEnd(dp(10));
         back.setLayoutParams(backLp);
         back.setOnClickListener(v -> finish());
         header.addView(back);
 
+        LinearLayout titleCol = new LinearLayout(this);
+        titleCol.setOrientation(LinearLayout.VERTICAL);
+        titleCol.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
+
         TextView title = new TextView(this);
         title.setText(forPrint ? "প্রিন্ট" : "PDF এক্সপোর্ট");
         title.setTextColor(Color.WHITE);
-        title.setTextSize(18f);
+        title.setTextSize(17f);
         title.setTypeface(Typeface.DEFAULT_BOLD);
-        title.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
-        header.addView(title);
+        titleCol.addView(title);
 
+        TextView subtitle = new TextView(this);
+        subtitle.setText((isIncome ? "💰 আয়ের রিপোর্ট" : "💸 ব্যয়ের রিপোর্ট") + " · " + fullList.size() + "টি লেনদেন");
+        subtitle.setTextColor(0xE6FFFFFF);
+        subtitle.setTextSize(11f);
+        subtitle.setTypeface(Typeface.DEFAULT_BOLD);
+        titleCol.addView(subtitle);
+
+        header.addView(titleCol);
         return header;
     }
 
@@ -172,10 +212,11 @@ public class InvoiceExportActivity extends BaseActivity {
         LinearLayout card = new LinearLayout(this);
         card.setOrientation(LinearLayout.VERTICAL);
         GradientDrawable gd = new GradientDrawable();
-        gd.setColor(cardBg);
+        gd.setColor(cardBgC);
         gd.setCornerRadius(dp(14));
-        gd.setStroke(dp(1), divider);
+        gd.setStroke(dp(1), dividerC);
         card.setBackground(gd);
+        card.setElevation(dp(1));
         int pad = dp(16);
         card.setPadding(pad, pad, pad, pad);
         for (View c : children) card.addView(c);
@@ -183,23 +224,69 @@ public class InvoiceExportActivity extends BaseActivity {
     }
 
     private View buildPreviewCard() {
-        TextView lbl = sectionLabel("লাইভ প্রিভিউ");
+        TextView lbl = sectionLabel("👁️ লাইভ প্রিভিউ");
+
         FrameLayout previewFrame = new FrameLayout(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(210), dp(297));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(200), dp(283));
         lp.gravity = Gravity.CENTER_HORIZONTAL;
-        lp.topMargin = dp(8);
+        lp.topMargin = dp(10);
         previewFrame.setLayoutParams(lp);
-        previewFrame.setBackgroundColor(0xFFE5E7EB);
+        GradientDrawable frameBg = new GradientDrawable();
+        frameBg.setColor(0xFFE5E7EB);
+        frameBg.setCornerRadius(dp(6));
+        previewFrame.setBackground(frameBg);
         previewFrame.setPadding(dp(3), dp(3), dp(3), dp(3));
+        previewFrame.setClipToOutline(false);
+        previewFrame.setElevation(dp(3));
+        previewFrame.setForeground(ripple(false));
+        previewFrame.setOnClickListener(v -> openZoomPreview());
+
         ivPreview = new ImageView(this);
         ivPreview.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
         ivPreview.setScaleType(ImageView.ScaleType.FIT_XY);
         previewFrame.addView(ivPreview);
-        return card(lbl, previewFrame);
+        addZoomBadge(previewFrame);
+
+        LinearLayout wrap = new LinearLayout(this);
+        wrap.setOrientation(LinearLayout.VERTICAL);
+        wrap.setGravity(Gravity.CENTER_HORIZONTAL);
+        wrap.addView(lbl);
+        wrap.addView(previewFrame);
+
+        TextView hint = new TextView(this);
+        hint.setText("🔍 বড় করে দেখতে ট্যাপ করুন");
+        hint.setTextColor(textMutedC);
+        hint.setTextSize(10.5f);
+        hint.setTypeface(Typeface.DEFAULT_BOLD);
+        hint.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams hintLp = new LinearLayout.LayoutParams(-2, -2);
+        hintLp.gravity = Gravity.CENTER_HORIZONTAL;
+        hintLp.topMargin = dp(8);
+        hint.setLayoutParams(hintLp);
+        wrap.addView(hint);
+
+        return card(wrap);
+    }
+
+    private void addZoomBadge(FrameLayout previewFrame) {
+        TextView badge = new TextView(this);
+        badge.setText("🔍");
+        badge.setTextSize(13f);
+        badge.setGravity(Gravity.CENTER);
+        GradientDrawable badgeBg = new GradientDrawable();
+        badgeBg.setShape(GradientDrawable.OVAL);
+        badgeBg.setColor(0xCC111827);
+        badge.setBackground(badgeBg);
+        FrameLayout.LayoutParams blp = new FrameLayout.LayoutParams(dp(28), dp(28));
+        blp.gravity = Gravity.BOTTOM | Gravity.END;
+        blp.setMargins(0, 0, dp(8), dp(8));
+        badge.setLayoutParams(blp);
+        badge.setPadding(0, 0, 0, dp(1));
+        previewFrame.addView(badge);
     }
 
     private View buildCompanyCard() {
-        TextView lbl = sectionLabel("কোম্পানি/প্রতিষ্ঠানের নাম (খালি রাখলে শুধু \"CashLipi\")");
+        TextView lbl = sectionLabel("🏢 কোম্পানি/প্রতিষ্ঠানের নাম (খালি রাখলে শুধু \"CashLipi\")");
         etCompany = themedInput();
         etCompany.setHint("CashLipi ক্যাশলিপি");
         etCompany.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -208,23 +295,23 @@ public class InvoiceExportActivity extends BaseActivity {
     }
 
     private View buildTemplateCard() {
-        TextView lbl = sectionLabel("শিরোনাম/সাক্ষর-প্যাড স্টাইল বেছে নিন");
+        TextView lbl = sectionLabel("🎨 শিরোনাম/সাক্ষর-প্যাড স্টাইল বেছে নিন");
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setPadding(0, dp(6), 0, 0);
+        row.setPadding(0, dp(8), 0, 0);
         List<TextView> chips = new ArrayList<>();
         for (int t = 0; t < InvoicePdfHelper.TEMPLATE_NAMES.length; t++) {
             TextView chip = chip(InvoicePdfHelper.TEMPLATE_NAMES[t], t < InvoicePdfHelper.TEMPLATE_NAMES.length - 1);
             final int idx = t;
             chip.setOnClickListener(v -> {
                 selectedTemplate = idx;
-                for (int k = 0; k < chips.size(); k++) InvoicePdfHelper.styleChip(chips.get(k), k == idx);
+                for (int k = 0; k < chips.size(); k++) typeStyleChip(chips.get(k), k == idx);
                 refreshPreview();
             });
             chips.add(chip);
             row.addView(chip);
         }
-        for (int k = 0; k < chips.size(); k++) InvoicePdfHelper.styleChip(chips.get(k), k == 0);
+        for (int k = 0; k < chips.size(); k++) typeStyleChip(chips.get(k), k == 0);
         return card(lbl, row);
     }
 
@@ -235,17 +322,17 @@ public class InvoiceExportActivity extends BaseActivity {
         LinearLayout toggleRow = new LinearLayout(this);
         toggleRow.setOrientation(LinearLayout.HORIZONTAL);
         toggleRow.setGravity(Gravity.CENTER_VERTICAL);
-        TextView toggleLbl = sectionLabel("তারিখ");
+        TextView toggleLbl = sectionLabel("📆 তারিখ");
         toggleLbl.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
         TextView rangeSwitch = new TextView(this);
         rangeSwitch.setText("📅 কাস্টম রেঞ্জ");
         rangeSwitch.setTextSize(11.5f);
         rangeSwitch.setTypeface(Typeface.DEFAULT_BOLD);
-        rangeSwitch.setPadding(dp(12), dp(7), dp(12), dp(7));
+        rangeSwitch.setPadding(dp(12), dp(8), dp(12), dp(8));
         toggleRow.addView(toggleLbl);
         toggleRow.addView(rangeSwitch);
         wrap.addView(toggleRow);
-        wrap.addView(gap(8));
+        wrap.addView(gap(10));
 
         // ── একক তারিখ (ডিফল্ট) ──
         singleDateGroup = new LinearLayout(this);
@@ -308,31 +395,31 @@ public class InvoiceExportActivity extends BaseActivity {
 
         rangeSwitch.setOnClickListener(v -> {
             useRange = !useRange;
-            styleToggle(rangeSwitch, useRange);
+            typeStyleChip(rangeSwitch, useRange);
             singleDateGroup.setVisibility(useRange ? View.GONE : View.VISIBLE);
             rangeDateGroup.setVisibility(useRange ? View.VISIBLE : View.GONE);
             refreshPreview();
         });
-        styleToggle(rangeSwitch, false);
+        typeStyleChip(rangeSwitch, false);
 
         return card(wrap);
     }
 
     private View buildColorCard() {
-        TextView lbl = sectionLabel("রঙ পছন্দ করুন");
+        TextView lbl = sectionLabel("🌈 রঙ পছন্দ করুন");
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setPadding(0, dp(8), 0, 0);
+        row.setPadding(0, dp(10), 0, 0);
         List<View> swatches = new ArrayList<>();
         for (int c : InvoicePdfHelper.PRESET_COLORS) {
             View sw = new View(this);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(36), dp(36));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(34), dp(34));
             lp.setMarginEnd(dp(12));
             sw.setLayoutParams(lp);
             GradientDrawable gd = new GradientDrawable();
             gd.setShape(GradientDrawable.OVAL);
             gd.setColor(c);
-            if (c == selectedColor) gd.setStroke(dp(3), Color.WHITE);
+            if (c == selectedColor) gd.setStroke(dp(3), textPrimaryC);
             sw.setBackground(gd);
             swatches.add(sw);
             row.addView(sw);
@@ -343,7 +430,7 @@ public class InvoiceExportActivity extends BaseActivity {
             sw.setOnClickListener(v -> {
                 selectedColor = c;
                 for (View s : swatches) ((GradientDrawable) s.getBackground()).setStroke(0, Color.TRANSPARENT);
-                ((GradientDrawable) sw.getBackground()).setStroke(dp(3), Color.WHITE);
+                ((GradientDrawable) sw.getBackground()).setStroke(dp(3), textPrimaryC);
                 refreshPreview();
             });
         }
@@ -353,8 +440,8 @@ public class InvoiceExportActivity extends BaseActivity {
     private View buildSignatureCard() {
         LinearLayout wrap = new LinearLayout(this);
         wrap.setOrientation(LinearLayout.VERTICAL);
-        wrap.addView(sectionLabel("স্বাক্ষর"));
-        wrap.addView(gap(6));
+        wrap.addView(sectionLabel("✒️ স্বাক্ষর"));
+        wrap.addView(gap(8));
 
         LinearLayout modeRow = new LinearLayout(this);
         modeRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -365,7 +452,7 @@ public class InvoiceExportActivity extends BaseActivity {
             final int idx = m;
             chip.setOnClickListener(v -> {
                 sigMode = idx;
-                for (int k = 0; k < modeChips.size(); k++) InvoicePdfHelper.styleChip(modeChips.get(k), k == idx);
+                for (int k = 0; k < modeChips.size(); k++) typeStyleChip(modeChips.get(k), k == idx);
                 sigDrawSection.setVisibility(idx == 1 ? View.VISIBLE : View.GONE);
                 sigTypeSection.setVisibility(idx == 2 ? View.VISIBLE : View.GONE);
                 if (idx != 1) signatureBitmap = null;
@@ -374,9 +461,9 @@ public class InvoiceExportActivity extends BaseActivity {
             modeChips.add(chip);
             modeRow.addView(chip);
         }
-        for (int k = 0; k < modeChips.size(); k++) InvoicePdfHelper.styleChip(modeChips.get(k), k == 0);
+        for (int k = 0; k < modeChips.size(); k++) typeStyleChip(modeChips.get(k), k == 0);
         wrap.addView(modeRow);
-        wrap.addView(gap(10));
+        wrap.addView(gap(12));
 
         // ── হাতে আঁকা সেকশন ──
         sigDrawSection = new LinearLayout(this);
@@ -392,6 +479,7 @@ public class InvoiceExportActivity extends BaseActivity {
         GradientDrawable thumbBg = new GradientDrawable();
         thumbBg.setColor(Color.WHITE);
         thumbBg.setCornerRadius(dp(8));
+        thumbBg.setStroke(dp(1), inputBorderC);
         ivSigThumb.setBackground(thumbBg);
         sigDrawSection.addView(ivSigThumb);
 
@@ -465,6 +553,7 @@ public class InvoiceExportActivity extends BaseActivity {
                 .show();
     }
 
+    /** ── নিচের বার: বাতিল ঘোস্ট-বাটন + মূল বাটন — আয়ে সবুজ, ব্যয়ে লাল গ্রেডিয়েন্ট। ── */
     private View buildBottomBar() {
         LinearLayout bar = new LinearLayout(this);
         bar.setOrientation(LinearLayout.HORIZONTAL);
@@ -472,34 +561,41 @@ public class InvoiceExportActivity extends BaseActivity {
         int padH = dp(16), padV = dp(12);
         bar.setPadding(padH, padV, padH, padV);
         GradientDrawable barBg = new GradientDrawable();
-        barBg.setColor(cardBg);
+        barBg.setColor(cardBgC);
         bar.setBackground(barBg);
         bar.setElevation(dp(8));
 
         TextView cancel = new TextView(this);
         cancel.setText("বাতিল");
-        cancel.setTextColor(textMuted);
+        cancel.setTextColor(textMutedC);
         cancel.setTypeface(Typeface.DEFAULT_BOLD);
         cancel.setTextSize(14.5f);
         cancel.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams cancelLp = new LinearLayout.LayoutParams(0, dp(48), 1f);
+        LinearLayout.LayoutParams cancelLp = new LinearLayout.LayoutParams(0, dp(50), 1f);
         cancel.setLayoutParams(cancelLp);
+        GradientDrawable cancelBg = new GradientDrawable();
+        cancelBg.setColor(Color.TRANSPARENT);
+        cancelBg.setCornerRadius(dp(12));
+        cancelBg.setStroke(dp(1), inputBorderC);
+        cancel.setBackground(cancelBg);
         cancel.setOnClickListener(v -> finish());
         bar.addView(cancel);
 
         TextView generate = new TextView(this);
-        generate.setText(forPrint ? "প্রিন্ট করুন" : "PDF তৈরি করুন");
+        generate.setText((forPrint ? "🖨️ " : "📄 ") + (forPrint ? "প্রিন্ট করুন" : "PDF তৈরি করুন"));
         generate.setTextColor(Color.WHITE);
         generate.setTypeface(Typeface.DEFAULT_BOLD);
         generate.setTextSize(14.5f);
         generate.setGravity(Gravity.CENTER);
-        LinearLayout.LayoutParams genLp = new LinearLayout.LayoutParams(0, dp(48), 2f);
+        LinearLayout.LayoutParams genLp = new LinearLayout.LayoutParams(0, dp(50), 2f);
         genLp.setMarginStart(dp(12));
         generate.setLayoutParams(genLp);
         GradientDrawable genBg = new GradientDrawable();
-        genBg.setColor(0xFF4F46E5);
+        genBg.setColors(new int[]{accentStart, accentEnd});
+        genBg.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
         genBg.setCornerRadius(dp(12));
         generate.setBackground(genBg);
+        generate.setElevation(dp(2));
         generate.setOnClickListener(v -> generateAndFinish());
         bar.addView(generate);
 
@@ -508,24 +604,85 @@ public class InvoiceExportActivity extends BaseActivity {
 
     // ══════════════════════════════ লজিক ══════════════════════════════
 
-    private void refreshPreview() {
+    private String currentCompany() {
         String company = etCompany != null ? etCompany.getText().toString().trim() : "";
-        if (company.isEmpty()) company = "CashLipi ক্যাশলিপি";
-        String headerDate = useRange ? (startDisplay + " – " + endDisplay) : singleDisplay;
-        List<Transaction> listForPreview = useRange
-                ? InvoicePdfHelper.filterByDateRange(fullList, startYmd, endYmd) : fullList;
-        Bitmap bmp = InvoicePdfHelper.renderPreviewBitmap(this, type, listForPreview, company, headerDate,
+        return company.isEmpty() ? "CashLipi ক্যাশলিপি" : company;
+    }
+
+    private String currentHeaderDate() {
+        return useRange ? (startDisplay + " – " + endDisplay) : singleDisplay;
+    }
+
+    private List<Transaction> currentList() {
+        return useRange ? InvoicePdfHelper.filterByDateRange(fullList, startYmd, endYmd) : fullList;
+    }
+
+    private void refreshPreview() {
+        Bitmap bmp = InvoicePdfHelper.renderPreviewBitmap(this, type, currentList(), currentCompany(), currentHeaderDate(),
                 selectedColor, selectedTemplate, sigMode == 1 ? signatureBitmap : null,
                 sigMode == 2 ? signatureText : null);
         ivPreview.setImageBitmap(bmp);
     }
 
+    /** ── ফুলস্ক্রিন পিঞ্চ-জুম প্রিভিউ ডায়ালগ — হাই-রেজ বিটম্যাপে (ঝাপসা হয় না) ── */
+    private void openZoomPreview() {
+        Bitmap hiRes = InvoicePdfHelper.renderHiResBitmap(this, type, currentList(), currentCompany(), currentHeaderDate(),
+                selectedColor, selectedTemplate, sigMode == 1 ? signatureBitmap : null,
+                sigMode == 2 ? signatureText : null);
+
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        FrameLayout root = new FrameLayout(this);
+        root.setBackgroundColor(0xF0000000);
+
+        ZoomableImageView zoomView = new ZoomableImageView(this);
+        zoomView.setLayoutParams(new FrameLayout.LayoutParams(-1, -1));
+        zoomView.setImageBitmap(hiRes);
+        root.addView(zoomView);
+
+        TextView close = new TextView(this);
+        close.setText("✕");
+        close.setTextColor(Color.WHITE);
+        close.setTextSize(18f);
+        close.setTypeface(Typeface.DEFAULT_BOLD);
+        close.setGravity(Gravity.CENTER);
+        GradientDrawable closeBg = new GradientDrawable();
+        closeBg.setShape(GradientDrawable.OVAL);
+        closeBg.setColor(0x99000000);
+        close.setBackground(closeBg);
+        FrameLayout.LayoutParams closeLp = new FrameLayout.LayoutParams(dp(40), dp(40));
+        closeLp.gravity = Gravity.TOP | Gravity.END;
+        closeLp.setMargins(0, dp(18), dp(16), 0);
+        close.setLayoutParams(closeLp);
+        close.setOnClickListener(v -> dialog.dismiss());
+        root.addView(close);
+
+        TextView zoomHint = new TextView(this);
+        zoomHint.setText("পিঞ্চ করে জুম, টেনে সরান, ডাবল-ট্যাপে ফিট করুন");
+        zoomHint.setTextColor(0xB3FFFFFF);
+        zoomHint.setTextSize(11.5f);
+        zoomHint.setTypeface(Typeface.DEFAULT_BOLD);
+        zoomHint.setGravity(Gravity.CENTER);
+        FrameLayout.LayoutParams hintLp = new FrameLayout.LayoutParams(-2, -2);
+        hintLp.gravity = Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL;
+        hintLp.bottomMargin = dp(24);
+        zoomHint.setLayoutParams(hintLp);
+        root.addView(zoomHint);
+
+        dialog.setContentView(root);
+        Window w = dialog.getWindow();
+        if (w != null) {
+            w.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+            w.setLayout(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        }
+        dialog.show();
+    }
+
     private void generateAndFinish() {
-        String company = etCompany.getText().toString().trim();
-        if (company.isEmpty()) company = "CashLipi ক্যাশলিপি";
-        String headerDate = useRange ? (startDisplay + " – " + endDisplay) : singleDisplay;
-        List<Transaction> listForPdf = useRange
-                ? InvoicePdfHelper.filterByDateRange(fullList, startYmd, endYmd) : fullList;
+        String company = currentCompany();
+        String headerDate = currentHeaderDate();
+        List<Transaction> listForPdf = currentList();
 
         byte[] pdf = InvoicePdfHelper.generatePdf(type, listForPdf, company, headerDate,
                 selectedColor, selectedTemplate,
@@ -567,7 +724,7 @@ public class InvoiceExportActivity extends BaseActivity {
         tv.setText(text);
         tv.setTextSize(12.5f);
         tv.setTypeface(Typeface.DEFAULT_BOLD);
-        tv.setTextColor(textLight);
+        tv.setTextColor(textPrimaryC);
         return tv;
     }
 
@@ -576,7 +733,7 @@ public class InvoiceExportActivity extends BaseActivity {
         tv.setText(text);
         tv.setTextSize(10.5f);
         tv.setTypeface(Typeface.DEFAULT_BOLD);
-        tv.setTextColor(textMuted);
+        tv.setTextColor(textMutedC);
         tv.setPadding(0, 0, 0, dp(4));
         return tv;
     }
@@ -584,14 +741,14 @@ public class InvoiceExportActivity extends BaseActivity {
     private EditText themedInput() {
         EditText et = new EditText(this);
         GradientDrawable gd = new GradientDrawable();
-        gd.setColor(inputBg);
+        gd.setColor(inputBgC);
         gd.setCornerRadius(dp(10));
-        gd.setStroke(dp(1), inputBorder);
+        gd.setStroke(dp(1), inputBorderC);
         et.setBackground(gd);
-        et.setTextColor(textLight);
-        et.setHintTextColor(textMuted);
+        et.setTextColor(textPrimaryC);
+        et.setHintTextColor(textMutedC);
         et.setTextSize(13.5f);
-        et.setPadding(dp(12), dp(10), dp(12), dp(10));
+        et.setPadding(dp(12), dp(11), dp(12), dp(11));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
         lp.topMargin = dp(6);
         et.setLayoutParams(lp);
@@ -604,7 +761,7 @@ public class InvoiceExportActivity extends BaseActivity {
         chip.setTextSize(11.5f);
         chip.setTypeface(Typeface.DEFAULT_BOLD);
         chip.setGravity(Gravity.CENTER);
-        chip.setPadding(dp(10), dp(8), dp(10), dp(8));
+        chip.setPadding(dp(10), dp(9), dp(10), dp(9));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -2, 1f);
         if (marginEnd) lp.setMarginEnd(dp(6));
         chip.setLayoutParams(lp);
@@ -620,24 +777,36 @@ public class InvoiceExportActivity extends BaseActivity {
         btn.setGravity(Gravity.CENTER);
         btn.setPadding(dp(16), dp(10), dp(16), dp(10));
         GradientDrawable gd = new GradientDrawable();
-        gd.setColor(0xFF4F46E5);
+        gd.setColors(new int[]{accentStart, accentEnd});
+        gd.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
         gd.setCornerRadius(dp(24));
         btn.setBackground(gd);
         return btn;
     }
 
-    private void styleToggle(TextView chip, boolean active) {
+    /** চিপ/টগল সিলেক্টেড হলে টাইপ-অ্যাকসেন্ট রঙে (আয়ে সবুজ, ব্যয়ে লাল) ভরাট হয় — সিস্টেম জুড়ে সামঞ্জস্যপূর্ণ। */
+    private void typeStyleChip(TextView chip, boolean active) {
         GradientDrawable gd = new GradientDrawable();
         gd.setCornerRadius(dp(18));
         if (active) {
-            gd.setColor(0xFF4F46E5);
+            gd.setColors(new int[]{accentStart, accentEnd});
+            gd.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
             chip.setTextColor(Color.WHITE);
         } else {
-            gd.setColor(inputBg);
-            gd.setStroke(dp(1), inputBorder);
-            chip.setTextColor(textMuted);
+            gd.setColor(inputBgC);
+            gd.setStroke(dp(1), inputBorderC);
+            chip.setTextColor(textMutedC);
         }
         chip.setBackground(gd);
+    }
+
+    private android.graphics.drawable.Drawable ripple(boolean borderless) {
+        TypedValue tv = new TypedValue();
+        int attr = borderless
+                ? android.R.attr.selectableItemBackgroundBorderless
+                : android.R.attr.selectableItemBackground;
+        getTheme().resolveAttribute(attr, tv, true);
+        return ContextCompat.getDrawable(this, tv.resourceId);
     }
 
     private View gap(int dpVal) {

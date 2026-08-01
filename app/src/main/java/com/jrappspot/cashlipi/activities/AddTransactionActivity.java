@@ -66,7 +66,7 @@ public class AddTransactionActivity extends BaseActivity {
     private TextInputEditText etAmount, etNote;
     private TextView tvDate, tvTime;
     private TextInputLayout tilCategory;
-    private TextInputEditText etCategory;
+    private com.google.android.material.textfield.MaterialAutoCompleteTextView etCategory;
     private LinearLayout chipGroupCategories;
     private Button btnSaveTxn;
     private View ringSaveTxn;
@@ -204,14 +204,70 @@ public class AddTransactionActivity extends BaseActivity {
         btnSaveTxn.setOnClickListener(v -> saveTransaction());
 
         btnAiVoiceEntry.setOnClickListener(v -> launchVoiceInput());
+
+        // ক্যাটাগরি অটোকমপ্লিট সেটআপ
+        setupCategoryAutocomplete();
     }
 
-    /** সিস্টেম ভয়েস রিকগনাইজার চালু করে — বাংলা ভাষায় শোনে */
+    /** ক্যাটাগরি ফিল্ডে autocomplete যোগ করা — টাইপ করলে লিস্ট থেকে মিলে এমন সব আসবে */
+    private void setupCategoryAutocomplete() {
+        android.widget.ArrayAdapter<String> adapter = new android.widget.ArrayAdapter<>(
+                this, android.R.layout.simple_dropdown_item_1line);
+        etCategory.setAdapter(adapter);
+        etCategory.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedCategory = (String) parent.getItemAtPosition(position);
+            etCategory.setText(selectedCategory);
+            etCategory.setSelection(selectedCategory.length());
+        });
+
+        // TextWatcher: টাইপ করার সময় ফিল্টার করা
+        etCategory.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String input = s.toString().trim().toLowerCase();
+                if (input.isEmpty()) {
+                    adapter.clear();
+                    return;
+                }
+
+                // বর্তমান মোড অনুযায়ী ক্যাটাগরি খুঁজবে
+                List<String> allCategories = db.getCategories(isIncome ? "income" : "expense");
+                List<String> filtered = new ArrayList<>();
+                for (String cat : allCategories) {
+                    if (cat.toLowerCase().startsWith(input)) {
+                        filtered.add(cat);
+                    }
+                }
+
+                adapter.clear();
+                adapter.addAll(filtered);
+                adapter.notifyDataSetChanged();
+
+                // Dropdown দেখানো
+                if (!filtered.isEmpty()) {
+                    etCategory.showDropDown();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
+    }
+
+    /** সিস্টেম ভয়েস রিকগনাইজার চালু করে — বাংলা ভাষায় শোনে
+     *  EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS = দীর্ঘ নীরবতার পর থামবে (৪ সেকেন্ড)
+     *  EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS = সংক্ষিপ্ত নীরবতায় চলতে থাকবে (২ সেকেন্ড) */
     private void launchVoiceInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "bn-BD");
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "আয় বা ব্যয়ের হিসাব বলুন...");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "আয় বা ব্যয়ের হিসাব বলুন... (ক্রমাগত বলুন, থামবেন না)");
+        // সিস্টেম speech recognizer-এর টাইমআউট কন্ট্রোল
+        intent.putExtra("android.speech.extra.SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS", 4000); // দীর্ঘ নীরবতা = থামা
+        intent.putExtra("android.speech.extra.SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS", 2000); // সংক্ষিপ্ত নীরবতা = চলতে থাকবে
         try {
             startActivityForResult(intent, REQ_VOICE_INPUT);
         } catch (ActivityNotFoundException e) {
@@ -243,18 +299,25 @@ public class AddTransactionActivity extends BaseActivity {
                 String incomeCats = String.join(", ", db.getCategories("income"));
                 String expenseCats = String.join(", ", db.getCategories("expense"));
 
-                String prompt = "তুমি CashLipi অ্যাপের একজন অভিজ্ঞ, মনোযোগী লেনদেন পার্সার। ইউজার যা বলেছে তা গভীরভাবে বিশ্লেষণ করে "
-                        + "লেনদেনের প্রতিটি তথ্য বুদ্ধিমত্তার সাথে বের করবে, তারপর শুধুমাত্র একটি বিশুদ্ধ JSON অবজেক্ট দাও, "
-                        + "অন্য কোনো লেখা, ব্যাখ্যা বা মার্কডাউন দিও না। "
-                        + "ফরম্যাট ঠিক এরকম: {\"type\":\"income\" অথবা \"expense\",\"amount\":সংখ্যা,"
-                        + "\"category\":\"একটি প্রাসঙ্গিক ইমোজিসহ সংক্ষিপ্ত, পরিষ্কার ক্যাটাগরি নাম (যেমন: 🍔 খাবার, 🚌 যাতায়াত, 💼 বেতন)\","
-                        + "\"method\":\"cash\" বা \"bkash\" বা \"nagad\" বা \"rocket\" বা \"bank\" বা \"other\","
-                        + "\"note\":\"একটি ছোট, সুন্দরভাবে গোছানো নোট — প্রাসঙ্গিক হলে একটি ইমোজি দিয়ে শুরু, প্রয়োজনীয় বিস্তারিত সংক্ষেপে, নাহলে খালি স্ট্রিং\"}. "
-                        + "বিদ্যমান আয়ের ক্যাটাগরি: " + incomeCats + ". "
-                        + "বিদ্যমান ব্যয়ের ক্যাটাগরি: " + expenseCats + ". "
-                        + "সম্ভব হলে বিদ্যমান ক্যাটাগরির সাথে মিলিয়ে দাও, নাহলে নতুন উপযুক্ত ক্যাটাগরি বানাও। "
-                        + "মাধ্যম উল্লেখ না থাকলে \"cash\" ধরে নাও। "
-                        + "ইউজার বলেছে: \"" + spokenText + "\"";
+                String prompt = "তুমি CashLipi অ্যাপের একজন অভিজ্ঞ লেনদেন বিশ্লেষক। ইউজার যা বলেছে তার গভীর বিশ্লেষণ করে সব তথ্য বের করবে। শুধুমাত্র একটি সঠিক JSON অবজেক্ট দাও, অন্য কিছু নয়।\n"
+                        + "JSON ফরম্যাট (অবশ্যই এই ফরম্যাট অনুসরণ করতে হবে):\n"
+                        + "{\n"
+                        + "  \"type\": \"income\" বা \"expense\",\n"
+                        + "  \"amount\": সংখ্যা (শুধু সংখ্যা, স্ট্রিং নয়),\n"
+                        + "  \"category\": \"🍔 খাবার\" অথবা \"🚌 যাতায়াত\" অথবা \"💼 বেতন\" বা অনুরূপ (প্রতিটি ক্যাটাগরিতে অবশ্যই ইমোজি থাকতে হবে),\n"
+                        + "  \"method\": \"cash\" বা \"bkash\" বা \"nagad\" বা \"rocket\" বা \"bank\" বা \"other\",\n"
+                        + "  \"note\": \"সুন্দরভাবে লেখা নোট, যেমন 'বাজারে আলু কিনেছি (২০০ টাকা)' — ইমোজি অপশনাল\"\n"
+                        + "}\n"
+                        + "বিদ্যমান আয়ের ক্যাটাগরি: " + incomeCats + "\n"
+                        + "বিদ্যমান ব্যয়ের ক্যাটাগরি: " + expenseCats + "\n"
+                        + "নিয়ম:\n"
+                        + "1. সম্ভব হলে বিদ্যমান ক্যাটাগরির সাথে মিলাও, নাহলে নতুন তৈরি করো।\n"
+                        + "2. প্রতিটি ক্যাটাগরিতে অবশ্যই প্রাসঙ্গিক ইমোজি থাকতে হবে।\n"
+                        + "3. টাকা বা পয়সা বলা থাকলে amount নির্ণয় করো।\n"
+                        + "4. মাধ্যম (cash/bkash/etc) উল্লেখ না থাকলে cash ধরে নাও।\n"
+                        + "5. note-তে সংক্ষিপ্ত, স্পষ্ট তথ্য লিখো।\n"
+                        + "6. শুধুমাত্র JSON দাও, অন্য কোনো লেখা নয়।\n"
+                        + "\nইউজার বলেছে: \"" + spokenText + "\"";
 
                 JSONObject obj = com.jrappspot.cashlipi.utils.PollinationsAiHelper.callJson(prompt);
 
@@ -371,10 +434,7 @@ public class AddTransactionActivity extends BaseActivity {
                         ? (chosenIsIncome[0] ? R.drawable.bg_txn_payment_item_selected_income : R.drawable.bg_txn_payment_item_selected_expense)
                         : R.drawable.bg_txn_payment_item));
 
-                ImageView icon = new ImageView(this);
-                icon.setImageResource(getMethodIcon(key));
-                icon.setLayoutParams(new LinearLayout.LayoutParams(48, 48));
-                if (selected) icon.setColorFilter(accentColor);
+                View iconWrap = wrapMethodIconWithCheck(getMethodIcon(key), selected, 48);
 
                 TextView label = new TextView(this);
                 label.setText(entry.getValue());
@@ -386,7 +446,7 @@ public class AddTransactionActivity extends BaseActivity {
                 labelLp.topMargin = 6;
                 label.setLayoutParams(labelLp);
 
-                item.addView(icon);
+                item.addView(iconWrap);
                 item.addView(label);
 
                 LinearLayout.LayoutParams itemLp = new LinearLayout.LayoutParams(
@@ -535,6 +595,39 @@ public class AddTransactionActivity extends BaseActivity {
         }
     }
 
+    /** পেমেন্ট মাধ্যমের আইকনগুলো (বিকাশ/নগদ/রকেট ইত্যাদি) এখন নিজস্ব ব্র্যান্ড কালারসহ ফুল-কালার
+     *  আইকন, তাই আগের মতো accentColor দিয়ে টিন্ট করা হয় না (তাহলে ব্র্যান্ড কালার নষ্ট হয়ে যেত)।
+     *  এর বদলে সিলেক্ট করা আইকনের ঠিক মাঝখানে একটা ছোট টিক-মার্ক ব্যাজ বসানো হয়, যাতে বোঝা যায়
+     *  কোন মাধ্যমটা বর্তমানে সিলেক্টেড আছে। */
+    private View wrapMethodIconWithCheck(int iconRes, boolean selected, int sizePx) {
+        android.widget.FrameLayout frame = new android.widget.FrameLayout(this);
+        frame.setLayoutParams(new LinearLayout.LayoutParams(sizePx, sizePx));
+
+        ImageView icon = new ImageView(this);
+        icon.setImageResource(iconRes);
+        icon.setLayoutParams(new android.widget.FrameLayout.LayoutParams(sizePx, sizePx));
+        frame.addView(icon);
+
+        if (selected) {
+            ImageView badge = new ImageView(this);
+            android.graphics.drawable.GradientDrawable badgeBg = new android.graphics.drawable.GradientDrawable();
+            badgeBg.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+            badgeBg.setColor(0xB3000000);
+            badge.setBackground(badgeBg);
+            badge.setImageResource(R.drawable.ic_checkmark_plain);
+            badge.setColorFilter(0xFFFFFFFF);
+            int badgeSize = Math.round(sizePx * 0.62f);
+            int pad = Math.round(badgeSize * 0.2f);
+            badge.setPadding(pad, pad, pad, pad);
+            android.widget.FrameLayout.LayoutParams badgeLp =
+                    new android.widget.FrameLayout.LayoutParams(badgeSize, badgeSize);
+            badgeLp.gravity = Gravity.CENTER;
+            badge.setLayoutParams(badgeLp);
+            frame.addView(badge);
+        }
+        return frame;
+    }
+
     /** ডিফল্ট লেনদেন মাধ্যম গ্রিড (Cash, bKash, Nagad, Rocket, Bank, Others) — আগে দুই সারিতে ৩টা করে
      *  ছিল, এখন সবগুলো (৬টা) এক লাইনেই থাকে (rowPaymentMethods1) — আইকন/টেক্সট একটু ছোট করে সাইজ
      *  করা হয়েছে যাতে ৬টাই এক সারিতে ঠিকমতো ধরে, ফলে পুরো পেজটা স্ক্রল ছাড়াই দেখা যায়। */
@@ -564,11 +657,7 @@ public class AddTransactionActivity extends BaseActivity {
                     ? (isIncome ? R.drawable.bg_txn_payment_item_selected_income : R.drawable.bg_txn_payment_item_selected_expense)
                     : R.drawable.bg_txn_payment_item));
 
-            ImageView icon = new ImageView(this);
-            icon.setImageResource(getMethodIcon(key));
-            LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(40, 40);
-            icon.setLayoutParams(iconLp);
-            if (selected) icon.setColorFilter(accentColor);
+            View iconWrap = wrapMethodIconWithCheck(getMethodIcon(key), selected, 40);
 
             TextView label1 = new TextView(this);
             label1.setText(label);
@@ -581,7 +670,7 @@ public class AddTransactionActivity extends BaseActivity {
             labelLp.topMargin = 6;
             label1.setLayoutParams(labelLp);
 
-            item.addView(icon);
+            item.addView(iconWrap);
             item.addView(label1);
 
             LinearLayout.LayoutParams itemLp = new LinearLayout.LayoutParams(

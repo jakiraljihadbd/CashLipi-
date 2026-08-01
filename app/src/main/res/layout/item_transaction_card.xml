@@ -60,6 +60,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:src="@drawable/ic_calendar"
+                app:tint="@color/ieDarkText"
                 android:alpha="0.55"/>
 
             <TextView
@@ -83,6 +84,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:src="@drawable/ic_clock"
+                app:tint="@color/ieDarkText"
                 android:alpha="0.55"/>
 
             <TextView
@@ -108,6 +110,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:src="@drawable/ic_edit"
+                app:tint="@color/ieDarkText"
                 android:alpha="0.5"/>
 
             <TextView
@@ -123,15 +126,53 @@
                 android:layout_marginStart="5dp"/>
         </LinearLayout>
 
-        <!-- কতদিন আগে -->
-        <TextView
-            android:id="@+id/tvItemRelative"
-            android:layout_width="wrap_content"
+        <!-- কতদিন আগে + পেমেন্ট মাধ্যম -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="11.5sp"
-            android:textColor="@color/ieDarkText"
-            android:alpha="0.45"
-            android:layout_marginTop="4dp"/>
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/tvItemRelative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11.5sp"
+                android:textColor="@color/ieDarkText"
+                android:alpha="0.45"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <LinearLayout
+                android:id="@+id/rowItemMethod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingStart="7dp"
+                android:paddingEnd="9dp"
+                android:paddingVertical="3dp"
+                android:background="@drawable/bg_txn_count_chip">
+
+                <ImageView
+                    android:id="@+id/ivItemMethod"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:id="@+id/tvItemMethod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="10.5sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ieDarkText"
+                    android:alpha="0.65"
+                    android:layout_marginStart="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <!-- সম্পাদনা / মুছুন / আরও -->
         <LinearLayout

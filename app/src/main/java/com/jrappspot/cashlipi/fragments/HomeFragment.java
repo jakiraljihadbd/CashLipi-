@@ -93,6 +93,13 @@ public class HomeFragment extends Fragment {
         db = DatabaseManager.getInstance(requireContext());
         initViews(view);
         setupClickListeners(view);
+
+        // নোটিশ বারের টেক্সট marquee (স্ক্রলিং) — setSelected(true) না দিলে অ্যান্ড্রয়েডে
+        // marquee অ্যানিমেশন শুরু হয় না, তাই লেখা "রাখুন সহজে" পর্যন্ত কখনো দেখা যেত না।
+        TextView tvHomeNotice = view.findViewById(R.id.tvHomeNotice);
+        if (tvHomeNotice != null) {
+            tvHomeNotice.setSelected(true);
+        }
     }
 
     @Override
@@ -329,10 +336,14 @@ public class HomeFragment extends Fragment {
 
     // ── CLICK LISTENERS ──────────────────────────────────────────────
     private void setupClickListeners(View root) {
-        root.findViewById(R.id.cardIncome).setOnClickListener(v ->
-                goToNavPage(MainPagerAdapter.POSITION_INCOME_EXPENSE));
-        root.findViewById(R.id.cardExpense).setOnClickListener(v ->
-                goToNavPage(MainPagerAdapter.POSITION_INCOME_EXPENSE));
+        root.findViewById(R.id.cardIncome).setOnClickListener(v -> {
+            IncomeExpenseFragment.pendingTransactionType = "income";
+            goToNavPage(MainPagerAdapter.POSITION_INCOME_EXPENSE);
+        });
+        root.findViewById(R.id.cardExpense).setOnClickListener(v -> {
+            IncomeExpenseFragment.pendingTransactionType = "expense";
+            goToNavPage(MainPagerAdapter.POSITION_INCOME_EXPENSE);
+        });
         root.findViewById(R.id.cardDena).setOnClickListener(v -> openMostRecentLedgerPerson("dena"));
         root.findViewById(R.id.cardPabona).setOnClickListener(v -> openMostRecentLedgerPerson("pabona"));
         root.findViewById(R.id.cardSavings).setOnClickListener(v ->
@@ -347,7 +358,7 @@ public class HomeFragment extends Fragment {
         root.findViewById(R.id.menuAnalysis).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), AnalysisActivity.class)));
         root.findViewById(R.id.menuLedger).setOnClickListener(v ->
-                goToNavPage(MainPagerAdapter.POSITION_BAKIR_KHATA));
+                goToNavPage(MainPagerAdapter.POSITION_BUDGET)); // বাকির খাতা এখন এই স্লটেই থাকে
         root.findViewById(R.id.menuCalculator).setOnClickListener(v ->
                 startActivity(new Intent(requireContext(), CalculatorActivity.class)));
         root.findViewById(R.id.menuNotes).setOnClickListener(v ->

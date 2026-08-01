@@ -309,44 +309,60 @@ public class TransactionSheetHelper {
         sheetIcon.setBackground(act.getResources().getDrawable(
                 isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable));
         sheetTitle.setText(item.getPerson());
+        String statusLabel = item.isPaid() ? ("  •   " + (isDena ? "দিলাম" : "পেলাম"))
+                : item.isPartiallyPaid() ? ("  •   আংশিক পরিশোধ (বাকি ৳" + DatabaseManager.formatAmount(item.getRemainingAmount()) + ")")
+                : "  •   বাকি";
         sheetSubtitle.setText(DatabaseManager.formatDateDisplay(item.getDate())
                 + "  •  " + DatabaseManager.formatTimeDisplay(item.getTime())
-                + (item.isPaid() ? ("  •   " + (isDena ? "দিলাম" : "পেলাম")) : "  •   বাকি"));
+                + statusLabel);
         sheetAmount.setText(DatabaseManager.formatAmount(item.getAmount()));
         sheetAmount.setTextColor(androidx.core.content.ContextCompat.getColor(act, isDena ? R.color.amountDebt : R.color.amountReceivable));
 
-        // Toggle paid row
+        // Toggle paid row + আংশিক পরিশোধ বাতিল রো
         View togglePaid = v.findViewById(R.id.actionTogglePaid);
         TextView togglePaidLabel = v.findViewById(R.id.togglePaidLabel);
+        View actionResetPartial = v.findViewById(R.id.actionResetPartial);
         togglePaid.setVisibility(View.VISIBLE);
         if (item.isPaid()) {
             togglePaidLabel.setText("↩️ অপরিশোধিত করুন");
+            actionResetPartial.setVisibility(View.GONE);
+        } else if (item.isPartiallyPaid()) {
+            togglePaidLabel.setText("✅ আরও পরিশোধ করুন  •  বাকি ৳" + DatabaseManager.formatAmount(item.getRemainingAmount()));
+            actionResetPartial.setVisibility(View.VISIBLE);
         } else {
             // পাওনার পরিশোধে "পেলাম" (টাকা পেয়েছি), দেনার পরিশোধে "দিলাম" (টাকা দিয়েছি)
             togglePaidLabel.setText(isDena ? "✅ দিলাম" : "✅ পেলাম");
+            actionResetPartial.setVisibility(View.GONE);
         }
         togglePaid.setOnClickListener(x -> {
             dialog.dismiss();
             if (item.isPaid()) {
-                // ইতিমধ্যে পরিশোধিত → অপরিশোধিত করতে সরাসরি টগল, কোনো প্রশ্ন করার দরকার নেই।
-                // তবে "আয়/ব্যয় হিসেবে" পরিশোধ করা থাকলে, সাথে অটো-তৈরি হওয়া আয়/ব্যয় এন্ট্রিটাও
-                // মুছে দেয় — নাহলে পরে আবার পরিশোধ করলে ডুপ্লিকেট লেনদেন তৈরি হয়ে যাবে।
+                // ইতিমধ্যে সম্পূর্ণ পরিশোধিত → পুরো পরিশোধ (আংশিক/সম্পূর্ণ যাই হোক) বাতিল করে
+                // একদম বাকি অবস্থায় ফিরিয়ে দেয়। "আয়/ব্যয় হিসেবে" পরিশোধ করা থাকলে সাথে অটো-তৈরি
+                // হওয়া আয়/ব্যয় এন্ট্রিও মুছে যায় — নাহলে পরে আবার পরিশোধ করলে ডুপ্লিকেট হয়ে যেত।
                 List<LedgerEntry> list = db.getLedgerList();
                 int idx = findLedgerIndex(list, item);
-                if (idx >= 0) {
-                    LedgerEntry entry = list.get(idx);
-                    if ("incomeExpense".equals(entry.getSettleTo()) && !entry.getSettleTxnId().isEmpty()) {
-                        if (entry.isPabona()) db.deleteIncomeById(entry.getSettleTxnId());
-                        else db.deleteExpenseById(entry.getSettleTxnId());
-                        entry.setSettleTxnId("");
-                        db.updateLedger(idx, entry);
-                    }
-                    db.toggleLedgerPaid(idx);
-                }
+                if (idx >= 0) db.resetLedgerPayment(idx);
                 if (onChange != null) onChange.run();
             } else {
                 showSettleSourceDialog(act, db, item, onChange);
             }
+        });
+        actionResetPartial.setOnClickListener(x -> {
+            dialog.dismiss();
+            new AlertDialog.Builder(act, R.style.PremiumDialog)
+                    .setTitle("পরিশোধ বাতিল করবেন?")
+                    .setMessage("এ পর্যন্ত করা ৳" + DatabaseManager.formatAmount(item.getPaidAmount())
+                            + " পরিশোধ বাতিল হয়ে যাবে এবং পুরো ৳" + DatabaseManager.formatAmount(item.getAmount())
+                            + " আবার বাকি হিসেবে দেখাবে।")
+                    .setPositiveButton("হ্যাঁ, বাতিল করুন", (d, w) -> {
+                        List<LedgerEntry> list = db.getLedgerList();
+                        int idx = findLedgerIndex(list, item);
+                        if (idx >= 0) db.resetLedgerPayment(idx);
+                        if (onChange != null) onChange.run();
+                    })
+                    .setNegativeButton("না", null)
+                    .show();
         });
 
         v.findViewById(R.id.actionEdit).setOnClickListener(x -> {
@@ -392,10 +408,11 @@ public class TransactionSheetHelper {
     private static void showSettleSourceDialog(Activity act, DatabaseManager db,
                                                  LedgerEntry item, Refresh onChange) {
         boolean isDena = item.isDena();
-        double amount = item.getAmount();
+        double remaining = item.getRemainingAmount();
 
         View v = LayoutInflater.from(act).inflate(R.layout.dialog_settle_source, null);
         TextView tvQuestion = v.findViewById(R.id.tvSettleQuestion);
+        TextView tvRemaining = v.findViewById(R.id.tvSettleRemaining);
         android.widget.ImageView ivIcon = v.findViewById(R.id.ivSettleIcon);
         ivIcon.setBackground(act.getResources().getDrawable(
                 isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable));
@@ -407,14 +424,71 @@ public class TransactionSheetHelper {
         TextView tvBefore = v.findViewById(R.id.tvSettleBefore);
         TextView tvAfter = v.findViewById(R.id.tvSettleAfter);
 
+        TextView btnPayFull = v.findViewById(R.id.btnPayFull);
+        TextView btnPayPartial = v.findViewById(R.id.btnPayPartial);
+        TextInputLayout tilPartialAmount = v.findViewById(R.id.tilPartialAmount);
+        TextInputEditText etPartialAmount = v.findViewById(R.id.etPartialAmount);
+
         tvQuestion.setText(isDena
-                ? "এই " + DatabaseManager.formatAmount(amount) + " টাকা কোথা থেকে দিলেন?"
-                : "এই " + DatabaseManager.formatAmount(amount) + " টাকা কোথায় রাখলেন?");
+                ? "টাকা পরিশোধ করুন"
+                : "টাকা গ্রহণ করুন");
+        tvRemaining.setText("মোট বাকি ৳" + DatabaseManager.formatAmount(remaining)
+                + (item.isPartiallyPaid() ? "  (ইতিমধ্যে ৳" + DatabaseManager.formatAmount(item.getPaidAmount()) + " পরিশোধিত — বাকিটাও একই মাধ্যমে হবে)" : ""));
 
         rbBalance.setText(isDena ? "ব্যালেন্স থেকে (মূল হিসাব থেকে কমবে)" : "ব্যালেন্সে (মূল হিসাবে যোগ হবে)");
         rbSavings.setText(isDena ? "সঞ্চয় থেকে (সঞ্চয়ের হিসাব থেকে কমবে)" : "সঞ্চয়ে (সঞ্চয়ের হিসাবে যোগ হবে)");
         rbIncomeExpense.setText(isDena ? "ব্যয় হিসেবে যোগ হবে" : "আয় হিসেবে যোগ হবে");
         rbNone.setText(isDena ? "কোথাও থেকে না (শুধু হিসাব থেকে বাদ)" : "কোথাও না (শুধু হিসাব থেকে বাদ)");
+
+        // ইতিমধ্যে একবার আংশিক পরিশোধ হয়ে থাকলে, ব্যালেন্স/সঞ্চয়ের হিসাব ঠিক রাখতে বাকি পরিশোধও
+        // একই মাধ্যমে (settleTo) করতে হবে — তাই অন্য অপশনগুলো বন্ধ করে দেওয়া হয়
+        if (item.isPartiallyPaid()) {
+            String lockedTo = item.getSettleTo();
+            if ("savings".equals(lockedTo)) rbSavings.setChecked(true);
+            else if ("incomeExpense".equals(lockedTo)) rbIncomeExpense.setChecked(true);
+            else if ("none".equals(lockedTo)) rbNone.setChecked(true);
+            else rbBalance.setChecked(true);
+            rbBalance.setEnabled(false);
+            rbSavings.setEnabled(false);
+            rbIncomeExpense.setEnabled(false);
+            rbNone.setEnabled(false);
+        }
+
+        // পুরো পরিশোধ / আংশিক পরিশোধ টগল
+        final boolean[] isPartialMode = {false};
+        etPartialAmount.setText(String.valueOf((long) remaining));
+        if (act instanceof FragmentActivity) {
+            AmountInputHelper.attach((FragmentActivity) act, etPartialAmount);
+        }
+
+        Runnable[] updatePreviewHolder = new Runnable[1];
+        Runnable updateToggleUI = () -> {
+            if (isPartialMode[0]) {
+                btnPayPartial.setBackgroundResource(R.drawable.bg_type_active_pabona);
+                btnPayPartial.setTextColor(ContextCompat.getColor(act, R.color.white));
+                btnPayFull.setBackgroundResource(R.drawable.bg_dialog_field);
+                btnPayFull.setTextColor(ContextCompat.getColor(act, R.color.textSecondary));
+                tilPartialAmount.setVisibility(View.VISIBLE);
+            } else {
+                btnPayFull.setBackgroundResource(R.drawable.bg_type_active_pabona);
+                btnPayFull.setTextColor(ContextCompat.getColor(act, R.color.white));
+                btnPayPartial.setBackgroundResource(R.drawable.bg_dialog_field);
+                btnPayPartial.setTextColor(ContextCompat.getColor(act, R.color.textSecondary));
+                tilPartialAmount.setVisibility(View.GONE);
+            }
+        };
+        updateToggleUI.run();
+
+        btnPayFull.setOnClickListener(x -> {
+            isPartialMode[0] = false;
+            updateToggleUI.run();
+            if (updatePreviewHolder[0] != null) updatePreviewHolder[0].run();
+        });
+        btnPayPartial.setOnClickListener(x -> {
+            isPartialMode[0] = true;
+            updateToggleUI.run();
+            if (updatePreviewHolder[0] != null) updatePreviewHolder[0].run();
+        });
 
         double curBalance = db.getBalance();
         double curSavings = db.getTotalSavings();
@@ -422,22 +496,23 @@ public class TransactionSheetHelper {
         double curExpense = db.getTotalExpense();
 
         Runnable updatePreview = () -> {
+            double payAmount = currentPayAmount(isPartialMode[0], remaining, etPartialAmount);
             int checked = rg.getCheckedRadioButtonId();
             if (checked == R.id.rbSettleBalance) {
-                double after = isDena ? curBalance - amount : curBalance + amount;
+                double after = isDena ? curBalance - payAmount : curBalance + payAmount;
                 tvBefore.setText("ব্যালেন্স ৳" + DatabaseManager.formatAmount(curBalance));
                 tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
             } else if (checked == R.id.rbSettleSavings) {
-                double after = isDena ? curSavings - amount : curSavings + amount;
+                double after = isDena ? curSavings - payAmount : curSavings + payAmount;
                 tvBefore.setText("সঞ্চয় ৳" + DatabaseManager.formatAmount(curSavings));
                 tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
             } else if (checked == R.id.rbSettleIncomeExpense) {
                 if (isDena) {
-                    double after = curExpense + amount;
+                    double after = curExpense + payAmount;
                     tvBefore.setText("ব্যয় ৳" + DatabaseManager.formatAmount(curExpense));
                     tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
                 } else {
-                    double after = curIncome + amount;
+                    double after = curIncome + payAmount;
                     tvBefore.setText("আয় ৳" + DatabaseManager.formatAmount(curIncome));
                     tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
                 }
@@ -446,56 +521,82 @@ public class TransactionSheetHelper {
                 tvAfter.setText("৳" + DatabaseManager.formatAmount(curBalance) + " (অপরিবর্তিত)");
             }
         };
+        updatePreviewHolder[0] = updatePreview;
         rg.setOnCheckedChangeListener((group, checkedId) -> updatePreview.run());
+        etPartialAmount.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) { updatePreview.run(); }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        });
         updatePreview.run();
 
-        new AlertDialog.Builder(act, R.style.PremiumDialog)
+        AlertDialog settleDialog = new AlertDialog.Builder(act, R.style.PremiumDialog)
                 .setView(v)
-                .setPositiveButton("পরিশোধ নিশ্চিত করুন", (d, w) -> {
-                    String settleTo;
-                    int checked = rg.getCheckedRadioButtonId();
-                    if (checked == R.id.rbSettleBalance) settleTo = "balance";
-                    else if (checked == R.id.rbSettleSavings) settleTo = "savings";
-                    else if (checked == R.id.rbSettleIncomeExpense) settleTo = "incomeExpense";
-                    else settleTo = "none";
-
-                    List<LedgerEntry> list = db.getLedgerList();
-                    int idx = findLedgerIndex(list, item);
-                    if (idx >= 0) {
-                        LedgerEntry updated = list.get(idx);
-                        updated.setSettleTo(settleTo);
-
-                        // "আয়/ব্যয় হিসেবে" বেছে নিলে শুধু ব্যালেন্সে যোগ-বিয়োগ না করে, আয়/ব্যয়
-                        // তালিকায় একটা আসল, দেখা যাওয়ার মতো লেনদেনও তৈরি করে — নাম, তারিখ ইত্যাদি
-                        // বিবরণ নোটে অটো বসিয়ে দেয়, যাতে পরে কোন পাওনা/দেনার বিপরীতে এই আয়/ব্যয়
-                        // যোগ হয়েছে তা স্পষ্ট বোঝা যায়।
-                        if ("incomeExpense".equals(settleTo)) {
-                            String personName = updated.getPerson();
-                            String entryDate = DatabaseManager.formatDateDisplay(updated.getDate());
-                            Transaction txn = new Transaction();
-                            txn.setDate(DatabaseManager.nowDate());
-                            txn.setTime(DatabaseManager.nowTime());
-                            if (updated.isPabona()) {
-                                txn.setType("income");
-                                txn.setSource("পাওনা প্রাপ্তি");
-                                txn.setNote(personName + " এর কাছ থেকে " + entryDate + " তারিখের পাওনা আদায় করা হয়েছে");
-                            } else {
-                                txn.setType("expense");
-                                txn.setCategory("দেনা পরিশোধ");
-                                txn.setNote(personName + " কে " + entryDate + " তারিখের দেনা পরিশোধ করা হয়েছে");
-                            }
-                            txn.setAmount(updated.getAmount());
-                            Transaction saved = updated.isPabona() ? db.addIncome(txn) : db.addExpense(txn);
-                            updated.setSettleTxnId(saved.getId());
-                        }
-
-                        db.updateLedger(idx, updated);
-                        db.toggleLedgerPaid(idx);
-                    }
-                    if (onChange != null) onChange.run();
-                })
+                .setPositiveButton("পরিশোধ নিশ্চিত করুন", null)
                 .setNegativeButton("বাতিল", null)
-                .show();
+                .create();
+        settleDialog.show();
+        settleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(btn -> {
+            double payAmount = currentPayAmount(isPartialMode[0], remaining, etPartialAmount);
+            if (payAmount <= 0) {
+                Toast.makeText(act, "সঠিক পরিমাণ লিখুন", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (payAmount > remaining + 0.01) {
+                Toast.makeText(act, "বাকি ৳" + DatabaseManager.formatAmount(remaining) + "-এর বেশি পরিশোধ করা যাবে না", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String settleTo;
+            int checked = rg.getCheckedRadioButtonId();
+            if (checked == R.id.rbSettleBalance) settleTo = "balance";
+            else if (checked == R.id.rbSettleSavings) settleTo = "savings";
+            else if (checked == R.id.rbSettleIncomeExpense) settleTo = "incomeExpense";
+            else settleTo = "none";
+
+            List<LedgerEntry> list = db.getLedgerList();
+            int idx = findLedgerIndex(list, item);
+            if (idx >= 0) {
+                String txnId = "";
+                // "আয়/ব্যয় হিসেবে" বেছে নিলে শুধু ব্যালেন্সে যোগ-বিয়োগ না করে, আয়/ব্যয়
+                // তালিকায় একটা আসল, দেখা যাওয়ার মতো লেনদেনও তৈরি করে — যতটুকু এই ধাপে
+                // পরিশোধ হচ্ছে (আংশিক হলে শুধু ততটুকুই) তার সমান পরিমাণে।
+                if ("incomeExpense".equals(settleTo)) {
+                    LedgerEntry updated = list.get(idx);
+                    String personName = updated.getPerson();
+                    String entryDate = DatabaseManager.formatDateDisplay(updated.getDate());
+                    Transaction txn = new Transaction();
+                    txn.setDate(DatabaseManager.nowDate());
+                    txn.setTime(DatabaseManager.nowTime());
+                    if (updated.isPabona()) {
+                        txn.setType("income");
+                        txn.setSource("পাওনা প্রাপ্তি");
+                        txn.setNote(personName + " এর কাছ থেকে " + entryDate + " তারিখের পাওনা আদায় করা হয়েছে");
+                    } else {
+                        txn.setType("expense");
+                        txn.setCategory("দেনা পরিশোধ");
+                        txn.setNote(personName + " কে " + entryDate + " তারিখের দেনা পরিশোধ করা হয়েছে");
+                    }
+                    txn.setAmount(payAmount);
+                    Transaction saved = updated.isPabona() ? db.addIncome(txn) : db.addExpense(txn);
+                    txnId = saved.getId();
+                }
+                db.addPartialPayment(idx, payAmount, settleTo, txnId);
+            }
+            settleDialog.dismiss();
+            if (onChange != null) onChange.run();
+        });
+    }
+
+    private static double currentPayAmount(boolean isPartialMode, double remaining, TextInputEditText etPartialAmount) {
+        if (!isPartialMode) return remaining;
+        String s = etPartialAmount.getText() != null ? etPartialAmount.getText().toString().trim() : "";
+        try {
+            double v = Double.parseDouble(s);
+            return Math.max(0, v);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private static void confirmDeleteLedger(Activity act, DatabaseManager db,

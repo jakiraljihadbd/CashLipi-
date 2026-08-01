@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="0dp"
                 app:cardBackgroundColor="@color/gradCircleBlueEnd"
                 app:cardElevation="2dp">
                 <TextView android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="0dp"
                 app:cardBackgroundColor="@color/bkCardInner"
                 app:cardElevation="2dp">
                 <TextView android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="0dp"
                 app:cardBackgroundColor="@color/bkCardInner"
                 app:cardElevation="2dp">
                 <TextView android:layout_width="wrap_content"
@@ -117,7 +117,7 @@
                 android:id="@+id/chipFilterLocal"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                app:cardCornerRadius="18dp"
+                app:cardCornerRadius="0dp"
                 app:cardBackgroundColor="@color/bkCardInner"
                 app:cardElevation="2dp">
                 <TextView android:layout_width="wrap_content"

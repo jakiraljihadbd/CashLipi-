@@ -91,7 +91,7 @@
                      android:layout_marginEnd="6dp"
                      app:cardElevation="0dp"
                      app:cardBackgroundColor="@color/bkCardInner"
-                     app:cardCornerRadius="12dp"
+                     app:cardCornerRadius="0dp"
                      android:layout_weight="1">
 
                     <LinearLayout
@@ -127,7 +127,7 @@
                      android:layout_marginHorizontal="3dp"
                      app:cardElevation="0dp"
                      app:cardBackgroundColor="@color/bkCardInner"
-                     app:cardCornerRadius="12dp"
+                     app:cardCornerRadius="0dp"
                      android:layout_weight="1">
 
                     <LinearLayout
@@ -163,7 +163,7 @@
                      app:cardElevation="0dp"
                      app:cardBackgroundColor="@color/bkCardInner"
                      android:layout_marginStart="6dp"
-                     app:cardCornerRadius="12dp"
+                     app:cardCornerRadius="0dp"
                      android:layout_weight="1">
 
                     <LinearLayout
@@ -209,7 +209,7 @@
                      android:visibility="gone"
                      app:cardElevation="8dp"
                      app:cardBackgroundColor="@color/bkCard"
-                     app:cardCornerRadius="24dp"
+                     app:cardCornerRadius="0dp"
                      android:id="@+id/cardLatestBackup">
 
                     <LinearLayout
@@ -362,7 +362,7 @@
                      android:layout_width="match_parent"
                      app:cardElevation="4dp"
                      app:cardBackgroundColor="@color/bkCard"
-                     app:cardCornerRadius="24dp"
+                     app:cardCornerRadius="0dp"
                      android:id="@+id/cardNoBackup">
 
                     <LinearLayout
@@ -410,7 +410,7 @@
                  android:layout_marginHorizontal="20dp"
                  app:cardElevation="4dp"
                  app:cardBackgroundColor="@color/bkCard"
-                 app:cardCornerRadius="24dp"
+                 app:cardCornerRadius="0dp"
                  android:id="@+id/cardQuickActions">
 
                 <LinearLayout
@@ -616,7 +616,7 @@
                  android:layout_marginHorizontal="20dp"
                  app:cardElevation="4dp"
                  app:cardBackgroundColor="@color/bkCard"
-                 app:cardCornerRadius="24dp"
+                 app:cardCornerRadius="0dp"
                  android:id="@+id/cardAutoBackup">
 
                 <LinearLayout
@@ -702,7 +702,7 @@
                  android:layout_marginHorizontal="20dp"
                  app:cardElevation="4dp"
                  app:cardBackgroundColor="@color/bkCard"
-                 app:cardCornerRadius="24dp"
+                 app:cardCornerRadius="0dp"
                  android:id="@+id/cardBackupMethods">
 
                 <LinearLayout
@@ -728,7 +728,7 @@
                          app:cardElevation="0dp"
                          app:cardUseCompatPadding="false"
                          app:cardBackgroundColor="@android:color/transparent"
-                         app:cardCornerRadius="16dp"
+                         app:cardCornerRadius="0dp"
                          android:id="@+id/cardTelegramMethod"
                          app:cardPreventCornerOverlap="false">
 
@@ -808,7 +808,7 @@
                          app:cardElevation="0dp"
                          app:cardUseCompatPadding="false"
                          app:cardBackgroundColor="@android:color/transparent"
-                         app:cardCornerRadius="16dp"
+                         app:cardCornerRadius="0dp"
                          android:id="@+id/cardGDriveMethod"
                          app:cardPreventCornerOverlap="false">
 
@@ -887,7 +887,7 @@
                          app:cardElevation="0dp"
                          app:cardUseCompatPadding="false"
                          app:cardBackgroundColor="@android:color/transparent"
-                         app:cardCornerRadius="16dp"
+                         app:cardCornerRadius="0dp"
                          android:id="@+id/cardLocalMethod"
                          app:cardPreventCornerOverlap="false">
 
@@ -972,7 +972,7 @@
                  android:layout_marginHorizontal="20dp"
                  app:cardElevation="4dp"
                  app:cardBackgroundColor="@color/bkCard"
-                 app:cardCornerRadius="24dp"
+                 app:cardCornerRadius="0dp"
                  android:id="@+id/cardSummary">
 
                 <LinearLayout

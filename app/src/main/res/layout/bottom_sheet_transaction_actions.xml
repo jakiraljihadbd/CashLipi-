@@ -104,6 +104,14 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/actionResetPartial"
+        style="@style/SheetActionRow"
+        android:visibility="gone">
+        <ImageView style="@style/SheetActionIcon" android:src="@drawable/emoji_arrows_clockwise" android:scaleType="centerInside"/>
+        <TextView style="@style/SheetActionLabel" android:text="পরিশোধ বাতিল করুন (বাকি ৳০ করুন)"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/actionDelete"
         style="@style/SheetActionRow">
         <ImageView style="@style/SheetActionIcon" android:src="@drawable/emoji_trash" android:scaleType="centerInside"/>

@@ -61,7 +61,11 @@ public class IncomeExpenseFragment extends Fragment {
     private List<Transaction> allList = new ArrayList<>();
     private List<Transaction> filteredList = new ArrayList<>();
     private String currentFilter = "all";
+    private String currentMethodFilter = "all"; // "all" | "cash" | "bkash" | "nagad" | "rocket" | "bank" | "other"
     private String currentType = "income"; // "income" | "expense"
+    /** হোম পেজের আয়/ব্যয় কার্ডে ট্যাপ করলে এখানে "income"/"expense" সেট হয় — পরের onResume-এ
+     *  সেই ট্যাব সরাসরি সিলেক্ট হয়ে যায় (একবার ব্যবহারের পর null করে দেওয়া হয়)। */
+    public static String pendingTransactionType = null;
     private String viewMode = "card"; // "card" | "table"
     private View rootView;
     private SoundEffectPlayer soundEffectPlayer;
@@ -138,6 +142,14 @@ public class IncomeExpenseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (pendingTransactionType != null) {
+            String type = pendingTransactionType;
+            pendingTransactionType = null;
+            if (!type.equals(currentType)) {
+                currentType = type;
+                refreshTypeUI();
+            }
+        }
         loadData();
     }
 
@@ -234,13 +246,59 @@ public class IncomeExpenseFragment extends Fragment {
         tvMonthAmount.setText(DatabaseManager.formatAmount(monthTotal));
     }
 
+    /** সব / মাস / বছর ফিল্টার বাদ দেওয়া হয়েছিল — এই চিপ রো-টা এখন পেমেন্ট মাধ্যম (নগদ/বিকাশ/রকেট
+     *  ইত্যাদি) দিয়ে ফিল্টার করার জন্য পুনরায় ব্যবহার করা হচ্ছে। */
     private void setupFilterChips(View root) {
-        // সব / মাস / বছর ফিল্টার বাদ দেওয়া হয়েছে — চিপ রো সম্পূর্ণ লুকানো থাকবে
         View chipRowScroll = root.findViewById(R.id.chipRowScroll);
-        if (chipRowScroll != null) chipRowScroll.setVisibility(View.GONE);
+        if (chipRowScroll != null) chipRowScroll.setVisibility(View.VISIBLE);
         chipRowLayout = root.findViewById(R.id.chipRow);
-        if (chipRowLayout != null) chipRowLayout.removeAllViews();
-        currentFilter = "all";
+        if (chipRowLayout == null) return;
+        chipRowLayout.removeAllViews();
+
+        String[] keys = {"all", "cash", "bkash", "nagad", "rocket", "bank", "other"};
+        for (String key : keys) {
+            boolean selected = key.equals(currentMethodFilter);
+
+            LinearLayout chip = new LinearLayout(requireContext());
+            chip.setOrientation(LinearLayout.HORIZONTAL);
+            chip.setGravity(android.view.Gravity.CENTER);
+            chip.setPadding(24, 16, 24, 16);
+            chip.setClickable(true);
+            chip.setFocusable(true);
+            chip.setBackground(ContextCompat.getDrawable(requireContext(),
+                    selected ? R.drawable.bg_chip_selected : R.drawable.bg_chip_unselected));
+
+            if (!"all".equals(key)) {
+                ImageView icon = new ImageView(requireContext());
+                icon.setImageResource(com.jrappspot.cashlipi.utils.PaymentMethodUtil.getIconRes(key));
+                LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(24, 24);
+                iconLp.setMarginEnd(6);
+                icon.setLayoutParams(iconLp);
+                chip.addView(icon);
+            }
+
+            TextView label = new TextView(requireContext());
+            label.setText("all".equals(key) ? "সব" : com.jrappspot.cashlipi.utils.PaymentMethodUtil.getLabel(key));
+            label.setTextSize(12.5f);
+            label.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+            label.setTextColor(selected
+                    ? ContextCompat.getColor(requireContext(), R.color.white)
+                    : ContextCompat.getColor(requireContext(), R.color.chipUnselectedText));
+            chip.addView(label);
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMarginEnd(8);
+            chip.setLayoutParams(lp);
+
+            chip.setOnClickListener(v -> {
+                currentMethodFilter = key;
+                setupFilterChips(root);
+                applyFilter();
+            });
+
+            chipRowLayout.addView(chip);
+        }
     }
 
     private void applyFilter() {
@@ -249,6 +307,7 @@ public class IncomeExpenseFragment extends Fragment {
         for (Transaction t : allList) {
             if (!q.isEmpty() && !t.getDisplayTitle().toLowerCase().contains(q) && !t.getNote().toLowerCase().contains(q)) continue;
             if (!DateFilterUtil.matches(t.getDate(), currentFilter)) continue;
+            if (!matchesMethodFilter(t)) continue;
             filteredList.add(t);
         }
 
@@ -267,10 +326,17 @@ public class IncomeExpenseFragment extends Fragment {
             List<Transaction> searchOnly = new ArrayList<>();
             for (Transaction t : allList) {
                 if (!qOnly.isEmpty() && !t.getDisplayTitle().toLowerCase().contains(qOnly) && !t.getNote().toLowerCase().contains(qOnly)) continue;
+                if (!matchesMethodFilter(t)) continue;
                 searchOnly.add(t);
             }
             renderMonthlyTable(searchOnly);
         }
+    }
+
+    private boolean matchesMethodFilter(Transaction t) {
+        if ("all".equals(currentMethodFilter)) return true;
+        String m = t.getMethod().isEmpty() ? "cash" : t.getMethod();
+        return currentMethodFilter.equals(m);
     }
 
     private void renderCardList() {

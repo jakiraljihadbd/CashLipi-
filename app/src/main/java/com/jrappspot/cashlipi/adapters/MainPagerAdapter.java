@@ -43,9 +43,11 @@ public class MainPagerAdapter extends FragmentStateAdapter {
             case POSITION_SAVINGS:
                 return new SavingsFragment();
             case POSITION_BAKIR_KHATA:
-                return new BakirKhataFragment();
-            case POSITION_BUDGET:
+                // এই স্লট বটম-নেভে "যোগ" গ্যাপের নিচে ঢাকা পড়ে (updateGapMode) — তাই এখন খালি
                 return new EmptyFragment();
+            case POSITION_BUDGET:
+                // বাজেট-এর দৃশ্যমান নেভ স্লটে এখন বাকির খাতা পেজ বসে (ইউজারের অনুরোধে রিপ্লেসড)
+                return new BakirKhataFragment();
             case POSITION_SETTINGS:
                 return new SettingsFragment();
             case POSITION_HOME:

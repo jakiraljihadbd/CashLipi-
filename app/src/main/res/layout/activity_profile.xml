@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-26dp"
                 android:layout_marginBottom="12dp"
-                app:cardCornerRadius="22dp" app:cardElevation="2dp"
+                app:cardCornerRadius="0dp" app:cardElevation="2dp"
                 app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
                 app:cardBackgroundColor="@color/cardBg">
 
@@ -147,7 +147,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                app:cardCornerRadius="18dp" app:cardElevation="1dp"
+                app:cardCornerRadius="0dp" app:cardElevation="1dp"
                 app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
                 app:cardBackgroundColor="@color/cardBg">
 
@@ -364,7 +364,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                app:cardCornerRadius="18dp" app:cardElevation="1dp"
+                app:cardCornerRadius="0dp" app:cardElevation="1dp"
                 app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
                 app:cardBackgroundColor="@color/cardBg">
 
@@ -486,7 +486,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                app:cardCornerRadius="18dp" app:cardElevation="1dp"
+                app:cardCornerRadius="0dp" app:cardElevation="1dp"
                 app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
                 app:cardBackgroundColor="@color/cardBg">
 
@@ -608,7 +608,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:layout_marginBottom="12dp"
-                app:cardCornerRadius="18dp" app:cardElevation="1dp"
+                app:cardCornerRadius="0dp" app:cardElevation="1dp"
                 app:strokeWidth="1dp" app:strokeColor="@color/borderColor"
                 app:cardBackgroundColor="@color/cardBg">
 

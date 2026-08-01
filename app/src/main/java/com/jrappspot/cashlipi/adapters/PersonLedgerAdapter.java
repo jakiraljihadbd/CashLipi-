@@ -156,6 +156,9 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             // পাওনা পরিশোধ হলে "পেলাম" (টাকা পাওয়া হয়েছে), দেনা পরিশোধ হলে "দিলাম" (টাকা দেওয়া হয়েছে) —
             // উপরের tvRowType-এর দেনা/পাওনা লেবেল অপরিবর্তিত থাকে, শুধু এই স্ট্যাটাস ব্যাজ পাল্টায়
             h.tvRowPaidBadge.setText(isDena ? " দিলাম" : " পেলাম");
+            h.tvRowPaidBadge.setBackgroundResource(R.drawable.bg_paid_badge);
+            h.tvRowPaidBadge.setTextColor(ContextCompat.getColor(ctx, R.color.amountIncome));
+            h.tvRowPartialInfo.setVisibility(View.GONE);
             h.tvRowAmount.setPaintFlags(h.tvRowAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             h.tvRowBalanceChip.setVisibility(View.GONE);
 
@@ -165,8 +168,46 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             h.tvRowType.setTextColor(mutedColor);
             h.tvRowAmount.setTextColor(mutedColor);
             h.ivRowIcon.setAlpha(0.5f);
+        } else if (e.isPartiallyPaid()) {
+            // আংশিক পরিশোধ — এখনো পুরোপুরি বাকি (unpaid) হিসেবে গণ্য, তবে আলাদা "আংশিক" ব্যাজ ও
+            // পরিশোধিত/বাকি ভাঙন দেখায় — যাতে এক নজরেই বোঝা যায় কতটুকু বাকি আছে
+            h.tvRowPaidBadge.setVisibility(View.VISIBLE);
+            h.tvRowPaidBadge.setText(" আংশিক পরিশোধ");
+            h.tvRowPaidBadge.setBackgroundResource(R.drawable.bg_partial_badge);
+            h.tvRowPaidBadge.setTextColor(ContextCompat.getColor(ctx, R.color.denaColor));
+
+            h.tvRowPartialInfo.setVisibility(View.VISIBLE);
+            h.tvRowPartialInfo.setText("পরিশোধিত ৳" + DatabaseManager.formatAmount(e.getPaidAmount())
+                    + "  •  বাকি ৳" + DatabaseManager.formatAmount(e.getRemainingAmount()));
+
+            h.tvRowAmount.setPaintFlags(h.tvRowAmount.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            h.tvRowType.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.denaColor : R.color.pabonaColor));
+            h.tvRowAmount.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.denaColor : R.color.pabonaColor));
+            h.ivRowIcon.setAlpha(1f);
+            h.tvRowBalanceChip.setVisibility(View.VISIBLE);
+
+            double bal = row.balanceAfter;
+            int chipColor, chipBg;
+            String chipText;
+            if (bal > 0.5) {
+                chipText = "পাবেন " + DatabaseManager.formatAmount(bal);
+                chipColor = ContextCompat.getColor(ctx, R.color.pabonaColor);
+                chipBg = ContextCompat.getColor(ctx, R.color.pabonaLight);
+            } else if (bal < -0.5) {
+                chipText = "দেবেন " + DatabaseManager.formatAmount(Math.abs(bal));
+                chipColor = ContextCompat.getColor(ctx, R.color.denaColor);
+                chipBg = ContextCompat.getColor(ctx, R.color.denaLight);
+            } else {
+                chipText = "হিসাব সমান";
+                chipColor = ContextCompat.getColor(ctx, R.color.textSecondary);
+                chipBg = ContextCompat.getColor(ctx, R.color.dividerColor);
+            }
+            h.tvRowBalanceChip.setText(chipText);
+            h.tvRowBalanceChip.setTextColor(chipColor);
+            DrawableCompat.setTint(DrawableCompat.wrap(h.tvRowBalanceChip.getBackground().mutate()), chipBg);
         } else {
             h.tvRowPaidBadge.setVisibility(View.GONE);
+            h.tvRowPartialInfo.setVisibility(View.GONE);
             h.tvRowAmount.setPaintFlags(h.tvRowAmount.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             h.tvRowBalanceChip.setVisibility(View.VISIBLE);
             h.ivRowIcon.setAlpha(1f);
@@ -214,13 +255,14 @@ public class PersonLedgerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     static class RowVH extends RecyclerView.ViewHolder {
         ImageView ivRowIcon;
-        TextView tvRowType, tvRowPaidBadge, tvRowNote, tvRowDate, tvRowAmount, tvRowBalanceChip;
+        TextView tvRowType, tvRowPaidBadge, tvRowNote, tvRowPartialInfo, tvRowDate, tvRowAmount, tvRowBalanceChip;
         RowVH(@NonNull View v) {
             super(v);
             ivRowIcon        = v.findViewById(R.id.ivRowIcon);
             tvRowType        = v.findViewById(R.id.tvRowType);
             tvRowPaidBadge   = v.findViewById(R.id.tvRowPaidBadge);
             tvRowNote        = v.findViewById(R.id.tvRowNote);
+            tvRowPartialInfo = v.findViewById(R.id.tvRowPartialInfo);
             tvRowDate        = v.findViewById(R.id.tvRowDate);
             tvRowAmount      = v.findViewById(R.id.tvRowAmount);
             tvRowBalanceChip = v.findViewById(R.id.tvRowBalanceChip);

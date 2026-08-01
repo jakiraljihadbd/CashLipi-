@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- স্থায়ী ক্যাটাগরি পেজের হেডার — অ্যাপের স্ট্যান্ডার্ড পিংক (bkashPink), সমান্তরাল/সোজা,
+     কোনো বাঁক বা গোল কোণ নেই, চিকন উচ্চতা। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/bkashPink"/>
+</shape>

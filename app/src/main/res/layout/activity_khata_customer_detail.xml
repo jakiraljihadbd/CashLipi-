@@ -171,7 +171,7 @@
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="8dp"
-        app:cardCornerRadius="8dp"
+        app:cardCornerRadius="0dp"
         app:cardElevation="5dp"
         app:cardPreventCornerOverlap="false"
         android:visibility="gone">

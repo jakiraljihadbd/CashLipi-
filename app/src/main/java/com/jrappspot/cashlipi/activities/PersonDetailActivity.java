@@ -242,16 +242,19 @@ public class PersonDetailActivity extends AppCompatActivity {
         double running = 0, totalGot = 0, totalGave = 0, totalReceived = 0, totalGiven = 0;
         int unpaidCount = 0;
         for (LedgerEntry e : chrono) {
+            double remaining = e.getRemainingAmount();
             if (!e.isPaid()) {
-                running += e.isPabona() ? e.getAmount() : -e.getAmount();
+                // আংশিক পরিশোধ হলে শুধু বাকি অংশটুকুই চলমান হিসাবে (রানিং ব্যালেন্স) যোগ হবে —
+                // যা পরিশোধ হয়ে গেছে তা আর বাকি হিসেবে গণনা হবে না
+                running += e.isPabona() ? remaining : -remaining;
                 unpaidCount++;
             }
             if (e.isPabona()) {
                 totalGot += e.getAmount();
-                if (e.isPaid()) totalReceived += e.getAmount(); // পাওনা থেকে পেলাম
+                totalReceived += e.getPaidAmount(); // পাওনা থেকে যা পেলাম — সম্পূর্ণ বা আংশিক যা-ই হোক
             } else {
                 totalGave += e.getAmount();
-                if (e.isPaid()) totalGiven += e.getAmount(); // দেনা থেকে দিলাম
+                totalGiven += e.getPaidAmount(); // দেনা থেকে যা দিলাম — সম্পূর্ণ বা আংশিক যা-ই হোক
             }
             allRows.add(new PersonLedgerAdapter.Row(e, running));
         }
@@ -279,11 +282,16 @@ public class PersonDetailActivity extends AppCompatActivity {
                 tvHeroLabel.setText("নিট হিসাব");
                 tvHeroAmount.setText("সব পরিশোধিত ✓");
             }
-            tvHeroSub.setText("মোট " + allRawEntries.size() + " টি লেনদেন  •  " + unpaidCount + " টি বাকি\n"
-                    + "মোট পাওনা " + DatabaseManager.formatAmount(totalGot)
+            String firstLine = "মোট " + allRawEntries.size() + " টি লেনদেন  •  " + unpaidCount + " টি বাকি";
+            String restLines = "মোট পাওনা " + DatabaseManager.formatAmount(totalGot)
                     + "  •  মোট দেনা " + DatabaseManager.formatAmount(totalGave) + "\n"
                     + "মোট পেলাম " + DatabaseManager.formatAmount(totalReceived)
-                    + "  •  মোট দিলাম " + DatabaseManager.formatAmount(totalGiven));
+                    + "  •  মোট দিলাম " + DatabaseManager.formatAmount(totalGiven);
+            String fullSub = firstLine + "\n" + restLines;
+            android.text.SpannableString spannableSub = new android.text.SpannableString(fullSub);
+            spannableSub.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+                    0, firstLine.length(), android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tvHeroSub.setText(spannableSub);
         }
 
         applyFiltersAndRender();
@@ -381,6 +389,7 @@ public class PersonDetailActivity extends AppCompatActivity {
             View rowView = LayoutInflater.from(this).inflate(R.layout.item_person_ledger_table_row, tableRowsContainer, false);
             TextView tvTitle = rowView.findViewById(R.id.tvTRowTitle);
             TextView tvDateTime = rowView.findViewById(R.id.tvTRowDateTime);
+            TextView tvPartialInfo = rowView.findViewById(R.id.tvTRowPartialInfo);
             TextView tvChip = rowView.findViewById(R.id.tvTRowChip);
             TextView tvDena = rowView.findViewById(R.id.tvTRowDena);
             TextView tvPabona = rowView.findViewById(R.id.tvTRowPabona);
@@ -401,6 +410,7 @@ public class PersonDetailActivity extends AppCompatActivity {
                 tvTitle.setTextColor(mutedColor);
                 tvDena.setTextColor(mutedColor);
                 tvPabona.setTextColor(mutedColor);
+                tvPartialInfo.setVisibility(View.GONE);
 
                 tvChip.setVisibility(View.VISIBLE);
                 // পাওনা পরিশোধ হলে "পেলাম", দেনা পরিশোধ হলে "দিলাম" — বাম পাশের দেনা/পাওনা রঙিন
@@ -409,11 +419,28 @@ public class PersonDetailActivity extends AppCompatActivity {
                 tvChip.setTextColor(ContextCompat.getColor(this, R.color.amountIncome));
                 DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()),
                         ContextCompat.getColor(this, R.color.paidBadgeBg));
+            } else if (e.isPartiallyPaid()) {
+                // আংশিক পরিশোধ — বাকি (অপরিশোধিত) এন্ট্রির মতোই রঙিন/উজ্জ্বল থাকবে, শুধু নিচে
+                // পরিশোধিত/বাকি ভাঙন এবং ডান পাশে "আংশিক" চিপ দেখাবে
+                colorBar.setBackgroundColor(ContextCompat.getColor(this, isDena ? R.color.denaColor : R.color.pabonaColor));
+                tvTitle.setTextColor(ContextCompat.getColor(this, R.color.textPrimary));
+                tvDena.setTextColor(ContextCompat.getColor(this, R.color.denaColor));
+                tvPabona.setTextColor(ContextCompat.getColor(this, R.color.pabonaColor));
+
+                tvPartialInfo.setVisibility(View.VISIBLE);
+                tvPartialInfo.setText("পরিশোধিত ৳" + DatabaseManager.formatAmount(e.getPaidAmount())
+                        + " • বাকি ৳" + DatabaseManager.formatAmount(e.getRemainingAmount()));
+
+                tvChip.setVisibility(View.VISIBLE);
+                tvChip.setText("আংশিক");
+                tvChip.setTextColor(ContextCompat.getColor(this, R.color.denaColor));
+                DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()), ContextCompat.getColor(this, R.color.denaLight));
             } else {
                 colorBar.setBackgroundColor(ContextCompat.getColor(this, isDena ? R.color.denaColor : R.color.pabonaColor));
                 tvTitle.setTextColor(ContextCompat.getColor(this, R.color.textPrimary));
                 tvDena.setTextColor(ContextCompat.getColor(this, R.color.denaColor));
                 tvPabona.setTextColor(ContextCompat.getColor(this, R.color.pabonaColor));
+                tvPartialInfo.setVisibility(View.GONE);
 
                 double bal = row.balanceAfter;
                 tvChip.setVisibility(View.VISIBLE);
@@ -495,11 +522,28 @@ public class PersonDetailActivity extends AppCompatActivity {
         TextView tvDate = v.findViewById(R.id.tvSheetDate);
         TextView tvTime = v.findViewById(R.id.tvSheetTime);
         Button btnSave = v.findViewById(R.id.btnSheetSave);
+        View btnCloseSheet = v.findViewById(R.id.btnCloseSheet);
+        View sheetIconBadge = v.findViewById(R.id.sheetIconBadge);
+        android.widget.ImageView ivSheetTypeIcon = v.findViewById(R.id.ivSheetTypeIcon);
+        View sheetAmountBox = v.findViewById(R.id.sheetAmountBox);
+        TextView tvSheetTakaSign = v.findViewById(R.id.tvSheetTakaSign);
+        View rowSheetDate = v.findViewById(R.id.rowSheetDate);
+        View rowSheetTime = v.findViewById(R.id.rowSheetTime);
+
+        btnCloseSheet.setOnClickListener(x -> dialog.dismiss());
 
         tvTitle.setText(isDena ? " দেনা যোগ করুন" : " পাওনা যোগ করুন");
         tvPersonChip.setText(person.getName());
         btnSave.setBackgroundResource(isDena ? R.drawable.bg_type_active_dena : R.drawable.bg_type_active_pabona);
         btnSave.setText(isDena ? " দেনা সংরক্ষণ করুন" : " পাওনা সংরক্ষণ করুন");
+
+        // টাইপ অনুযায়ী (দেনা=কমলা / পাওনা=নীল) আইকন ব্যাজ + এমাউন্ট বক্সের রঙ পাল্টে দেয়
+        sheetIconBadge.setBackgroundResource(isDena ? R.drawable.bg_sheet_icon_badge_dena : R.drawable.bg_sheet_icon_badge_pabona);
+        ivSheetTypeIcon.setImageResource(isDena ? R.drawable.ic_minus_plain : R.drawable.ic_plus);
+        sheetAmountBox.setBackgroundResource(isDena ? R.drawable.bg_sheet_amount_box_dena : R.drawable.bg_sheet_amount_box_pabona);
+        int amountAccent = ContextCompat.getColor(this, isDena ? R.color.denaColor : R.color.pabonaColor);
+        tvSheetTakaSign.setTextColor(amountAccent);
+        etAmount.setTextColor(amountAccent);
 
         AmountInputHelper.attach(this, etAmount);
 
@@ -508,14 +552,14 @@ public class PersonDetailActivity extends AppCompatActivity {
         tvDate.setText(DatabaseManager.formatDateDisplay(sheetDate));
         tvTime.setText(DatabaseManager.formatTimeDisplay(sheetTime));
 
-        tvDate.setOnClickListener(x -> {
+        rowSheetDate.setOnClickListener(x -> {
             Calendar c = Calendar.getInstance();
             new DatePickerDialog(this, (view, y, m, d) -> {
                 sheetDate = String.format("%04d-%02d-%02d", y, m + 1, d);
                 tvDate.setText(DatabaseManager.formatDateDisplay(sheetDate));
             }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
         });
-        tvTime.setOnClickListener(x -> {
+        rowSheetTime.setOnClickListener(x -> {
             Calendar c = Calendar.getInstance();
             new TimePickerDialog(this, (view, h, min) -> {
                 sheetTime = String.format("%02d:%02d", h, min);

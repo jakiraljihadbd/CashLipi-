@@ -6,5 +6,5 @@
         android:startColor="@color/incomeCardGradStart"
         android:centerColor="@color/incomeCardGradMid"
         android:endColor="@color/incomeCardGradEnd"/>
-    <corners android:radius="16dp"/>
+    <corners android:radius="0dp"/>
 </shape>

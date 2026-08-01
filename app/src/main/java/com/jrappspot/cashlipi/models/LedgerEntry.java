@@ -2,6 +2,9 @@ package com.jrappspot.cashlipi.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LedgerEntry {
 
     @SerializedName("id")
@@ -31,6 +34,10 @@ public class LedgerEntry {
     @SerializedName("paid")
     private boolean paid;
 
+    // এ পর্যন্ত মোট কত টাকা পরিশোধ হয়েছে (আংশিক বা সম্পূর্ণ) — সম্পূর্ণ পরিশোধ হলে amount-এর সমান হয়ে যায়
+    @SerializedName("paidAmount")
+    private double paidAmount;
+
     @SerializedName("paidDate")
     private String paidDate;
 
@@ -38,7 +45,12 @@ public class LedgerEntry {
     private String settleTo;    // পরিশোধ করার সময় কোথায় হিসাব হবে: "balance" | "savings" | "incomeExpense" | "none"
 
     @SerializedName("settleTxnId")
-    private String settleTxnId; // "incomeExpense"-এ পরিশোধ হলে তৈরি হওয়া আসল আয়/ব্যয় Transaction-এর id
+    private String settleTxnId; // পুরনো ডেটার সাথে সামঞ্জস্যের জন্য রাখা (একক আয়/ব্যয় id)
+
+    // একাধিক আংশিক পরিশোধ "আয়/ব্যয়" হিসেবে করলে, প্রতিটার তৈরি হওয়া transaction id এখানে জমা হয় —
+    // পরিশোধ বাতিল করলে (resetLedgerPayment) সবগুলো এক সাথে মুছে দেওয়া যায়
+    @SerializedName("settleTxnIds")
+    private List<String> settleTxnIds;
 
     @SerializedName("favorite")
     private boolean favorite;
@@ -58,6 +70,7 @@ public class LedgerEntry {
         this.date = date;
         this.time = time;
         this.paid = false;
+        this.paidAmount = 0;
     }
 
     public boolean isDena() { return "dena".equals(type); }
@@ -65,6 +78,17 @@ public class LedgerEntry {
 
     public String getTypeDisplay() {
         return isDena() ? " দেনা" : " পাওনা";
+    }
+
+    /** এই এন্ট্রির কিছু টাকা পরিশোধ হয়েছে কিন্তু পুরোটা এখনো বাকি — কার্ড/ছক ভিউতে "আংশিক" ব্যাজ দেখাতে ব্যবহৃত। */
+    public boolean isPartiallyPaid() {
+        return !paid && paidAmount > 0.009;
+    }
+
+    /** এখনো কত টাকা বাকি আছে (কখনো ঋণাত্মক হবে না)। */
+    public double getRemainingAmount() {
+        double rem = amount - paidAmount;
+        return rem < 0 ? 0 : rem;
     }
 
     // Getters
@@ -77,9 +101,14 @@ public class LedgerEntry {
     public String getTime() { return time != null ? time : ""; }
     public String getNote() { return note != null ? note : ""; }
     public boolean isPaid() { return paid; }
+    public double getPaidAmount() { return paidAmount; }
     public String getPaidDate() { return paidDate != null ? paidDate : ""; }
     public String getSettleTo() { return settleTo != null && !settleTo.isEmpty() ? settleTo : "balance"; }
     public String getSettleTxnId() { return settleTxnId != null ? settleTxnId : ""; }
+    public List<String> getSettleTxnIds() {
+        if (settleTxnIds == null) settleTxnIds = new ArrayList<>();
+        return settleTxnIds;
+    }
     public boolean isFavorite() { return favorite; }
     public String getCreatedAt() { return createdAt != null ? createdAt : ""; }
     public String getUpdatedAt() { return updatedAt != null ? updatedAt : ""; }
@@ -94,9 +123,15 @@ public class LedgerEntry {
     public void setTime(String time) { this.time = time; }
     public void setNote(String note) { this.note = note; }
     public void setPaid(boolean paid) { this.paid = paid; }
+    public void setPaidAmount(double paidAmount) { this.paidAmount = paidAmount; }
     public void setPaidDate(String paidDate) { this.paidDate = paidDate; }
     public void setSettleTo(String settleTo) { this.settleTo = settleTo; }
     public void setSettleTxnId(String settleTxnId) { this.settleTxnId = settleTxnId; }
+    public void setSettleTxnIds(List<String> settleTxnIds) { this.settleTxnIds = settleTxnIds; }
+    public void addSettleTxnId(String txnId) {
+        if (txnId == null || txnId.isEmpty()) return;
+        getSettleTxnIds().add(txnId);
+    }
     public void setFavorite(boolean favorite) { this.favorite = favorite; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }

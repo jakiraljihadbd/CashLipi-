@@ -5,5 +5,5 @@
         android:angle="135"
         android:startColor="@color/colorPrimaryAlpha20"
         android:endColor="@color/cardWhite"/>
-    <corners android:radius="22dp"/>
+    <corners android:radius="0dp"/>
 </shape>

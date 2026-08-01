@@ -315,7 +315,6 @@
     <string name="payment_method_rocket">रॉकेट</string>
     <string name="payment_method_bank">बैंक</string>
     <string name="payment_method_other">अन्य</string>
-    <string name="filter_all">सभी</string>
 
     <!-- आय-व्यय पेज -->
     <string name="sort_newest_first">नया पहले</string>

@@ -315,7 +315,6 @@
     <string name="payment_method_rocket">روكيت</string>
     <string name="payment_method_bank">بنك</string>
     <string name="payment_method_other">أخرى</string>
-    <string name="filter_all">الكل</string>
 
     <!-- صفحة الدخل والمصروفات -->
     <string name="sort_newest_first">الأحدث أولاً</string>

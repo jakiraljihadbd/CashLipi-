@@ -385,7 +385,6 @@ Chat ID: @userinfobot → /start</string>
     <string name="payment_method_rocket">রকেট</string>
     <string name="payment_method_bank">ব্যাংক</string>
     <string name="payment_method_other">অন্যান্য</string>
-    <string name="filter_all">সব</string>
 
     <!-- আয়-ব্যয় পেজ -->
     <string name="sort_newest_first">নতুন আগে</string>
@@ -444,8 +443,6 @@ Chat ID: @userinfobot → /start</string>
     <string name="status_paid_pabona">পেলাম</string>
     <string name="status_partial_paid">আংশিক পরিশোধ (বাকি ৳%1$s)</string>
     <string name="status_due">বাকি</string>
-    <string name="ledger_type_dena">দেনা</string>
-    <string name="ledger_type_pabona">পাওনা</string>
     <string name="ts_mark_unpaid">↩️ অপরিশোধিত করুন</string>
     <string name="ts_pay_more_prefix">✅ আরও পরিশোধ করুন  •  বাকি ৳%1$s</string>
     <string name="ts_mark_paid_dena">✅ দিলাম</string>

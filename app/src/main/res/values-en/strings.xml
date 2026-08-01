@@ -340,7 +340,6 @@
     <string name="payment_method_rocket">Rocket</string>
     <string name="payment_method_bank">Bank</string>
     <string name="payment_method_other">Others</string>
-    <string name="filter_all">All</string>
 
     <!-- Income-Expense page -->
     <string name="sort_newest_first">Newest first</string>

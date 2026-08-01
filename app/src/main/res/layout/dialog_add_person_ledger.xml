@@ -155,18 +155,24 @@
             android:orientation="horizontal"
             android:layout_marginBottom="18dp">
 
+            <Button android:id="@+id/btnSheetQ5" style="@style/QuickAmountPill"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="+৫" android:layout_marginEnd="4dp"/>
+            <Button android:id="@+id/btnSheetQ10" style="@style/QuickAmountPill"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="+১০" android:layout_marginEnd="4dp"/>
+            <Button android:id="@+id/btnSheetQ20" style="@style/QuickAmountPill"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="+২০" android:layout_marginEnd="4dp"/>
+            <Button android:id="@+id/btnSheetQ30" style="@style/QuickAmountPill"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="+৩০" android:layout_marginEnd="4dp"/>
+            <Button android:id="@+id/btnSheetQ50" style="@style/QuickAmountPill"
+                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
+                android:layout_weight="1" android:text="+৫০" android:layout_marginEnd="4dp"/>
             <Button android:id="@+id/btnSheetQ100" style="@style/QuickAmountPill"
                 android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
-                android:layout_weight="1" android:text="+১০০" android:layout_marginEnd="6dp"/>
-            <Button android:id="@+id/btnSheetQ500" style="@style/QuickAmountPill"
-                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
-                android:layout_weight="1" android:text="+৫০০" android:layout_marginEnd="6dp"/>
-            <Button android:id="@+id/btnSheetQ1000" style="@style/QuickAmountPill"
-                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
-                android:layout_weight="1" android:text="+১,০০০" android:layout_marginEnd="6dp"/>
-            <Button android:id="@+id/btnSheetQ5000" style="@style/QuickAmountPill"
-                android:layout_width="0dp" android:layout_height="@dimen/quick_btn_height"
-                android:layout_weight="1" android:text="+৫,০০০"/>
+                android:layout_weight="1" android:text="+১০০"/>
         </LinearLayout>
 
         <!-- Date & Time — আইকনসহ কার্ড -->
@@ -246,7 +252,7 @@
 
         <Button
             android:id="@+id/btnSheetSave"
-            style="@style/SubmitButton.Ledger"
+            style="@style/SubmitButton"
             android:layout_width="match_parent"
             android:layout_height="58dp"
             android:textSize="16sp"

@@ -5,7 +5,7 @@
     android:orientation="vertical" android:background="@color/appBg">
 
     <LinearLayout android:id="@+id/listHeader" android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:background="@drawable/bg_header_ledger"
+        android:layout_height="wrap_content" android:background="@drawable/bg_header_khata"
         android:orientation="vertical" android:paddingTop="14dp"
         android:paddingBottom="20dp" android:paddingHorizontal="18dp"
         android:elevation="6dp">

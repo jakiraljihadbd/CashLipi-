@@ -57,7 +57,7 @@ public class KhataEntryListAdapter extends RecyclerView.Adapter<KhataEntryListAd
         h.tvTypeBadge.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, isDena ? R.color.amountDebt : R.color.amountReceivable));
         h.tvIcon.setImageResource(isDena ? R.drawable.emoji_book_red : R.drawable.emoji_book_green);
         h.tvIcon.setBackground(ctx.getResources().getDrawable(
-                isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable));
+                isDena ? R.drawable.bg_icon_circle_khata : R.drawable.bg_icon_circle_khata_joma));
 
         // Amount color
         h.tvAmount.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, isDena ? R.color.amountDebt : R.color.amountReceivable));
@@ -74,7 +74,7 @@ public class KhataEntryListAdapter extends RecyclerView.Adapter<KhataEntryListAd
             h.tvPaidBadge.setVisibility(View.VISIBLE);
             h.tvPaidBadge.setText(" বাকি");
             h.tvPaidBadge.setBackground(ctx.getResources().getDrawable(R.drawable.bg_unpaid_badge));
-            h.tvPaidBadge.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.debtGradStart));
+            h.tvPaidBadge.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.bakiColor));
             h.tvAmount.setPaintFlags(h.tvAmount.getPaintFlags()
                     & ~android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
         }

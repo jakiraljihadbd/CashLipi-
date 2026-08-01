@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- বাকির খাতার "যোগ" পেজে বাকি টগল বাটনের নিষ্ক্রিয় অবস্থা — হালকা লাল ব্যাকগ্রাউন্ড ও বর্ডার। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/bakiLight"/>
+    <corners android:radius="12dp"/>
+    <stroke android:width="1.5dp" android:color="@color/bakiColor"/>
+</shape>

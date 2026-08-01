@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="cardBackground">#FFFFFF</color>
     <color name="colorPrimary">#4F46E5</color>
     <color name="colorPrimaryDark">#3730A3</color>
     <!-- বিকাশ ব্র্যান্ড পিংক — অ্যাপের একদম উপরের স্ট্যাটাস বার এখন এই রঙে -->
@@ -101,6 +100,9 @@
     <!-- Background -->
     <color name="bgColor">#EDF1F7</color>
     <color name="cardBg">#FAFBFF</color>
+    <color name="cardBackground">#FFFFFF</color>
+    <!-- আসল ছকের/স্প্রেডশিটের মতো স্পষ্ট দাগের জন্য — dividerColor থেকে বেশি কনট্রাস্ট -->
+    <color name="ledgerGridLine">#C6D0E0</color>
     <color name="surfaceColor">#FFFFFF</color>
 
     <!-- Text -->
@@ -120,8 +122,6 @@
     <!-- Border -->
     <color name="borderColor">#D1D9E6</color>
     <color name="dividerColor">#F3F4F6</color>
-    <!-- আসল ছকের/স্প্রেডশিটের মতো স্পষ্ট দাগের জন্য — dividerColor থেকে বেশি কনট্রাস্ট -->
-    <color name="ledgerGridLine">#C6D0E0</color>
 
     <!-- Bottom Nav -->
     <color name="bottomNavBg">#FFFFFF</color>
@@ -156,10 +156,30 @@
     <color name="navSwatchPink">#DB2777</color>
     <color name="navSwatchCharcoal">#1F2937</color>
 
-    <!-- Splash -->
-    <color name="splashBg">#150C18</color>
-    <color name="splashGradStart">#1B0F20</color>
-    <color name="splashGradEnd">#0D0710</color>
+    <!-- Splash (Light) -->
+    <color name="splashBg">#FFFFFF</color>
+    <color name="splashGradStart">#FFFFFF</color>
+    <color name="splashGradEnd">#FFF3F8</color>
+    <color name="splashGlowColor1">#1FE0126D</color>
+    <color name="splashGlowColor2">#12E0126D</color>
+    <color name="splashCenterGlow1">#1FE0126D</color>
+    <color name="splashCenterGlow2">#12E0126D</color>
+    <color name="splashTextPrimary">#1B0F20</color>
+    <color name="splashTextShadow">#33E0126D</color>
+    <color name="splashTagline">#C7861B</color>
+    <color name="splashTaglineShadow">#40C7861B</color>
+    <color name="splashVersionText">#991B0F20</color>
+    <color name="splashVersionBadgeBg">#12E0126D</color>
+    <color name="splashVersionBadgeStroke">#33C7861B</color>
+    <color name="splashLoadingLabel">#B3E0126D</color>
+    <color name="splashPercentText">#E0126D</color>
+    <color name="splashCredit">#B3C7861B</color>
+    <color name="splashCreditShadow">#40C7861B</color>
+    <color name="splashProgressTrack">#14E0126D</color>
+    <color name="splashProgressIndicator">#E0126D</color>
+    <color name="splashDividerColor">#33C7861B</color>
+    <color name="splashBottomGlowCenter">#14E0126D</color>
+    <color name="splashBottomGlowLine">#40C7861B</color>
 
     <!-- CashLipi brand (pink/gold logo) -->
     <color name="brandPink">#E0126D</color>
@@ -335,8 +355,6 @@
     <color name="devCallColor">#4F46E5</color>
     <color name="devCallDark">#4338CA</color>
 
-    <!-- Developer contact card — brand accents -->
-
     <!-- Google brand -->
     <color name="googleBlue">#4285F4</color>
     <color name="googleGreen">#34A853</color>
@@ -412,6 +430,17 @@
     <color name="loginInfoBoxBorder">#C7D2FE</color>
     <color name="loginLogoGlowFill">#33FFFFFF</color>
     <color name="loginLogoGlowStroke">#4DFFFFFF</color>
+
+    <!-- Login screen — clean/flat redesign -->
+    <color name="loginCleanBg">#FFFFFF</color>
+    <color name="loginCleanLogoBg">#EEF2FF</color>
+    <color name="loginCleanTextPrimary">#111827</color>
+    <color name="loginCleanTextSecondary">#6B7280</color>
+    <color name="loginCleanTextTertiary">#9CA3AF</color>
+    <color name="loginCleanBtnBg">#FFFFFF</color>
+    <color name="loginCleanBtnBorder">#E5E7EB</color>
+    <color name="loginCleanSkipBg">#F3F4F6</color>
+    <color name="loginCleanDivider">#F0F1F5</color>
 
     <!-- System nav bar -->
     <color name="navigationBarColor">#FFFFFF</color>
@@ -734,6 +763,7 @@
     <color name="m3SavingsContainer">#F8CFE3</color>
     <color name="m3OnSavingsContainer">#4E1F8F</color>
 
-    <color name="m3MenuCardSurface">#F8FAFD</color>
-    <color name="m3MenuCardOutline">#E1E7F0</color>
+    <color name="m3MenuCardSurface">#FCFDFE</color>
+    <color name="m3MenuCardOutline">#E7ECF4</color>
+    <color name="personCardBorder">#E4E9F1</color>
 </resources>

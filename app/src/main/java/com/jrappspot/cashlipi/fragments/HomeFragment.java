@@ -180,43 +180,43 @@ public class HomeFragment extends Fragment {
         List<TipData> tips = new ArrayList<>();
 
         if (income == 0 && expense == 0) {
-            tips.add(new TipData("লেনদেন যোগ করুন, AI আপনাকে স্মার্ট পরামর্শ দেবে!",
+            tips.add(new TipData(getString(R.string.home_tip_start_transaction),
                     R.drawable.emoji_bulb, R.drawable.bg_tip_card_purple));
         } else {
             if (income > 0 && expense > 0) {
                 double ratio = expense / income * 100;
                 if (ratio > 90)
-                    tips.add(new TipData("আয়ের " + (int) ratio + "% ব্যয় হচ্ছে! সঞ্চয় বাড়ানো দরকার।",
+                    tips.add(new TipData(getString(R.string.home_tip_expense_high, (int) ratio),
                             R.drawable.emoji_warning, R.drawable.bg_tip_card_rose));
                 else if (ratio > 70)
-                    tips.add(new TipData("আয়ের " + (int) ratio + "% ব্যয় হচ্ছে। নিয়ন্ত্রণে রাখুন।",
+                    tips.add(new TipData(getString(R.string.home_tip_expense_medium, (int) ratio),
                             R.drawable.emoji_bulb, R.drawable.bg_tip_card_orange));
                 else
-                    tips.add(new TipData("চমৎকার! আয়ের মাত্র " + (int) ratio + "% ব্যয় হচ্ছে।",
+                    tips.add(new TipData(getString(R.string.home_tip_expense_good, (int) ratio),
                             R.drawable.emoji_check_mark_green, R.drawable.bg_tip_card_green));
             }
             if (savings == 0)
-                tips.add(new TipData("সঞ্চয় শূন্য! আজই সঞ্চয় শুরু করুন।",
+                tips.add(new TipData(getString(R.string.home_tip_savings_zero),
                         R.drawable.emoji_green_heart, R.drawable.bg_tip_card_orange));
             else
-                tips.add(new TipData("সঞ্চয় " + DatabaseManager.formatAmount(savings) + " — দারুণ অভ্যাস!",
+                tips.add(new TipData(getString(R.string.home_tip_savings_good, DatabaseManager.formatAmount(savings)),
                         R.drawable.emoji_green_heart, R.drawable.bg_tip_card_green));
             if (dena > 0)
-                tips.add(new TipData("দেনা " + DatabaseManager.formatAmount(dena) + " বাকি। আজই পরিশোধের পরিকল্পনা করুন।",
+                tips.add(new TipData(getString(R.string.home_tip_dena_due, DatabaseManager.formatAmount(dena)),
                         R.drawable.emoji_book_red, R.drawable.bg_tip_card_rose));
             if (pabona > 0)
-                tips.add(new TipData("পাওনা " + DatabaseManager.formatAmount(pabona) + " — সংগ্রহ করতে ভুলবেন না।",
+                tips.add(new TipData(getString(R.string.home_tip_pabona_due, DatabaseManager.formatAmount(pabona)),
                         R.drawable.emoji_book_green, R.drawable.bg_tip_card_blue));
             if (balance < 0)
-                tips.add(new TipData("ব্যালেন্স নেগেটিভ! অপ্রয়োজনীয় ব্যয় কমান।",
+                tips.add(new TipData(getString(R.string.home_tip_balance_negative),
                         R.drawable.emoji_warning, R.drawable.bg_tip_card_rose));
             else if (balance > 0 && income > 0)
-                tips.add(new TipData("ব্যালেন্স ইতিবাচক। বিনিয়োগের কথা ভাবুন!",
+                tips.add(new TipData(getString(R.string.home_tip_balance_positive),
                         R.drawable.emoji_chart_up, R.drawable.bg_tip_card_purple));
         }
 
         if (tips.isEmpty())
-            tips.add(new TipData("স্মার্ট পরামর্শ লোড হচ্ছে...",
+            tips.add(new TipData(getString(R.string.home_tip_loading),
                     R.drawable.emoji_bulb, R.drawable.bg_tip_card_purple));
 
         tipDots.removeAllViews();
@@ -284,7 +284,7 @@ public class HomeFragment extends Fragment {
             View card = holder.itemView;
             card.setBackgroundResource(tip.bgRes);
             ((ImageView) card.findViewById(R.id.tipIcon)).setImageResource(tip.iconRes);
-            ((TextView) card.findViewById(R.id.tipTitle)).setText("স্মার্ট পরামর্শ");
+            ((TextView) card.findViewById(R.id.tipTitle)).setText(getString(R.string.home_tip_card_title));
             ((TextView) card.findViewById(R.id.tipSubtitle)).setText(tip.subtitle);
             card.setOnClickListener(v -> startActivity(new Intent(requireContext(), AiChatActivity.class)));
         }

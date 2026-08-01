@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Deep elegant base -->
+    <!-- Base surface — white in light theme, black in dark theme -->
     <item>
         <shape android:shape="rectangle">
             <gradient
                 android:type="linear"
                 android:angle="90"
-                android:startColor="#1B0F20"
-                android:centerColor="#150C18"
-                android:endColor="#0D0710"/>
+                android:startColor="@color/splashGradStart"
+                android:centerColor="@color/splashGradStart"
+                android:endColor="@color/splashGradEnd"/>
         </shape>
     </item>
-    <!-- Soft centered glow (warm plum/wine, echoes brand pink) — no fixed dp values, scales with screen -->
+    <!-- Soft centered glow (brand pink) — subtle in light, richer in dark -->
     <item>
         <shape android:shape="oval">
             <gradient
                 android:type="radial"
                 android:gradientRadius="60%"
-                android:startColor="#33301428"
-                android:centerColor="#1A170C1C"
-                android:endColor="#00000000"/>
+                android:startColor="@color/splashGlowColor1"
+                android:centerColor="@color/splashGlowColor2"
+                android:endColor="@android:color/transparent"/>
         </shape>
     </item>
 </layer-list>

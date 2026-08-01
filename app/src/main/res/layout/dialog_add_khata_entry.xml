@@ -52,6 +52,28 @@
                 android:ellipsize="end"/>
         </LinearLayout>
 
+        <!-- লেনদেনের ধরন — বিক্রয়/পেমেন্ট (গ্রাহক) বা গ্রহণ/প্রদান (সাপ্লায়ার), + অগ্রিম/জের -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginBottom="14dp">
+
+            <LinearLayout
+                android:id="@+id/rowSheetCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView android:id="@+id/chipCatSale" style="@style/KhataCategoryChip" android:text="বিক্রয়"/>
+                <TextView android:id="@+id/chipCatPayment" style="@style/KhataCategoryChip" android:text="পেমেন্ট"/>
+                <TextView android:id="@+id/chipCatReceive" style="@style/KhataCategoryChip" android:text="গ্রহণ"/>
+                <TextView android:id="@+id/chipCatGive" style="@style/KhataCategoryChip" android:text="প্রদান"/>
+                <TextView android:id="@+id/chipCatAdvance" style="@style/KhataCategoryChip" android:text="অগ্রিম পরিশোধ"/>
+                <TextView android:id="@+id/chipCatBalance" style="@style/KhataCategoryChip" android:text="জের" android:layout_marginEnd="0dp"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+
         <!-- Amount -->
         <TextView
             android:layout_width="wrap_content"

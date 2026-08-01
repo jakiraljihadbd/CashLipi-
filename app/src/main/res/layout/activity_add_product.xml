@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/appBg">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:background="@drawable/bg_header_khata"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:paddingHorizontal="18dp" android:paddingVertical="16dp">
+
+            <LinearLayout android:id="@+id/btnBack" android:layout_width="36dp" android:layout_height="36dp"
+                android:background="@drawable/bg_summary_glass" android:gravity="center"
+                android:clickable="true" android:focusable="true">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="←" android:textSize="18sp" android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <TextView android:id="@+id/tvFormTitle" android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:layout_marginStart="12dp"
+                android:text="নতুন পণ্য যোগ করুন" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/white"/>
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="18dp">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="পণ্যের নাম" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textSecondary"
+                android:layout_marginBottom="6dp"/>
+            <EditText android:id="@+id/etProductName" android:layout_width="match_parent" android:layout_height="52dp"
+                android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                android:hint="যেমন: Air Bud" android:textSize="14sp" android:layout_marginBottom="16dp"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="বারকোড (ঐচ্ছিক)" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textSecondary"
+                android:layout_marginBottom="6dp"/>
+            <EditText android:id="@+id/etProductBarcode" android:layout_width="match_parent" android:layout_height="52dp"
+                android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                android:hint="বারকোড নম্বর" android:inputType="number" android:textSize="14sp" android:layout_marginBottom="16dp"/>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="16dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:orientation="vertical" android:layout_marginEnd="8dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="ক্রয় মূল্য (৳)" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textSecondary"
+                        android:layout_marginBottom="6dp"/>
+                    <EditText android:id="@+id/etBuyPrice" android:layout_width="match_parent" android:layout_height="52dp"
+                        android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                        android:hint="0" android:inputType="numberDecimal" android:textSize="14sp"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="বিক্রয় মূল্য (৳)" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textSecondary"
+                        android:layout_marginBottom="6dp"/>
+                    <EditText android:id="@+id/etSellPrice" android:layout_width="match_parent" android:layout_height="52dp"
+                        android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                        android:hint="0" android:inputType="numberDecimal" android:textSize="14sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="16dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:orientation="vertical" android:layout_marginEnd="8dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="বর্তমান মজুদ" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textSecondary"
+                        android:layout_marginBottom="6dp"/>
+                    <EditText android:id="@+id/etStockQty" android:layout_width="match_parent" android:layout_height="52dp"
+                        android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                        android:hint="0" android:inputType="numberDecimal" android:textSize="14sp"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="কম স্টক অ্যালার্ট" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textSecondary"
+                        android:layout_marginBottom="6dp"/>
+                    <EditText android:id="@+id/etLowStockAlert" android:layout_width="match_parent" android:layout_height="52dp"
+                        android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                        android:hint="5" android:inputType="numberDecimal" android:textSize="14sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="একক (ঐচ্ছিক)" android:textSize="13sp" android:textStyle="bold" android:textColor="@color/textSecondary"
+                android:layout_marginBottom="6dp"/>
+            <EditText android:id="@+id/etUnit" android:layout_width="match_parent" android:layout_height="52dp"
+                android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                android:hint="পিস, কেজি, লিটার..." android:textSize="14sp" android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:id="@+id/btnSaveProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="14dp"
+                android:gravity="center"
+                android:text="সংরক্ষণ করুন"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/bg_btn_khata_wide"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

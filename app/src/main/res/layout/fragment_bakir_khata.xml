@@ -15,92 +15,179 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- আরও চিকন হেডার — অ্যাপ বার কালারে, একই লাইনে ব্যক্তি সংখ্যা + মোট লেনদেন (ছোট করে) -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@color/m3HomeBalanceContainer"
-            android:paddingHorizontal="18dp">
-
-            <TextView
-                android:id="@+id/tvHeaderTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="ব্যক্তি ও প্রতিষ্ঠান"
-                android:textSize="12.5sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-
-            <TextView
-                android:id="@+id/tvKhataCustomerCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:text="মোট লেনদেন নেই"
-                android:textSize="10.5sp"
-                android:textColor="#D9FFFFFF"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-        </LinearLayout>
-
-        <!-- বিজনেস ওয়ালেট চিপ + দ্রুত অ্যাকশন (খরচ/জমা) — মূল একাউন্ট থেকে সম্পূর্ণ আলাদা পকেট -->
+        <!-- বাকির খাতার নিজস্ব হেডার — ইন্ডিগো "খাতার মলাট" স্টাইল, নিচে ৩টা সামারি টাইল
+             (মোট বাকি লাল, মোট জমা সবুজ, ওয়ালেট সাদা)। আগে এখানে দেনা-পাওনা পেজের মতোই একটা
+             পাতলা পিংক হেডার আর প্রতি-গ্রাহক স্লাইডিং ব্যানার ছিল — এখন পুরোটাই বদলে পুরো
+             ব্যবসার একটা ড্যাশবোর্ড-সামারি একনজরে দেখানো হয়, যা গঠনগতভাবেই দেনা-পাওনা থেকে
+             আলাদা এবং বাকির খাতার নিজস্ব পরিচয় বহন করে। -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@color/cardBackground"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="8dp">
+            android:orientation="vertical"
+            android:background="@drawable/bg_header_khata"
+            android:paddingTop="14dp"
+            android:paddingBottom="16dp"
+            android:paddingHorizontal="18dp"
+            android:elevation="8dp">
 
             <LinearLayout
-                android:id="@+id/chipKhataWallet"
-                android:layout_width="0dp"
+                android:id="@+id/rowShopSwitcher"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:background="@drawable/bg_dialog_field"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp"
+                android:layout_marginBottom="14dp"
                 android:clickable="true"
                 android:focusable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ওয়ালেট"
-                    android:textSize="11.5sp"
-                    android:textColor="@color/textSecondary"
-                    android:layout_marginEnd="6dp"/>
+                    android:text="📒"
+                    android:textSize="18sp"
+                    android:layout_marginEnd="8dp"/>
 
                 <TextView
-                    android:id="@+id/tvKhataWalletBalance"
+                    android:id="@+id/tvHeaderTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="৳০"
-                    android:textSize="13.5sp"
+                    android:text="বাকির খাতা"
+                    android:textSize="16.5sp"
                     android:textStyle="bold"
-                    android:textColor="@color/khataWalletColor"
+                    android:textColor="@color/white"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="▾"
+                    android:textSize="13sp"
+                    android:textColor="#D9FFFFFF"/>
+
+                <TextView
+                    android:id="@+id/tvKhataCustomerCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="মোট লেনদেন নেই"
+                    android:textSize="11sp"
+                    android:textColor="#D9FFFFFF"
                     android:maxLines="1"
                     android:ellipsize="end"/>
             </LinearLayout>
 
+            <!-- ৩টা সামারি টাইল: মোট বাকি / মোট জমা / ওয়ালেট -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_summary_glass"
+                    android:padding="12dp"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="মোট বাকি"
+                        android:textSize="11sp"
+                        android:textColor="#D9FFFFFF"/>
+
+                    <TextView
+                        android:id="@+id/tvSummaryBaki"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="৳০"
+                        android:textSize="15.5sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFB4B4"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_summary_glass"
+                    android:padding="12dp"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="মোট জমা"
+                        android:textSize="11sp"
+                        android:textColor="#D9FFFFFF"/>
+
+                    <TextView
+                        android:id="@+id/tvSummaryJoma"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="৳০"
+                        android:textSize="15.5sp"
+                        android:textStyle="bold"
+                        android:textColor="#A7F3D0"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/chipKhataWallet"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_summary_glass"
+                    android:padding="12dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ওয়ালেট"
+                        android:textSize="11sp"
+                        android:textColor="#D9FFFFFF"/>
+
+                    <TextView
+                        android:id="@+id/tvKhataWalletBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="৳০"
+                        android:textSize="15.5sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- দ্রুত অ্যাকশন: খরচ যোগ / ওয়ালেটে জমা — ট্যাব-স্টাইলে -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp">
+
             <TextView
                 android:id="@+id/btnKhataAddExpense"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="9dp"
-                android:text="+ খরচ"
-                android:textSize="12.5sp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:paddingVertical="10dp"
+                android:gravity="center"
+                android:text="− খরচ যোগ করুন"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/bakiColor"
                 android:background="@drawable/bg_dialog_field"
@@ -109,13 +196,13 @@
 
             <TextView
                 android:id="@+id/btnKhataAddJoma"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="9dp"
-                android:text="+ জমা"
-                android:textSize="12.5sp"
+                android:layout_weight="1"
+                android:paddingVertical="10dp"
+                android:gravity="center"
+                android:text="+ ওয়ালেটে জমা"
+                android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/jomaColor"
                 android:background="@drawable/bg_dialog_field"
@@ -123,119 +210,35 @@
                 android:focusable="true"/>
         </LinearLayout>
 
-        <View
+        <!-- দ্রুত-প্রবেশ টাইল গ্রিড — গ্রাহক/সাপ্লায়ার ফিল্টার, রিপোর্ট, স্টক, ইনভয়েস, তাগাদা মেসেজ -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="8dp"/>
-
-        <!-- অটো-স্লাইড ব্যানার — কার বাকি এখনও আদায় হয়নি, সেটা একটাই কার্ডে (বাকি হলে লাল,
-             অগ্রিম হলে সবুজ ব্যাকগ্রাউন্ড) দেখায় এবং ৫ সেকেন্ড পরপর পরের গ্রাহকে বদলায়।
-
-             আগে এখানে একটা খালি FrameLayout (bannerCardHolder) ছিল, যার ভেতরে কোডে
-             ডাইনামিকভাবে item_debt_banner_khata/khata_joma ইনফ্লেট করে addView/removeView
-             করা হতো — কিছু ডিভাইসে সেই মুহূর্তে কার্ডটা খালি/সাদা দেখা যাচ্ছিল (দেনা-পাওনা
-             পেজেও একই বাগ ছিল, ওখানে ঠিক করার সময় এখানেও একইভাবে ঠিক করা হলো)। এখন
-             কার্ডটা সরাসরি স্ট্যাটিকভাবে লেখা — bannerCardRoot সবসময় বিদ্যমান এবং সবসময় একটা
-             background নিয়েই তৈরি হয়, কোডে শুধু setBackgroundResource() ও টেক্সট বদলানো
-             হয়, কখনও কোনো ভিউ যোগ/বাদ দেওয়া হয় না। -->
-        <FrameLayout
-            android:id="@+id/bannerContainer"
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:layout_marginHorizontal="18dp"
-            android:layout_marginBottom="12dp"
-            android:visibility="gone">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingTop="10dp">
 
             <LinearLayout
-                android:id="@+id/bannerCardRoot"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="18dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="@drawable/bg_debt_banner_khata"
-                android:foreground="?attr/selectableItemBackground">
+                android:layout_marginBottom="8dp">
 
-                <LinearLayout
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
-                    android:background="@drawable/bg_banner_avatar_plain"
-                    android:gravity="center"
-                    android:layout_marginEnd="12dp">
-
-                    <TextView
-                        android:id="@+id/tvBannerInitial"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="?"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvBannerName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="15.5sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
-
-                    <TextView
-                        android:id="@+id/tvBannerSub"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:textSize="12sp"
-                        android:textColor="@color/white"
-                        android:alpha="0.9"
-                        android:maxLines="1"
-                        android:ellipsize="end"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="end">
-
-                    <TextView
-                        android:id="@+id/tvBannerAmount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/white"/>
-
-                    <TextView
-                        android:id="@+id/tvBannerLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:textSize="11sp"
-                        android:textColor="@color/white"
-                        android:alpha="0.9"/>
-                </LinearLayout>
+                <include layout="@layout/item_dashboard_tile" android:id="@+id/tileCustomers"/>
+                <include layout="@layout/item_dashboard_tile" android:id="@+id/tileSuppliers"/>
+                <include layout="@layout/item_dashboard_tile" android:id="@+id/tileReport"/>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/debtDots"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal"
-                android:gravity="center"/>
-        </FrameLayout>
+                android:orientation="horizontal">
+
+                <include layout="@layout/item_dashboard_tile" android:id="@+id/tileStock"/>
+                <include layout="@layout/item_dashboard_tile" android:id="@+id/tileInvoice"/>
+                <include layout="@layout/item_dashboard_tile" android:id="@+id/tileReminders"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <!-- Search + ফিল্টার + থিম চেঞ্জ — এক লাইনে, প্রোফেশনাল লেভেল -->
         <LinearLayout

@@ -171,7 +171,7 @@
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="8dp"
-        app:cardCornerRadius="0dp"
+        app:cardCornerRadius="8dp"
         app:cardElevation="5dp"
         app:cardPreventCornerOverlap="false"
         android:visibility="gone">
@@ -238,6 +238,72 @@
                 android:alpha="0.88"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <!-- বাকি পরিশোধের তারিখ + তাগাদা মেসেজ পাঠান — শুধু গ্রাহকের বাকি থাকলে দেখা যাবে -->
+    <LinearLayout
+        android:id="@+id/rowDueDateReminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_card_khata"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/btnSetDueDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="14dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="⏰" android:textSize="15sp" android:layout_marginEnd="10dp"/>
+
+            <TextView
+                android:id="@+id/tvDueDateLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="বাকি পরিশোধের তারিখ ঠিক করুন"
+                android:textSize="13.5sp"
+                android:textColor="@color/textPrimary"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="›" android:textSize="16sp" android:textColor="@color/textSecondary"/>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/dividerColor"/>
+
+        <LinearLayout
+            android:id="@+id/btnSendReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="14dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="💬" android:textSize="15sp" android:layout_marginEnd="10dp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="তাগাদা মেসেজ পাঠান"
+                android:textSize="13.5sp"
+                android:textColor="@color/bakiColor"
+                android:textStyle="bold"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="›" android:textSize="16sp" android:textColor="@color/textSecondary"/>
+        </LinearLayout>
+    </LinearLayout>
 
     <!-- সার্চ + ফিল্টার চিপ + ভিউ-বদল আইকন — এক লাইনে, কম্প্যাক্ট -->
     <LinearLayout
@@ -402,7 +468,7 @@
                 android:gravity="end"
                 android:textSize="11.5sp"
                 android:textStyle="bold"
-                android:textColor="@color/denaColor"/>
+                android:textColor="@color/bakiColor"/>
 
             <View
                 android:layout_width="1dp"
@@ -418,7 +484,7 @@
                 android:gravity="end"
                 android:textSize="11.5sp"
                 android:textStyle="bold"
-                android:textColor="@color/pabonaColor"/>
+                android:textColor="@color/jomaColor"/>
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -466,7 +532,7 @@
                 android:gravity="end"
                 android:textSize="12.5sp"
                 android:textStyle="bold"
-                android:textColor="@color/denaColor"/>
+                android:textColor="@color/bakiColor"/>
 
             <View
                 android:layout_width="1dp"
@@ -482,7 +548,7 @@
                 android:gravity="end"
                 android:textSize="12.5sp"
                 android:textStyle="bold"
-                android:textColor="@color/pabonaColor"/>
+                android:textColor="@color/jomaColor"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -547,7 +613,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:backgroundTint="@null"
-            android:background="@drawable/bg_type_active_pabona"/>
+            android:background="@drawable/bg_type_active_khata_joma"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddDilam"
@@ -561,7 +627,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:backgroundTint="@null"
-            android:background="@drawable/bg_type_active_dena"/>
+            android:background="@drawable/bg_type_active_khata"/>
     </LinearLayout>
 
 </LinearLayout>

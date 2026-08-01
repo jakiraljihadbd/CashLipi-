@@ -65,7 +65,7 @@
         android:gravity="end|top"
         android:textSize="12.5sp"
         android:textStyle="bold"
-        android:textColor="@color/denaColor"/>
+        android:textColor="@color/bakiColor"/>
 
     <View
         android:layout_width="1dp"
@@ -82,6 +82,6 @@
         android:gravity="end|top"
         android:textSize="12.5sp"
         android:textStyle="bold"
-        android:textColor="@color/pabonaColor"/>
+        android:textColor="@color/jomaColor"/>
 
 </LinearLayout>

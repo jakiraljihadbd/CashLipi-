@@ -293,4 +293,120 @@
     <string name="lang_hindi">हिन्दी</string>
     <string name="lang_arabic">عربي</string>
     <string name="language_changed">تم تغيير اللغة. إعادة التشغيل…</string>
+
+    <!-- الصفحة الرئيسية — بطاقة الاقتراحات الذكية -->
+    <string name="home_tip_start_transaction">أضف معاملة، وسيقدم لك الذكاء الاصطناعي اقتراحات ذكية!</string>
+    <string name="home_tip_expense_high">%1$d%% من دخلك يتم إنفاقه! تحتاج إلى زيادة المدخرات.</string>
+    <string name="home_tip_expense_medium">%1$d%% من دخلك يتم إنفاقه. حافظ على السيطرة.</string>
+    <string name="home_tip_expense_good">رائع! يتم إنفاق %1$d%% فقط من دخلك.</string>
+    <string name="home_tip_savings_zero">المدخرات صفر! ابدأ الادخار اليوم.</string>
+    <string name="home_tip_savings_good">المدخرات %1$s — عادة رائعة!</string>
+    <string name="home_tip_dena_due">متبقٍ دين %1$s. خطط للسداد اليوم.</string>
+    <string name="home_tip_pabona_due">مستحق لك %1$s — لا تنس تحصيله.</string>
+    <string name="home_tip_balance_negative">الرصيد سلبي! قلل من النفقات غير الضرورية.</string>
+    <string name="home_tip_balance_positive">الرصيد إيجابي. فكر في الاستثمار!</string>
+    <string name="home_tip_loading">جارٍ تحميل الاقتراحات الذكية...</string>
+    <string name="home_tip_card_title">اقتراح ذكي</string>
+
+    <!-- أسماء طرق الدفع -->
+    <string name="payment_method_cash">نقدًا</string>
+    <string name="payment_method_bkash">بي‑كاش</string>
+    <string name="payment_method_nagad">ناجاد</string>
+    <string name="payment_method_rocket">روكيت</string>
+    <string name="payment_method_bank">بنك</string>
+    <string name="payment_method_other">أخرى</string>
+    <string name="filter_all">الكل</string>
+
+    <!-- صفحة الدخل والمصروفات -->
+    <string name="sort_newest_first">الأحدث أولاً</string>
+    <string name="sort_oldest_first">الأقدم أولاً</string>
+    <string name="sort_amount_high_first">المبلغ الأعلى أولاً</string>
+    <string name="sort_amount_low_first">المبلغ الأقل أولاً</string>
+    <string name="month_total_income">إجمالي الدخل هذا الشهر</string>
+    <string name="month_total_expense">إجمالي المصروفات هذا الشهر</string>
+    <string name="table_col_source">المصدر</string>
+    <string name="table_col_amount">المبلغ</string>
+    <string name="table_col_date">التاريخ</string>
+    <string name="table_col_time">الوقت</string>
+    <string name="table_total">الإجمالي</string>
+    <string name="table_total_prefix">الإجمالي: %1$s</string>
+    <string name="month_unknown">غير معروف</string>
+    <string name="no_data_found">لا توجد بيانات</string>
+
+    <string-array name="month_names">
+        <item>يناير</item>
+        <item>فبراير</item>
+        <item>مارس</item>
+        <item>أبريل</item>
+        <item>مايو</item>
+        <item>يونيو</item>
+        <item>يوليو</item>
+        <item>أغسطس</item>
+        <item>سبتمبر</item>
+        <item>أكتوبر</item>
+        <item>نوفمبر</item>
+        <item>ديسمبر</item>
+    </string-array>
+
+    <!-- TransactionSheetHelper — এডিট/ডিলিট/শেয়ার/সেটল ডায়ালগ -->
+    <string name="ts_delete_confirm_title">هل تريد الحذف؟</string>
+    <string name="ts_delete_confirm_msg">\"%1$s\" سيتم نقلها إلى سلة المهملات.</string>
+    <string name="ts_yes_delete">نعم، احذف</string>
+    <string name="ts_no_keep">لا، احتفظ به</string>
+    <string name="ts_deleted_toast"> تم الحذف</string>
+    <string name="ts_updated_toast"> تم التحديث</string>
+    <string name="type_label_income">الدخل</string>
+    <string name="type_label_expense">المصروفات</string>
+    <string name="type_label_savings">المدخرات</string>
+    <string name="ts_share_transaction_template"> تفاصيل %1$s\n─────────────\nالعنوان: %2$s\nالمبلغ: %3$s\nالتاريخ: %4$s\nالوقت: %5$s</string>
+    <string name="ts_share_note_line">\nملاحظة: %1$s</string>
+    <string name="ts_share_action">مشاركة</string>
+    <string name="ts_close">إغلاق</string>
+    <string name="hint_expense_category">فئة المصروف</string>
+    <string name="hint_savings_bank_name">اسم البنك/الوسيلة (اختياري)</string>
+    <string name="hint_income_source">مصدر الدخل</string>
+    <string name="ts_edit_dialog_title"> تعديل</string>
+    <string name="ts_save_btn">حفظ</string>
+    <string name="ts_field_required_error">لا يمكن ترك هذا الحقل فارغًا</string>
+    <string name="ts_invalid_amount_error">أدخل مبلغًا صحيحًا</string>
+    <string name="status_paid_dena">تم الدفع</string>
+    <string name="status_paid_pabona">تم الاستلام</string>
+    <string name="status_partial_paid">مدفوع جزئيًا (متبقٍ %1$s)</string>
+    <string name="status_due">مستحق</string>
+    <string name="ts_mark_unpaid">↩️ وضع كغير مدفوع</string>
+    <string name="ts_pay_more_prefix">✅ ادفع المزيد  •  المتبقي %1$s</string>
+    <string name="ts_mark_paid_dena">✅ تم الدفع</string>
+    <string name="ts_mark_paid_pabona">✅ تم الاستلام</string>
+    <string name="ts_cancel_payment_title">هل تريد إلغاء الدفع؟</string>
+    <string name="ts_cancel_payment_msg">سيتم إلغاء المبلغ المدفوع حتى الآن %1$s وسيظهر المبلغ الكامل %2$s مستحقًا مرة أخرى.</string>
+    <string name="ts_yes_cancel">نعم، إلغاء</string>
+    <string name="ts_no">لا</string>
+    <string name="ts_pay_money_question">ادفع المبلغ</string>
+    <string name="ts_receive_money_question">استلم المبلغ</string>
+    <string name="ts_total_due_prefix">إجمالي المستحق %1$s</string>
+    <string name="ts_already_paid_note">  (تم دفع %1$s بالفعل — سيتم دفع الباقي بنفس الطريقة)</string>
+    <string name="rb_balance_dena">من الرصيد (سيقل الرصيد الرئيسي)</string>
+    <string name="rb_balance_pabona">إلى الرصيد (سيضاف إلى الرصيد الرئيسي)</string>
+    <string name="rb_savings_dena">من المدخرات (ستقل المدخرات)</string>
+    <string name="rb_savings_pabona">إلى المدخرات (ستضاف إلى المدخرات)</string>
+    <string name="rb_incomeexpense_dena">سيُضاف كمصروف</string>
+    <string name="rb_incomeexpense_pabona">سيُضاف كدخل</string>
+    <string name="rb_none_dena">لا من أي مكان (يُحذف من السجلات فقط)</string>
+    <string name="rb_none_pabona">لا مكان (يُحذف من السجلات فقط)</string>
+    <string name="ts_balance_prefix">الرصيد %1$s</string>
+    <string name="ts_savings_prefix">المدخرات %1$s</string>
+    <string name="ts_expense_prefix">المصروفات %1$s</string>
+    <string name="ts_income_prefix">الدخل %1$s</string>
+    <string name="ts_unchanged_suffix"> (دون تغيير)</string>
+    <string name="ts_confirm_payment">تأكيد الدفع</string>
+    <string name="ts_exceeds_due">لا يمكن دفع أكثر من المستحق %1$s</string>
+    <string name="ts_receivable_collection_source">تحصيل مستحق</string>
+    <string name="ts_receivable_note">تم تحصيل المستحق من %1$s بتاريخ %2$s</string>
+    <string name="ts_debt_payment_category">سداد دين</string>
+    <string name="ts_debt_payment_note">تم سداد الدين إلى %1$s بتاريخ %2$s</string>
+    <string name="ts_type_dena"> دين</string>
+    <string name="ts_type_pabona"> مستحق</string>
+    <string name="ts_share_ledger_template"> تفاصيل %1$s\n─────────────\nالشخص: %2$s\nالمبلغ: %3$s\nالتاريخ: %4$s\nالوقت: %5$s\nالحالة: %6$s</string>
+    <string name="ts_share_category_line">\nالفئة: %1$s</string>
+    <string name="ts_enter_name_error">أدخل الاسم</string>
 </resources>

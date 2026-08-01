@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- নতুন ব্যক্তি (দেনা-পাওনা) যোগ পেজের হেডার — সম্পূর্ণ সোজা/ফ্ল্যাট বার, কোনো বাঁকা কোণা নেই। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="@color/brandPink" android:endColor="@color/brandPinkDeep" android:angle="135"/>
+</shape>

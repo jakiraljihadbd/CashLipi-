@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -20,6 +20,8 @@
         <item name="android:windowBackground">@color/splashBg</item>
         <item name="android:statusBarColor">@color/splashBg</item>
         <item name="android:navigationBarColor">@color/splashBg</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
 
     <!-- ══════════════════════════════
@@ -254,6 +256,20 @@
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
+    <style name="KhataCategoryChip">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:paddingHorizontal">14dp</item>
+        <item name="android:paddingVertical">9dp</item>
+        <item name="android:textSize">12.5sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textSecondary</item>
+        <item name="android:background">@drawable/bg_dialog_field</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
     <!-- Quick Amount Pill — গোলাকার, হালকা-ভরাট চিপ, "যোগ করুন" পপ-আপের রিডিজাইনে ব্যবহৃত -->
     <style name="QuickAmountPill" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="cornerRadius">20dp</item>
@@ -366,6 +382,45 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/primaryTextDark</item>
+    </style>
+
+    <!-- ══════════════════════════════
+         আয়-ব্যয় লিস্ট পেজ — ফিল্টার শিট (বড়, মোবাইল-ফ্রেন্ডলি রো)
+    ══════════════════════════════ -->
+    <style name="FilterSheetRow">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:paddingVertical">18dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="FilterSheetIcon">
+        <item name="android:layout_width">44dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:padding">11dp</item>
+        <item name="android:background">@drawable/bg_icon_circle_primary</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
+    <style name="FilterSheetLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primaryTextDark</item>
+    </style>
+
+    <style name="FilterSheetSubLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/secondaryTextDark</item>
+        <item name="android:layout_marginTop">2dp</item>
     </style>
 
     <!-- Premium Edit Dialog -->

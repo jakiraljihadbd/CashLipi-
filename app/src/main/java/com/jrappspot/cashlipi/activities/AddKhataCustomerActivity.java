@@ -52,6 +52,8 @@ public class AddKhataCustomerActivity extends AppCompatActivity {
     private View photoRing, photoPlaceholder;
     private EditText etName, etRelation, etPhone, etAddress, etEmail, etOpeningBalance;
     private LinearLayout btnSaveKhataCustomer;
+    private TextView btnPartyCustomer, btnPartySupplier;
+    private String selectedPartyType = "customer";
 
     private String pendingPhotoPath = "";
     private String selectedDate;
@@ -88,6 +90,11 @@ public class AddKhataCustomerActivity extends AppCompatActivity {
         etAddress = findViewById(R.id.etAddress);
         etEmail = findViewById(R.id.etEmail);
         etOpeningBalance = findViewById(R.id.etOpeningBalance);
+        btnPartyCustomer = findViewById(R.id.btnPartyCustomer);
+        btnPartySupplier = findViewById(R.id.btnPartySupplier);
+        btnPartyCustomer.setOnClickListener(v -> { selectedPartyType = "customer"; refreshPartyTypeUi(); });
+        btnPartySupplier.setOnClickListener(v -> { selectedPartyType = "supplier"; refreshPartyTypeUi(); });
+        refreshPartyTypeUi();
         btnSaveKhataCustomer = findViewById(R.id.btnSaveKhataCustomer);
     }
 
@@ -225,6 +232,8 @@ public class AddKhataCustomerActivity extends AppCompatActivity {
         etPhone.setText(p.getPhone());
         etAddress.setText(p.getAddress());
         etEmail.setText(p.getEmail());
+        selectedPartyType = p.getPartyType();
+        refreshPartyTypeUi();
         if (etOpeningBalance != null) {
             if (Math.abs(p.getOpeningBalance()) > 0.004) {
                 etOpeningBalance.setText(String.valueOf(p.getOpeningBalance()));
@@ -240,6 +249,14 @@ public class AddKhataCustomerActivity extends AppCompatActivity {
         refreshSaveEnabled();
     }
 
+    private void refreshPartyTypeUi() {
+        boolean isSupplier = "supplier".equals(selectedPartyType);
+        btnPartyCustomer.setBackgroundResource(isSupplier ? R.drawable.bg_dialog_field : R.drawable.bg_type_active_khata_joma);
+        btnPartyCustomer.setTextColor(ContextCompat.getColor(this, isSupplier ? R.color.textSecondary : R.color.white));
+        btnPartySupplier.setBackgroundResource(isSupplier ? R.drawable.bg_type_active_khata : R.drawable.bg_dialog_field);
+        btnPartySupplier.setTextColor(ContextCompat.getColor(this, isSupplier ? R.color.white : R.color.textSecondary));
+    }
+
     private void saveKhataCustomer() {
         String name = etName.getText() != null ? etName.getText().toString().trim() : "";
         String phone = etPhone.getText() != null ? etPhone.getText().toString().trim() : "";
@@ -249,6 +266,7 @@ public class AddKhataCustomerActivity extends AppCompatActivity {
         }
 
         KhataCustomer p = editingKhataCustomer != null ? editingKhataCustomer : new KhataCustomer();
+        p.setPartyType(selectedPartyType);
         p.setName(name.isEmpty() ? phone : name);
         p.setBusinessTag(etRelation.getText() != null ? etRelation.getText().toString().trim() : "");
         p.setPhone(phone);

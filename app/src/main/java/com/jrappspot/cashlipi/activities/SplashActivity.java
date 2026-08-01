@@ -18,7 +18,15 @@ import com.jrappspot.cashlipi.utils.FirestoreSyncManager;
 
 public class SplashActivity extends BaseActivity {
 
-    private static final int SPLASH_DELAY = 3800;
+    private static final int SPLASH_DELAY = 2600;
+
+    // Loading label cycles through these as the progress bar fills — gives a
+    // dynamic, "something is actually happening" feel instead of a static label.
+    private static final String[] LOADING_STEPS = {
+            "প্রাথমিক প্রস্তুতি...",
+            "ডাটা লোড হচ্ছে...",
+            "প্রায় সম্পন্ন..."
+    };
 
     // Angle (degrees, screen convention: 0=right, 90=down) at which each of the
     // 8 pink petal pieces sits around the logo ring — matches the source artwork.
@@ -44,6 +52,7 @@ public class SplashActivity extends BaseActivity {
         TextView  tagline       = findViewById(R.id.splashTagline);
         TextView  version       = findViewById(R.id.splashVersion);
         TextView  loadingLabel  = findViewById(R.id.splashLoadingLabel);
+        TextView  percentText   = findViewById(R.id.splashPercent);
         TextView  credit        = findViewById(R.id.splashCredit);
         LinearProgressIndicator progressBar = findViewById(R.id.splashProgressBar);
 
@@ -53,15 +62,15 @@ public class SplashActivity extends BaseActivity {
         };
 
         // ── Logo assembly: ring → coin → taka pop in ──
-        popIn(logoRing, 120, 450);
-        popIn(logoCoin, 300, 420);
-        popIn(logoTaka, 460, 420);
+        popIn(logoRing, 80, 380);
+        popIn(logoCoin, 200, 360);
+        popIn(logoTaka, 320, 360);
 
         // ── Pink petals fly in from outside, one after another, and land in place ──
         float density = getResources().getDisplayMetrics().density;
         float flyDistancePx = 260f * density;
-        int petalBaseDelay = 620;
-        int petalStagger = 75;
+        int petalBaseDelay = 430;
+        int petalStagger = 50;
 
         for (int i = 0; i < petalIds.length; i++) {
             ImageView petal = findViewById(petalIds[i]);
@@ -91,19 +100,29 @@ public class SplashActivity extends BaseActivity {
         }
 
         // ── Text / element fade-in sequence (after petals settle) ──
-        fadeInView(appName,      1780);
-        fadeInView(divider,      1950);
-        fadeInView(tagline,      2100);
-        fadeInView(version,      2250);
-        fadeInView(loadingLabel, 2400);
-        fadeInView(credit,       2550);
+        fadeInView(appName,      1220);
+        fadeInView(divider,      1340);
+        fadeInView(tagline,      1440);
+        fadeInView(version,      1540);
+        fadeInView(loadingLabel, 1640);
+        if (percentText != null) fadeInView(percentText, 1640);
+        fadeInView(credit,       1780);
 
-        // ── Progress bar ──
+        // ── Progress bar: fills smoothly, updates a live % and cycles the
+        //    status label so the loading feels dynamic rather than static ──
         if (progressBar != null) {
             ObjectAnimator progressAnim = ObjectAnimator.ofInt(progressBar, "progress", 0, 100);
-            progressAnim.setDuration(SPLASH_DELAY - 500);
-            progressAnim.setStartDelay(600);
+            progressAnim.setDuration(1750);
+            progressAnim.setStartDelay(400);
             progressAnim.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
+            progressAnim.addUpdateListener(anim -> {
+                int value = (int) anim.getAnimatedValue();
+                if (percentText != null) percentText.setText(value + "%");
+                if (loadingLabel != null) {
+                    int stepIndex = Math.min(LOADING_STEPS.length - 1, value * LOADING_STEPS.length / 100);
+                    loadingLabel.setText(LOADING_STEPS[stepIndex]);
+                }
+            });
             progressAnim.start();
         }
 

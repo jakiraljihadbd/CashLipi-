@@ -220,41 +220,60 @@ public class AddTransactionActivity extends BaseActivity {
             etCategory.setSelection(selectedCategory.length());
         });
 
-        // TextWatcher: টাইপ করার সময় ফিল্টার করা
+        // Focus listener: ফোকাস পেলে সব categories দেখান
+        etCategory.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                refreshCategorySuggestions("", adapter);
+            }
+        });
+
+        // TextWatcher: টাইপ করার সময় রিয়েল-টাইমে ফিল্টার করা
         etCategory.addTextChangedListener(new android.text.TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String input = s.toString().trim().toLowerCase();
-                if (input.isEmpty()) {
-                    adapter.clear();
-                    return;
-                }
-
-                // বর্তমান মোড অনুযায়ী ক্যাটাগরি খুঁজবে
-                List<String> allCategories = db.getCategories(isIncome ? "income" : "expense");
-                List<String> filtered = new ArrayList<>();
-                for (String cat : allCategories) {
-                    if (cat.toLowerCase().startsWith(input)) {
-                        filtered.add(cat);
-                    }
-                }
-
-                adapter.clear();
-                adapter.addAll(filtered);
-                adapter.notifyDataSetChanged();
-
-                // Dropdown দেখানো
-                if (!filtered.isEmpty()) {
-                    etCategory.showDropDown();
-                }
+                String input = s.toString().trim();
+                refreshCategorySuggestions(input, adapter);
             }
 
             @Override
             public void afterTextChanged(android.text.Editable s) {}
         });
+    }
+
+    /** Category suggestions refresh করা — input অনুযায়ী ফিল্টার করে dropd own show করে */
+    private void refreshCategorySuggestions(String input, android.widget.ArrayAdapter<String> adapter) {
+        if (db == null) return;
+
+        List<String> allCategories = db.getCategories(isIncome ? "income" : "expense");
+        List<String> filtered = new ArrayList<>();
+
+        String lowerInput = input.toLowerCase().trim();
+        
+        if (lowerInput.isEmpty()) {
+            // Empty input: সব categories দেখান
+            filtered.addAll(allCategories);
+        } else {
+            // Partial match: যা লেখা আছে তার সাথে শুরু হয় এমন সব
+            for (String cat : allCategories) {
+                if (cat.toLowerCase().contains(lowerInput)) {  // startsWith এর পরিবর্তে contains ব্যবহার করছি
+                    filtered.add(cat);
+                }
+            }
+        }
+
+        adapter.clear();
+        if (!filtered.isEmpty()) {
+            adapter.addAll(filtered);
+        }
+        adapter.notifyDataSetChanged();
+
+        // Dropdown সবসময় দেখান (যদি suggestions থাকে)
+        if (!filtered.isEmpty()) {
+            etCategory.showDropDown();
+        }
     }
 
     /** সিস্টেম ভয়েস রিকগনাইজার চালু করে — বাংলা ভাষায় শোনে
@@ -299,40 +318,58 @@ public class AddTransactionActivity extends BaseActivity {
                 String incomeCats = String.join(", ", db.getCategories("income"));
                 String expenseCats = String.join(", ", db.getCategories("expense"));
 
-                String prompt = "তুমি CashLipi অ্যাপের একজন অভিজ্ঞ লেনদেন বিশ্লেষক। ইউজার যা বলেছে তার গভীর বিশ্লেষণ করে সব তথ্য বের করবে। শুধুমাত্র একটি সঠিক JSON অবজেক্ট দাও, অন্য কিছু নয়।\n"
-                        + "JSON ফরম্যাট (অবশ্যই এই ফরম্যাট অনুসরণ করতে হবে):\n"
+                // English prompt for better AI understanding
+                String prompt = "You are a financial transaction analyzer. Analyze the user's spoken text and extract transaction details.\n\n"
+                        + "RESPOND WITH ONLY A VALID JSON OBJECT. No markdown, no explanation, just JSON.\n\n"
+                        + "JSON Format (MUST follow exactly):\n"
                         + "{\n"
-                        + "  \"type\": \"income\" বা \"expense\",\n"
-                        + "  \"amount\": সংখ্যা (শুধু সংখ্যা, স্ট্রিং নয়),\n"
-                        + "  \"category\": \"🍔 খাবার\" অথবা \"🚌 যাতায়াত\" অথবা \"💼 বেতন\" বা অনুরূপ (প্রতিটি ক্যাটাগরিতে অবশ্যই ইমোজি থাকতে হবে),\n"
-                        + "  \"method\": \"cash\" বা \"bkash\" বা \"nagad\" বা \"rocket\" বা \"bank\" বা \"other\",\n"
-                        + "  \"note\": \"সুন্দরভাবে লেখা নোট, যেমন 'বাজারে আলু কিনেছি (২০০ টাকা)' — ইমোজি অপশনাল\"\n"
-                        + "}\n"
-                        + "বিদ্যমান আয়ের ক্যাটাগরি: " + incomeCats + "\n"
-                        + "বিদ্যমান ব্যয়ের ক্যাটাগরি: " + expenseCats + "\n"
-                        + "নিয়ম:\n"
-                        + "1. সম্ভব হলে বিদ্যমান ক্যাটাগরির সাথে মিলাও, নাহলে নতুন তৈরি করো।\n"
-                        + "2. প্রতিটি ক্যাটাগরিতে অবশ্যই প্রাসঙ্গিক ইমোজি থাকতে হবে।\n"
-                        + "3. টাকা বা পয়সা বলা থাকলে amount নির্ণয় করো।\n"
-                        + "4. মাধ্যম (cash/bkash/etc) উল্লেখ না থাকলে cash ধরে নাও।\n"
-                        + "5. note-তে সংক্ষিপ্ত, স্পষ্ট তথ্য লিখো।\n"
-                        + "6. শুধুমাত্র JSON দাও, অন্য কোনো লেখা নয়।\n"
-                        + "\nইউজার বলেছে: \"" + spokenText + "\"";
+                        + "  \"type\": \"income\" or \"expense\",\n"
+                        + "  \"amount\": number (numeric value only, not string),\n"
+                        + "  \"category\": \"Category Name\" (use existing categories if possible, otherwise create new),\n"
+                        + "  \"method\": \"cash\" or \"bkash\" or \"nagad\" or \"rocket\" or \"bank\" or \"other\",\n"
+                        + "  \"note\": \"Brief description of transaction\"\n"
+                        + "}\n\n"
+                        + "Existing income categories: " + incomeCats + "\n"
+                        + "Existing expense categories: " + expenseCats + "\n\n"
+                        + "Rules:\n"
+                        + "1. If amount is mentioned, extract the numeric value\n"
+                        + "2. Determine if income or expense based on context\n"
+                        + "3. If method not mentioned, assume 'cash'\n"
+                        + "4. Extract brief note about the transaction\n"
+                        + "5. RESPOND WITH ONLY JSON, NOTHING ELSE\n\n"
+                        + "User said: \"" + spokenText + "\"";
+
+                Log.d("CashLipiAI", "Sending to Pollinations AI...");
+                Log.d("CashLipiAI", "Prompt: " + prompt);
 
                 JSONObject obj = com.jrappspot.cashlipi.utils.PollinationsAiHelper.callJson(prompt);
+
+                Log.d("CashLipiAI", "AI Response: " + obj.toString());
 
                 runOnUiThread(() -> {
                     hideAiThinking();
                     showAiPreview(spokenText, obj);
                 });
             } catch (Exception e) {
-                android.util.Log.e("CashLipiAI", "parseWithAi ব্যর্থ হয়েছে", e);
-                String msg = (e.getMessage() != null && e.getMessage().contains("ব্যস্ত"))
-                        ? e.getMessage()
-                        : "AI বুঝতে পারেনি, আবার চেষ্টা করুন বা নিজে হাতে লিখুন";
+                android.util.Log.e("CashLipiAI", "parseWithAi failed", e);
+                String msg;
+                String errorMsg = e.getMessage() != null ? e.getMessage() : "";
+                
+                if (errorMsg.contains("429") || errorMsg.contains("ব্যস্ত")) {
+                    msg = "⏳ AI সার্ভার ব্যস্ত। ২০ সেকেন্ড পর আবার চেষ্টা করুন।";
+                } else if (errorMsg.contains("500") || errorMsg.contains("সার্ভার")) {
+                    msg = "⚠️ AI সার্ভারে সমস্যা হয়েছে। ১ মিনিট পর আবার চেষ্টা করুন।";
+                } else if (errorMsg.contains("পার্স")) {
+                    msg = "🤔 AI বিশ্লেষণ করতে পারেনি। স্পষ্টভাবে বলুন বা নিজে লিখুন।";
+                } else if (errorMsg.contains("নেটওয়ার্ক")) {
+                    msg = "🌐 ইন্টারনেট সংযোগ চেক করুন।";
+                } else {
+                    msg = "❌ AI Error: " + errorMsg;
+                }
+                
                 runOnUiThread(() -> {
                     hideAiThinking();
-                    Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddTransactionActivity.this, msg, Toast.LENGTH_LONG).show();
                 });
             }
         });
@@ -402,6 +439,12 @@ public class AddTransactionActivity extends BaseActivity {
         aiEtAmount.setText(aiAmount > 0 ? formatAmountPlain(aiAmount) : "");
         aiEtCategory.setText(aiCategory);
         aiEtNote.setText(aiNote);
+        
+        // ✓ Success state: সবুজ টিক মার্ক দেখান
+        tvAiThinking.setText("✓ AI সফলভাবে বিশ্লেষণ করেছে");
+        tvAiThinking.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.incomeColor));
+        thinkingHandler.removeCallbacks(thinkingDotsRunnable);
+        aiThinkingOverlay.setVisibility(View.GONE);
 
         Runnable[] refreshMethodsHolder = new Runnable[1];
         Runnable refreshTabs = () -> {
@@ -628,9 +671,11 @@ public class AddTransactionActivity extends BaseActivity {
         return frame;
     }
 
-    /** ডিফল্ট লেনদেন মাধ্যম গ্রিড (Cash, bKash, Nagad, Rocket, Bank, Others) — আগে দুই সারিতে ৩টা করে
-     *  ছিল, এখন সবগুলো (৬টা) এক লাইনেই থাকে (rowPaymentMethods1) — আইকন/টেক্সট একটু ছোট করে সাইজ
-     *  করা হয়েছে যাতে ৬টাই এক সারিতে ঠিকমতো ধরে, ফলে পুরো পেজটা স্ক্রল ছাড়াই দেখা যায়। */
+    /** ডিফল্ট লেনদেন মাধ্যম গ্রিড — এখন আরও বড় এবং স্পষ্ট দেখা যায়
+     *  আইকন: 56px (আগে 40px)
+     *  লেবেল: 11sp font (আগে 9.5sp)
+     *  Padding: improved spacing
+     *  এটি horizontal scrollable row হিসেবে কাজ করে যাতে ছোট স্ক্রিনেও সব বুঝা যায়। */
     private void loadPaymentMethods() {
         if (rowPaymentMethods1 == null) return;
         rowPaymentMethods1.removeAllViews();
@@ -648,7 +693,7 @@ public class AddTransactionActivity extends BaseActivity {
             LinearLayout item = new LinearLayout(this);
             item.setOrientation(LinearLayout.VERTICAL);
             item.setGravity(Gravity.CENTER);
-            item.setPadding(4, 12, 4, 12);
+            item.setPadding(10, 14, 10, 14);  // বাড়ানো padding
             item.setClickable(true);
             item.setFocusable(true);
 
@@ -657,17 +702,19 @@ public class AddTransactionActivity extends BaseActivity {
                     ? (isIncome ? R.drawable.bg_txn_payment_item_selected_income : R.drawable.bg_txn_payment_item_selected_expense)
                     : R.drawable.bg_txn_payment_item));
 
-            View iconWrap = wrapMethodIconWithCheck(getMethodIcon(key), selected, 40);
+            // Icon size বাড়ানো হয়েছে 40px থেকে 56px এ
+            View iconWrap = wrapMethodIconWithCheck(getMethodIcon(key), selected, 56);
 
             TextView label1 = new TextView(this);
             label1.setText(label);
-            label1.setTextSize(9.5f);
-            label1.setMaxLines(1);
+            label1.setTextSize(11f);  // বাড়ানো font size
+            label1.setMaxLines(2);    // দুই লাইন allow করা
+            label1.setGravity(Gravity.CENTER);
             label1.setTypeface(label1.getTypeface(), android.graphics.Typeface.BOLD);
             label1.setTextColor(selected ? accentColor : androidx.core.content.ContextCompat.getColor(this, R.color.textPrimary));
             LinearLayout.LayoutParams labelLp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            labelLp.topMargin = 6;
+            labelLp.topMargin = 8;
             label1.setLayoutParams(labelLp);
 
             item.addView(iconWrap);
@@ -675,7 +722,7 @@ public class AddTransactionActivity extends BaseActivity {
 
             LinearLayout.LayoutParams itemLp = new LinearLayout.LayoutParams(
                     0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f);
-            itemLp.setMarginEnd((i != total - 1) ? 6 : 0);
+            itemLp.setMarginEnd((i != total - 1) ? 8 : 0);
             item.setLayoutParams(itemLp);
 
             item.setOnClickListener(v -> {

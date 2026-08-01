@@ -77,6 +77,8 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
     private androidx.cardview.widget.CardView heroCard;
     private LinearLayout heroCardInner, emptyKhataEntryState, personSearchBox, personToolsRow;
     private TextView tvHeroLabel, tvHeroAmount, tvHeroSub;
+    private LinearLayout rowDueDateReminder, btnSetDueDate, btnSendReminder;
+    private TextView tvDueDateLabel;
     private ImageView btnShareStatement, ivClearKhataCustomerSearch, btnToggleView, btnExportPdf;
     private EditText etKhataCustomerKhataEntrySearch;
     private ImageView btnKhataCustomerFilter;
@@ -122,6 +124,12 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
         tvHeroAmount      = findViewById(R.id.tvHeroAmount);
         tvHeroSub         = findViewById(R.id.tvHeroSub);
         btnShareStatement = findViewById(R.id.btnShareStatement);
+        rowDueDateReminder = findViewById(R.id.rowDueDateReminder);
+        btnSetDueDate = findViewById(R.id.btnSetDueDate);
+        btnSendReminder = findViewById(R.id.btnSendReminder);
+        tvDueDateLabel = findViewById(R.id.tvDueDateLabel);
+        btnSetDueDate.setOnClickListener(v -> showSetDueDateDialog());
+        btnSendReminder.setOnClickListener(v -> sendReminderMessage());
 
         personToolsRow        = findViewById(R.id.personToolsRow);
         personSearchBox       = findViewById(R.id.personSearchBox);
@@ -261,6 +269,7 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
         if (allRawEntries.isEmpty()) {
             heroCard.setVisibility(View.GONE);
             personToolsRow.setVisibility(View.GONE);
+            rowDueDateReminder.setVisibility(View.GONE);
         } else {
             heroCard.setVisibility(View.VISIBLE);
             personToolsRow.setVisibility(View.VISIBLE);
@@ -270,14 +279,20 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
                 heroCardInner.setBackgroundResource(R.drawable.bg_hero_flat_pabona);
                 tvHeroLabel.setText("আপনি পাবেন");
                 tvHeroAmount.setText(DatabaseManager.formatAmount(net));
+                rowDueDateReminder.setVisibility(View.VISIBLE);
+                tvDueDateLabel.setText(customerName.hasDueDate()
+                        ? "পরিশোধের তারিখ: " + DatabaseManager.formatDateDisplay(customerName.getDueDate())
+                        : "বাকি পরিশোধের তারিখ ঠিক করুন");
             } else if (net < -0.5) {
                 heroCardInner.setBackgroundResource(R.drawable.bg_hero_flat_dena);
                 tvHeroLabel.setText("আপনি দেবেন");
                 tvHeroAmount.setText(DatabaseManager.formatAmount(Math.abs(net)));
+                rowDueDateReminder.setVisibility(View.GONE);
             } else {
                 heroCardInner.setBackgroundResource(R.drawable.bg_hero_flat_settled);
                 tvHeroLabel.setText("নিট হিসাব");
                 tvHeroAmount.setText("সব পরিশোধিত ✓");
+                rowDueDateReminder.setVisibility(View.GONE);
             }
             tvHeroSub.setText("মোট " + allRawEntries.size() + " টি লেনদেন  •  " + unpaidCount + " টি বাকি\n"
                     + "মোট পাওনা " + DatabaseManager.formatAmount(totalGot)
@@ -385,7 +400,7 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
             TextView tvDena = rowView.findViewById(R.id.tvTRowDena);
             TextView tvPabona = rowView.findViewById(R.id.tvTRowPabona);
             View colorBar = rowView.findViewById(R.id.tvTRowColorBar);
-            colorBar.setBackgroundColor(ContextCompat.getColor(this, isDena ? R.color.denaColor : R.color.pabonaColor));
+            colorBar.setBackgroundColor(ContextCompat.getColor(this, isDena ? R.color.bakiColor : R.color.jomaColor));
 
             String note = e.getNote() != null && !e.getNote().isEmpty() ? e.getNote()
                     : (e.getCategory() != null ? e.getCategory() : "");
@@ -408,12 +423,12 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
                 tvChip.setVisibility(View.VISIBLE);
                 if (bal > 0.5) {
                     tvChip.setText("পাবেন " + DatabaseManager.formatAmount(bal));
-                    tvChip.setTextColor(ContextCompat.getColor(this, R.color.pabonaColor));
-                    DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()), ContextCompat.getColor(this, R.color.pabonaLight));
+                    tvChip.setTextColor(ContextCompat.getColor(this, R.color.jomaColor));
+                    DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()), ContextCompat.getColor(this, R.color.jomaLight));
                 } else if (bal < -0.5) {
                     tvChip.setText("দেবেন " + DatabaseManager.formatAmount(Math.abs(bal)));
-                    tvChip.setTextColor(ContextCompat.getColor(this, R.color.denaColor));
-                    DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()), ContextCompat.getColor(this, R.color.denaLight));
+                    tvChip.setTextColor(ContextCompat.getColor(this, R.color.bakiColor));
+                    DrawableCompat.setTint(DrawableCompat.wrap(tvChip.getBackground().mutate()), ContextCompat.getColor(this, R.color.bakiLight));
                 } else {
                     tvChip.setText("সমান");
                     tvChip.setTextColor(ContextCompat.getColor(this, R.color.textSecondary));
@@ -467,10 +482,19 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
         }
     }
 
-    /** নিচের পাওনা/দেনা বাটনে চাপলে এই ব্যক্তির নাম প্রি-ফিল করে দ্রুত এন্ট্রি যোগ করার শিট। */
+    /** নিচের পাওনা/দেনা বাটনে চাপলে এই ব্যক্তির নাম প্রি-ফিল করে দ্রুত এন্ট্রি যোগ করার শিট।
+     *  type প্যারামিটারটা শুরুর ডিফল্ট ক্যাটাগরি ঠিক করতে ব্যবহৃত হয় — গ্রাহক হলে বিক্রয়/পেমেন্ট,
+     *  সাপ্লায়ার হলে গ্রহণ/প্রদান দিয়ে শুরু হয়, কিন্তু ব্যবহারকারী চিপ থেকে যেকোনো ক্যাটাগরি
+     *  বেছে নিতে পারেন। */
     private void showAddKhataEntrySheet(String type) {
         if (customerName == null) return;
         boolean isDena = "baki".equals(type);
+        boolean supplier = customerName.isSupplier();
+
+        String defaultCat = isDena
+                ? (supplier ? KhataEntry.CAT_RECEIVE : KhataEntry.CAT_SALE)
+                : (supplier ? KhataEntry.CAT_GIVE : KhataEntry.CAT_PAYMENT);
+        final String[] selectedCat = {defaultCat};
 
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.PremiumBottomSheetDialog);
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_add_khata_entry, null);
@@ -485,10 +509,37 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
         TextView tvTime = v.findViewById(R.id.tvSheetTime);
         Button btnSave = v.findViewById(R.id.btnSheetSave);
 
-        tvTitle.setText(isDena ? " দেনা যোগ করুন" : " পাওনা যোগ করুন");
+        tvTitle.setText("লেনদেন যোগ করুন");
         tvKhataCustomerChip.setText(customerName.getName());
-        btnSave.setBackgroundResource(isDena ? R.drawable.bg_type_active_dena : R.drawable.bg_type_active_pabona);
-        btnSave.setText(isDena ? " দেনা সংরক্ষণ করুন" : " পাওনা সংরক্ষণ করুন");
+
+        // ৬টা ক্যাটাগরি চিপ — সিলেক্ট করা চিপটা রঙিন হয়ে থাকে, বাকিগুলো নিউট্রাল
+        java.util.Map<String, TextView> chips = new java.util.LinkedHashMap<>();
+        chips.put(KhataEntry.CAT_SALE, v.findViewById(R.id.chipCatSale));
+        chips.put(KhataEntry.CAT_PAYMENT, v.findViewById(R.id.chipCatPayment));
+        chips.put(KhataEntry.CAT_RECEIVE, v.findViewById(R.id.chipCatReceive));
+        chips.put(KhataEntry.CAT_GIVE, v.findViewById(R.id.chipCatGive));
+        chips.put(KhataEntry.CAT_ADVANCE, v.findViewById(R.id.chipCatAdvance));
+        chips.put(KhataEntry.CAT_BALANCE, v.findViewById(R.id.chipCatBalance));
+
+        Runnable[] refreshChipsHolder = new Runnable[1];
+        Runnable refreshChips = () -> {
+            for (java.util.Map.Entry<String, TextView> e : chips.entrySet()) {
+                boolean sel = e.getKey().equals(selectedCat[0]);
+                boolean catIsBaki = "baki".equals(KhataEntry.typeForCategory(e.getKey()));
+                e.getValue().setBackgroundResource(sel
+                        ? (catIsBaki ? R.drawable.bg_type_active_khata : R.drawable.bg_type_active_khata_joma)
+                        : R.drawable.bg_dialog_field);
+                e.getValue().setTextColor(ContextCompat.getColor(this, sel ? R.color.white : R.color.textSecondary));
+            }
+            boolean nowDena = "baki".equals(KhataEntry.typeForCategory(selectedCat[0]));
+            btnSave.setBackgroundResource(nowDena ? R.drawable.bg_type_active_khata : R.drawable.bg_type_active_khata_joma);
+            btnSave.setText(" সংরক্ষণ করুন — " + KhataEntry.categoryLabel(selectedCat[0]));
+        };
+        refreshChipsHolder[0] = refreshChips;
+        for (java.util.Map.Entry<String, TextView> e : chips.entrySet()) {
+            e.getValue().setOnClickListener(x -> { selectedCat[0] = e.getKey(); refreshChipsHolder[0].run(); });
+        }
+        refreshChips.run();
 
         AmountInputHelper.attach(this, etAmount);
 
@@ -545,7 +596,8 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
             KhataEntry entry = new KhataEntry();
             entry.setCustomerId(customerName.getId());
             entry.setCustomerName(customerName.getName());
-            entry.setType(type);
+            entry.setCategory(selectedCat[0]);
+            entry.setType(KhataEntry.typeForCategory(selectedCat[0]));
             entry.setAmount(amount);
             entry.setDate(sheetDate.isEmpty() ? DatabaseManager.nowDate() : sheetDate);
             entry.setTime(sheetTime.isEmpty() ? DatabaseManager.nowTime() : sheetTime);
@@ -560,14 +612,68 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
             dialog.dismiss();
             loadKhataEntry();
 
-            SuccessPopup.Category cat = isDena ? SuccessPopup.Category.DENA : SuccessPopup.Category.PABONA;
+            boolean savedIsDena = "baki".equals(KhataEntry.typeForCategory(selectedCat[0]));
+            SuccessPopup.Category cat = savedIsDena ? SuccessPopup.Category.DENA : SuccessPopup.Category.PABONA;
             SuccessPopup.show(this, cat,
-                    (isDena ? "দেনা" : "পাওনা") + " যোগ সফল হয়েছে!",
+                    KhataEntry.categoryLabel(selectedCat[0]) + " যোগ সফল হয়েছে!",
                     customerName.getName() + "-এর হিসাব আপডেট হয়েছে।",
                     null, null);
         });
 
         dialog.show();
+    }
+
+    /** বাকি পরিশোধের তারিখ সিলেক্ট করে গ্রাহকের প্রোফাইলে সংরক্ষণ করে। */
+    private void showSetDueDateDialog() {
+        if (customerName == null) return;
+        Calendar c = Calendar.getInstance();
+        new DatePickerDialog(this, (view, y, m, d) -> {
+            String date = String.format(java.util.Locale.US, "%04d-%02d-%02d", y, m + 1, d);
+            int idx = db.getKhataCustomerIndexById(customerName.getId());
+            if (idx >= 0) {
+                customerName.setDueDate(date);
+                db.updateKhataCustomer(idx, customerName);
+                tvDueDateLabel.setText("পরিশোধের তারিখ: " + DatabaseManager.formatDateDisplay(date));
+                Toast.makeText(this, "তারিখ সংরক্ষণ হয়েছে", Toast.LENGTH_SHORT).show();
+            }
+        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    /** গ্রাহকের বকেয়া নিয়ে একটা ভদ্র তাগাদা মেসেজ তৈরি করে WhatsApp-এ পাঠানোর জন্য খুলে দেয়। */
+    private void sendReminderMessage() {
+        if (customerName == null) return;
+        double due = tvHeroAmount.getText() != null
+                ? parseAmountSafe(tvHeroAmount.getText().toString()) : 0;
+
+        String dueDateLine = customerName.hasDueDate()
+                ? "\nপরিশোধের তারিখ: " + DatabaseManager.formatDateDisplay(customerName.getDueDate())
+                : "";
+        String message = "প্রিয় " + customerName.getName() + ",\n"
+                + "আপনার কাছে আমাদের বর্তমান বকেয়া ৳" + DatabaseManager.formatAmount(due) + " টাকা।"
+                + dueDateLine
+                + "\nদয়া করে সুবিধামতো সময়ে পরিশোধ করবেন। ধন্যবাদ।";
+
+        String phone = customerName.getPhone().replaceAll("[^0-9]", "");
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setPackage("com.whatsapp");
+            intent.setData(android.net.Uri.parse("https://wa.me/" + (phone.startsWith("880") ? phone : "88" + phone)
+                    + "?text=" + java.net.URLEncoder.encode(message, "UTF-8")));
+            startActivity(intent);
+        } catch (Exception e) {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_TEXT, message);
+            startActivity(Intent.createChooser(share, "তাগাদা মেসেজ পাঠান"));
+        }
+    }
+
+    private double parseAmountSafe(String s) {
+        try {
+            return Double.parseDouble(s.replaceAll("[^0-9.]", ""));
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private void callKhataCustomer() {

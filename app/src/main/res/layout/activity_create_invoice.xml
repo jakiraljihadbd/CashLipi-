@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/appBg">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_khata"
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:paddingHorizontal="18dp" android:paddingVertical="16dp">
+
+        <LinearLayout android:id="@+id/btnBack" android:layout_width="36dp" android:layout_height="36dp"
+            android:background="@drawable/bg_summary_glass" android:gravity="center"
+            android:clickable="true" android:focusable="true">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="←" android:textSize="18sp" android:textColor="@color/white"/>
+        </LinearLayout>
+
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="নতুন ইনভয়েস" android:textSize="17sp" android:textStyle="bold" android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <!-- ক্রেতার তথ্য -->
+            <EditText android:id="@+id/etCustomerName" android:layout_width="match_parent" android:layout_height="52dp"
+                android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                android:hint="ক্রেতার নাম" android:textSize="14sp" android:layout_marginBottom="10dp"/>
+
+            <EditText android:id="@+id/etCustomerAddress" android:layout_width="match_parent" android:layout_height="52dp"
+                android:background="@drawable/bg_card_white" android:paddingHorizontal="14dp"
+                android:hint="ক্রেতার ঠিকানা/মোবাইল (ঐচ্ছিক)" android:textSize="14sp" android:layout_marginBottom="18dp"/>
+
+            <!-- আইটেম টেবিল হেডার -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:background="@color/khataWalletColor"
+                android:paddingVertical="8dp" android:paddingHorizontal="8dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="3"
+                    android:text="বিবরণ" android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold"/>
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
+                    android:text="পরিমাণ" android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold" android:gravity="center"/>
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
+                    android:text="দর" android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold" android:gravity="center"/>
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="3"
+                    android:text="টাকা" android:textColor="@color/white" android:textSize="12sp" android:textStyle="bold" android:gravity="end"/>
+                <View android:layout_width="22dp" android:layout_height="1dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/itemRowsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/cardBg"/>
+
+            <TextView
+                android:id="@+id/btnAddItemRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="10dp"
+                android:gravity="center"
+                android:text="+ আইটেম যোগ করুন"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:textColor="@color/khataWalletColor"
+                android:background="@drawable/bg_dialog_field"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="18dp"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:background="@drawable/bg_card_khata" android:padding="14dp" android:layout_marginBottom="18dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="সর্বমোট" android:textSize="15sp" android:textStyle="bold" android:textColor="@color/textPrimary"/>
+                <TextView android:id="@+id/tvInvoiceTotal" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="৳০" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/jomaColor"/>
+            </LinearLayout>
+
+            <EditText android:id="@+id/etInvoiceNote" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:minLines="2" android:background="@drawable/bg_card_white" android:padding="14dp"
+                android:hint="নোট (ঐচ্ছিক)" android:textSize="13.5sp" android:layout_marginBottom="18dp"/>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/btnSaveInvoice"
+                    android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:layout_marginEnd="8dp" android:paddingVertical="14dp" android:gravity="center"
+                    android:text="সংরক্ষণ করুন" android:textSize="14.5sp" android:textStyle="bold" android:textColor="@color/white"
+                    android:background="@drawable/bg_btn_khata_wide" android:clickable="true" android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/btnSaveAndShare"
+                    android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:paddingVertical="14dp" android:gravity="center"
+                    android:text="সংরক্ষণ + শেয়ার" android:textSize="14.5sp" android:textStyle="bold" android:textColor="@color/white"
+                    android:background="@drawable/bg_type_active_khata_joma" android:clickable="true" android:focusable="true"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

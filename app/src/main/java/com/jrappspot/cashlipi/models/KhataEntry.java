@@ -71,6 +71,38 @@ public class KhataEntry {
         return isBaki() ? "বাকি" : "জমা";
     }
 
+    /** ছয়টা লেনদেন ক্যাটাগরির কোড — গ্রাহক/সাপ্লায়ার দুই ধরনের পার্টির জন্যই ব্যবহৃত হয়। */
+    public static final String CAT_SALE = "sale";         // বিক্রয় (গ্রাহক বাকি বাড়ে)
+    public static final String CAT_PAYMENT = "payment";   // পেমেন্ট (গ্রাহকের কাছ থেকে জমা)
+    public static final String CAT_RECEIVE = "receive";   // গ্রহণ (সাপ্লায়ার থেকে মাল নিলাম, আপনার বাকি বাড়ে)
+    public static final String CAT_GIVE = "give";         // প্রদান (সাপ্লায়ারকে টাকা দিলাম, বাকি কমে)
+    public static final String CAT_ADVANCE = "advance";   // অগ্রিম পরিশোধ
+    public static final String CAT_BALANCE = "balance";   // জের (ওপেনিং/সমন্বয়)
+
+    /** category কোড থেকে বাংলা লেবেল — এন্ট্রি যোগ/এডিট করার সময় ও তালিকায় দেখানোর জন্য। */
+    public static String categoryLabel(String cat) {
+        if (cat == null) return "";
+        switch (cat) {
+            case CAT_SALE: return "বিক্রয়";
+            case CAT_PAYMENT: return "পেমেন্ট";
+            case CAT_RECEIVE: return "গ্রহণ";
+            case CAT_GIVE: return "প্রদান";
+            case CAT_ADVANCE: return "অগ্রিম পরিশোধ";
+            case CAT_BALANCE: return "জের";
+            default: return cat;
+        }
+    }
+
+    /** category অনুযায়ী এন্ট্রির দিক (বাকি বাড়বে নাকি জমা/কমবে) — নতুন এন্ট্রি তৈরির সময় type
+     *  স্বয়ংক্রিয়ভাবে এখান থেকে বসানো হয়, বাকি/জমা-ভিত্তিক পুরনো লজিক (রং, ব্যালেন্স হিসাব)
+     *  অপরিবর্তিত থাকে। */
+    public static String typeForCategory(String cat) {
+        if (CAT_SALE.equals(cat) || CAT_RECEIVE.equals(cat)) return "baki";
+        return "joma"; // payment, give, advance, balance(ঋণাত্মক না হলে) সবই বাকি কমায়
+    }
+
+    public String getCategoryLabel() { return categoryLabel(getCategory()); }
+
     /** টেবিল/লেজার ভিউতে দেখানোর জন্য — বাকি হলে ধনাত্মক, জমা হলে ঋণাত্মক প্রভাব। */
     public double getSignedAmount() {
         return isBaki() ? amount : -amount;

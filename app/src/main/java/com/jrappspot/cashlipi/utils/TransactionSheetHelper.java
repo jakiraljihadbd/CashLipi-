@@ -9,6 +9,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -16,13 +17,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.models.LedgerEntry;
+import com.jrappspot.cashlipi.models.Person;
 import com.jrappspot.cashlipi.models.Transaction;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -114,9 +119,9 @@ public class TransactionSheetHelper {
     public static void confirmDeleteTransaction(Activity act, DatabaseManager db, String type,
                                                    Transaction item, Refresh onChange) {
         new AlertDialog.Builder(act, R.style.PremiumDialog)
-                .setTitle("মুছে ফেলবেন?")
-                .setMessage("\"" + item.getDisplayTitle() + "\" এন্ট্রিটি ট্র্যাশে যাবে।")
-                .setPositiveButton("হ্যাঁ, মুছুন", (d, w) -> {
+                .setTitle(act.getString(R.string.ts_delete_confirm_title))
+                .setMessage(act.getString(R.string.ts_delete_confirm_msg, item.getDisplayTitle()))
+                .setPositiveButton(act.getString(R.string.ts_yes_delete), (d, w) -> {
                     List<Transaction> list = listFor(db, type);
                     int idx = findIndex(list, item);
                     if (idx >= 0) {
@@ -126,26 +131,23 @@ public class TransactionSheetHelper {
                             default: db.deleteIncome(idx); break;
                         }
                     }
-                    Toast.makeText(act, " মুছে গেছে", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(act, act.getString(R.string.ts_deleted_toast), Toast.LENGTH_SHORT).show();
                     if (onChange != null) onChange.run();
                 })
-                .setNegativeButton("না, রাখুন", null)
+                .setNegativeButton(act.getString(R.string.ts_no_keep), null)
                 .show();
     }
 
     private static void shareTransaction(Activity act, String type, Transaction item) {
-        String typeLabel = "income".equals(type) ? "আয়" : "expense".equals(type) ? "ব্যয়" : "সঞ্চয়";
-        String text = " " + typeLabel + " বিবরণ\n"
-                + "─────────────\n"
-                + "শিরোনাম: " + item.getDisplayTitle() + "\n"
-                + "পরিমাণ: " + DatabaseManager.formatAmount(item.getAmount()) + "\n"
-                + "তারিখ: " + DatabaseManager.formatDateDisplay(item.getDate()) + "\n"
-                + "সময়: " + DatabaseManager.formatTimeDisplay(item.getTime())
-                + (item.getNote() != null && !item.getNote().isEmpty() ? "\nনোট: " + item.getNote() : "");
+        String typeLabel = "income".equals(type) ? act.getString(R.string.type_label_income) : "expense".equals(type) ? act.getString(R.string.type_label_expense) : act.getString(R.string.type_label_savings);
+        String text = act.getString(R.string.ts_share_transaction_template, typeLabel, item.getDisplayTitle(),
+                DatabaseManager.formatAmount(item.getAmount()), DatabaseManager.formatDateDisplay(item.getDate()),
+                DatabaseManager.formatTimeDisplay(item.getTime()))
+                + (item.getNote() != null && !item.getNote().isEmpty() ? act.getString(R.string.ts_share_note_line, item.getNote()) : "");
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, text);
-        act.startActivity(Intent.createChooser(intent, "শেয়ার করুন"));
+        act.startActivity(Intent.createChooser(intent, act.getString(R.string.ts_share_action)));
     }
 
     private static void showTransactionDetails(Activity act, String type, Transaction item) {
@@ -164,7 +166,7 @@ public class TransactionSheetHelper {
         }
         new AlertDialog.Builder(act, R.style.PremiumDialog)
                 .setView(v)
-                .setPositiveButton("বন্ধ করুন", null)
+                .setPositiveButton(act.getString(R.string.ts_close), null)
                 .show();
     }
 
@@ -182,9 +184,9 @@ public class TransactionSheetHelper {
         View btnTime = v.findViewById(R.id.btnEditTime);
 
         switch (type) {
-            case "expense": tilTitle.setHint("ব্যয়ের ক্যাটাগরি"); break;
-            case "savings": tilTitle.setHint("ব্যাংক/মাধ্যমের নাম (ঐচ্ছিক)"); break;
-            default: tilTitle.setHint("আয়ের উৎস"); break;
+            case "expense": tilTitle.setHint(act.getString(R.string.hint_expense_category)); break;
+            case "savings": tilTitle.setHint(act.getString(R.string.hint_savings_bank_name)); break;
+            default: tilTitle.setHint(act.getString(R.string.hint_income_source)); break;
         }
 
         if ("savings".equals(type)) {
@@ -230,10 +232,10 @@ public class TransactionSheetHelper {
         });
 
         AlertDialog dialog = new AlertDialog.Builder(act, R.style.PremiumDialog)
-                .setTitle(" সম্পাদনা করুন")
+                .setTitle(act.getString(R.string.ts_edit_dialog_title))
                 .setView(v)
-                .setPositiveButton("সংরক্ষণ করুন", null)
-                .setNegativeButton("বাতিল", null)
+                .setPositiveButton(act.getString(R.string.ts_save_btn), null)
+                .setNegativeButton(act.getString(R.string.cancel), null)
                 .create();
 
         dialog.show();
@@ -243,7 +245,7 @@ public class TransactionSheetHelper {
             String note = etNote.getText() != null ? etNote.getText().toString().trim() : "";
 
             if (!"savings".equals(type) && title.isEmpty()) {
-                tilTitle.setError("এই ঘরটি খালি রাখা যাবে না");
+                tilTitle.setError(act.getString(R.string.ts_field_required_error));
                 return;
             }
             tilTitle.setError(null);
@@ -253,7 +255,7 @@ public class TransactionSheetHelper {
                 amount = Double.parseDouble(amtStr);
                 if (amount <= 0) throw new NumberFormatException();
             } catch (Exception e) {
-                tilAmount.setError("সঠিক পরিমাণ লিখুন");
+                tilAmount.setError(act.getString(R.string.ts_invalid_amount_error));
                 return;
             }
             tilAmount.setError(null);
@@ -283,7 +285,7 @@ public class TransactionSheetHelper {
                     default: db.updateIncome(idx, item); break;
                 }
             }
-            Toast.makeText(act, " আপডেট হয়েছে", Toast.LENGTH_SHORT).show();
+            Toast.makeText(act, act.getString(R.string.ts_updated_toast), Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             if (onChange != null) onChange.run();
         });
@@ -293,28 +295,68 @@ public class TransactionSheetHelper {
     //  LEDGER (debt / receivable)
     // ═══════════════════════════════════════════
 
+    private static final int[] SHEET_AVATAR_BGS = {
+            R.drawable.bg_avatar_circle_1, R.drawable.bg_avatar_circle_2,
+            R.drawable.bg_avatar_circle_3, R.drawable.bg_avatar_circle_4,
+            R.drawable.bg_avatar_circle_5
+    };
+
     public static void showLedgerSheet(Activity act, DatabaseManager db,
                                          LedgerEntry item, Refresh onChange) {
+        showLedgerSheet(act, db, item, null, onChange);
+    }
+
+    /**
+     * @param person যদি দেনা-পাওনা ব্যক্তির নিজস্ব পেজ (PersonDetailActivity) থেকে খোলা হয়, তার Person
+     *               অবজেক্ট দিলে হেডারে ব্যক্তির আসল ছবি (বা ছবি না থাকলে নামের প্রথম অক্ষরসহ রঙিন
+     *               বৃত্ত) দেখানো হয়। সাধারণ দেনা-পাওনা লিস্ট (LedgerListActivity) থেকে খুললে null
+     *               দিলে আগের মতোই দেনা/পাওনা আইকন দেখাবে — বাকির খাতার সাথে এর কোনো সম্পর্ক নেই।
+     */
+    public static void showLedgerSheet(Activity act, DatabaseManager db,
+                                         LedgerEntry item, Person person, Refresh onChange) {
         BottomSheetDialog dialog = new BottomSheetDialog(act, R.style.PremiumBottomSheetDialog);
         View v = LayoutInflater.from(act).inflate(R.layout.bottom_sheet_transaction_actions, null);
         dialog.setContentView(v);
 
         boolean isDena = item.isDena();
         TextView sheetIcon = v.findViewById(R.id.sheetIcon);
+        ImageView sheetPersonPhoto = v.findViewById(R.id.sheetPersonPhoto);
         TextView sheetTitle = v.findViewById(R.id.sheetTitle);
         TextView sheetSubtitle = v.findViewById(R.id.sheetSubtitle);
         TextView sheetAmount = v.findViewById(R.id.sheetAmount);
 
-        sheetIcon.setText(isDena ? "" : "");
-        sheetIcon.setBackground(act.getResources().getDrawable(
-                isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable));
+        if (person != null) {
+            // দেনা-পাওনা ব্যক্তির পেজ থেকে খোলা হলে: ছবি থাকলে ছবি, নাহলে নামের অক্ষরসহ রঙিন বৃত্ত
+            if (person.hasPhoto() && new File(person.getPhotoPath()).exists()) {
+                sheetIcon.setVisibility(View.GONE);
+                sheetPersonPhoto.setVisibility(View.VISIBLE);
+                Glide.with(act).load(new File(person.getPhotoPath())).transform(new CircleCrop()).into(sheetPersonPhoto);
+            } else {
+                sheetPersonPhoto.setVisibility(View.GONE);
+                sheetIcon.setVisibility(View.VISIBLE);
+                String name = person.getName();
+                sheetIcon.setText(name.isEmpty() ? "?" : name.substring(0, 1).toUpperCase(Locale.getDefault()));
+                int colorIdx = Math.abs(name.hashCode()) % SHEET_AVATAR_BGS.length;
+                sheetIcon.setBackgroundResource(SHEET_AVATAR_BGS[colorIdx]);
+            }
+        } else {
+            sheetPersonPhoto.setVisibility(View.GONE);
+            sheetIcon.setVisibility(View.VISIBLE);
+            sheetIcon.setText(isDena ? "" : "");
+            sheetIcon.setBackground(act.getResources().getDrawable(
+                    isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable));
+        }
+
         sheetTitle.setText(item.getPerson());
-        String statusLabel = item.isPaid() ? ("  •   " + (isDena ? "দিলাম" : "পেলাম"))
-                : item.isPartiallyPaid() ? ("  •   আংশিক পরিশোধ (বাকি ৳" + DatabaseManager.formatAmount(item.getRemainingAmount()) + ")")
-                : "  •   বাকি";
-        sheetSubtitle.setText(DatabaseManager.formatDateDisplay(item.getDate())
+        String typeLabel = isDena ? act.getString(R.string.ledger_type_dena) : act.getString(R.string.ledger_type_pabona);
+        String statusLabel = item.isPaid() ? ("  •   " + (isDena ? act.getString(R.string.status_paid_dena) : act.getString(R.string.status_paid_pabona)))
+                : item.isPartiallyPaid() ? ("  •   " + act.getString(R.string.status_partial_paid, DatabaseManager.formatAmount(item.getRemainingAmount())))
+                : "  •   " + act.getString(R.string.status_due);
+        String noteSuffix = item.getNote().isEmpty() ? "" : ("  •   " + item.getNote());
+        sheetSubtitle.setText(typeLabel
+                + "  •  " + DatabaseManager.formatDateDisplay(item.getDate())
                 + "  •  " + DatabaseManager.formatTimeDisplay(item.getTime())
-                + statusLabel);
+                + statusLabel + noteSuffix);
         sheetAmount.setText(DatabaseManager.formatAmount(item.getAmount()));
         sheetAmount.setTextColor(androidx.core.content.ContextCompat.getColor(act, isDena ? R.color.amountDebt : R.color.amountReceivable));
 
@@ -324,14 +366,14 @@ public class TransactionSheetHelper {
         View actionResetPartial = v.findViewById(R.id.actionResetPartial);
         togglePaid.setVisibility(View.VISIBLE);
         if (item.isPaid()) {
-            togglePaidLabel.setText("↩️ অপরিশোধিত করুন");
+            togglePaidLabel.setText(act.getString(R.string.ts_mark_unpaid));
             actionResetPartial.setVisibility(View.GONE);
         } else if (item.isPartiallyPaid()) {
-            togglePaidLabel.setText("✅ আরও পরিশোধ করুন  •  বাকি ৳" + DatabaseManager.formatAmount(item.getRemainingAmount()));
+            togglePaidLabel.setText(act.getString(R.string.ts_pay_more_prefix, DatabaseManager.formatAmount(item.getRemainingAmount())));
             actionResetPartial.setVisibility(View.VISIBLE);
         } else {
             // পাওনার পরিশোধে "পেলাম" (টাকা পেয়েছি), দেনার পরিশোধে "দিলাম" (টাকা দিয়েছি)
-            togglePaidLabel.setText(isDena ? "✅ দিলাম" : "✅ পেলাম");
+            togglePaidLabel.setText(isDena ? act.getString(R.string.ts_mark_paid_dena) : act.getString(R.string.ts_mark_paid_pabona));
             actionResetPartial.setVisibility(View.GONE);
         }
         togglePaid.setOnClickListener(x -> {
@@ -351,17 +393,16 @@ public class TransactionSheetHelper {
         actionResetPartial.setOnClickListener(x -> {
             dialog.dismiss();
             new AlertDialog.Builder(act, R.style.PremiumDialog)
-                    .setTitle("পরিশোধ বাতিল করবেন?")
-                    .setMessage("এ পর্যন্ত করা ৳" + DatabaseManager.formatAmount(item.getPaidAmount())
-                            + " পরিশোধ বাতিল হয়ে যাবে এবং পুরো ৳" + DatabaseManager.formatAmount(item.getAmount())
-                            + " আবার বাকি হিসেবে দেখাবে।")
-                    .setPositiveButton("হ্যাঁ, বাতিল করুন", (d, w) -> {
+                    .setTitle(act.getString(R.string.ts_cancel_payment_title))
+                    .setMessage(act.getString(R.string.ts_cancel_payment_msg,
+                            DatabaseManager.formatAmount(item.getPaidAmount()), DatabaseManager.formatAmount(item.getAmount())))
+                    .setPositiveButton(act.getString(R.string.ts_yes_cancel), (d, w) -> {
                         List<LedgerEntry> list = db.getLedgerList();
                         int idx = findLedgerIndex(list, item);
                         if (idx >= 0) db.resetLedgerPayment(idx);
                         if (onChange != null) onChange.run();
                     })
-                    .setNegativeButton("না", null)
+                    .setNegativeButton(act.getString(R.string.ts_no), null)
                     .show();
         });
 
@@ -430,15 +471,15 @@ public class TransactionSheetHelper {
         TextInputEditText etPartialAmount = v.findViewById(R.id.etPartialAmount);
 
         tvQuestion.setText(isDena
-                ? "টাকা পরিশোধ করুন"
-                : "টাকা গ্রহণ করুন");
-        tvRemaining.setText("মোট বাকি ৳" + DatabaseManager.formatAmount(remaining)
-                + (item.isPartiallyPaid() ? "  (ইতিমধ্যে ৳" + DatabaseManager.formatAmount(item.getPaidAmount()) + " পরিশোধিত — বাকিটাও একই মাধ্যমে হবে)" : ""));
+                ? act.getString(R.string.ts_pay_money_question)
+                : act.getString(R.string.ts_receive_money_question));
+        tvRemaining.setText(act.getString(R.string.ts_total_due_prefix, DatabaseManager.formatAmount(remaining))
+                + (item.isPartiallyPaid() ? act.getString(R.string.ts_already_paid_note, DatabaseManager.formatAmount(item.getPaidAmount())) : ""));
 
-        rbBalance.setText(isDena ? "ব্যালেন্স থেকে (মূল হিসাব থেকে কমবে)" : "ব্যালেন্সে (মূল হিসাবে যোগ হবে)");
-        rbSavings.setText(isDena ? "সঞ্চয় থেকে (সঞ্চয়ের হিসাব থেকে কমবে)" : "সঞ্চয়ে (সঞ্চয়ের হিসাবে যোগ হবে)");
-        rbIncomeExpense.setText(isDena ? "ব্যয় হিসেবে যোগ হবে" : "আয় হিসেবে যোগ হবে");
-        rbNone.setText(isDena ? "কোথাও থেকে না (শুধু হিসাব থেকে বাদ)" : "কোথাও না (শুধু হিসাব থেকে বাদ)");
+        rbBalance.setText(isDena ? act.getString(R.string.rb_balance_dena) : act.getString(R.string.rb_balance_pabona));
+        rbSavings.setText(isDena ? act.getString(R.string.rb_savings_dena) : act.getString(R.string.rb_savings_pabona));
+        rbIncomeExpense.setText(isDena ? act.getString(R.string.rb_incomeexpense_dena) : act.getString(R.string.rb_incomeexpense_pabona));
+        rbNone.setText(isDena ? act.getString(R.string.rb_none_dena) : act.getString(R.string.rb_none_pabona));
 
         // ইতিমধ্যে একবার আংশিক পরিশোধ হয়ে থাকলে, ব্যালেন্স/সঞ্চয়ের হিসাব ঠিক রাখতে বাকি পরিশোধও
         // একই মাধ্যমে (settleTo) করতে হবে — তাই অন্য অপশনগুলো বন্ধ করে দেওয়া হয়
@@ -500,25 +541,25 @@ public class TransactionSheetHelper {
             int checked = rg.getCheckedRadioButtonId();
             if (checked == R.id.rbSettleBalance) {
                 double after = isDena ? curBalance - payAmount : curBalance + payAmount;
-                tvBefore.setText("ব্যালেন্স ৳" + DatabaseManager.formatAmount(curBalance));
+                tvBefore.setText(act.getString(R.string.ts_balance_prefix, DatabaseManager.formatAmount(curBalance)));
                 tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
             } else if (checked == R.id.rbSettleSavings) {
                 double after = isDena ? curSavings - payAmount : curSavings + payAmount;
-                tvBefore.setText("সঞ্চয় ৳" + DatabaseManager.formatAmount(curSavings));
+                tvBefore.setText(act.getString(R.string.ts_savings_prefix, DatabaseManager.formatAmount(curSavings)));
                 tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
             } else if (checked == R.id.rbSettleIncomeExpense) {
                 if (isDena) {
                     double after = curExpense + payAmount;
-                    tvBefore.setText("ব্যয় ৳" + DatabaseManager.formatAmount(curExpense));
+                    tvBefore.setText(act.getString(R.string.ts_expense_prefix, DatabaseManager.formatAmount(curExpense)));
                     tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
                 } else {
                     double after = curIncome + payAmount;
-                    tvBefore.setText("আয় ৳" + DatabaseManager.formatAmount(curIncome));
+                    tvBefore.setText(act.getString(R.string.ts_income_prefix, DatabaseManager.formatAmount(curIncome)));
                     tvAfter.setText("৳" + DatabaseManager.formatAmount(after));
                 }
             } else {
-                tvBefore.setText("ব্যালেন্স ৳" + DatabaseManager.formatAmount(curBalance));
-                tvAfter.setText("৳" + DatabaseManager.formatAmount(curBalance) + " (অপরিবর্তিত)");
+                tvBefore.setText(act.getString(R.string.ts_balance_prefix, DatabaseManager.formatAmount(curBalance)));
+                tvAfter.setText("৳" + DatabaseManager.formatAmount(curBalance) + act.getString(R.string.ts_unchanged_suffix));
             }
         };
         updatePreviewHolder[0] = updatePreview;
@@ -532,18 +573,18 @@ public class TransactionSheetHelper {
 
         AlertDialog settleDialog = new AlertDialog.Builder(act, R.style.PremiumDialog)
                 .setView(v)
-                .setPositiveButton("পরিশোধ নিশ্চিত করুন", null)
-                .setNegativeButton("বাতিল", null)
+                .setPositiveButton(act.getString(R.string.ts_confirm_payment), null)
+                .setNegativeButton(act.getString(R.string.cancel), null)
                 .create();
         settleDialog.show();
         settleDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(btn -> {
             double payAmount = currentPayAmount(isPartialMode[0], remaining, etPartialAmount);
             if (payAmount <= 0) {
-                Toast.makeText(act, "সঠিক পরিমাণ লিখুন", Toast.LENGTH_SHORT).show();
+                Toast.makeText(act, act.getString(R.string.ts_invalid_amount_error), Toast.LENGTH_SHORT).show();
                 return;
             }
             if (payAmount > remaining + 0.01) {
-                Toast.makeText(act, "বাকি ৳" + DatabaseManager.formatAmount(remaining) + "-এর বেশি পরিশোধ করা যাবে না", Toast.LENGTH_SHORT).show();
+                Toast.makeText(act, act.getString(R.string.ts_exceeds_due, DatabaseManager.formatAmount(remaining)), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -570,12 +611,12 @@ public class TransactionSheetHelper {
                     txn.setTime(DatabaseManager.nowTime());
                     if (updated.isPabona()) {
                         txn.setType("income");
-                        txn.setSource("পাওনা প্রাপ্তি");
-                        txn.setNote(personName + " এর কাছ থেকে " + entryDate + " তারিখের পাওনা আদায় করা হয়েছে");
+                        txn.setSource(act.getString(R.string.ts_receivable_collection_source));
+                        txn.setNote(act.getString(R.string.ts_receivable_note, personName, entryDate));
                     } else {
                         txn.setType("expense");
-                        txn.setCategory("দেনা পরিশোধ");
-                        txn.setNote(personName + " কে " + entryDate + " তারিখের দেনা পরিশোধ করা হয়েছে");
+                        txn.setCategory(act.getString(R.string.ts_debt_payment_category));
+                        txn.setNote(act.getString(R.string.ts_debt_payment_note, personName, entryDate));
                     }
                     txn.setAmount(payAmount);
                     Transaction saved = updated.isPabona() ? db.addIncome(txn) : db.addExpense(txn);
@@ -602,34 +643,31 @@ public class TransactionSheetHelper {
     private static void confirmDeleteLedger(Activity act, DatabaseManager db,
                                               LedgerEntry item, Refresh onChange) {
         new AlertDialog.Builder(act, R.style.PremiumDialog)
-                .setTitle("মুছে ফেলবেন?")
-                .setMessage("\"" + item.getPerson() + "\" এন্ট্রিটি ট্র্যাশে যাবে।")
-                .setPositiveButton("হ্যাঁ, মুছুন", (d, w) -> {
+                .setTitle(act.getString(R.string.ts_delete_confirm_title))
+                .setMessage(act.getString(R.string.ts_delete_confirm_msg, item.getPerson()))
+                .setPositiveButton(act.getString(R.string.ts_yes_delete), (d, w) -> {
                     List<LedgerEntry> list = db.getLedgerList();
                     int idx = findLedgerIndex(list, item);
                     if (idx >= 0) db.deleteLedger(idx);
-                    Toast.makeText(act, " মুছে গেছে", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(act, act.getString(R.string.ts_deleted_toast), Toast.LENGTH_SHORT).show();
                     if (onChange != null) onChange.run();
                 })
-                .setNegativeButton("না, রাখুন", null)
+                .setNegativeButton(act.getString(R.string.ts_no_keep), null)
                 .show();
     }
 
     private static void shareLedger(Activity act, LedgerEntry item) {
-        String typeLabel = item.isDena() ? " দেনা" : " পাওনা";
-        String text = " " + typeLabel + " বিবরণ\n"
-                + "─────────────\n"
-                + "ব্যক্তি: " + item.getPerson() + "\n"
-                + "পরিমাণ: " + DatabaseManager.formatAmount(item.getAmount()) + "\n"
-                + "তারিখ: " + DatabaseManager.formatDateDisplay(item.getDate()) + "\n"
-                + "সময়: " + DatabaseManager.formatTimeDisplay(item.getTime()) + "\n"
-                + "স্ট্যাটাস: " + (item.isPaid() ? (" " + (item.isDena() ? "দিলাম" : "পেলাম")) : " বাকি")
-                + (item.getCategory() != null && !item.getCategory().isEmpty() ? "\nক্যাটাগরি: " + item.getCategory() : "")
-                + (item.getNote() != null && !item.getNote().isEmpty() ? "\nনোট: " + item.getNote() : "");
+        String typeLabel = item.isDena() ? act.getString(R.string.ts_type_dena) : act.getString(R.string.ts_type_pabona);
+        String status = item.isPaid() ? (" " + (item.isDena() ? act.getString(R.string.status_paid_dena) : act.getString(R.string.status_paid_pabona))) : " " + act.getString(R.string.status_due);
+        String text = act.getString(R.string.ts_share_ledger_template, typeLabel, item.getPerson(),
+                DatabaseManager.formatAmount(item.getAmount()), DatabaseManager.formatDateDisplay(item.getDate()),
+                DatabaseManager.formatTimeDisplay(item.getTime()), status)
+                + (item.getCategory() != null && !item.getCategory().isEmpty() ? act.getString(R.string.ts_share_category_line, item.getCategory()) : "")
+                + (item.getNote() != null && !item.getNote().isEmpty() ? act.getString(R.string.ts_share_note_line, item.getNote()) : "");
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, text);
-        act.startActivity(Intent.createChooser(intent, "শেয়ার করুন"));
+        act.startActivity(Intent.createChooser(intent, act.getString(R.string.ts_share_action)));
     }
 
     private static void showLedgerDetails(Activity act, LedgerEntry item) {
@@ -647,7 +685,7 @@ public class TransactionSheetHelper {
         ((TextView) v.findViewById(R.id.tvDetailDate)).setText(DatabaseManager.formatDateDisplay(item.getDate()));
         ((TextView) v.findViewById(R.id.tvDetailTime)).setText(DatabaseManager.formatTimeDisplay(item.getTime()));
         ((TextView) v.findViewById(R.id.tvDetailStatus)).setText(
-                item.isPaid() ? (" " + (item.isDena() ? "দিলাম" : "পেলাম")) : " বাকি");
+                item.isPaid() ? (" " + (item.isDena() ? act.getString(R.string.status_paid_dena) : act.getString(R.string.status_paid_pabona))) : " " + act.getString(R.string.status_due));
 
         if (item.getNote() != null && !item.getNote().isEmpty()) {
             ((TextView) v.findViewById(R.id.tvDetailNote)).setText(item.getNote());
@@ -657,7 +695,7 @@ public class TransactionSheetHelper {
 
         new AlertDialog.Builder(act, R.style.PremiumDialog)
                 .setView(v)
-                .setPositiveButton("বন্ধ করুন", null)
+                .setPositiveButton(act.getString(R.string.ts_close), null)
                 .show();
     }
 
@@ -734,10 +772,10 @@ public class TransactionSheetHelper {
         });
 
         AlertDialog dialog = new AlertDialog.Builder(act, R.style.PremiumDialog)
-                .setTitle(" সম্পাদনা করুন")
+                .setTitle(act.getString(R.string.ts_edit_dialog_title))
                 .setView(v)
-                .setPositiveButton("সংরক্ষণ করুন", null)
-                .setNegativeButton("বাতিল", null)
+                .setPositiveButton(act.getString(R.string.ts_save_btn), null)
+                .setNegativeButton(act.getString(R.string.cancel), null)
                 .create();
 
         dialog.show();
@@ -747,14 +785,14 @@ public class TransactionSheetHelper {
             String amtStr = etAmount.getText() != null ? etAmount.getText().toString().trim() : "";
             String note = etNote.getText() != null ? etNote.getText().toString().trim() : "";
 
-            if (person.isEmpty()) { Toast.makeText(act, "নাম লিখুন", Toast.LENGTH_SHORT).show(); return; }
+            if (person.isEmpty()) { Toast.makeText(act, act.getString(R.string.ts_enter_name_error), Toast.LENGTH_SHORT).show(); return; }
 
             double amount;
             try {
                 amount = Double.parseDouble(amtStr);
                 if (amount <= 0) throw new NumberFormatException();
             } catch (Exception e) {
-                tilAmount.setError("সঠিক পরিমাণ লিখুন");
+                tilAmount.setError(act.getString(R.string.ts_invalid_amount_error));
                 return;
             }
             tilAmount.setError(null);
@@ -771,7 +809,7 @@ public class TransactionSheetHelper {
             int idx = findLedgerIndex(list, item);
             if (idx >= 0) db.updateLedger(idx, item);
 
-            Toast.makeText(act, " আপডেট হয়েছে", Toast.LENGTH_SHORT).show();
+            Toast.makeText(act, act.getString(R.string.ts_updated_toast), Toast.LENGTH_SHORT).show();
             dialog.dismiss();
             if (onChange != null) onChange.run();
         });

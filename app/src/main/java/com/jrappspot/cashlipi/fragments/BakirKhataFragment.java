@@ -66,14 +66,7 @@ public class BakirKhataFragment extends Fragment {
     private FrameLayout btnFilter, btnThemeChange;
     private View filterActiveDot;
 
-    private FrameLayout bannerContainer;
-    private LinearLayout bannerCardRoot;
-    private TextView tvBannerInitial, tvBannerName, tvBannerSub, tvBannerAmount, tvBannerLabel;
-    private LinearLayout debtDots;
-    private TextView tvKhataWalletBalance;
-    private final Handler bannerHandler = new Handler(Looper.getMainLooper());
-    private final List<KhataCustomer> bannerKhataCustomers = new ArrayList<>();
-    private int bannerIndex = 0;
+    private TextView tvSummaryBaki, tvSummaryJoma, tvKhataWalletBalance;
 
     private final List<KhataCustomer> allKhataCustomers = new ArrayList<>();
     private final Map<String, KhataCustomerStat> statsMap = new HashMap<>();
@@ -113,14 +106,8 @@ public class BakirKhataFragment extends Fragment {
         btnFilter = root.findViewById(R.id.btnFilter);
         btnThemeChange = root.findViewById(R.id.btnThemeChange);
         filterActiveDot = root.findViewById(R.id.filterActiveDot);
-        bannerContainer = root.findViewById(R.id.bannerContainer);
-        bannerCardRoot = root.findViewById(R.id.bannerCardRoot);
-        tvBannerInitial = root.findViewById(R.id.tvBannerInitial);
-        tvBannerName = root.findViewById(R.id.tvBannerName);
-        tvBannerSub = root.findViewById(R.id.tvBannerSub);
-        tvBannerAmount = root.findViewById(R.id.tvBannerAmount);
-        tvBannerLabel = root.findViewById(R.id.tvBannerLabel);
-        debtDots = root.findViewById(R.id.debtDots);
+        tvSummaryBaki = root.findViewById(R.id.tvSummaryBaki);
+        tvSummaryJoma = root.findViewById(R.id.tvSummaryJoma);
         tvKhataWalletBalance = root.findViewById(R.id.tvKhataWalletBalance);
 
         rvList.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -129,12 +116,25 @@ public class BakirKhataFragment extends Fragment {
                 startActivity(new Intent(requireContext(), AddKhataCustomerActivity.class)));
 
         root.findViewById(R.id.chipKhataWallet).setOnClickListener(v -> showWalletDialog());
+        root.findViewById(R.id.chipKhataWallet).setOnLongClickListener(v -> {
+            startActivity(new Intent(requireContext(), com.jrappspot.cashlipi.activities.StockActivity.class));
+            return true;
+        });
         root.findViewById(R.id.btnKhataAddExpense).setOnClickListener(v -> showAddExpenseDialog());
         root.findViewById(R.id.btnKhataAddExpense).setOnLongClickListener(v -> {
             startActivity(new Intent(requireContext(), com.jrappspot.cashlipi.activities.KhataExpenseActivity.class));
             return true;
         });
         root.findViewById(R.id.btnKhataAddJoma).setOnClickListener(v -> showFundWalletDialog());
+        root.findViewById(R.id.btnKhataAddJoma).setOnLongClickListener(v -> {
+            startActivity(new Intent(requireContext(), com.jrappspot.cashlipi.activities.CreateInvoiceActivity.class));
+            return true;
+        });
+
+        root.findViewById(R.id.rowShopSwitcher).setOnClickListener(v ->
+                startActivity(new Intent(requireContext(), com.jrappspot.cashlipi.activities.ChooseShopActivity.class)));
+
+        setupDashboardTiles(root);
 
         setupSearch();
         setupFilterAndTheme();
@@ -151,7 +151,6 @@ public class BakirKhataFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        bannerHandler.removeCallbacksAndMessages(null);
     }
 
     // ── সার্চ ────────────────────────────────────────────────────────
@@ -182,11 +181,41 @@ public class BakirKhataFragment extends Fragment {
         m.add(Menu.NONE, 0, 0, "সব");
         m.add(Menu.NONE, 1, 1, "অপরিশোধিত");
         m.add(Menu.NONE, 2, 2, "পরিশোধিত");
+        m.add(Menu.NONE, 3, 3, "শুধু গ্রাহক");
+        m.add(Menu.NONE, 4, 4, "শুধু সাপ্লায়ার");
         menu.setOnMenuItemClickListener((MenuItem item) -> {
             selectFilter(item.getItemId());
             return true;
         });
         menu.show();
+    }
+
+    private void setupDashboardTiles(View root) {
+        bindTile(root, R.id.tileCustomers, "👥", "গ্রাহক", v -> {
+            selectFilter(3);
+            android.widget.Toast.makeText(requireContext(), "শুধু গ্রাহক দেখানো হচ্ছে", android.widget.Toast.LENGTH_SHORT).show();
+        });
+        bindTile(root, R.id.tileSuppliers, "🚚", "সাপ্লায়ার", v -> {
+            selectFilter(4);
+            android.widget.Toast.makeText(requireContext(), "শুধু সাপ্লায়ার দেখানো হচ্ছে", android.widget.Toast.LENGTH_SHORT).show();
+        });
+        bindTile(root, R.id.tileReport, "📊", "রিপোর্ট", v ->
+                startActivity(new Intent(requireContext(), com.jrappspot.cashlipi.activities.KhataEntryListActivity.class)));
+        bindTile(root, R.id.tileStock, "📦", "স্টক", v ->
+                startActivity(new Intent(requireContext(), com.jrappspot.cashlipi.activities.StockActivity.class)));
+        bindTile(root, R.id.tileInvoice, "🧾", "ইনভয়েস", v ->
+                startActivity(new Intent(requireContext(), com.jrappspot.cashlipi.activities.CreateInvoiceActivity.class)));
+        bindTile(root, R.id.tileReminders, "💬", "তাগাদা", v -> {
+            selectFilter(1);
+            android.widget.Toast.makeText(requireContext(), "যাদের বাকি আছে তাদের দেখানো হচ্ছে — কারো নামে ঢুকে তাগাদা মেসেজ পাঠান", android.widget.Toast.LENGTH_LONG).show();
+        });
+    }
+
+    private void bindTile(View root, int includeId, String icon, String label, View.OnClickListener onClick) {
+        View tile = root.findViewById(includeId);
+        ((TextView) tile.findViewById(R.id.tvTileIcon)).setText(icon);
+        ((TextView) tile.findViewById(R.id.tvTileLabel)).setText(label);
+        tile.setOnClickListener(onClick);
     }
 
     private void selectFilter(int filter) {
@@ -234,14 +263,12 @@ public class BakirKhataFragment extends Fragment {
         int totalTxn = 0;
         for (KhataCustomerStat s : statsMap.values()) totalTxn += s.totalCount;
 
-        tvHeaderTitle.setText("গ্রাহক: " + allKhataCustomers.size());
-        if (totalTxn == 0) {
-            tvKhataCustomerCount.setText("মোট লেনদেন নেই");
-        } else {
-            tvKhataCustomerCount.setText("মোট লেনদেন: " + totalTxn);
-        }
+        com.jrappspot.cashlipi.models.Shop activeShop = db.getActiveShop();
+        tvHeaderTitle.setText(activeShop.getName().isEmpty() ? "বাকির খাতা" : activeShop.getName());
+        tvKhataCustomerCount.setText(allKhataCustomers.size() + " জন গ্রাহক" +
+                (totalTxn == 0 ? "" : " • " + totalTxn + " লেনদেন"));
 
-        setupBanner();
+        refreshSummaryTiles();
         applyFilters();
         refreshWalletChip();
     }
@@ -355,115 +382,11 @@ public class BakirKhataFragment extends Fragment {
         }
     }
 
-    // ── উপরের অটো-স্লাইড ব্যানার — শুধু বাকি-থাকা গ্রাহকদের নিয়ে ──
-    private void setupBanner() {
-        bannerHandler.removeCallbacksAndMessages(null);
-
-        bannerKhataCustomers.clear();
-        for (KhataCustomer p : allKhataCustomers) {
-            KhataCustomerStat s = statsMap.get(p.getId());
-            if (s != null && s.isDue()) bannerKhataCustomers.add(p);
-        }
-        // যার বকেয়া সবচেয়ে বেশি সে আগে দেখাবে
-        bannerKhataCustomers.sort((a, b) -> {
-            KhataCustomerStat sa = statsMap.get(a.getId());
-            KhataCustomerStat sb = statsMap.get(b.getId());
-            double na = sa != null ? sa.getNetAmount() : 0;
-            double nb = sb != null ? sb.getNetAmount() : 0;
-            return Double.compare(nb, na);
-        });
-
-        if (bannerKhataCustomers.isEmpty()) {
-            bannerContainer.setVisibility(View.GONE);
-            return;
-        }
-
-        bannerContainer.setVisibility(View.VISIBLE);
-        debtDots.removeAllViews();
-        for (int i = 0; i < bannerKhataCustomers.size(); i++) {
-            View dot = new View(requireContext());
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(3, 0, 3, 0);
-            dot.setLayoutParams(lp);
-            dot.setBackgroundResource(R.drawable.dot_inactive);
-            debtDots.addView(dot);
-        }
-
-        bannerIndex = 0;
-        showBannerCard(bannerIndex, false);
-        updateBannerDots(bannerIndex);
-        if (bannerKhataCustomers.size() > 1) startBannerAutoSlide();
-    }
-
-    /**
-     * bannerCardRoot XML-এই স্ট্যাটিকভাবে ডিফাইন করা এবং সবসময় বিদ্যমান — এখানে শুধু তার
-     * background ও টেক্সট বদলানো হয়, কখনও কোনো ভিউ যোগ/বাদ দেওয়া হয় না। তাই কোনো অবস্থাতেই
-     * কার্ডটা খালি/সাদা দেখানোর সুযোগ নেই (দেনা-পাওনা পেজেও একই বাগ ছিল, একইভাবে ঠিক করা হলো)।
-     * পরিবর্তনের সময় (animate=true) শুধু একটা হালকা scale/translate "পপ" ইফেক্ট হয় —
-     * background/content কখনও অস্বচ্ছতা হারায় না।
-     */
-    private void showBannerCard(int index, boolean animate) {
-        if (bannerCardRoot == null || index < 0 || index >= bannerKhataCustomers.size()) return;
-        KhataCustomer p = bannerKhataCustomers.get(index);
-
-        Runnable applyContent = () -> bindBannerCard(p);
-
-        if (!animate) {
-            applyContent.run();
-            return;
-        }
-
-        bannerCardRoot.animate().cancel();
-        bannerCardRoot.animate()
-                .translationY(-6f)
-                .setDuration(120)
-                .withEndAction(() -> {
-                    applyContent.run();
-                    bannerCardRoot.setTranslationY(-6f);
-                    bannerCardRoot.animate().translationY(0f).setDuration(160).start();
-                }).start();
-    }
-
-    private void bindBannerCard(KhataCustomer p) {
-        KhataCustomerStat s = statsMap.get(p.getId());
-        if (s == null) s = new KhataCustomerStat();
-        boolean isDue = s.isDue();
-
-        // বাকি ও জমা-বেশি (অগ্রিম) এর জন্য সঠিক ব্যাকগ্রাউন্ড সরাসরি bannerCardRoot-এ সেট করা
-        // হয় — এটা সবসময়ই বিদ্যমান কোনো একটা background নিয়ে থাকে (কখনও transparent/blank নয়)।
-        bannerCardRoot.setBackgroundResource(
-                isDue ? R.drawable.bg_debt_banner_khata : R.drawable.bg_debt_banner_khata_joma);
-
-        tvBannerInitial.setText(p.getInitial());
-        tvBannerName.setText(p.getName().isEmpty() ? "নাম নেই" : p.getName());
-        tvBannerSub.setText(s.totalCount + " টি লেনদেন" + (p.hasBusinessTag() ? " • " + p.getBusinessTag() : ""));
-        tvBannerLabel.setText(isDue ? "গ্রাহক বাকি আছেন" : "অগ্রিম জমা আছে");
-        tvBannerAmount.setText(DatabaseManager.formatAmount(s.getNetAmount()));
-
-        bannerCardRoot.setOnClickListener(v -> openKhataCustomer(p));
-    }
-
-    private void updateBannerDots(int activeIndex) {
-        for (int i = 0; i < debtDots.getChildCount(); i++) {
-            debtDots.getChildAt(i).setBackgroundResource(
-                    i == activeIndex ? R.drawable.dot_active : R.drawable.dot_inactive);
-        }
-    }
-
-    private void startBannerAutoSlide() {
-        bannerHandler.removeCallbacksAndMessages(null);
-        bannerHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (bannerCardRoot != null && bannerKhataCustomers.size() > 1) {
-                    bannerIndex = (bannerIndex + 1) % bannerKhataCustomers.size();
-                    showBannerCard(bannerIndex, true);
-                    updateBannerDots(bannerIndex);
-                }
-                bannerHandler.postDelayed(this, 5000);
-            }
-        }, 5000);
+    // ── উপরের হেডারের সামারি টাইল (মোট বাকি / মোট জমা) — প্রতি-গ্রাহক স্লাইডিং ব্যানারের
+    //    বদলে এখন পুরো ব্যবসার একটা সংক্ষিপ্ত চিত্র সবসময় স্থিরভাবে দেখা যায়। ─────────
+    private void refreshSummaryTiles() {
+        if (tvSummaryBaki != null) tvSummaryBaki.setText("৳" + DatabaseManager.formatAmount(db.getTotalKhataBaki()));
+        if (tvSummaryJoma != null) tvSummaryJoma.setText("৳" + DatabaseManager.formatAmount(db.getTotalKhataJoma()));
     }
 
     private void openKhataCustomer(KhataCustomer customerName) {
@@ -494,6 +417,8 @@ public class BakirKhataFragment extends Fragment {
             boolean matchesFilter;
             if (currentFilter == 1) matchesFilter = stat != null && stat.isDue();
             else if (currentFilter == 2) matchesFilter = stat != null && stat.isSettled() && stat.hasAnyTxn();
+            else if (currentFilter == 3) matchesFilter = p.isCustomer();
+            else if (currentFilter == 4) matchesFilter = p.isSupplier();
             else matchesFilter = true;
 
             if (matchesFilter) filtered.add(p);

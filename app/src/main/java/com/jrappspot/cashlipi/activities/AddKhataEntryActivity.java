@@ -104,15 +104,15 @@ public class AddKhataEntryActivity extends BaseActivity {
 
     private void updateTypeUI() {
         if ("baki".equals(selectedType)) {
-            btnTypeDena.setBackground(getResources().getDrawable(R.drawable.bg_type_active_dena));
+            btnTypeDena.setBackground(getResources().getDrawable(R.drawable.bg_type_active_khata));
             btnTypeDena.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.white));
-            btnTypePabona.setBackground(getResources().getDrawable(R.drawable.bg_type_inactive_pabona));
-            btnTypePabona.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.pabonaColor));
+            btnTypePabona.setBackground(getResources().getDrawable(R.drawable.bg_type_inactive_khata_joma));
+            btnTypePabona.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.jomaColor));
         } else {
-            btnTypePabona.setBackground(getResources().getDrawable(R.drawable.bg_type_active_pabona));
+            btnTypePabona.setBackground(getResources().getDrawable(R.drawable.bg_type_active_khata_joma));
             btnTypePabona.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.white));
-            btnTypeDena.setBackground(getResources().getDrawable(R.drawable.bg_type_inactive_dena));
-            btnTypeDena.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.denaColor));
+            btnTypeDena.setBackground(getResources().getDrawable(R.drawable.bg_type_inactive_khata));
+            btnTypeDena.setTextColor(androidx.core.content.ContextCompat.getColor(this, R.color.bakiColor));
         }
     }
 

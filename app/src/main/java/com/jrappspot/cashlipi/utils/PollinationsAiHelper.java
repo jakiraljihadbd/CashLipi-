@@ -75,19 +75,14 @@ public final class PollinationsAiHelper {
 
     private static JSONObject callJsonOnce(String prompt) throws Exception {
         JSONObject body = new JSONObject();
-        body.put("model", "openai");
-        // jsonMode এবং response_format যুক্ত করে JSON কঠোরভাবে বলবে
-        body.put("jsonMode", true);
-        JSONObject responseFormat = new JSONObject();
-        responseFormat.put("type", "json_object");
-        body.put("response_format", responseFormat);
+        body.put("model", "gpt-3.5-turbo");  // Pollinations-এ available model
         body.put("referrer", REFERRER);
 
         JSONArray messages = new JSONArray();
         
         JSONObject sysMsg = new JSONObject();
         sysMsg.put("role", "system");
-        sysMsg.put("content", "আপনি একজন অভিজ্ঞ JSON জেনারেটর। শুধুমাত্র বিশুদ্ধ, সঠিক JSON অবজেক্ট প্রদান করুন। কোনো মার্কডাউন, ব্যাখ্যা বা অতিরিক্ত টেক্সট নয়। শুধু JSON।");
+        sysMsg.put("content", "You are a JSON generator. You MUST respond with ONLY valid JSON object, nothing else. No markdown, no explanations, no extra text. Just pure JSON.");
         
         JSONObject userMsg = new JSONObject();
         userMsg.put("role", "user");
@@ -96,7 +91,13 @@ public final class PollinationsAiHelper {
         messages.put(sysMsg);
         messages.put(userMsg);
         body.put("messages", messages);
-        body.put("max_tokens", 1024);
+        body.put("max_tokens", 512);
+        body.put("temperature", 0.3);  // Lower temperature for consistent JSON
+
+        // Log the request
+        Log.d(TAG, "=== Sending Request to Pollinations ===");
+        Log.d(TAG, "Endpoint: " + ENDPOINT);
+        Log.d(TAG, "Body: " + body.toString());
 
         URL url = new URL(ENDPOINT + "?referrer=" + REFERRER);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -105,8 +106,8 @@ public final class PollinationsAiHelper {
         conn.setRequestProperty("User-Agent", "CashLipi-Android/1.0");
         conn.setRequestProperty("Referer", "https://" + REFERRER + "/");
         conn.setDoOutput(true);
-        conn.setConnectTimeout(20000);  // বর্ধিত কানেক্ট টাইমআউট
-        conn.setReadTimeout(40000);      // বর্ধিত রিড টাইমআউট
+        conn.setConnectTimeout(25000);
+        conn.setReadTimeout(45000);
 
         byte[] bodyBytes = body.toString().getBytes(StandardCharsets.UTF_8);
         conn.setFixedLengthStreamingMode(bodyBytes.length);
@@ -117,7 +118,7 @@ public final class PollinationsAiHelper {
         }
 
         int status = conn.getResponseCode();
-        Log.d(TAG, "Pollinations HTTP স্ট্যাটাস: " + status);
+        Log.d(TAG, "HTTP Status: " + status);
         
         InputStreamReader streamReader = new InputStreamReader(
                 status >= 200 && status < 300 ? conn.getInputStream() : conn.getErrorStream(),
@@ -129,38 +130,47 @@ public final class PollinationsAiHelper {
         br.close();
         String raw = sb.toString().trim();
 
-        Log.d(TAG, "Pollinations রেসপন্স (প্রথম ২০০ অক্ষর): " + raw.substring(0, Math.min(200, raw.length())));
+        Log.d(TAG, "=== Raw Response ===");
+        Log.d(TAG, raw);
 
         if (status == 429) {
-            Log.e(TAG, "Pollinations রেট-লিমিট (HTTP 429): " + raw);
+            Log.e(TAG, "Rate Limited (HTTP 429)");
             throw new RateLimitedException("রেট-লিমিট হিট");
         }
         if (status >= 500 && status < 600) {
-            Log.e(TAG, "Pollinations সাময়িক সার্ভার এরর (HTTP " + status + "): " + raw);
+            Log.e(TAG, "Server Error (HTTP " + status + ")");
             throw new RetryableServerException("সার্ভার এরর " + status);
         }
         if (status < 200 || status >= 300) {
-            Log.e(TAG, "Pollinations HTTP " + status + ": " + raw);
+            Log.e(TAG, "HTTP Error " + status + ": " + raw);
             throw new IllegalStateException("AI সার্ভার এরর (" + status + ")");
         }
 
         String content = extractJsonFromResponse(raw);
         if (content == null || content.isEmpty()) {
-            Log.e(TAG, "JSON এক্সট্র্যাক্ট ব্যর্থ, raw: " + raw);
+            Log.e(TAG, "Failed to extract JSON from response: " + raw);
             throw new IllegalStateException("AI উত্তর পার্স করতে ব্যর্থ");
         }
 
+        Log.d(TAG, "Extracted JSON: " + content);
+
         try {
-            return new JSONObject(content);
+            JSONObject result = new JSONObject(content);
+            Log.d(TAG, "✓ Successfully parsed JSON");
+            return result;
         } catch (Exception e) {
-            Log.e(TAG, "JSON পার্স ব্যর্থ: " + content, e);
+            Log.e(TAG, "Failed to parse JSON: " + content, e);
             throw new IllegalStateException("AI উত্তর বিশুদ্ধ JSON নয়", e);
         }
     }
 
     /** OpenAI-compatible রেসপন্স থেকে JSON কন্টেন্ট এক্সট্র্যাক্ট করে */
     private static String extractJsonFromResponse(String raw) {
-        String content;
+        Log.d(TAG, "--- Extracting JSON from response ---");
+        
+        String content = raw;
+        
+        // Try to extract from OpenAI format first
         try {
             JSONObject wrapper = new JSONObject(raw);
             JSONArray choices = wrapper.optJSONArray("choices");
@@ -168,32 +178,38 @@ public final class PollinationsAiHelper {
                 JSONObject choice = choices.getJSONObject(0);
                 JSONObject message = choice.optJSONObject("message");
                 if (message != null) {
-                    content = message.optString("content", "");
-                } else {
-                    content = "";
+                    String extractedContent = message.optString("content", "");
+                    if (!extractedContent.isEmpty()) {
+                        Log.d(TAG, "Found content in OpenAI format: " + extractedContent.substring(0, Math.min(100, extractedContent.length())));
+                        content = extractedContent;
+                    }
                 }
-            } else {
-                // সরাসরি JSON হতে পারে
-                content = raw;
             }
         } catch (Exception e) {
-            // wrapper পার্স ব্যর্থ, সরাসরি raw ব্যবহার করুন
-            content = raw;
+            Log.d(TAG, "Not OpenAI format, treating as raw JSON");
+            // Not OpenAI format, use raw
         }
 
-        if (content.isEmpty()) return null;
+        if (content.isEmpty()) {
+            Log.e(TAG, "Empty content");
+            return null;
+        }
 
-        // মার্কডাউন ফেন্স রিমুভ করুন
-        content = content.replaceAll("(?s)```json\\s*|```\\s*", "").trim();
+        // Remove markdown fences
+        content = content.replaceAll("(?s)```json\\s*", "").replaceAll("(?s)```\\s*", "").trim();
+        Log.d(TAG, "After removing markdown: " + content.substring(0, Math.min(100, content.length())));
         
-        // JSON অবজেক্ট এক্সট্র্যাক্ট করুন { থেকে }
+        // Extract JSON object { ... }
         int start = content.indexOf('{');
         int end = content.lastIndexOf('}');
         
         if (start >= 0 && end > start) {
-            return content.substring(start, end + 1);
+            String extracted = content.substring(start, end + 1);
+            Log.d(TAG, "Extracted JSON object: " + extracted.substring(0, Math.min(100, extracted.length())));
+            return extracted;
         }
         
+        Log.e(TAG, "Could not find JSON object in: " + content);
         return null;
     }
 

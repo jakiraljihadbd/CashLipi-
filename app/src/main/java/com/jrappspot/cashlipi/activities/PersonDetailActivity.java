@@ -23,6 +23,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -363,7 +365,7 @@ public class PersonDetailActivity extends AppCompatActivity {
                 tableViewContainer.setVisibility(View.GONE);
                 rvPersonLedger.setVisibility(View.VISIBLE);
                 ledgerAdapter = new PersonLedgerAdapter(this, filtered,
-                        entry -> TransactionSheetHelper.showLedgerSheet(this, db, entry, () -> {
+                        entry -> TransactionSheetHelper.showLedgerSheet(this, db, entry, person, () -> {
                             loadLedger();
                             com.jrappspot.cashlipi.utils.BackupManager.getInstance(this).triggerAutoGoogleDriveSync();
                             FirestoreSyncManager.getInstance(this).uploadAllData(null);
@@ -532,8 +534,18 @@ public class PersonDetailActivity extends AppCompatActivity {
 
         btnCloseSheet.setOnClickListener(x -> dialog.dismiss());
 
+        // ফোনের নেভিগেশন বার/জেসচার বারের নিচে বাটন যেন ঢাকা না পড়ে, তাই সিস্টেম ইনসেট অনুযায়ী নিচে এক্সট্রা প্যাডিং যোগ করা হয়
+        final int basePadBottom = v.getPaddingBottom();
+        ViewCompat.setOnApplyWindowInsetsListener(v, (view, insets) -> {
+            int navBarBottom = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
+            view.setPadding(view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(), basePadBottom + navBarBottom);
+            return insets;
+        });
+
         tvTitle.setText(isDena ? " দেনা যোগ করুন" : " পাওনা যোগ করুন");
         tvPersonChip.setText(person.getName());
+        // backgroundTintList আগে null করে দেওয়া হচ্ছে, নাহলে XML স্টাইলের পুরনো টিন্ট এই নতুন ব্যাকগ্রাউন্ড ড্রয়েবলের রঙ চাপা দিয়ে দিতো
+        btnSave.setBackgroundTintList(null);
         btnSave.setBackgroundResource(isDena ? R.drawable.bg_type_active_dena : R.drawable.bg_type_active_pabona);
         btnSave.setText(isDena ? " দেনা সংরক্ষণ করুন" : " পাওনা সংরক্ষণ করুন");
 
@@ -567,8 +579,8 @@ public class PersonDetailActivity extends AppCompatActivity {
             }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), false).show();
         });
 
-        int[] qIds = {R.id.btnSheetQ100, R.id.btnSheetQ500, R.id.btnSheetQ1000, R.id.btnSheetQ5000};
-        int[] qVals = {100, 500, 1000, 5000};
+        int[] qIds = {R.id.btnSheetQ5, R.id.btnSheetQ10, R.id.btnSheetQ20, R.id.btnSheetQ30, R.id.btnSheetQ50, R.id.btnSheetQ100};
+        int[] qVals = {5, 10, 20, 30, 50, 100};
         for (int i = 0; i < qIds.length; i++) {
             final int val = qVals[i];
             Button qb = v.findViewById(qIds[i]);

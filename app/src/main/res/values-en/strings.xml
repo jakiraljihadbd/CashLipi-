@@ -318,4 +318,120 @@
     <string name="lang_hindi">हिन्दी</string>
     <string name="lang_arabic">عربي</string>
     <string name="language_changed">Language changed!</string>
+
+    <!-- Home page — AI tip card -->
+    <string name="home_tip_start_transaction">Add a transaction, AI will give you smart suggestions!</string>
+    <string name="home_tip_expense_high">%1$d%% of your income is being spent! You need to save more.</string>
+    <string name="home_tip_expense_medium">%1$d%% of your income is being spent. Keep it under control.</string>
+    <string name="home_tip_expense_good">Great! Only %1$d%% of your income is being spent.</string>
+    <string name="home_tip_savings_zero">Savings are zero! Start saving today.</string>
+    <string name="home_tip_savings_good">Savings %1$s — great habit!</string>
+    <string name="home_tip_dena_due">%1$s owed remaining. Plan to pay it off today.</string>
+    <string name="home_tip_pabona_due">%1$s receivable — don\'t forget to collect it.</string>
+    <string name="home_tip_balance_negative">Balance is negative! Reduce unnecessary spending.</string>
+    <string name="home_tip_balance_positive">Balance is positive. Think about investing!</string>
+    <string name="home_tip_loading">Loading smart suggestions...</string>
+    <string name="home_tip_card_title">Smart Suggestion</string>
+
+    <!-- Payment method names -->
+    <string name="payment_method_cash">Cash</string>
+    <string name="payment_method_bkash">bKash</string>
+    <string name="payment_method_nagad">Nagad</string>
+    <string name="payment_method_rocket">Rocket</string>
+    <string name="payment_method_bank">Bank</string>
+    <string name="payment_method_other">Others</string>
+    <string name="filter_all">All</string>
+
+    <!-- Income-Expense page -->
+    <string name="sort_newest_first">Newest first</string>
+    <string name="sort_oldest_first">Oldest first</string>
+    <string name="sort_amount_high_first">Highest amount first</string>
+    <string name="sort_amount_low_first">Lowest amount first</string>
+    <string name="month_total_income">Total income this month</string>
+    <string name="month_total_expense">Total expense this month</string>
+    <string name="table_col_source">Source</string>
+    <string name="table_col_amount">Amount</string>
+    <string name="table_col_date">Date</string>
+    <string name="table_col_time">Time</string>
+    <string name="table_total">Total</string>
+    <string name="table_total_prefix">Total: %1$s</string>
+    <string name="month_unknown">Unknown</string>
+    <string name="no_data_found">No data found</string>
+
+    <string-array name="month_names">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
+    <!-- TransactionSheetHelper — এডিট/ডিলিট/শেয়ার/সেটল ডায়ালগ -->
+    <string name="ts_delete_confirm_title">Delete this?</string>
+    <string name="ts_delete_confirm_msg">\"%1$s\" will go to trash.</string>
+    <string name="ts_yes_delete">Yes, delete</string>
+    <string name="ts_no_keep">No, keep it</string>
+    <string name="ts_deleted_toast"> Deleted</string>
+    <string name="ts_updated_toast"> Updated</string>
+    <string name="type_label_income">Income</string>
+    <string name="type_label_expense">Expense</string>
+    <string name="type_label_savings">Savings</string>
+    <string name="ts_share_transaction_template"> %1$s Details\n─────────────\nTitle: %2$s\nAmount: %3$s\nDate: %4$s\nTime: %5$s</string>
+    <string name="ts_share_note_line">\nNote: %1$s</string>
+    <string name="ts_share_action">Share</string>
+    <string name="ts_close">Close</string>
+    <string name="hint_expense_category">Expense category</string>
+    <string name="hint_savings_bank_name">Bank/method name (optional)</string>
+    <string name="hint_income_source">Income source</string>
+    <string name="ts_edit_dialog_title"> Edit</string>
+    <string name="ts_save_btn">Save</string>
+    <string name="ts_field_required_error">This field cannot be left empty</string>
+    <string name="ts_invalid_amount_error">Enter a valid amount</string>
+    <string name="status_paid_dena">Paid</string>
+    <string name="status_paid_pabona">Received</string>
+    <string name="status_partial_paid">Partially paid (%1$s remaining)</string>
+    <string name="status_due">Due</string>
+    <string name="ts_mark_unpaid">↩️ Mark unpaid</string>
+    <string name="ts_pay_more_prefix">✅ Pay more  •  %1$s remaining</string>
+    <string name="ts_mark_paid_dena">✅ Paid</string>
+    <string name="ts_mark_paid_pabona">✅ Received</string>
+    <string name="ts_cancel_payment_title">Cancel this payment?</string>
+    <string name="ts_cancel_payment_msg">The %1$s paid so far will be cancelled and the full %2$s will show as due again.</string>
+    <string name="ts_yes_cancel">Yes, cancel</string>
+    <string name="ts_no">No</string>
+    <string name="ts_pay_money_question">Pay the amount</string>
+    <string name="ts_receive_money_question">Receive the amount</string>
+    <string name="ts_total_due_prefix">Total due %1$s</string>
+    <string name="ts_already_paid_note">  (%1$s already paid — the rest will use the same method)</string>
+    <string name="rb_balance_dena">From balance (reduces main balance)</string>
+    <string name="rb_balance_pabona">To balance (adds to main balance)</string>
+    <string name="rb_savings_dena">From savings (reduces savings)</string>
+    <string name="rb_savings_pabona">To savings (adds to savings)</string>
+    <string name="rb_incomeexpense_dena">Added as an expense</string>
+    <string name="rb_incomeexpense_pabona">Added as income</string>
+    <string name="rb_none_dena">From nowhere (just removed from records)</string>
+    <string name="rb_none_pabona">Nowhere (just removed from records)</string>
+    <string name="ts_balance_prefix">Balance %1$s</string>
+    <string name="ts_savings_prefix">Savings %1$s</string>
+    <string name="ts_expense_prefix">Expense %1$s</string>
+    <string name="ts_income_prefix">Income %1$s</string>
+    <string name="ts_unchanged_suffix"> (unchanged)</string>
+    <string name="ts_confirm_payment">Confirm payment</string>
+    <string name="ts_exceeds_due">Cannot pay more than the %1$s due</string>
+    <string name="ts_receivable_collection_source">Receivable collected</string>
+    <string name="ts_receivable_note">Receivable from %1$s dated %2$s has been collected</string>
+    <string name="ts_debt_payment_category">Debt payment</string>
+    <string name="ts_debt_payment_note">Debt to %1$s dated %2$s has been paid</string>
+    <string name="ts_type_dena"> Debt</string>
+    <string name="ts_type_pabona"> Receivable</string>
+    <string name="ts_share_ledger_template"> %1$s Details\n─────────────\nPerson: %2$s\nAmount: %3$s\nDate: %4$s\nTime: %5$s\nStatus: %6$s</string>
+    <string name="ts_share_category_line">\nCategory: %1$s</string>
+    <string name="ts_enter_name_error">Enter a name</string>
 </resources>

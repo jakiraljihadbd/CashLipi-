@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- বাকির খাতার নিজস্ব হেডার রং — গাঢ় ইন্ডিগো গ্র্যাডিয়েন্ট, খাতার "মলাট"-এর মতো দেখতে।
+     দেনা-পাওনার গোলাপি/অ্যাম্বার হেডার থেকে সম্পূর্ণ আলাদা, যাতে এক নজরেই বোঝা যায় এটা
+     ভিন্ন একটা মডিউল। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="#4338CA" android:endColor="#4F46E5" android:angle="135"/>
+    <corners android:bottomLeftRadius="26dp" android:bottomRightRadius="26dp"/>
+</shape>

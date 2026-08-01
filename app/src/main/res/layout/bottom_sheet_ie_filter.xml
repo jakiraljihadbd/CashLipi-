@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_bottom_sheet"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <!-- Drag handle -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_marginBottom="14dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_drag_handle"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ফিল্টার করুন"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/primaryTextDark"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="6dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"/>
+
+    <!-- ১. ক্যাটাগরি অনুযায়ী -->
+    <LinearLayout android:id="@+id/rowFilterCategory" style="@style/FilterSheetRow">
+        <ImageView style="@style/FilterSheetIcon" android:src="@drawable/ic_tag" app:tint="@color/white"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView style="@style/FilterSheetLabel" android:text="ক্যাটাগরি অনুযায়ী"/>
+            <TextView android:id="@+id/subFilterCategory" style="@style/FilterSheetSubLabel" android:text="সব ক্যাটাগরি"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/secondaryTextDark"/>
+    </LinearLayout>
+
+    <!-- ২. সময় অনুযায়ী সাজান -->
+    <LinearLayout android:id="@+id/rowFilterSort" style="@style/FilterSheetRow">
+        <ImageView style="@style/FilterSheetIcon" android:src="@drawable/ic_sort" app:tint="@color/white"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView style="@style/FilterSheetLabel" android:text="সময় অনুযায়ী সাজান"/>
+            <TextView android:id="@+id/subFilterSort" style="@style/FilterSheetSubLabel" android:text="নতুন থেকে পুরাতন"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/secondaryTextDark"/>
+    </LinearLayout>
+
+    <!-- ৩. ধরন (পেমেন্ট মাধ্যম) -->
+    <LinearLayout android:id="@+id/rowFilterType" style="@style/FilterSheetRow">
+        <ImageView style="@style/FilterSheetIcon" android:src="@drawable/ic_wallet_txn" app:tint="@color/white"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView style="@style/FilterSheetLabel" android:text="ধরন"/>
+            <TextView android:id="@+id/subFilterType" style="@style/FilterSheetSubLabel" android:text="সব"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/secondaryTextDark"/>
+    </LinearLayout>
+
+</LinearLayout>

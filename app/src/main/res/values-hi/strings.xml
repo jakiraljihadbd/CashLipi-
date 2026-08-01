@@ -293,4 +293,120 @@
     <string name="lang_hindi">हिन्दी</string>
     <string name="lang_arabic">عربي</string>
     <string name="language_changed">भाषा बदली गई। पुनः आरंभ हो रहा है…</string>
+
+    <!-- होम पेज — AI सुझाव कार्ड -->
+    <string name="home_tip_start_transaction">लेन-देन जोड़ें, AI आपको स्मार्ट सुझाव देगा!</string>
+    <string name="home_tip_expense_high">आय का %1$d%% खर्च हो रहा है! बचत बढ़ाने की जरूरत है।</string>
+    <string name="home_tip_expense_medium">आय का %1$d%% खर्च हो रहा है। नियंत्रण में रखें।</string>
+    <string name="home_tip_expense_good">बढ़िया! आय का केवल %1$d%% खर्च हो रहा है।</string>
+    <string name="home_tip_savings_zero">बचत शून्य है! आज ही बचत शुरू करें।</string>
+    <string name="home_tip_savings_good">बचत %1$s — बढ़िया आदत!</string>
+    <string name="home_tip_dena_due">देना %1$s बाकी है। आज ही चुकाने की योजना बनाएं।</string>
+    <string name="home_tip_pabona_due">पावना %1$s — इसे लेना न भूलें।</string>
+    <string name="home_tip_balance_negative">बैलेंस नेगेटिव है! अनावश्यक खर्च कम करें।</string>
+    <string name="home_tip_balance_positive">बैलेंस सकारात्मक है। निवेश के बारे में सोचें!</string>
+    <string name="home_tip_loading">स्मार्ट सुझाव लोड हो रहा है...</string>
+    <string name="home_tip_card_title">स्मार्ट सुझाव</string>
+
+    <!-- भुगतान माध्यम के नाम -->
+    <string name="payment_method_cash">कैश</string>
+    <string name="payment_method_bkash">बिकाश</string>
+    <string name="payment_method_nagad">नगद</string>
+    <string name="payment_method_rocket">रॉकेट</string>
+    <string name="payment_method_bank">बैंक</string>
+    <string name="payment_method_other">अन्य</string>
+    <string name="filter_all">सभी</string>
+
+    <!-- आय-व्यय पेज -->
+    <string name="sort_newest_first">नया पहले</string>
+    <string name="sort_oldest_first">पुराना पहले</string>
+    <string name="sort_amount_high_first">अधिक राशि पहले</string>
+    <string name="sort_amount_low_first">कम राशि पहले</string>
+    <string name="month_total_income">इस महीने की कुल आय</string>
+    <string name="month_total_expense">इस महीने का कुल खर्च</string>
+    <string name="table_col_source">स्रोत</string>
+    <string name="table_col_amount">राशि</string>
+    <string name="table_col_date">तारीख</string>
+    <string name="table_col_time">समय</string>
+    <string name="table_total">कुल</string>
+    <string name="table_total_prefix">कुल: %1$s</string>
+    <string name="month_unknown">अज्ञात</string>
+    <string name="no_data_found">कोई जानकारी नहीं</string>
+
+    <string-array name="month_names">
+        <item>जनवरी</item>
+        <item>फरवरी</item>
+        <item>मार्च</item>
+        <item>अप्रैल</item>
+        <item>मई</item>
+        <item>जून</item>
+        <item>जुलाई</item>
+        <item>अगस्त</item>
+        <item>सितंबर</item>
+        <item>अक्टूबर</item>
+        <item>नवंबर</item>
+        <item>दिसंबर</item>
+    </string-array>
+
+    <!-- TransactionSheetHelper — এডিট/ডিলিট/শেয়ার/সেটল ডায়ালগ -->
+    <string name="ts_delete_confirm_title">इसे हटाएं?</string>
+    <string name="ts_delete_confirm_msg">\"%1$s\" ट्रैश में चली जाएगी।</string>
+    <string name="ts_yes_delete">हां, हटाएं</string>
+    <string name="ts_no_keep">नहीं, रखें</string>
+    <string name="ts_deleted_toast"> हटा दिया गया</string>
+    <string name="ts_updated_toast"> अपडेट हो गया</string>
+    <string name="type_label_income">आय</string>
+    <string name="type_label_expense">व्यय</string>
+    <string name="type_label_savings">बचत</string>
+    <string name="ts_share_transaction_template"> %1$s विवरण\n─────────────\nशीर्षक: %2$s\nराशि: %3$s\nतारीख: %4$s\nसमय: %5$s</string>
+    <string name="ts_share_note_line">\nनोट: %1$s</string>
+    <string name="ts_share_action">साझा करें</string>
+    <string name="ts_close">बंद करें</string>
+    <string name="hint_expense_category">व्यय श्रेणी</string>
+    <string name="hint_savings_bank_name">बैंक/माध्यम का नाम (वैकल्पिक)</string>
+    <string name="hint_income_source">आय का स्रोत</string>
+    <string name="ts_edit_dialog_title"> संपादित करें</string>
+    <string name="ts_save_btn">सहेजें</string>
+    <string name="ts_field_required_error">इस फ़ील्ड को खाली नहीं छोड़ा जा सकता</string>
+    <string name="ts_invalid_amount_error">सही राशि दर्ज करें</string>
+    <string name="status_paid_dena">दिया</string>
+    <string name="status_paid_pabona">मिला</string>
+    <string name="status_partial_paid">आंशिक भुगतान (৳%1$s बाकी)</string>
+    <string name="status_due">बकाया</string>
+    <string name="ts_mark_unpaid">↩️ अवैतनिक करें</string>
+    <string name="ts_pay_more_prefix">✅ और भुगतान करें  •  ৳%1$s बाकी</string>
+    <string name="ts_mark_paid_dena">✅ दिया</string>
+    <string name="ts_mark_paid_pabona">✅ मिला</string>
+    <string name="ts_cancel_payment_title">भुगतान रद्द करें?</string>
+    <string name="ts_cancel_payment_msg">अब तक किया गया ৳%1$s भुगतान रद्द हो जाएगा और पूरा ৳%2$s फिर से बकाया दिखेगा।</string>
+    <string name="ts_yes_cancel">हां, रद्द करें</string>
+    <string name="ts_no">नहीं</string>
+    <string name="ts_pay_money_question">राशि का भुगतान करें</string>
+    <string name="ts_receive_money_question">राशि प्राप्त करें</string>
+    <string name="ts_total_due_prefix">कुल बकाया ৳%1$s</string>
+    <string name="ts_already_paid_note">  (৳%1$s पहले ही भुगतान हो चुका है — बाकी भी उसी माध्यम से होगा)</string>
+    <string name="rb_balance_dena">बैलेंस से (मुख्य हिसाब से घटेगा)</string>
+    <string name="rb_balance_pabona">बैलेंस में (मुख्य हिसाब में जुड़ेगा)</string>
+    <string name="rb_savings_dena">बचत से (बचत के हिसाब से घटेगा)</string>
+    <string name="rb_savings_pabona">बचत में (बचत में जुड़ेगा)</string>
+    <string name="rb_incomeexpense_dena">व्यय के रूप में जुड़ेगा</string>
+    <string name="rb_incomeexpense_pabona">आय के रूप में जुड़ेगा</string>
+    <string name="rb_none_dena">कहीं से नहीं (सिर्फ हिसाब से हटेगा)</string>
+    <string name="rb_none_pabona">कहीं नहीं (सिर्फ हिसाब से हटेगा)</string>
+    <string name="ts_balance_prefix">बैलेंस ৳%1$s</string>
+    <string name="ts_savings_prefix">बचत ৳%1$s</string>
+    <string name="ts_expense_prefix">व्यय ৳%1$s</string>
+    <string name="ts_income_prefix">आय ৳%1$s</string>
+    <string name="ts_unchanged_suffix"> (अपरिवर्तित)</string>
+    <string name="ts_confirm_payment">भुगतान की पुष्टि करें</string>
+    <string name="ts_exceeds_due">बकाया ৳%1$s से अधिक भुगतान नहीं किया जा सकता</string>
+    <string name="ts_receivable_collection_source">पावना वसूली</string>
+    <string name="ts_receivable_note">%1$s से %2$s तारीख का पावना वसूल किया गया</string>
+    <string name="ts_debt_payment_category">देना भुगतान</string>
+    <string name="ts_debt_payment_note">%1$s को %2$s तारीख का देना भुगतान किया गया</string>
+    <string name="ts_type_dena"> देना</string>
+    <string name="ts_type_pabona"> पावना</string>
+    <string name="ts_share_ledger_template"> %1$s विवरण\n─────────────\nव्यक्ति: %2$s\nराशि: %3$s\nतारीख: %4$s\nसमय: %5$s\nस्थिति: %6$s</string>
+    <string name="ts_share_category_line">\nश्रेणी: %1$s</string>
+    <string name="ts_enter_name_error">नाम दर्ज करें</string>
 </resources>

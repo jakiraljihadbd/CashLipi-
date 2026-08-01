@@ -15,6 +15,9 @@ import com.jrappspot.cashlipi.models.KhataCustomer;
 import com.jrappspot.cashlipi.models.KhataEntry;
 import com.jrappspot.cashlipi.models.KhataExpense;
 import com.jrappspot.cashlipi.models.KhataWalletTxn;
+import com.jrappspot.cashlipi.models.Shop;
+import com.jrappspot.cashlipi.models.Product;
+import com.jrappspot.cashlipi.models.SalesInvoice;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -52,6 +55,17 @@ public class DatabaseManager {
     private static final String KEY_KHATA_EXPENSE_CATEGORIES = "bakir_khata_expense_categories";
     private static final String KEY_KHATA_WALLET_BALANCE = "bakir_khata_wallet_balance";
     private static final String KEY_KHATA_WALLET_TXNS = "bakir_khata_wallet_txns";
+
+    // ── মাল্টি-শপ ──
+    private static final String KEY_SHOPS = "cashlipi_shops";
+    private static final String KEY_ACTIVE_SHOP_ID = "cashlipi_active_shop_id";
+
+    // ── স্টক/ইনভেন্টরি ──
+    private static final String KEY_PRODUCTS = "cashlipi_products";
+
+    // ── ইনভয়েস ──
+    private static final String KEY_INVOICES = "cashlipi_invoices";
+    private static final String KEY_INVOICE_COUNTER = "cashlipi_invoice_counter";
 
     private static DatabaseManager instance;
     private final SharedPreferences prefs;
@@ -1417,7 +1431,7 @@ public class DatabaseManager {
     // ═══════════════════════════════════════════
     public List<KhataCustomer> getKhataCustomerList() {
         Type t = new TypeToken<List<KhataCustomer>>() {}.getType();
-        return loadList(KEY_KHATA_CUSTOMERS, t);
+        return loadList(shopScope(KEY_KHATA_CUSTOMERS), t);
     }
 
     public KhataCustomer addKhataCustomer(KhataCustomer c) {
@@ -1427,7 +1441,7 @@ public class DatabaseManager {
         if (c.getDate().isEmpty()) c.setDate(nowDate());
         if (c.getTime().isEmpty()) c.setTime(nowTime());
         list.add(0, c);
-        saveList(KEY_KHATA_CUSTOMERS, list);
+        saveList(shopScope(KEY_KHATA_CUSTOMERS), list);
 
         // পূর্বের জের (opening balance) থাকলে সেটার জন্য একটা প্রাথমিক "বাকি" এন্ট্রি তৈরি হয়,
         // যাতে গ্রাহকের হিসাব থেকে প্রথম দিনই তার আগের বকেয়া দেখা যায়।
@@ -1448,7 +1462,7 @@ public class DatabaseManager {
         if (index < 0 || index >= list.size()) return false;
         updated.setUpdatedAt(nowIso());
         list.set(index, updated);
-        saveList(KEY_KHATA_CUSTOMERS, list);
+        saveList(shopScope(KEY_KHATA_CUSTOMERS), list);
         return true;
     }
 
@@ -1456,7 +1470,7 @@ public class DatabaseManager {
         List<KhataCustomer> list = getKhataCustomerList();
         if (index < 0 || index >= list.size()) return false;
         KhataCustomer removed = list.remove(index);
-        saveList(KEY_KHATA_CUSTOMERS, list);
+        saveList(shopScope(KEY_KHATA_CUSTOMERS), list);
         deleteKhataEntriesForCustomerId(removed.getId());
         return true;
     }
@@ -1483,7 +1497,7 @@ public class DatabaseManager {
     // ═══════════════════════════════════════════
     public List<KhataEntry> getKhataEntryList() {
         Type t = new TypeToken<List<KhataEntry>>() {}.getType();
-        return loadList(KEY_KHATA_ENTRIES, t);
+        return loadList(shopScope(KEY_KHATA_ENTRIES), t);
     }
 
     public List<KhataEntry> getKhataEntriesForCustomerId(String customerId) {
@@ -1513,7 +1527,7 @@ public class DatabaseManager {
         if (entry.getDate().isEmpty()) entry.setDate(nowDate());
         if (entry.getTime().isEmpty()) entry.setTime(nowTime());
         list.add(0, entry);
-        saveList(KEY_KHATA_ENTRIES, list);
+        saveList(shopScope(KEY_KHATA_ENTRIES), list);
 
         // "জমা" এন্ট্রি হলে টাকাটা কোথায় জমা হবে সেটা routing করা হয় — ওয়ালেটে বা মূল ব্যালেন্সে।
         if (entry.isJoma()) {
@@ -1539,7 +1553,7 @@ public class DatabaseManager {
         if (index < 0 || index >= list.size()) return false;
         updated.setUpdatedAt(nowIso());
         list.set(index, updated);
-        saveList(KEY_KHATA_ENTRIES, list);
+        saveList(shopScope(KEY_KHATA_ENTRIES), list);
         return true;
     }
 
@@ -1547,7 +1561,7 @@ public class DatabaseManager {
         List<KhataEntry> list = getKhataEntryList();
         if (index < 0 || index >= list.size()) return false;
         list.remove(index);
-        saveList(KEY_KHATA_ENTRIES, list);
+        saveList(shopScope(KEY_KHATA_ENTRIES), list);
         return true;
     }
 
@@ -1575,7 +1589,7 @@ public class DatabaseManager {
         e.setPaid(!e.isPaid());
         e.setPaidDate(e.isPaid() ? nowDate() : "");
         list.set(index, e);
-        saveList(KEY_KHATA_ENTRIES, list);
+        saveList(shopScope(KEY_KHATA_ENTRIES), list);
         return true;
     }
 
@@ -1588,7 +1602,7 @@ public class DatabaseManager {
             if (customerId.equals(e.getCustomerId())) removedCount++;
             else kept.add(e);
         }
-        if (removedCount > 0) saveList(KEY_KHATA_ENTRIES, kept);
+        if (removedCount > 0) saveList(shopScope(KEY_KHATA_ENTRIES), kept);
         return removedCount;
     }
 
@@ -1625,11 +1639,11 @@ public class DatabaseManager {
     //   কিছু বা পুরো টাকা এখানে আনা যায়, আবার ফেরতও নেওয়া যায়।)
     // ═══════════════════════════════════════════
     public double getKhataWalletBalance() {
-        return (double) prefs.getFloat(KEY_KHATA_WALLET_BALANCE, 0f);
+        return (double) prefs.getFloat(shopScope(KEY_KHATA_WALLET_BALANCE), 0f);
     }
 
     private void setKhataWalletBalance(double value) {
-        prefs.edit().putFloat(KEY_KHATA_WALLET_BALANCE, (float) value).apply();
+        prefs.edit().putFloat(shopScope(KEY_KHATA_WALLET_BALANCE), (float) value).apply();
     }
 
     private void adjustKhataWalletBalance(double delta) {
@@ -1638,7 +1652,7 @@ public class DatabaseManager {
 
     public List<KhataWalletTxn> getKhataWalletTxnList() {
         Type t = new TypeToken<List<KhataWalletTxn>>() {}.getType();
-        return loadList(KEY_KHATA_WALLET_TXNS, t);
+        return loadList(shopScope(KEY_KHATA_WALLET_TXNS), t);
     }
 
     private void logKhataWalletTxn(String type, double amount, String note, String date, String time) {
@@ -1649,7 +1663,7 @@ public class DatabaseManager {
         txn.setTime(time.isEmpty() ? nowTime() : time);
         txn.setCreatedAt(nowIso());
         list.add(0, txn);
-        saveList(KEY_KHATA_WALLET_TXNS, list);
+        saveList(shopScope(KEY_KHATA_WALLET_TXNS), list);
     }
 
     /** মূল ব্যালেন্স থেকে (কিছু বা পুরো) ওয়ালেটে টাকা আনে — মূল হিসাবে এটা একটা "ব্যয়" হিসেবে গণ্য হয়। */
@@ -1687,7 +1701,7 @@ public class DatabaseManager {
     // ═══════════════════════════════════════════
     public List<KhataExpense> getKhataExpenseList() {
         Type t = new TypeToken<List<KhataExpense>>() {}.getType();
-        return loadList(KEY_KHATA_EXPENSES, t);
+        return loadList(shopScope(KEY_KHATA_EXPENSES), t);
     }
 
     public KhataExpense addKhataExpense(KhataExpense e) {
@@ -1697,7 +1711,7 @@ public class DatabaseManager {
         if (e.getDate().isEmpty()) e.setDate(nowDate());
         if (e.getTime().isEmpty()) e.setTime(nowTime());
         list.add(0, e);
-        saveList(KEY_KHATA_EXPENSES, list);
+        saveList(shopScope(KEY_KHATA_EXPENSES), list);
 
         if (e.isPayFromWallet()) {
             adjustKhataWalletBalance(-e.getAmount());
@@ -1707,7 +1721,7 @@ public class DatabaseManager {
         List<String> cats = getKhataExpenseCategories();
         if (!cats.contains(e.getCategory())) {
             cats.add(e.getCategory());
-            saveList(KEY_KHATA_EXPENSE_CATEGORIES, cats);
+            saveList(shopScope(KEY_KHATA_EXPENSE_CATEGORIES), cats);
         }
         return e;
     }
@@ -1716,7 +1730,7 @@ public class DatabaseManager {
         List<KhataExpense> list = getKhataExpenseList();
         if (index < 0 || index >= list.size()) return false;
         list.remove(index);
-        saveList(KEY_KHATA_EXPENSES, list);
+        saveList(shopScope(KEY_KHATA_EXPENSES), list);
         return true;
     }
 
@@ -1731,11 +1745,11 @@ public class DatabaseManager {
 
     public List<String> getKhataExpenseCategories() {
         Type t = new TypeToken<List<String>>() {}.getType();
-        List<String> list = loadList(KEY_KHATA_EXPENSE_CATEGORIES, t);
+        List<String> list = loadList(shopScope(KEY_KHATA_EXPENSE_CATEGORIES), t);
         if (list.isEmpty()) {
             list = new ArrayList<>(java.util.Arrays.asList(
                     "দোকান ভাড়া", "কর্মচারী বেতন", "বিদ্যুৎ বিল", "পরিবহন খরচ", "মালামাল ক্রয়", "অন্যান্য"));
-            saveList(KEY_KHATA_EXPENSE_CATEGORIES, list);
+            saveList(shopScope(KEY_KHATA_EXPENSE_CATEGORIES), list);
         }
         return list;
     }
@@ -1771,6 +1785,232 @@ public class DatabaseManager {
 
     public void setDriveAutoSyncEnabled(boolean enabled) {
         prefs.edit().putBoolean(KEY_DRIVE_AUTO_SYNC, enabled).apply();
+    }
+
+    // ═══════════════════════════════════════════
+    //  মাল্টি-শপ — বাকির খাতা, স্টক ও ইনভয়েস মডিউলের সব ডেটা shopId দিয়ে স্কোপ করা থাকে
+    // ═══════════════════════════════════════════
+
+    /** কোনো বেস-কী-কে বর্তমানে সিলেক্ট করা দোকানের সাথে যুক্ত করে — যেমন "bakir_khata_customers"
+     *  হয়ে যায় "bakir_khata_customers:shop_ab12cd" — যাতে প্রতিটা দোকানের ডেটা আলাদা থাকে। */
+    private String shopScope(String baseKey) {
+        return baseKey + ":" + getActiveShopId();
+    }
+
+    public List<Shop> getShopList() {
+        Type t = new TypeToken<List<Shop>>() {}.getType();
+        List<Shop> list = loadList(KEY_SHOPS, t);
+        if (list.isEmpty()) {
+            // প্রথমবার — একটা ডিফল্ট দোকান তৈরি হয়, যাতে ব্যবহারকারীকে জোর করে দোকান
+            // তৈরি করতে না হয়, বিদ্যমান ডেটা (যদি কিছু থাকে) এই ডিফল্ট দোকানেই থাকবে।
+            Shop def = new Shop("আমার দোকান", "Main Branch");
+            def.setId(generateId());
+            def.setCreatedAt(nowIso());
+            list.add(def);
+            saveList(KEY_SHOPS, list);
+            prefs.edit().putString(KEY_ACTIVE_SHOP_ID, def.getId()).apply();
+        }
+        return list;
+    }
+
+    public Shop addShop(Shop shop) {
+        List<Shop> list = getShopList();
+        shop.setId(generateId());
+        shop.setCreatedAt(nowIso());
+        list.add(shop);
+        saveList(KEY_SHOPS, list);
+        return shop;
+    }
+
+    public boolean renameShop(String shopId, String newName, String newBranchTag) {
+        List<Shop> list = getShopList();
+        for (Shop s : list) {
+            if (s.getId().equals(shopId)) {
+                s.setName(newName);
+                s.setBranchTag(newBranchTag);
+                saveList(KEY_SHOPS, list);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteShop(String shopId) {
+        List<Shop> list = getShopList();
+        if (list.size() <= 1) return false; // অন্তত একটা দোকান সবসময় থাকতে হবে
+        boolean removed = list.removeIf(s -> s.getId().equals(shopId));
+        if (removed) {
+            saveList(KEY_SHOPS, list);
+            if (shopId.equals(getActiveShopId())) {
+                setActiveShopId(list.get(0).getId());
+            }
+        }
+        return removed;
+    }
+
+    public String getActiveShopId() {
+        String id = prefs.getString(KEY_ACTIVE_SHOP_ID, null);
+        if (id == null || id.isEmpty()) {
+            // getShopList() নিজে থেকেই ডিফল্ট দোকান বানিয়ে সেট করে দেয়
+            List<Shop> list = getShopList();
+            id = prefs.getString(KEY_ACTIVE_SHOP_ID, list.isEmpty() ? "" : list.get(0).getId());
+        }
+        return id;
+    }
+
+    public void setActiveShopId(String shopId) {
+        prefs.edit().putString(KEY_ACTIVE_SHOP_ID, shopId).apply();
+    }
+
+    public Shop getActiveShop() {
+        String id = getActiveShopId();
+        for (Shop s : getShopList()) {
+            if (s.getId().equals(id)) return s;
+        }
+        List<Shop> list = getShopList();
+        return list.isEmpty() ? new Shop("আমার দোকান", "") : list.get(0);
+    }
+
+    // ═══════════════════════════════════════════
+    //  স্টক/ইনভেন্টরি — shop-scoped পণ্য তালিকা
+    // ═══════════════════════════════════════════
+    public List<Product> getProductList() {
+        Type t = new TypeToken<List<Product>>() {}.getType();
+        return loadList(shopScope(KEY_PRODUCTS), t);
+    }
+
+    public Product addProduct(Product p) {
+        List<Product> list = getProductList();
+        p.setId(generateId());
+        p.setCreatedAt(nowIso());
+        list.add(0, p);
+        saveList(shopScope(KEY_PRODUCTS), list);
+        return p;
+    }
+
+    public boolean updateProduct(int index, Product updated) {
+        List<Product> list = getProductList();
+        if (index < 0 || index >= list.size()) return false;
+        updated.setUpdatedAt(nowIso());
+        list.set(index, updated);
+        saveList(shopScope(KEY_PRODUCTS), list);
+        return true;
+    }
+
+    public boolean deleteProduct(int index) {
+        List<Product> list = getProductList();
+        if (index < 0 || index >= list.size()) return false;
+        list.remove(index);
+        saveList(shopScope(KEY_PRODUCTS), list);
+        return true;
+    }
+
+    public Product getProductById(String id) {
+        if (id == null) return null;
+        for (Product p : getProductList()) {
+            if (id.equals(p.getId())) return p;
+        }
+        return null;
+    }
+
+    public int getProductIndexById(String id) {
+        if (id == null) return -1;
+        List<Product> list = getProductList();
+        for (int i = 0; i < list.size(); i++) {
+            if (id.equals(list.get(i).getId())) return i;
+        }
+        return -1;
+    }
+
+    /** স্টক বাড়ায় (+) বা কমায় (-) — "পণ্য যোগ"/"পণ্য বাদ" কুইক বাটনে ব্যবহৃত। */
+    public boolean adjustProductStock(String productId, double delta) {
+        int idx = getProductIndexById(productId);
+        if (idx < 0) return false;
+        List<Product> list = getProductList();
+        Product p = list.get(idx);
+        double newQty = p.getStockQty() + delta;
+        p.setStockQty(Math.max(0, newQty));
+        p.setUpdatedAt(nowIso());
+        list.set(idx, p);
+        saveList(shopScope(KEY_PRODUCTS), list);
+        return true;
+    }
+
+    public List<Product> getLowStockProducts() {
+        List<Product> result = new ArrayList<>();
+        for (Product p : getProductList()) {
+            if (p.isLowStock()) result.add(p);
+        }
+        return result;
+    }
+
+    public double getTotalStockBuyValue() {
+        double total = 0;
+        for (Product p : getProductList()) total += p.getTotalBuyValue();
+        return total;
+    }
+
+    public double getTotalStockSellValue() {
+        double total = 0;
+        for (Product p : getProductList()) total += p.getTotalSellValue();
+        return total;
+    }
+
+    public double getTotalStockQty() {
+        double total = 0;
+        for (Product p : getProductList()) total += p.getStockQty();
+        return total;
+    }
+
+    public double getTotalStockProfit() {
+        double total = 0;
+        for (Product p : getProductList()) total += p.getTotalProfit();
+        return total;
+    }
+
+    // ═══════════════════════════════════════════
+    //  ইনভয়েস — shop-scoped, প্রতিটা দোকানের নিজস্ব ক্রমিক নম্বর
+    // ═══════════════════════════════════════════
+    public List<SalesInvoice> getInvoiceList() {
+        Type t = new TypeToken<List<SalesInvoice>>() {}.getType();
+        return loadList(shopScope(KEY_INVOICES), t);
+    }
+
+    /** এই দোকানের পরবর্তী ইনভয়েস নম্বর — প্রতিটা দোকানের হিসাব আলাদা, ১ থেকে শুরু। */
+    private int nextInvoiceNumber() {
+        String key = shopScope(KEY_INVOICE_COUNTER);
+        int next = prefs.getInt(key, 0) + 1;
+        prefs.edit().putInt(key, next).apply();
+        return next;
+    }
+
+    public SalesInvoice addInvoice(SalesInvoice inv) {
+        List<SalesInvoice> list = getInvoiceList();
+        inv.setId(generateId());
+        inv.setInvoiceNo(String.valueOf(nextInvoiceNumber()));
+        inv.setCreatedAt(nowIso());
+        if (inv.getDate().isEmpty()) inv.setDate(nowDate());
+        if (inv.getTime().isEmpty()) inv.setTime(nowTime());
+        list.add(0, inv);
+        saveList(shopScope(KEY_INVOICES), list);
+        return inv;
+    }
+
+    public boolean deleteInvoice(int index) {
+        List<SalesInvoice> list = getInvoiceList();
+        if (index < 0 || index >= list.size()) return false;
+        list.remove(index);
+        saveList(shopScope(KEY_INVOICES), list);
+        return true;
+    }
+
+    public int getInvoiceIndexById(String id) {
+        if (id == null) return -1;
+        List<SalesInvoice> list = getInvoiceList();
+        for (int i = 0; i < list.size(); i++) {
+            if (id.equals(list.get(i).getId())) return i;
+        }
+        return -1;
     }
 
 }

@@ -78,7 +78,7 @@ public class IncomeExpenseCardAdapter extends RecyclerView.Adapter<IncomeExpense
 
         String method = t.getMethod().isEmpty() ? "cash" : t.getMethod();
         h.ivItemMethod.setImageResource(PaymentMethodUtil.getIconRes(method));
-        h.tvItemMethod.setText(PaymentMethodUtil.getLabel(method));
+        h.tvItemMethod.setText(PaymentMethodUtil.getLabel(h.itemView.getContext(), method));
 
         h.btnEdit.setOnClickListener(v -> onEdit.run(t, h.getBindingAdapterPosition()));
         h.btnDelete.setOnClickListener(v -> onDelete.run(t, h.getBindingAdapterPosition()));

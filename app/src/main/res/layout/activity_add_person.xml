@@ -1,66 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- দেনা-পাওনা "নতুন ব্যক্তি যোগ করুন" পেজ — কম্প্যাক্ট ডিজাইন যা সাধারণ অবস্থায় স্ক্রল ছাড়াই এক
+     স্ক্রিনে ধরে (fillViewport + center_vertical দিয়ে খালি জায়গায় কনটেন্ট মাঝ বরাবর বসে), হেডার
+     সম্পূর্ণ সোজা/ফ্ল্যাট বার (কোনো বাঁকা কোণা নেই), আর ইনপুট বক্সগুলো রাউন্ডেড, নরম ব্যাকগ্রাউন্ড ও
+     বর্ডারসহ পরিশীলিত ডিজাইনে। ছোট স্ক্রিন বা কীবোর্ড খোলা অবস্থায় (যেখানে জায়গা কম পড়ে) নিরাপত্তা
+     হিসেবে হালকা স্ক্রল এখনও সম্ভব, যাতে কোনো ইনপুট বক্স কখনো অগম্য/আটকে না যায়। -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bgColor">
+    android:orientation="vertical"
+    android:background="@color/bgColor"
+    android:fitsSystemWindows="true">
+
+    <!-- হেডার — সম্পূর্ণ সোজা/ফ্ল্যাট বার, অ্যাপের মূল গোলাপি রঙে, কোনো কার্ভ/গোল কোণা নেই -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_header_add_person_pink_flat"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="6dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:padding="9dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/white"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:text="নতুন ব্যক্তি"
+            android:textSize="16.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+    </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:overScrollMode="never"
-        android:paddingBottom="30dp"
-        android:clipToPadding="false">
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- হেডার — চিকন বার, অ্যাপের মূল গোলাপি রঙে -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_header_add_person_pink"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="6dp">
-
-                <ImageView
-                    android:id="@+id/btnBack"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:padding="9dp"
-                    android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/white"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:focusable="true"/>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="4dp"
-                    android:text="নতুন ব্যক্তি"
-                    android:textSize="16.5sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"/>
-            </LinearLayout>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp">
 
             <!-- ছবি -->
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="22dp">
+                android:layout_gravity="center_horizontal">
 
                 <FrameLayout
                     android:id="@+id/photoFrame"
-                    android:layout_width="112dp"
-                    android:layout_height="112dp"
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
                     android:clickable="true"
                     android:focusable="true">
 
@@ -86,16 +94,16 @@
                         android:gravity="center">
 
                         <ImageView
-                            android:layout_width="34dp"
-                            android:layout_height="34dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_camera_add"
                             app:tint="#E2136E"/>
                     </LinearLayout>
                 </FrameLayout>
 
                 <LinearLayout
-                    android:layout_width="34dp"
-                    android:layout_height="34dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="bottom|end"
                     android:background="@drawable/bg_camera_badge_pink"
                     android:gravity="center"
@@ -103,8 +111,8 @@
                     android:focusable="false">
 
                     <ImageView
-                        android:layout_width="17dp"
-                        android:layout_height="17dp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
                         android:src="@drawable/ic_camera_add"/>
                 </LinearLayout>
             </FrameLayout>
@@ -113,36 +121,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="ছবি যোগ করুন (ঐচ্ছিক)"
-                android:textSize="12.5sp"
+                android:textSize="11.5sp"
                 android:textColor="@color/textSecondary"/>
 
-            <!-- ফর্ম কার্ড -->
+            <!-- ফর্ম কার্ড — হালকা রাউন্ডেড কর্নার, নরম শ্যাডো -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="14dp"
-                android:layout_marginTop="20dp"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="4dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
                 app:cardBackgroundColor="@color/cardBg">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="18dp">
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp">
 
                     <!-- নাম + সম্পর্ক (একই লাইনে) -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="নাম"
-                        android:textSize="13sp"
+                        android:textSize="12.5sp"
                         android:textStyle="bold"
                         android:textColor="@color/textSecondary"
-                        android:layout_marginBottom="6dp"/>
+                        android:layout_marginBottom="5dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -153,30 +161,30 @@
                         <EditText
                             android:id="@+id/etName"
                             android:layout_width="0dp"
-                            android:layout_height="56dp"
+                            android:layout_height="50dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_card_white"
+                            android:background="@drawable/bg_dialog_field"
                             android:paddingHorizontal="16dp"
                             android:hint="ব্যক্তি বা প্রতিষ্ঠানের নাম"
                             android:textColor="@color/textPrimary"
                             android:textColorHint="@color/hintTextLight"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:textStyle="bold"
                             android:maxLines="1"
                             android:inputType="textPersonName|textCapWords"/>
 
                         <EditText
                             android:id="@+id/etRelation"
-                            android:layout_width="92dp"
-                            android:layout_height="56dp"
+                            android:layout_width="88dp"
+                            android:layout_height="50dp"
                             android:layout_marginStart="8dp"
                             android:background="@drawable/bg_relation_chip"
-                            android:paddingHorizontal="12dp"
+                            android:paddingHorizontal="10dp"
                             android:hint="সম্পর্ক"
                             android:gravity="center"
                             android:textColor="#B3105A"
                             android:textColorHint="#C97AA0"
-                            android:textSize="13sp"
+                            android:textSize="12.5sp"
                             android:textStyle="bold"
                             android:maxLines="1"
                             android:inputType="text"/>
@@ -187,24 +195,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="মোবাইল নম্বর (ঐচ্ছিক)"
-                        android:textSize="13sp"
+                        android:textSize="12.5sp"
                         android:textStyle="bold"
                         android:textColor="@color/textSecondary"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="6dp"/>
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="5dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="50dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:background="@drawable/bg_card_white"
+                        android:background="@drawable/bg_dialog_field"
                         android:paddingStart="16dp"
-                        android:paddingEnd="6dp">
+                        android:paddingEnd="5dp">
 
                         <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
                             android:src="@drawable/ic_call_filled"
                             app:tint="#E2136E"
                             android:layout_marginEnd="10dp"/>
@@ -218,16 +226,16 @@
                             android:hint="ফোন নম্বর লিখুন"
                             android:textColor="@color/textPrimary"
                             android:textColorHint="@color/hintTextLight"
-                            android:textSize="15sp"
+                            android:textSize="14.5sp"
                             android:textStyle="bold"
                             android:maxLines="1"
                             android:inputType="phone"/>
 
                         <ImageView
                             android:id="@+id/btnPickContact"
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
-                            android:padding="9dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:padding="8dp"
                             android:src="@drawable/ic_contact_book"
                             android:background="@drawable/bg_contact_pick_btn"
                             android:clickable="true"
@@ -239,23 +247,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ঠিকানা (ঐচ্ছিক)"
-                        android:textSize="13sp"
+                        android:textSize="12.5sp"
                         android:textStyle="bold"
                         android:textColor="@color/textSecondary"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="6dp"/>
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="5dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="50dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:background="@drawable/bg_card_white"
+                        android:background="@drawable/bg_dialog_field"
                         android:paddingHorizontal="16dp">
 
                         <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
                             android:src="@drawable/ic_location_pin"
                             android:layout_marginEnd="10dp"/>
 
@@ -268,7 +276,7 @@
                             android:hint="ঠিকানা লিখুন"
                             android:textColor="@color/textPrimary"
                             android:textColorHint="@color/hintTextLight"
-                            android:textSize="15sp"
+                            android:textSize="14.5sp"
                             android:maxLines="1"
                             android:inputType="textPostalAddress|textCapSentences"/>
                     </LinearLayout>
@@ -278,23 +286,23 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ইমেইল (ঐচ্ছিক)"
-                        android:textSize="13sp"
+                        android:textSize="12.5sp"
                         android:textStyle="bold"
                         android:textColor="@color/textSecondary"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="6dp"/>
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="5dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="50dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:background="@drawable/bg_card_white"
+                        android:background="@drawable/bg_dialog_field"
                         android:paddingHorizontal="16dp">
 
                         <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
+                            android:layout_width="17dp"
+                            android:layout_height="17dp"
                             android:src="@drawable/ic_mail"
                             app:tint="@color/textSecondary"
                             android:layout_marginEnd="10dp"/>
@@ -308,7 +316,7 @@
                             android:hint="ইমেইল ঠিকানা লিখুন"
                             android:textColor="@color/textPrimary"
                             android:textColorHint="@color/hintTextLight"
-                            android:textSize="15sp"
+                            android:textSize="14.5sp"
                             android:maxLines="1"
                             android:inputType="textEmailAddress"/>
                     </LinearLayout>
@@ -319,9 +327,8 @@
             <LinearLayout
                 android:id="@+id/btnSavePerson"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginHorizontal="14dp"
-                android:layout_marginTop="22dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/bg_btn_ledger"
                 android:gravity="center"
                 android:enabled="false"
@@ -339,4 +346,4 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/appBg">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:background="@drawable/bg_header_khata"
+        android:orientation="vertical" android:paddingTop="14dp"
+        android:paddingBottom="14dp" android:paddingHorizontal="18dp"
+        android:elevation="8dp">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical">
+
+            <LinearLayout android:id="@+id/btnBack" android:layout_width="36dp" android:layout_height="36dp"
+                android:background="@drawable/bg_summary_glass" android:gravity="center"
+                android:clickable="true" android:focusable="true">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="←" android:textSize="18sp" android:textColor="@color/white"/>
+            </LinearLayout>
+
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:text="পণ্য" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white"/>
+
+            <LinearLayout android:id="@+id/btnRefreshStock" android:layout_width="wrap_content" android:layout_height="36dp"
+                android:background="@drawable/bg_summary_glass" android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:clickable="true" android:focusable="true">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="↻ রিফ্রেশ" android:textSize="12.5sp" android:textStyle="bold" android:textColor="@color/white"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- সামারি কার্ড: মোট পণ্য / ক্রয় মূল্য / বিক্রয় মূল্য / মজুদ / লাভ / কম স্টক -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_margin="14dp" app:cardCornerRadius="14dp" app:cardElevation="6dp"
+        app:cardBackgroundColor="@color/cardBg">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="14dp">
+                <include layout="@layout/item_stock_stat" android:id="@+id/statTotalProducts"/>
+                <include layout="@layout/item_stock_stat" android:id="@+id/statBuyValue"/>
+                <include layout="@layout/item_stock_stat" android:id="@+id/statSellValue"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <include layout="@layout/item_stock_stat" android:id="@+id/statTotalStock"/>
+                <include layout="@layout/item_stock_stat" android:id="@+id/statTotalProfit"/>
+                <include layout="@layout/item_stock_stat" android:id="@+id/statLowStock"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- সার্চ বার -->
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:background="@drawable/bg_search_premium"
+        android:layout_marginHorizontal="14dp" android:layout_marginBottom="10dp"
+        android:paddingHorizontal="14dp" android:paddingVertical="10dp">
+
+        <EditText android:id="@+id/etProductSearch" android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:background="@android:color/transparent"
+            android:hint="পণ্য খুঁজুন..." android:textSize="13.5sp" android:maxLines="1"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="⌕" android:textSize="16sp" android:textColor="@color/textSecondary"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProducts"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="14dp"
+        android:clipToPadding="false"/>
+
+    <LinearLayout android:id="@+id/emptyProductState" android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:visibility="gone">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="এখনো কোনো পণ্য যোগ করা হয়নি" android:textSize="14sp" android:textColor="@color/textSecondary"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btnAddProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="14dp"
+        android:paddingVertical="14dp"
+        android:gravity="center"
+        android:text="+ নতুন পণ্য যোগ করুন"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_btn_khata_wide"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</LinearLayout>

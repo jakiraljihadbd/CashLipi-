@@ -129,13 +129,13 @@ public class KhataEntryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         boolean isDena = e.isBaki();
 
         h.tvRowType.setText(isDena ? " দেনা" : " পাওনা");
-        h.tvRowType.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.denaColor : R.color.pabonaColor));
+        h.tvRowType.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.bakiColor : R.color.jomaColor));
 
         h.ivRowIcon.setImageResource(isDena ? R.drawable.emoji_book_red : R.drawable.emoji_book_green);
-        h.ivRowIcon.setBackgroundResource(isDena ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable);
+        h.ivRowIcon.setBackgroundResource(isDena ? R.drawable.bg_icon_circle_khata : R.drawable.bg_icon_circle_khata_joma);
 
         h.tvRowAmount.setText(DatabaseManager.formatAmount(e.getAmount()));
-        h.tvRowAmount.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.denaColor : R.color.pabonaColor));
+        h.tvRowAmount.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.bakiColor : R.color.jomaColor));
 
         h.tvRowDate.setText(DatabaseManager.formatTimeDisplay(e.getTime()));
 
@@ -168,12 +168,12 @@ public class KhataEntryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             String chipText;
             if (bal > 0.5) {
                 chipText = "পাবেন " + DatabaseManager.formatAmount(bal);
-                chipColor = ContextCompat.getColor(ctx, R.color.pabonaColor);
-                chipBg = ContextCompat.getColor(ctx, R.color.pabonaLight);
+                chipColor = ContextCompat.getColor(ctx, R.color.jomaColor);
+                chipBg = ContextCompat.getColor(ctx, R.color.jomaLight);
             } else if (bal < -0.5) {
                 chipText = "দেবেন " + DatabaseManager.formatAmount(Math.abs(bal));
-                chipColor = ContextCompat.getColor(ctx, R.color.denaColor);
-                chipBg = ContextCompat.getColor(ctx, R.color.denaLight);
+                chipColor = ContextCompat.getColor(ctx, R.color.bakiColor);
+                chipBg = ContextCompat.getColor(ctx, R.color.bakiLight);
             } else {
                 chipText = "হিসাব সমান";
                 chipColor = ContextCompat.getColor(ctx, R.color.textSecondary);

@@ -140,11 +140,11 @@
             android:text="CashLipi ক্যাশলিপি"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/splashTextPrimary"
             android:letterSpacing="0.20"
             android:alpha="0"
             android:layout_marginBottom="8dp"
-            android:shadowColor="#CCE0126D"
+            android:shadowColor="@color/splashTextShadow"
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="22"/>
@@ -165,11 +165,11 @@
             android:layout_height="wrap_content"
             android:text="Daily Account Tracker"
             android:textSize="14sp"
-            android:textColor="#FFD23F"
+            android:textColor="@color/splashTagline"
             android:letterSpacing="0.08"
             android:alpha="0"
             android:layout_marginBottom="10dp"
-            android:shadowColor="#80FFD23F"
+            android:shadowColor="@color/splashTaglineShadow"
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="16"/>
@@ -181,7 +181,7 @@
             android:layout_height="wrap_content"
             android:text="v 1.0"
             android:textSize="11sp"
-            android:textColor="#CCFFFFFF"
+            android:textColor="@color/splashVersionText"
             android:background="@drawable/splash_version_badge"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
@@ -199,19 +199,37 @@
         android:layout_marginBottom="48dp"
         android:paddingHorizontal="48dp">
 
-        <!-- Loading label -->
-        <TextView
-            android:id="@+id/splashLoadingLabel"
-            android:layout_width="wrap_content"
+        <!-- Loading label row: status text (left) + live percentage (right) -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="INITIALIZING..."
-            android:textSize="9sp"
-            android:letterSpacing="0.28"
-            android:textColor="#99E0126D"
-            android:layout_marginBottom="12dp"
-            android:alpha="0"/>
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
-        <!-- Material 3 style rounded progress indicator -->
+            <TextView
+                android:id="@+id/splashLoadingLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="প্রাথমিক প্রস্তুতি..."
+                android:textSize="10sp"
+                android:letterSpacing="0.22"
+                android:textColor="@color/splashLoadingLabel"
+                android:alpha="0"/>
+
+            <TextView
+                android:id="@+id/splashPercent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.04"
+                android:textColor="@color/splashPercentText"
+                android:alpha="0"/>
+        </LinearLayout>
+
+        <!-- Material 3 style rounded progress indicator — bigger & clearer -->
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/splashProgressBar"
             android:layout_width="match_parent"
@@ -219,10 +237,10 @@
             android:layout_marginBottom="18dp"
             android:max="100"
             android:progress="0"
-            app:trackThickness="3dp"
-            app:trackCornerRadius="2dp"
-            app:indicatorColor="@color/brandGold"
-            app:trackColor="#1FE0126D"
+            app:trackThickness="7dp"
+            app:trackCornerRadius="4dp"
+            app:indicatorColor="@color/splashProgressIndicator"
+            app:trackColor="@color/splashProgressTrack"
             android:indeterminate="false"/>
 
         <!-- Credit -->
@@ -232,9 +250,9 @@
             android:layout_height="wrap_content"
             android:text="@jakiraljihad"
             android:textSize="11sp"
-            android:textColor="#99FFD23F"
+            android:textColor="@color/splashCredit"
             android:letterSpacing="0.12"
-            android:shadowColor="#66FFD23F"
+            android:shadowColor="@color/splashCreditShadow"
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="10"

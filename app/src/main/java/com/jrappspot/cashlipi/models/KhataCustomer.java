@@ -12,6 +12,9 @@ public class KhataCustomer {
     @SerializedName("id")
     private String id;
 
+    @SerializedName("partyType")
+    private String partyType;      // "customer" | "supplier" — গ্রাহক নাকি সাপ্লায়ার
+
     @SerializedName("name")
     private String name;
 
@@ -32,6 +35,9 @@ public class KhataCustomer {
 
     @SerializedName("openingBalance")
     private double openingBalance; // পূর্বের জের — ধনাত্মক মানে গ্রাহক আগে থেকেই বাকি, ঋণাত্মক মানে অগ্রিম জমা
+
+    @SerializedName("dueDate")
+    private String dueDate;        // বাকি পরিশোধের তারিখ — ঐচ্ছিক, তাগাদা মেসেজ ফিচারে ব্যবহৃত
 
     @SerializedName("date")
     private String date;
@@ -70,6 +76,11 @@ public class KhataCustomer {
 
     // Getters
     public String getId() { return id != null ? id : ""; }
+    public String getPartyType() { return partyType != null && !partyType.isEmpty() ? partyType : "customer"; }
+    public boolean isSupplier() { return "supplier".equals(getPartyType()); }
+    public boolean isCustomer() { return !isSupplier(); }
+    public String getDueDate() { return dueDate != null ? dueDate : ""; }
+    public boolean hasDueDate() { return !getDueDate().isEmpty(); }
     public String getName() { return name != null ? name : ""; }
     public String getBusinessTag() { return businessTag != null ? businessTag : ""; }
     public String getPhone() { return phone != null ? phone : ""; }
@@ -85,6 +96,8 @@ public class KhataCustomer {
 
     // Setters
     public void setId(String id) { this.id = id; }
+    public void setPartyType(String partyType) { this.partyType = partyType; }
+    public void setDueDate(String dueDate) { this.dueDate = dueDate; }
     public void setName(String name) { this.name = name; }
     public void setBusinessTag(String businessTag) { this.businessTag = businessTag; }
     public void setPhone(String phone) { this.phone = phone; }

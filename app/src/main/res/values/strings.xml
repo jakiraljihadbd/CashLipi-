@@ -363,4 +363,123 @@ Chat ID: @userinfobot → /start</string>
         <string name="telegram_backup">Telegram Backup</string>
         <string name="telegram_backup_desc">Automatic Backup via Bot</string>
         <string name="telegram_guide">Telegram Guide</string>
+
+    <!-- হোম পেজ — AI টিপ কার্ড -->
+    <string name="home_tip_start_transaction">লেনদেন যোগ করুন, AI আপনাকে স্মার্ট পরামর্শ দেবে!</string>
+    <string name="home_tip_expense_high">আয়ের %1$d%% ব্যয় হচ্ছে! সঞ্চয় বাড়ানো দরকার।</string>
+    <string name="home_tip_expense_medium">আয়ের %1$d%% ব্যয় হচ্ছে। নিয়ন্ত্রণে রাখুন।</string>
+    <string name="home_tip_expense_good">চমৎকার! আয়ের মাত্র %1$d%% ব্যয় হচ্ছে।</string>
+    <string name="home_tip_savings_zero">সঞ্চয় শূন্য! আজই সঞ্চয় শুরু করুন।</string>
+    <string name="home_tip_savings_good">সঞ্চয় %1$s — দারুণ অভ্যাস!</string>
+    <string name="home_tip_dena_due">দেনা %1$s বাকি। আজই পরিশোধের পরিকল্পনা করুন।</string>
+    <string name="home_tip_pabona_due">পাওনা %1$s — সংগ্রহ করতে ভুলবেন না।</string>
+    <string name="home_tip_balance_negative">ব্যালেন্স নেগেটিভ! অপ্রয়োজনীয় ব্যয় কমান।</string>
+    <string name="home_tip_balance_positive">ব্যালেন্স ইতিবাচক। বিনিয়োগের কথা ভাবুন!</string>
+    <string name="home_tip_loading">স্মার্ট পরামর্শ লোড হচ্ছে...</string>
+    <string name="home_tip_card_title">স্মার্ট পরামর্শ</string>
+
+    <!-- পেমেন্ট মাধ্যমের নাম -->
+    <string name="payment_method_cash">ক্যাশ</string>
+    <string name="payment_method_bkash">বিকাশ</string>
+    <string name="payment_method_nagad">নগদ</string>
+    <string name="payment_method_rocket">রকেট</string>
+    <string name="payment_method_bank">ব্যাংক</string>
+    <string name="payment_method_other">অন্যান্য</string>
+    <string name="filter_all">সব</string>
+
+    <!-- আয়-ব্যয় পেজ -->
+    <string name="sort_newest_first">নতুন আগে</string>
+    <string name="sort_oldest_first">পুরাতন আগে</string>
+    <string name="sort_amount_high_first">বেশি পরিমাণ আগে</string>
+    <string name="sort_amount_low_first">কম পরিমাণ আগে</string>
+    <string name="month_total_income">এই মাসের মোট আয়</string>
+    <string name="month_total_expense">এই মাসের মোট ব্যয়</string>
+    <string name="table_col_source">উৎস</string>
+    <string name="table_col_amount">পরিমাণ</string>
+    <string name="table_col_date">তারিখ</string>
+    <string name="table_col_time">সময়</string>
+    <string name="table_total">মোট</string>
+    <string name="table_total_prefix">মোট: %1$s</string>
+    <string name="month_unknown">অজানা</string>
+    <string name="no_data_found">কোনো তথ্য নেই</string>
+
+    <!-- বাংলা মাসের নাম (Gregorian ক্যালেন্ডার, বাংলা হরফে) -->
+    <string-array name="month_names">
+        <item>জানুয়ারি</item>
+        <item>ফেব্রুয়ারি</item>
+        <item>মার্চ</item>
+        <item>এপ্রিল</item>
+        <item>মে</item>
+        <item>জুন</item>
+        <item>জুলাই</item>
+        <item>আগস্ট</item>
+        <item>সেপ্টেম্বর</item>
+        <item>অক্টোবর</item>
+        <item>নভেম্বর</item>
+        <item>ডিসেম্বর</item>
+    </string-array>
+
+    <!-- TransactionSheetHelper — এডিট/ডিলিট/শেয়ার/সেটল ডায়ালগ -->
+    <string name="ts_delete_confirm_title">মুছে ফেলবেন?</string>
+    <string name="ts_delete_confirm_msg">\"%1$s\" এন্ট্রিটি ট্র্যাশে যাবে।</string>
+    <string name="ts_yes_delete">হ্যাঁ, মুছুন</string>
+    <string name="ts_no_keep">না, রাখুন</string>
+    <string name="ts_deleted_toast"> মুছে গেছে</string>
+    <string name="ts_updated_toast"> আপডেট হয়েছে</string>
+    <string name="type_label_income">আয়</string>
+    <string name="type_label_expense">ব্যয়</string>
+    <string name="type_label_savings">সঞ্চয়</string>
+    <string name="ts_share_transaction_template"> %1$s বিবরণ\n─────────────\nশিরোনাম: %2$s\nপরিমাণ: %3$s\nতারিখ: %4$s\nসময়: %5$s</string>
+    <string name="ts_share_note_line">\nনোট: %1$s</string>
+    <string name="ts_share_action">শেয়ার করুন</string>
+    <string name="ts_close">বন্ধ করুন</string>
+    <string name="hint_expense_category">ব্যয়ের ক্যাটাগরি</string>
+    <string name="hint_savings_bank_name">ব্যাংক/মাধ্যমের নাম (ঐচ্ছিক)</string>
+    <string name="hint_income_source">আয়ের উৎস</string>
+    <string name="ts_edit_dialog_title"> সম্পাদনা করুন</string>
+    <string name="ts_save_btn">সংরক্ষণ করুন</string>
+    <string name="ts_field_required_error">এই ঘরটি খালি রাখা যাবে না</string>
+    <string name="ts_invalid_amount_error">সঠিক পরিমাণ লিখুন</string>
+    <string name="status_paid_dena">দিলাম</string>
+    <string name="status_paid_pabona">পেলাম</string>
+    <string name="status_partial_paid">আংশিক পরিশোধ (বাকি ৳%1$s)</string>
+    <string name="status_due">বাকি</string>
+    <string name="ledger_type_dena">দেনা</string>
+    <string name="ledger_type_pabona">পাওনা</string>
+    <string name="ts_mark_unpaid">↩️ অপরিশোধিত করুন</string>
+    <string name="ts_pay_more_prefix">✅ আরও পরিশোধ করুন  •  বাকি ৳%1$s</string>
+    <string name="ts_mark_paid_dena">✅ দিলাম</string>
+    <string name="ts_mark_paid_pabona">✅ পেলাম</string>
+    <string name="ts_cancel_payment_title">পরিশোধ বাতিল করবেন?</string>
+    <string name="ts_cancel_payment_msg">এ পর্যন্ত করা ৳%1$s পরিশোধ বাতিল হয়ে যাবে এবং পুরো ৳%2$s আবার বাকি হিসেবে দেখাবে।</string>
+    <string name="ts_yes_cancel">হ্যাঁ, বাতিল করুন</string>
+    <string name="ts_no">না</string>
+    <string name="ts_pay_money_question">টাকা পরিশোধ করুন</string>
+    <string name="ts_receive_money_question">টাকা গ্রহণ করুন</string>
+    <string name="ts_total_due_prefix">মোট বাকি ৳%1$s</string>
+    <string name="ts_already_paid_note">  (ইতিমধ্যে ৳%1$s পরিশোধিত — বাকিটাও একই মাধ্যমে হবে)</string>
+    <string name="rb_balance_dena">ব্যালেন্স থেকে (মূল হিসাব থেকে কমবে)</string>
+    <string name="rb_balance_pabona">ব্যালেন্সে (মূল হিসাবে যোগ হবে)</string>
+    <string name="rb_savings_dena">সঞ্চয় থেকে (সঞ্চয়ের হিসাব থেকে কমবে)</string>
+    <string name="rb_savings_pabona">সঞ্চয়ে (সঞ্চয়ের হিসাবে যোগ হবে)</string>
+    <string name="rb_incomeexpense_dena">ব্যয় হিসেবে যোগ হবে</string>
+    <string name="rb_incomeexpense_pabona">আয় হিসেবে যোগ হবে</string>
+    <string name="rb_none_dena">কোথাও থেকে না (শুধু হিসাব থেকে বাদ)</string>
+    <string name="rb_none_pabona">কোথাও না (শুধু হিসাব থেকে বাদ)</string>
+    <string name="ts_balance_prefix">ব্যালেন্স ৳%1$s</string>
+    <string name="ts_savings_prefix">সঞ্চয় ৳%1$s</string>
+    <string name="ts_expense_prefix">ব্যয় ৳%1$s</string>
+    <string name="ts_income_prefix">আয় ৳%1$s</string>
+    <string name="ts_unchanged_suffix"> (অপরিবর্তিত)</string>
+    <string name="ts_confirm_payment">পরিশোধ নিশ্চিত করুন</string>
+    <string name="ts_exceeds_due">বাকি ৳%1$s-এর বেশি পরিশোধ করা যাবে না</string>
+    <string name="ts_receivable_collection_source">পাওনা প্রাপ্তি</string>
+    <string name="ts_receivable_note">%1$s এর কাছ থেকে %2$s তারিখের পাওনা আদায় করা হয়েছে</string>
+    <string name="ts_debt_payment_category">দেনা পরিশোধ</string>
+    <string name="ts_debt_payment_note">%1$s কে %2$s তারিখের দেনা পরিশোধ করা হয়েছে</string>
+    <string name="ts_type_dena"> দেনা</string>
+    <string name="ts_type_pabona"> পাওনা</string>
+    <string name="ts_share_ledger_template"> %1$s বিবরণ\n─────────────\nব্যক্তি: %2$s\nপরিমাণ: %3$s\nতারিখ: %4$s\nসময়: %5$s\nস্ট্যাটাস: %6$s</string>
+    <string name="ts_share_category_line">\nক্যাটাগরি: %1$s</string>
+    <string name="ts_enter_name_error">নাম লিখুন</string>
 </resources>

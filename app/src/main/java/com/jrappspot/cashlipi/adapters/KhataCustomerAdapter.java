@@ -140,6 +140,7 @@ public class KhataCustomerAdapter extends RecyclerView.Adapter<KhataCustomerAdap
                 h.statusDot.setVisibility(View.VISIBLE);
                 h.statusDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
                         ctx.getResources().getColor(R.color.bakiColor)));
+                if (h.accentBar != null) h.accentBar.setBackgroundColor(ctx.getResources().getColor(R.color.bakiColor));
             } else if (stat.isAdvance()) {
                 h.tvUnpaidBadge.setBackgroundResource(R.drawable.bg_badge_paid);
                 h.tvUnpaidBadge.setTextColor(ctx.getResources().getColor(R.color.jomaColor));
@@ -147,15 +148,18 @@ public class KhataCustomerAdapter extends RecyclerView.Adapter<KhataCustomerAdap
                 h.statusDot.setVisibility(View.VISIBLE);
                 h.statusDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
                         ctx.getResources().getColor(R.color.jomaColor)));
+                if (h.accentBar != null) h.accentBar.setBackgroundColor(ctx.getResources().getColor(R.color.jomaColor));
             } else {
                 h.tvUnpaidBadge.setBackgroundResource(R.drawable.bg_badge_paid);
                 h.tvUnpaidBadge.setTextColor(ctx.getResources().getColor(R.color.successColor));
                 h.tvUnpaidBadge.setText("হিসাব ক্লিয়ার");
                 h.statusDot.setVisibility(View.GONE);
+                if (h.accentBar != null) h.accentBar.setBackgroundColor(ctx.getResources().getColor(R.color.successColor));
             }
         } else {
             h.rowStats.setVisibility(View.GONE);
             h.statusDot.setVisibility(View.GONE);
+            if (h.accentBar != null) h.accentBar.setBackgroundColor(ctx.getResources().getColor(R.color.khataWalletColor));
         }
 
         h.itemView.setOnClickListener(v -> {
@@ -225,10 +229,11 @@ public class KhataCustomerAdapter extends RecyclerView.Adapter<KhataCustomerAdap
         ImageView ivPhoto;
         LinearLayout avatarInitial, rowPhone, rowAddress, rowStats;
         TextView tvInitial, tvName, tvDot, tvRelation, tvPhone, tvAddress, tvTxnCount, tvUnpaidBadge;
-        View statusDot;
+        View statusDot, accentBar;
 
         VH(@NonNull View itemView) {
             super(itemView);
+            accentBar = itemView.findViewById(R.id.accentBar);
             avatarFrame = itemView.findViewById(R.id.avatarFrame);
             ivPhoto = itemView.findViewById(R.id.ivKhataCustomerPhoto);
             avatarInitial = itemView.findViewById(R.id.avatarInitial);

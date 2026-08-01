@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- বাকির খাতার কাস্টমার কার্ডের নিজস্ব ব্যাকগ্রাউন্ড — সাদা, হালকা কম রাউন্ডেড কোণা
+     (দেনা-পাওনার bg_card_style_classic থেকে আলাদা), accentBar-এর সাথে মিলিয়ে একটা
+     "খাতার পাতা" লুক তৈরি করে। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/cardBg"/>
+    <corners android:topLeftRadius="4dp" android:bottomLeftRadius="4dp"
+        android:topRightRadius="14dp" android:bottomRightRadius="14dp"/>
+</shape>

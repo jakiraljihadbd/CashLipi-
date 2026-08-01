@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/appBg">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:paddingHorizontal="18dp" android:paddingVertical="16dp"
+        android:background="@drawable/bg_header_khata">
+
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+            android:text="Choose Shop" android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white"/>
+
+        <LinearLayout android:id="@+id/btnClose" android:layout_width="34dp" android:layout_height="34dp"
+            android:background="@drawable/bg_summary_glass" android:gravity="center"
+            android:clickable="true" android:focusable="true">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="✕" android:textSize="16sp" android:textColor="@color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvShops"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="14dp"
+        android:clipToPadding="false"/>
+
+    <TextView
+        android:id="@+id/btnAddShop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="14dp"
+        android:paddingVertical="14dp"
+        android:gravity="center"
+        android:text="+ নতুন দোকান যোগ করুন"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_btn_khata_wide"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</LinearLayout>

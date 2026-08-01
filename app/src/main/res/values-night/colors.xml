@@ -40,10 +40,30 @@
     <color name="bottomNavBg">#1E293B</color>
     <color name="navigationBarColor">#1E293B</color>
 
-    <!-- ── Splash ────────────────────────────────────────────────────── -->
-    <color name="splashBg">#0D1520</color>
-    <color name="splashGradStart">#0D1520</color>
-    <color name="splashGradEnd">#1E3A5F</color>
+    <!-- ── Splash (Dark) ─────────────────────────────────────────────── -->
+    <color name="splashBg">#000000</color>
+    <color name="splashGradStart">#000000</color>
+    <color name="splashGradEnd">#0C0509</color>
+    <color name="splashGlowColor1">#40E0126D</color>
+    <color name="splashGlowColor2">#24E0126D</color>
+    <color name="splashCenterGlow1">#40E0126D</color>
+    <color name="splashCenterGlow2">#24E0126D</color>
+    <color name="splashTextPrimary">#FFFFFF</color>
+    <color name="splashTextShadow">#CCE0126D</color>
+    <color name="splashTagline">#FFD23F</color>
+    <color name="splashTaglineShadow">#80FFD23F</color>
+    <color name="splashVersionText">#CCFFFFFF</color>
+    <color name="splashVersionBadgeBg">#14E0126D</color>
+    <color name="splashVersionBadgeStroke">#33FFD23F</color>
+    <color name="splashLoadingLabel">#99E0126D</color>
+    <color name="splashPercentText">#FFD23F</color>
+    <color name="splashCredit">#99FFD23F</color>
+    <color name="splashCreditShadow">#66FFD23F</color>
+    <color name="splashProgressTrack">#1FE0126D</color>
+    <color name="splashProgressIndicator">#FFD23F</color>
+    <color name="splashDividerColor">#FFFFD23F</color>
+    <color name="splashBottomGlowCenter">#18E0126D</color>
+    <color name="splashBottomGlowLine">#55FFD23F</color>
 
     <!-- ── Profile ────────────────────────────────────────────────────── -->
     <color name="profileAccent">#818CF8</color>
@@ -145,6 +165,17 @@
     <color name="loginInfoBoxBg">#0F2A4A</color>
     <color name="loginInfoBoxBorder">#1E3A5F</color>
 
+    <!-- Login screen — clean/flat redesign (dark) -->
+    <color name="loginCleanBg">#0F1115</color>
+    <color name="loginCleanLogoBg">#1E2140</color>
+    <color name="loginCleanTextPrimary">#F3F4F6</color>
+    <color name="loginCleanTextSecondary">#9CA3AF</color>
+    <color name="loginCleanTextTertiary">#6B7280</color>
+    <color name="loginCleanBtnBg">#1A1C24</color>
+    <color name="loginCleanBtnBorder">#2A2D3A</color>
+    <color name="loginCleanSkipBg">#20222C</color>
+    <color name="loginCleanDivider">#22242E</color>
+
 
     <!-- ── Ledger / Debt / Savings token dark overrides ─────────────── -->
     <color name="ledgerBg">#B45309</color>
@@ -190,8 +221,9 @@
     <color name="m3SavingsContainer">#2E1F44</color>
     <color name="m3OnSavingsContainer">#DCB8FF</color>
 
-    <color name="m3MenuCardSurface">#131C2E</color>
-    <color name="m3MenuCardOutline">#26324A</color>
+    <color name="m3MenuCardSurface">#182338</color>
+    <color name="m3MenuCardOutline">#2E3B56</color>
+    <color name="personCardBorder">#2E3B56</color>
     <!-- ── আয়-ব্যয় (Income/Expense) পেজ — ডার্ক মোডে উজ্জ্বল, স্যাচুরেটেড কালার
          প্রাণবন্ত এবং স্পষ্ট দৃশ্যমানতার জন্য অপটিমাইজ করা -->
     <color name="ieIncomeDark">#22C55E</color>

@@ -45,7 +45,7 @@ public class KhataEntrySheetHelper {
 
         sheetIcon.setText(isBaki ? "৳" : "✓");
         sheetIcon.setBackground(act.getResources().getDrawable(
-                isBaki ? R.drawable.bg_icon_circle_ledger : R.drawable.bg_icon_circle_receivable));
+                isBaki ? R.drawable.bg_icon_circle_khata : R.drawable.bg_icon_circle_khata_joma));
         sheetTitle.setText(item.getCustomerName());
         sheetSubtitle.setText(DatabaseManager.formatDateDisplay(item.getDate())
                 + "  •  " + DatabaseManager.formatTimeDisplay(item.getTime())
@@ -201,13 +201,13 @@ public class KhataEntrySheetHelper {
             boolean baki = "baki".equals(selType[0]);
             if (btnTypeBaki instanceof TextView) {
                 ((TextView) btnTypeBaki).setBackground(act.getResources().getDrawable(
-                        baki ? R.drawable.bg_type_active_dena : R.drawable.bg_dialog_field));
+                        baki ? R.drawable.bg_type_active_khata : R.drawable.bg_dialog_field));
                 ((TextView) btnTypeBaki).setTextColor(ContextCompat.getColor(act,
                         baki ? R.color.white : R.color.secondaryTextDark));
             }
             if (btnTypeJoma instanceof TextView) {
                 ((TextView) btnTypeJoma).setBackground(act.getResources().getDrawable(
-                        !baki ? R.drawable.bg_type_active_pabona : R.drawable.bg_dialog_field));
+                        !baki ? R.drawable.bg_type_active_khata_joma : R.drawable.bg_dialog_field));
                 ((TextView) btnTypeJoma).setTextColor(ContextCompat.getColor(act,
                         !baki ? R.color.white : R.color.secondaryTextDark));
             }

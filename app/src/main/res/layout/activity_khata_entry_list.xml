@@ -13,7 +13,7 @@
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
             android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="14dp">
             <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
-                android:text=" দেনা/পাওনা তালিকা"
+                android:text=" বাকি ও জমার তালিকা"
                 android:textSize="19sp" android:textStyle="bold" android:textColor="@color/white"
                 android:fontFamily="sans-serif-medium"/>
             <LinearLayout android:id="@+id/btnAddNew" android:layout_width="38dp" android:layout_height="38dp"
@@ -34,7 +34,7 @@
                 android:layout_weight="1" android:background="@drawable/bg_summary_glass"
                 android:orientation="vertical" android:padding="12dp" android:layout_marginEnd="6dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text=" দেনা" android:textSize="11sp" android:textColor="@color/white"/>
+                    android:text=" বাকি" android:textSize="11sp" android:textColor="@color/white"/>
                 <TextView android:id="@+id/tvDenaTotal" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:text="৳ 0"
                     android:textSize="16sp" android:textStyle="bold" android:textColor="@color/white"
@@ -44,7 +44,7 @@
                 android:layout_weight="1" android:background="@drawable/bg_summary_glass"
                 android:orientation="vertical" android:padding="12dp" android:layout_marginStart="6dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text=" পাওনা" android:textSize="11sp" android:textColor="@color/white"/>
+                    android:text=" জমা" android:textSize="11sp" android:textColor="@color/white"/>
                 <TextView android:id="@+id/tvPabonaTotal" android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:text="৳ 0"
                     android:textSize="16sp" android:textStyle="bold" android:textColor="@color/white"
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content" android:orientation="horizontal"/>
     </HorizontalScrollView>
 
-    <!-- Filter Chips — সব/দেনা/পাওনা | বাকি/পরিশোধ একটি row এ -->
+    <!-- Filter Chips — সব/বাকি/জমা | বকেয়া/আদায় একটি row এ -->
     <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content"
         android:scrollbars="none" android:paddingHorizontal="16dp" android:layout_marginBottom="10dp">
         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -116,12 +116,12 @@
                 android:textColor="@color/white" android:layout_marginEnd="7dp"
                 android:textStyle="bold" android:clickable="true" android:focusable="true"/>
             <TextView android:id="@+id/chipDena" android:layout_width="wrap_content" android:layout_height="36dp"
-                android:text="দেনা" android:textSize="12sp" android:gravity="center"
+                android:text="বাকি" android:textSize="12sp" android:gravity="center"
                 android:paddingHorizontal="16dp" android:background="@drawable/bg_chip_unselected"
                 android:textColor="@color/chipUnselectedText" android:layout_marginEnd="7dp"
                 android:textStyle="bold" android:clickable="true" android:focusable="true"/>
             <TextView android:id="@+id/chipPabona" android:layout_width="wrap_content" android:layout_height="36dp"
-                android:text="পাওনা" android:textSize="12sp" android:gravity="center"
+                android:text="জমা" android:textSize="12sp" android:gravity="center"
                 android:paddingHorizontal="16dp" android:background="@drawable/bg_chip_unselected"
                 android:textColor="@color/chipUnselectedText" android:layout_marginEnd="12dp"
                 android:textStyle="bold" android:clickable="true" android:focusable="true"/>
@@ -130,12 +130,12 @@
                 android:background="@color/borderColor" android:layout_marginEnd="12dp"/>
 
             <TextView android:id="@+id/chipUnpaid" android:layout_width="wrap_content" android:layout_height="36dp"
-                android:text="বাকি" android:textSize="12sp" android:gravity="center"
+                android:text="বকেয়া" android:textSize="12sp" android:gravity="center"
                 android:paddingHorizontal="16dp" android:background="@drawable/bg_chip_unselected"
                 android:textColor="@color/chipUnselectedText" android:layout_marginEnd="7dp"
                 android:textStyle="bold" android:clickable="true" android:focusable="true"/>
             <TextView android:id="@+id/chipPaid" android:layout_width="wrap_content" android:layout_height="36dp"
-                android:text="পরিশোধ" android:textSize="12sp" android:gravity="center"
+                android:text="আদায়" android:textSize="12sp" android:gravity="center"
                 android:paddingHorizontal="16dp" android:background="@drawable/bg_chip_unselected"
                 android:textColor="@color/chipUnselectedText"
                 android:textStyle="bold" android:clickable="true" android:focusable="true"/>
@@ -154,7 +154,7 @@
         <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:src="@drawable/emoji_empty_mailbox" android:scaleType="centerInside" android:layout_marginBottom="12dp"/>
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="কোনো দেনা-পাওনা নেই" android:textSize="16sp"
+            android:text="কোনো বাকি-জমা নেই" android:textSize="16sp"
             android:textColor="@color/textPrimary" android:textStyle="bold"/>
     </LinearLayout>
 </LinearLayout>

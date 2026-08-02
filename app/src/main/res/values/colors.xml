@@ -441,6 +441,8 @@
     <color name="loginCleanBtnBorder">#E5E7EB</color>
     <color name="loginCleanSkipBg">#F3F4F6</color>
     <color name="loginCleanDivider">#F0F1F5</color>
+    <color name="loginLinkGreen">#15A36B</color>
+    <color name="loginLinkBlue">#2F6FE4</color>
 
     <!-- System nav bar -->
     <color name="navigationBarColor">#FFFFFF</color>
@@ -766,4 +768,39 @@
     <color name="m3MenuCardSurface">#FCFDFE</color>
     <color name="m3MenuCardOutline">#E7ECF4</color>
     <color name="personCardBorder">#E4E9F1</color>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         AI CHAT — dedicated immersive dark palette (redesign)
+         ═══════════════════════════════════════════════════════════════ -->
+    <color name="aiChatBg">#0B1120</color>
+    <color name="aiChatBgElevated">#111A2E</color>
+    <color name="aiChatHeaderStart">#0F0A2E</color>
+    <color name="aiChatHeaderEnd">#1A1140</color>
+    <color name="aiChatDivider">#1E2A44</color>
+
+    <color name="aiUserBubbleStart">#6366F1</color>
+    <color name="aiUserBubbleEnd">#9333EA</color>
+    <color name="aiBotText">#E7ECF7</color>
+    <color name="aiBotTextSecondary">#8B96B3</color>
+    <color name="aiBotAvatarStart">#00D4FF</color>
+    <color name="aiBotAvatarEnd">#6366F1</color>
+
+    <color name="aiInputBarBg">#0F1729</color>
+    <color name="aiInputFieldBg">#1A2338</color>
+    <color name="aiInputFieldStroke">#2A3552</color>
+    <color name="aiInputHint">#6B7794</color>
+
+    <color name="aiSendBtnStart">#00D4FF</color>
+    <color name="aiSendBtnEnd">#6366F1</color>
+    <color name="aiSendBtnDisabled">#243050</color>
+    <color name="aiSendIconDisabled">#57648A</color>
+
+    <color name="aiChipBg">#141D33</color>
+    <color name="aiChipStroke">#293656</color>
+    <color name="aiChipText">#C7D0E8</color>
+
+    <color name="aiAccentCyan">#00D4FF</color>
+    <color name="aiAccentPurple">#9333EA</color>
+    <color name="aiTypingDot">#7C8AB8</color>
+    <color name="aiIconBtnBg">#1A2338</color>
 </resources>

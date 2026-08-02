@@ -1,42 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- ══════════════════════════════════════════════════════════════
+     AI চ্যাট — সম্পূর্ণ রিডিজাইন (v2)
+     ইমার্সিভ ডার্ক থিম, ChatGPT/Groq স্টাইলের চেয়ে প্রিমিয়াম লুক।
+     এই ফাইলে শুধু UI/UX — AI API পরে যুক্ত হবে (দেখুন AiChatActivity.java)
+     ══════════════════════════════════════════════════════════════ -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical" android:background="@color/bgColor">
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:background="@drawable/bg_header_generic" android:orientation="horizontal"
-        android:gravity="center_vertical" android:paddingTop="12dp"
-        android:paddingBottom="14dp" android:paddingHorizontal="16dp">
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text=" AI সহায়তা" android:textSize="17sp"
-                android:textStyle="bold" android:textColor="@color/white"/>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="আর্থিক বিশ্লেষণ ও পরামর্শ"
-                android:textSize="11sp" android:textColor="@color/white"/>
-        </LinearLayout>
-    </LinearLayout>
-    <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvChat"
-        android:layout_width="match_parent" android:layout_height="0dp"
-        android:layout_weight="1" android:paddingHorizontal="12dp"
-        android:paddingVertical="8dp" android:clipToPadding="false"
-        android:overScrollMode="never"/>
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:orientation="vertical" android:background="@color/aiChatBg">
+
+    <!-- ── Header ── -->
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal" android:gravity="center_vertical"
-        android:background="@color/cardBg" android:elevation="8dp"
-        android:padding="10dp">
-        <com.google.android.material.textfield.TextInputLayout style="@style/AppTextInput"
+        android:background="@drawable/bg_ai_chat_header"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="14dp" android:paddingBottom="14dp"
+        android:elevation="4dp">
+
+        <ImageView android:id="@+id/btnBack"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:background="@drawable/bg_ai_icon_btn_circle"
+            android:src="@drawable/ic_arrow_back"
+            android:padding="9dp"
+            android:contentDescription="ফিরে যান"/>
+
+        <LinearLayout
             android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:hint="আপনার প্রশ্ন লিখুন..."
-            android:layout_marginEnd="8dp">
-            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etInput"
+            android:layout_weight="1" android:orientation="vertical"
+            android:layout_marginStart="10dp">
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="ক্যাশলিপি AI"
+                android:textSize="17sp" android:textStyle="bold" android:textColor="@color/white"/>
+            <LinearLayout
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginTop="2dp">
+                <View
+                    android:layout_width="6dp" android:layout_height="6dp"
+                    android:background="@drawable/dot_ai_online"
+                    android:layout_marginEnd="5dp"/>
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="আর্থিক সহায়ক · সক্রিয়"
+                    android:textSize="11sp" android:textColor="@color/aiChipText"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView android:id="@+id/btnNewChat"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:background="@drawable/bg_ai_icon_btn_circle"
+            android:src="@drawable/ic_new_chat"
+            android:padding="9dp"
+            android:contentDescription="নতুন চ্যাট"/>
+    </LinearLayout>
+
+    <!-- ── Content area: welcome screen OR chat list ── -->
+    <FrameLayout
+        android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/welcomeScroll"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:overScrollMode="never" android:fillViewport="true">
+
+            <LinearLayout
                 android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:inputType="textMultiLine" android:maxLines="3"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <Button android:id="@+id/btnSend" style="@style/SubmitButton.Primary"
-            android:layout_width="52dp" android:layout_height="52dp"
-            android:text="→" android:textColor="@color/white"
-            android:padding="0dp"/>
+                android:orientation="vertical" android:gravity="center_horizontal"
+                android:paddingHorizontal="28dp" android:paddingTop="28dp" android:paddingBottom="16dp">
+
+                <FrameLayout
+                    android:layout_width="88dp" android:layout_height="88dp"
+                    android:layout_marginBottom="18dp">
+                    <View
+                        android:layout_width="match_parent" android:layout_height="match_parent"
+                        android:background="@drawable/bg_ai_welcome_glow"/>
+                    <ImageView
+                        android:layout_width="38dp" android:layout_height="38dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/emoji_robot"
+                        android:scaleType="centerInside"/>
+                </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="কেমন আছেন? আমি আপনার\nআর্থিক সহায়ক"
+                    android:textSize="20sp" android:textStyle="bold" android:textColor="@color/white"
+                    android:gravity="center" android:lineSpacingExtra="3dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="আপনার আয়-ব্যয়, সঞ্চয়, বাজেট নিয়ে যেকোনো প্রশ্ন করুন"
+                    android:textSize="13sp" android:textColor="@color/aiBotTextSecondary"
+                    android:gravity="center" android:layout_marginTop="8dp"
+                    android:layout_marginBottom="24dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal" android:layout_marginBottom="10dp">
+                    <TextView android:id="@+id/chip1"
+                        style="@style/AiSuggestionChip"
+                        android:layout_marginEnd="5dp"
+                        android:text="📊  এই মাসের খরচ বিশ্লেষণ করো"/>
+                    <TextView android:id="@+id/chip2"
+                        style="@style/AiSuggestionChip"
+                        android:layout_marginStart="5dp"
+                        android:text="💰  সঞ্চয়ের পরামর্শ দাও"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView android:id="@+id/chip3"
+                        style="@style/AiSuggestionChip"
+                        android:layout_marginEnd="5dp"
+                        android:text="🩺  আর্থিক স্বাস্থ্য স্কোর বুঝিয়ে দাও"/>
+                    <TextView android:id="@+id/chip4"
+                        style="@style/AiSuggestionChip"
+                        android:layout_marginStart="5dp"
+                        android:text="🗓️  মাসিক বাজেট প্ল্যান বানাও"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvChat"
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:visibility="gone"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="10dp" android:clipToPadding="false"
+            android:overScrollMode="never"/>
+    </FrameLayout>
+
+    <!-- ── Input bar ── -->
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_ai_input_bar"
+        android:paddingHorizontal="12dp" android:paddingTop="12dp" android:paddingBottom="8dp"
+        android:elevation="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="bottom">
+
+            <LinearLayout
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:minHeight="46dp"
+                android:background="@drawable/bg_ai_input_field_pill"
+                android:paddingStart="16dp" android:paddingEnd="6dp"
+                android:layout_marginEnd="8dp">
+
+                <EditText android:id="@+id/etInput"
+                    android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="আপনার প্রশ্ন লিখুন..."
+                    android:textColorHint="@color/aiInputHint"
+                    android:textColor="@color/aiBotText"
+                    android:textSize="14.5sp"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:maxLines="5"
+                    android:paddingVertical="10dp"/>
+
+                <ImageView android:id="@+id/btnMic"
+                    android:layout_width="34dp" android:layout_height="34dp"
+                    android:padding="7dp"
+                    android:background="@drawable/bg_ai_icon_btn_circle"
+                    android:src="@drawable/ic_mic_ai"
+                    android:contentDescription="ভয়েস ইনপুট"/>
+            </LinearLayout>
+
+            <ImageView android:id="@+id/btnSend"
+                android:layout_width="46dp" android:layout_height="46dp"
+                android:background="@drawable/bg_ai_send_btn_disabled"
+                android:src="@drawable/ic_send_plane"
+                android:padding="13dp"
+                android:contentDescription="পাঠান"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="ক্যাশলিপি AI ভুল তথ্য দিতে পারে। গুরুত্বপূর্ণ সিদ্ধান্তের আগে যাচাই করুন।"
+            android:textSize="9.5sp" android:textColor="@color/aiInputHint"
+            android:gravity="center" android:layout_marginTop="8dp"/>
     </LinearLayout>
 </LinearLayout>

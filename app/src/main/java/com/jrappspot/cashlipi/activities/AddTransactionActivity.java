@@ -101,6 +101,9 @@ public class AddTransactionActivity extends BaseActivity {
 
     private SoundEffectPlayer soundEffectPlayer;
 
+    /** Activity/window পুরোপুরি রেডি হওয়ার আগে dropdown/popup শো করার চেষ্টা ঠেকাতে */
+    private boolean isActivityReady = false;
+
     /** ডিফল্ট লেনদেন মাধ্যম লেবেল — কী → প্রদর্শিত নাম */
     private static final Map<String, String> PAYMENT_LABELS = new LinkedHashMap<>();
     static {
@@ -127,6 +130,9 @@ public class AddTransactionActivity extends BaseActivity {
         setupClickListeners();
         applyModeUI();
         soundEffectPlayer = SoundEffectPlayer.getInstance(this);
+
+        // সবকিছু সেটআপ শেষ হওয়ার পর, window পুরোপুরি attach হলেই dropdown শো করা নিরাপদ
+        isActivityReady = true;
     }
 
     private void playTapSound() {
@@ -271,9 +277,13 @@ public class AddTransactionActivity extends BaseActivity {
         }
         adapter.notifyDataSetChanged();
 
-        // Dropdown সবসময় দেখান (যদি suggestions থাকে)
-        if (!filtered.isEmpty()) {
-            etCategory.showDropDown();
+        // Dropdown সবসময় দেখান (যদি suggestions থাকে) — কিন্তু activity window রেডি থাকলেই
+        if (!filtered.isEmpty() && isActivityReady && etCategory.isAttachedToWindow()) {
+            try {
+                etCategory.showDropDown();
+            } catch (Exception e) {
+                Log.w("CashLipiUI", "Cannot show category dropdown: " + e.getMessage());
+            }
         }
     }
 
@@ -319,16 +329,16 @@ public class AddTransactionActivity extends BaseActivity {
                 String incomeCats = String.join(", ", db.getCategories("income"));
                 String expenseCats = String.join(", ", db.getCategories("expense"));
 
-                // English prompt for better AI understanding
-                String prompt = "You are a financial transaction analyzer. Analyze the user's spoken text and extract transaction details.\n\n"
+                // English prompt for better AI understanding, but Bengali output enforced
+                String prompt = "You are a financial transaction analyzer. Analyze the user's spoken text (in Bengali) and extract transaction details.\n\n"
                         + "RESPOND WITH ONLY A VALID JSON OBJECT. No markdown, no explanation, just JSON.\n\n"
                         + "JSON Format (MUST follow exactly):\n"
                         + "{\n"
                         + "  \"type\": \"income\" or \"expense\",\n"
                         + "  \"amount\": number (numeric value only, not string),\n"
-                        + "  \"category\": \"Category Name\" (use existing categories if possible, otherwise create new),\n"
+                        + "  \"category\": \"Category Name IN BENGALI\" (use existing categories if a good match exists, otherwise create a new short Bengali category name, optionally with one emoji),\n"
                         + "  \"method\": \"cash\" or \"bkash\" or \"nagad\" or \"rocket\" or \"bank\" or \"other\",\n"
-                        + "  \"note\": \"Brief description of transaction\"\n"
+                        + "  \"note\": \"Brief description of transaction IN BENGALI\"\n"
                         + "}\n\n"
                         + "Existing income categories: " + incomeCats + "\n"
                         + "Existing expense categories: " + expenseCats + "\n\n"
@@ -337,8 +347,12 @@ public class AddTransactionActivity extends BaseActivity {
                         + "2. Determine if income or expense based on context\n"
                         + "3. If method not mentioned, assume 'cash'\n"
                         + "4. Extract brief note about the transaction\n"
-                        + "5. RESPOND WITH ONLY JSON, NOTHING ELSE\n\n"
-                        + "User said: \"" + spokenText + "\"";
+                        + "5. IMPORTANT: The \"category\" and \"note\" field VALUES must be written in BENGALI (বাংলা) language "
+                        + "  — the same language the user spoke in — even though these instructions are in English. "
+                        + "  Never respond with English text inside \"category\" or \"note\".\n"
+                        + "6. Keep JSON key names exactly as shown (type, amount, category, method, note) — only the VALUES of category/note are Bengali.\n"
+                        + "7. RESPOND WITH ONLY JSON, NOTHING ELSE\n\n"
+                        + "User said (Bengali): \"" + spokenText + "\"";
 
                 Log.d("CashLipiAI", "Sending to Pollinations AI...");
                 Log.d("CashLipiAI", "Prompt: " + prompt);

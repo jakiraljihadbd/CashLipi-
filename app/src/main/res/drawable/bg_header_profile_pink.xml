@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- প্রোফাইল পেজের হেডার — শুধু এই পেজের জন্য। অ্যাপের মূল গোলাপি (brandPink) রঙে,
+     পরিষ্কার সলিড গ্র্যাডিয়েন্ট, কোনো ডেকোরেটিভ সার্কেল নেই — ক্লিন লুক। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient android:startColor="@color/brandPink" android:endColor="@color/brandPinkDeep" android:angle="135"/>
+    <corners android:bottomLeftRadius="28dp" android:bottomRightRadius="28dp"/>
+</shape>

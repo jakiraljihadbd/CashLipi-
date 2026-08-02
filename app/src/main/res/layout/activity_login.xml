@@ -6,6 +6,36 @@
     android:layout_height="match_parent"
     android:background="@color/loginCleanBg">
 
+    <!-- ── Language toggle (top-right) ── -->
+    <LinearLayout
+        android:id="@+id/btnLanguageToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_login_lang_pill"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="9dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="2dp">
+
+        <TextView
+            android:id="@+id/tvCurrentLanguage"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="বাংলা" android:textSize="13.5sp" android:textStyle="bold"
+            android:textColor="@color/loginCleanTextPrimary"
+            android:layout_marginEnd="6dp"/>
+
+        <ImageView
+            android:layout_width="16dp" android:layout_height="16dp"
+            android:src="@drawable/emoji_globe"
+            android:contentDescription="@null"/>
+    </LinearLayout>
+
     <!-- Main content -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,35 +56,23 @@
             android:gravity="center"
             android:alpha="0">
 
-            <!-- Logo -->
-            <FrameLayout
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_login_logo_box">
-                <ImageView android:layout_width="54dp" android:layout_height="54dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/logo_splash"
-                    android:scaleType="centerInside"/>
-            </FrameLayout>
+            <!-- Logo (plain mark, no box/glow — matches reference) -->
+            <ImageView
+                android:layout_width="78dp" android:layout_height="78dp"
+                android:layout_marginBottom="26dp"
+                android:src="@drawable/logo_splash"
+                android:scaleType="centerInside"/>
 
             <!-- স্বাগতম -->
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="স্বাগতম" android:textSize="14sp"
+                android:text="স্বাগতম" android:textSize="15sp"
                 android:textColor="@color/loginCleanTextSecondary" android:letterSpacing="0.06"
-                android:layout_marginBottom="6dp"/>
+                android:layout_marginBottom="10dp"/>
 
-            <!-- App name -->
+            <!-- App name, quoted -->
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="CashLipi ক্যাশলিপি" android:textSize="27sp"
-                android:textStyle="bold" android:textColor="@color/loginCleanTextPrimary"
-                android:layout_marginBottom="8dp"/>
-
-            <!-- Tagline -->
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="আপনার প্রতিদিনের হিসাব — সহজ ও নিরাপদ"
-                android:textSize="13sp" android:textColor="@color/loginCleanTextSecondary"
-                android:gravity="center"/>
+                android:text="&#8220;ক্যাশলিপি&#8221;" android:textSize="32sp"
+                android:textStyle="bold" android:textColor="@color/loginCleanTextPrimary"/>
         </LinearLayout>
 
         <!-- ── Login Section ── -->
@@ -65,79 +83,77 @@
             android:orientation="vertical"
             android:alpha="0">
 
-            <!-- Email/Phone login button -->
-            <LinearLayout
-                android:id="@+id/btnEmailPhoneLogin"
-                android:layout_width="match_parent" android:layout_height="58dp"
-                android:orientation="horizontal" android:gravity="center_vertical"
-                android:background="@drawable/bg_login_btn_clean"
-                android:paddingHorizontal="20dp"
-                android:layout_marginBottom="14dp"
-                android:clickable="true" android:focusable="true">
-
-                <TextView android:layout_width="24dp" android:layout_height="wrap_content"
-                    android:text="✉️" android:textSize="17sp" android:gravity="start"/>
-
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:gravity="center"
-                    android:text="Email / Phone দিয়ে চালিয়ে যান"
-                    android:textSize="14sp" android:textStyle="bold"
-                    android:textColor="@color/loginCleanTextPrimary"/>
-
-                <View android:layout_width="24dp" android:layout_height="wrap_content"/>
-            </LinearLayout>
-
             <!-- Google Sign-In Button -->
             <LinearLayout
                 android:id="@+id/btnGoogleSignIn"
-                android:layout_width="match_parent" android:layout_height="58dp"
-                android:orientation="horizontal" android:gravity="center_vertical"
-                android:background="@drawable/bg_login_btn_clean"
+                android:layout_width="match_parent" android:layout_height="60dp"
+                android:orientation="horizontal" android:gravity="center"
+                android:background="@drawable/bg_login_btn_pill"
                 android:paddingHorizontal="20dp"
-                android:layout_marginBottom="14dp"
+                android:layout_marginBottom="16dp"
                 android:clickable="true" android:focusable="true">
 
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                    android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_google_logo"/>
 
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:gravity="center"
-                    android:text="Google দিয়ে চালিয়ে যান"
-                    android:textSize="14sp" android:textStyle="bold"
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="গুগল দিয়ে চালিয়ে যান"
+                    android:textSize="15sp" android:textStyle="bold"
                     android:textColor="@color/loginCleanTextPrimary"/>
-
-                <View android:layout_width="22dp" android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <!-- Skip Button -->
+            <!-- Email/Phone login button -->
             <LinearLayout
-                android:id="@+id/btnSkipLogin"
-                android:layout_width="match_parent" android:layout_height="58dp"
+                android:id="@+id/btnEmailPhoneLogin"
+                android:layout_width="match_parent" android:layout_height="60dp"
                 android:orientation="horizontal" android:gravity="center"
-                android:background="@drawable/bg_login_btn_skip_clean"
+                android:background="@drawable/bg_login_btn_pill"
+                android:paddingHorizontal="20dp"
                 android:layout_marginBottom="22dp"
                 android:clickable="true" android:focusable="true">
 
+                <ImageView android:layout_width="18dp" android:layout_height="18dp"
+                    android:layout_marginEnd="10dp"
+                    android:src="@drawable/ic_mail"
+                    app:tint="@color/loginCleanTextPrimary"/>
+
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="☁️  লগইন ছাড়াই ব্যবহার করুন"
-                    android:textSize="14sp" android:textStyle="bold"
+                    android:text="ইমেইল দিয়ে চালিয়ে যান"
+                    android:textSize="15sp" android:textStyle="bold"
                     android:textColor="@color/loginCleanTextPrimary"/>
             </LinearLayout>
 
-            <!-- Info caption (no box, minimal) -->
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:text="Google দিয়ে লগইন করলে ডেটা ক্লাউডে ব্যাকআপ হবে ও যেকোনো ডিভাইসে ফিরিয়ে আনা যাবে"
-                android:textSize="11.5sp" android:textColor="@color/loginCleanTextTertiary"
-                android:gravity="center" android:lineSpacingExtra="2dp"/>
-        </LinearLayout>
+            <!-- Terms + Privacy (green underlined links, set as spans in code) -->
+            <TextView
+                android:id="@+id/tvTermsPrivacy"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:text="চালিয়ে যাওয়ার মাধ্যমে আপনি আমাদের টার্মস ও কন্ডিশন এবং প্রাইভেসি পলিসি-তে সম্মত হচ্ছেন।"
+                android:textSize="12sp" android:textColor="@color/loginCleanTextTertiary"
+                android:gravity="center" android:lineSpacingExtra="3dp"/>
 
-        <!-- Privacy note -->
-        <TextView
-            android:id="@+id/tvPrivacyNote"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="সাইন ইন করে আপনি Privacy Policy-তে সম্মত হচ্ছেন"
-            android:textSize="11sp" android:textColor="@color/loginCleanTextTertiary"
-            android:gravity="center" android:layout_marginTop="18dp"/>
+            <!-- পাসওয়ার্ড ভুলে গেছেন -->
+            <TextView
+                android:id="@+id/tvForgotPassword"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="পাসওয়ার্ড ভুলে গেছেন?"
+                android:textSize="13sp" android:textStyle="bold"
+                android:textColor="@color/loginLinkBlue"
+                android:paddingTop="20dp" android:paddingBottom="4dp"
+                android:clickable="true" android:focusable="true"/>
+
+            <!-- Skip -->
+            <TextView
+                android:id="@+id/tvSkipLogin"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="লগইন ছাড়াই এগিয়ে যান"
+                android:textSize="12.5sp"
+                android:textColor="@color/loginCleanTextTertiary"
+                android:paddingTop="14dp"
+                android:clickable="true" android:focusable="true"/>
+        </LinearLayout>
 
     </LinearLayout>
 

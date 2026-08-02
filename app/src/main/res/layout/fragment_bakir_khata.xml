@@ -90,23 +90,23 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:background="@drawable/bg_summary_glass"
-                    android:padding="12dp"
+                    android:padding="14dp"
                     android:layout_marginEnd="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="মোট বাকি"
-                        android:textSize="11sp"
+                        android:textSize="12.5sp"
                         android:textColor="#D9FFFFFF"/>
 
                     <TextView
                         android:id="@+id/tvSummaryBaki"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="4dp"
                         android:text="৳০"
-                        android:textSize="15.5sp"
+                        android:textSize="19sp"
                         android:textStyle="bold"
                         android:textColor="#FFB4B4"/>
                 </LinearLayout>
@@ -117,23 +117,23 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:background="@drawable/bg_summary_glass"
-                    android:padding="12dp"
+                    android:padding="14dp"
                     android:layout_marginEnd="8dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="মোট জমা"
-                        android:textSize="11sp"
+                        android:textSize="12.5sp"
                         android:textColor="#D9FFFFFF"/>
 
                     <TextView
                         android:id="@+id/tvSummaryJoma"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="4dp"
                         android:text="৳০"
-                        android:textSize="15.5sp"
+                        android:textSize="19sp"
                         android:textStyle="bold"
                         android:textColor="#A7F3D0"/>
                 </LinearLayout>
@@ -145,7 +145,7 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:background="@drawable/bg_summary_glass"
-                    android:padding="12dp"
+                    android:padding="14dp"
                     android:clickable="true"
                     android:focusable="true">
 
@@ -153,16 +153,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ওয়ালেট"
-                        android:textSize="11sp"
+                        android:textSize="12.5sp"
                         android:textColor="#D9FFFFFF"/>
 
                     <TextView
                         android:id="@+id/tvKhataWalletBalance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="4dp"
                         android:text="৳০"
-                        android:textSize="15.5sp"
+                        android:textSize="19sp"
                         android:textStyle="bold"
                         android:textColor="@color/white"/>
                 </LinearLayout>
@@ -184,10 +184,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:paddingVertical="10dp"
+                android:paddingVertical="14dp"
                 android:gravity="center"
                 android:text="− খরচ যোগ করুন"
-                android:textSize="13sp"
+                android:textSize="14.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/bakiColor"
                 android:background="@drawable/bg_dialog_field"
@@ -199,10 +199,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingVertical="10dp"
+                android:paddingVertical="14dp"
                 android:gravity="center"
                 android:text="+ ওয়ালেটে জমা"
-                android:textSize="13sp"
+                android:textSize="14.5sp"
                 android:textStyle="bold"
                 android:textColor="@color/jomaColor"
                 android:background="@drawable/bg_dialog_field"

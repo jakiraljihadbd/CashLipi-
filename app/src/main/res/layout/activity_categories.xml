@@ -174,17 +174,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="14dp"
-                        android:hint="যেমনঃ 🚕 রাইড শেয়ারিং আয়">
+                        app:startIconDrawable="@drawable/ic_tag"
+                        app:boxCornerRadiusTopStart="18dp"
+                        app:boxCornerRadiusTopEnd="18dp"
+                        app:boxCornerRadiusBottomStart="18dp"
+                        app:boxCornerRadiusBottomEnd="18dp"
+                        app:boxStrokeWidthFocused="2dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etNewCategory"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingVertical="12dp"
+                            android:paddingVertical="14dp"
                             android:inputType="textCapSentences"
                             android:maxLines="1"
                             android:imeOptions="actionDone"
-                            android:textSize="15sp"
+                            android:textSize="15.5sp"
+                            android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
                     </com.google.android.material.textfield.TextInputLayout>
 

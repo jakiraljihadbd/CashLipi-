@@ -53,7 +53,7 @@ public class KhataEntryListAdapter extends RecyclerView.Adapter<KhataEntryListAd
 
         // Type badge & icon
         boolean isDena = e.isBaki();
-        h.tvTypeBadge.setText(isDena ? " দেনা" : " পাওনা");
+        h.tvTypeBadge.setText(isDena ? " বাকি" : " জমা");
         h.tvTypeBadge.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, isDena ? R.color.amountDebt : R.color.amountReceivable));
         h.tvIcon.setImageResource(isDena ? R.drawable.emoji_book_red : R.drawable.emoji_book_green);
         h.tvIcon.setBackground(ctx.getResources().getDrawable(
@@ -65,16 +65,23 @@ public class KhataEntryListAdapter extends RecyclerView.Adapter<KhataEntryListAd
         // Paid badge
         if (e.isPaid()) {
             h.tvPaidBadge.setVisibility(View.VISIBLE);
-            h.tvPaidBadge.setText(" পরিশোধিত");
+            h.tvPaidBadge.setText(" আদায় হয়েছে");
             h.tvPaidBadge.setBackground(ctx.getResources().getDrawable(R.drawable.bg_paid_badge));
             h.tvPaidBadge.setTextColor(ContextCompat.getColor(ctx, R.color.amountIncome));
             h.tvAmount.setPaintFlags(h.tvAmount.getPaintFlags()
                     | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
-        } else {
+        } else if (isDena) {
+            // শুধু "বাকি" (baki) টাইপের এন্ট্রির জন্য "বকেয়া" ব্যাজ দেখানো হয় — টাইপ ব্যাজের
+            // "বাকি" শব্দের সাথে গুলিয়ে না যায় সেজন্য আলাদা শব্দ ব্যবহার করা হয়েছে।
             h.tvPaidBadge.setVisibility(View.VISIBLE);
-            h.tvPaidBadge.setText(" বাকি");
+            h.tvPaidBadge.setText(" বকেয়া");
             h.tvPaidBadge.setBackground(ctx.getResources().getDrawable(R.drawable.bg_unpaid_badge));
             h.tvPaidBadge.setTextColor(androidx.core.content.ContextCompat.getColor(ctx, R.color.bakiColor));
+            h.tvAmount.setPaintFlags(h.tvAmount.getPaintFlags()
+                    & ~android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            // জমা এন্ট্রি নিজেই একটা সম্পন্ন পরিশোধ — এখানে আলাদা কোনো স্ট্যাটাস ব্যাজ দরকার নেই
+            h.tvPaidBadge.setVisibility(View.GONE);
             h.tvAmount.setPaintFlags(h.tvAmount.getPaintFlags()
                     & ~android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
         }

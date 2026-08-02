@@ -63,9 +63,14 @@ public class ProfileActivity extends BaseActivity {
     private TextView tvGoogleSecondaryEmail;
 
     // Profile edit
-    private TextInputEditText etProfileName, etUsername, etPhoneNumber, etEmail;
+    private TextInputEditText etProfileName, etUsername, etPhoneNumber, etEmail, etAddress;
     private View headerEditProfile, bodyEditProfile;
     private TextView tvEditProfileChevron;
+
+    // Hero (লগইন নেই / লগইন করা আছে — দুইটা অবস্থা)
+    private View layoutHeroLoggedOut, layoutHeroLoggedIn;
+    private View btnHeroGoogleSignIn, btnHeroManualSignIn;
+    private TextView tvMembershipDuration;
 
     // Change password
     private TextInputEditText etOldPassword, etNewPassword, etConfirmPassword;
@@ -134,9 +139,16 @@ public class ProfileActivity extends BaseActivity {
         etUsername     = findViewById(R.id.etUsername);
         etPhoneNumber  = findViewById(R.id.etPhoneNumber);
         etEmail        = findViewById(R.id.etEmail);
+        etAddress      = findViewById(R.id.etAddress);
         headerEditProfile   = findViewById(R.id.headerEditProfile);
         bodyEditProfile     = findViewById(R.id.bodyEditProfile);
         tvEditProfileChevron = findViewById(R.id.tvEditProfileChevron);
+
+        layoutHeroLoggedOut = findViewById(R.id.layoutHeroLoggedOut);
+        layoutHeroLoggedIn  = findViewById(R.id.layoutHeroLoggedIn);
+        btnHeroGoogleSignIn = findViewById(R.id.btnHeroGoogleSignIn);
+        btnHeroManualSignIn = findViewById(R.id.btnHeroManualSignIn);
+        tvMembershipDuration = findViewById(R.id.tvMembershipDuration);
 
         etOldPassword     = findViewById(R.id.etOldPassword);
         etNewPassword     = findViewById(R.id.etNewPassword);
@@ -216,6 +228,13 @@ public class ProfileActivity extends BaseActivity {
         if (btnGoogleSignIn != null) btnGoogleSignIn.setOnClickListener(v ->
             signInHelper.getSignInIntentAfterSignOut(this,
                 intent -> signInLauncher.launch(intent)));
+
+        // ── Hero (উপরের বড় "লগইন নেই" ভিউ) — একই অ্যাকশন, শুধু আলাদা বাটন থেকে ──
+        if (btnHeroGoogleSignIn != null) btnHeroGoogleSignIn.setOnClickListener(v ->
+            signInHelper.getSignInIntentAfterSignOut(this,
+                intent -> signInLauncher.launch(intent)));
+        if (btnHeroManualSignIn != null) btnHeroManualSignIn.setOnClickListener(v ->
+            startActivity(new Intent(this, EmailLoginActivity.class)));
 
         // Google sign-out (বড় প্রাইমারি কার্ড থেকে)
         View btnSignOut = findViewById(R.id.btnGoogleSignOut);
@@ -316,10 +335,13 @@ public class ProfileActivity extends BaseActivity {
             return;
         }
 
+        String address = etAddress != null && etAddress.getText() != null ? etAddress.getText().toString().trim() : "";
+
         db.saveCustomName(name);
         db.saveUsername(user);
         db.savePhoneNumber(phone);
         db.saveUserEmail(email);
+        db.saveAddress(address);
 
         refreshUI();
         Toast.makeText(this, " প্রোফাইল তথ্য সেভ হয়েছে!", Toast.LENGTH_SHORT).show();
@@ -551,6 +573,19 @@ public class ProfileActivity extends BaseActivity {
         // কিন্তু সেটা নিচের "Auto Sync (Google Drive)" টগল থেকেই হবে।
         boolean phoneSignedIn  = db.isEmailPhoneSignedIn();
         boolean googleSignedIn = db.isGoogleSignedIn();
+        boolean anySignedIn    = phoneSignedIn || googleSignedIn;
+
+        // ── Hero: লগইন নেই vs লগইন করা আছে ──
+        if (layoutHeroLoggedOut != null) layoutHeroLoggedOut.setVisibility(anySignedIn ? View.GONE : View.VISIBLE);
+        if (layoutHeroLoggedIn  != null) layoutHeroLoggedIn.setVisibility(anySignedIn ? View.VISIBLE : View.GONE);
+
+        if (anySignedIn) {
+            db.ensureJoinDateSet();
+            if (tvMembershipDuration != null)
+                tvMembershipDuration.setText("🎉 CashLipi সাথে আছেন " + db.getMembershipDurationText());
+        }
+
+        if (etAddress != null) etAddress.setText(db.getAddress());
 
         if (phoneSignedIn) {
             // শুধু মোবাইল/ইমেইল প্রাইমারি কার্ড

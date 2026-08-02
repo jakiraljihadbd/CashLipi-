@@ -1413,6 +1413,53 @@ public class DatabaseManager {
     }
 
     // ═══════════════════════════════════════════
+    //  PROFILE — অতিরিক্ত ঠিকানা (ঐচ্ছিক, দিলে সেভ থাকবে, না দিলে ফাঁকা)
+    // ═══════════════════════════════════════════
+    private static final String KEY_PROFILE_ADDRESS = "_profile_address";
+
+    public String getAddress() { return prefs.getString(KEY_PROFILE_ADDRESS, ""); }
+    public void saveAddress(String address) {
+        prefs.edit().putString(KEY_PROFILE_ADDRESS, address == null ? "" : address).apply();
+    }
+
+    // ═══════════════════════════════════════════
+    //  MEMBERSHIP — কত দিন ধরে CashLipi সাথে আছেন
+    //  (প্রথমবার সাইন-ইন করা অবস্থায় প্রোফাইল স্ক্রিন খোলার সময় সেট হয়)
+    // ═══════════════════════════════════════════
+    private static final String KEY_JOIN_DATE_MILLIS = "_join_date_millis";
+
+    /** সাইন-ইন করা আছে অথচ join date এখনো সেট হয়নি — এমন হলে এখনকার সময় দিয়ে একবারই সেট করে দেয়। */
+    public void ensureJoinDateSet() {
+        if (prefs.getLong(KEY_JOIN_DATE_MILLIS, 0L) == 0L) {
+            prefs.edit().putLong(KEY_JOIN_DATE_MILLIS, System.currentTimeMillis()).apply();
+        }
+    }
+
+    public long getJoinDateMillis() {
+        return prefs.getLong(KEY_JOIN_DATE_MILLIS, 0L);
+    }
+
+    /** "CashLipi সাথে আছেন" — কতদিন হলো, বাংলায় সুন্দরভাবে ফরম্যাট করা। */
+    public String getMembershipDurationText() {
+        long joined = getJoinDateMillis();
+        if (joined == 0L) return "আজই যুক্ত হয়েছেন";
+
+        long diffDays = (System.currentTimeMillis() - joined) / (24L * 60 * 60 * 1000);
+        if (diffDays <= 0) return "আজই যুক্ত হয়েছেন";
+        if (diffDays == 1) return "১ দিন ধরে";
+        if (diffDays < 30) return diffDays + " দিন ধরে";
+        if (diffDays < 365) {
+            long months = diffDays / 30;
+            long remDays = diffDays % 30;
+            return remDays > 0 ? (months + " মাস " + remDays + " দিন ধরে") : (months + " মাস ধরে");
+        }
+        long years = diffDays / 365;
+        long remDays = diffDays % 365;
+        long months = remDays / 30;
+        return months > 0 ? (years + " বছর " + months + " মাস ধরে") : (years + " বছর ধরে");
+    }
+
+    // ═══════════════════════════════════════════
     //  GOOGLE DRIVE SYNC STATE
     // ═══════════════════════════════════════════
     private static final String KEY_DRIVE_LAST_SYNC = "_drive_last_sync_time";

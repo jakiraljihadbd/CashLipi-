@@ -190,7 +190,7 @@ public class AddKhataEntryActivity extends BaseActivity {
         // 🔥 Firebase auto-sync
         FirestoreSyncManager.getInstance(this).uploadAllData(null);
 
-        String typeLabel = "baki".equals(selectedType) ? "দেনা" : "পাওনা";
+        String typeLabel = "baki".equals(selectedType) ? "বাকি" : "জমা";
         SuccessPopup.Category cat2 = "baki".equals(selectedType) ? SuccessPopup.Category.DENA : SuccessPopup.Category.PABONA;
         SuccessPopup.show(this, cat2,
                 typeLabel + " যোগ সফল হয়েছে!",

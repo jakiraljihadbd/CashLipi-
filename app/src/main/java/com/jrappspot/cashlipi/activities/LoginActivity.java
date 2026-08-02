@@ -236,19 +236,128 @@ public class LoginActivity extends BaseActivity {
             });
         }
 
-        View btnSkip = findViewById(R.id.btnSkipLogin);
-        if (btnSkip != null) {
-            btnSkip.setOnClickListener(v -> {
-                db.setLoginDone(true);
-                goToNextScreen();
-            });
-        }
-
         View btnEmailPhoneLogin = findViewById(R.id.btnEmailPhoneLogin);
         if (btnEmailPhoneLogin != null) {
             btnEmailPhoneLogin.setOnClickListener(v ->
                 startActivity(new Intent(this, EmailLoginActivity.class))
             );
+        }
+
+        View tvForgotPassword = findViewById(R.id.tvForgotPassword);
+        if (tvForgotPassword != null) {
+            tvForgotPassword.setOnClickListener(v ->
+                startActivity(new Intent(this, ForgotPasswordActivity.class))
+            );
+        }
+
+        View tvSkipLogin = findViewById(R.id.tvSkipLogin);
+        if (tvSkipLogin != null) {
+            tvSkipLogin.setOnClickListener(v -> {
+                db.setLoginDone(true);
+                goToNextScreen();
+            });
+        }
+
+        setupTermsPrivacyLinks();
+        setupLanguageToggle();
+    }
+
+    /** "টার্মস ও কন্ডিশন" ও "প্রাইভেসি পলিসি" অংশ দুটোকে সবুজ + আন্ডারলাইন করে ক্লিকযোগ্য বানানো। */
+    private void setupTermsPrivacyLinks() {
+        android.widget.TextView tv = findViewById(R.id.tvTermsPrivacy);
+        if (tv == null) return;
+
+        String text = "চালিয়ে যাওয়ার মাধ্যমে আপনি আমাদের টার্মস ও কন্ডিশন এবং প্রাইভেসি পলিসি-তে সম্মত হচ্ছেন।";
+        String termsWord = "টার্মস ও কন্ডিশন";
+        String privacyWord = "প্রাইভেসি পলিসি";
+
+        android.text.SpannableString spannable = new android.text.SpannableString(text);
+        int linkColor = androidx.core.content.ContextCompat.getColor(this, R.color.loginLinkGreen);
+
+        int termsStart = text.indexOf(termsWord);
+        if (termsStart >= 0) {
+            applyLinkSpan(spannable, termsStart, termsStart + termsWord.length(), linkColor,
+                () -> openExternalUrlSafe(getString(R.string.drawer_terms_url)));
+        }
+
+        int privacyStart = text.indexOf(privacyWord);
+        if (privacyStart >= 0) {
+            applyLinkSpan(spannable, privacyStart, privacyStart + privacyWord.length(), linkColor,
+                () -> openExternalUrlSafe(getString(R.string.drawer_privacy_policy_url)));
+        }
+
+        tv.setText(spannable);
+        tv.setMovementMethod(android.text.method.LinkMovementMethod.getInstance());
+        tv.setHighlightColor(android.graphics.Color.TRANSPARENT);
+    }
+
+    private void applyLinkSpan(android.text.SpannableString spannable, int start, int end,
+                                int color, Runnable onClick) {
+        spannable.setSpan(new android.text.style.ClickableSpan() {
+            @Override public void onClick(android.view.View widget) { onClick.run(); }
+            @Override public void updateDrawState(android.text.TextPaint ds) {
+                ds.setColor(color);
+                ds.setUnderlineText(true);
+            }
+        }, start, end, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private void openExternalUrlSafe(String url) {
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(url)));
+        } catch (Exception e) {
+            Toast.makeText(this, "লিংক খোলা যায়নি", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /** 🌐 উপরের ডানদিকের ভাষা পিল — Settings-এর মতোই bn/en/hi/ar এর মধ্যে সুইচ করা যায়। */
+    private void setupLanguageToggle() {
+        android.widget.TextView tvCurrentLanguage = findViewById(R.id.tvCurrentLanguage);
+        View btnLanguageToggle = findViewById(R.id.btnLanguageToggle);
+        if (btnLanguageToggle == null) return;
+
+        if (tvCurrentLanguage != null) {
+            tvCurrentLanguage.setText(languageLabel(db.getAppLanguage()));
+        }
+
+        btnLanguageToggle.setOnClickListener(v -> {
+            androidx.appcompat.widget.PopupMenu popup =
+                new androidx.appcompat.widget.PopupMenu(this, v);
+            popup.getMenu().add(0, 1, 0, "বাংলা");
+            popup.getMenu().add(0, 2, 1, "English");
+            popup.getMenu().add(0, 3, 2, "हिन्दी");
+            popup.getMenu().add(0, 4, 3, "العربية");
+
+            popup.setOnMenuItemClickListener(item -> {
+                String langCode;
+                if (item.getItemId() == 1) langCode = "bn";
+                else if (item.getItemId() == 2) langCode = "en";
+                else if (item.getItemId() == 3) langCode = "hi";
+                else langCode = "ar";
+
+                if (langCode.equals(db.getAppLanguage())) return true;
+
+                com.jrappspot.cashlipi.utils.LocaleHelper.setLocale(this, langCode);
+
+                // App restart — না হলে UI change হবে না
+                Intent restartIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                if (restartIntent != null) {
+                    restartIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(restartIntent);
+                }
+                return true;
+            });
+            popup.show();
+        });
+    }
+
+    private String languageLabel(String code) {
+        if (code == null) return "বাংলা";
+        switch (code) {
+            case "en": return "English";
+            case "hi": return "हिन्दी";
+            case "ar": return "العربية";
+            default: return "বাংলা";
         }
     }
 

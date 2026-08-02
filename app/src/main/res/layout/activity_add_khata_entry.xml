@@ -30,11 +30,11 @@
                     android:layout_marginBottom="6dp">
                     <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text=" দেনা / পাওনা যোগ"
+                        android:text=" বাকি / জমা যোগ"
                         android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white"/>
                 </LinearLayout>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="দেনা বা পাওনার তথ্য লিখুন"
+                    android:text="বাকি বা জমার তথ্য লিখুন"
                     android:textSize="12sp" android:textColor="@color/white"/>
             </LinearLayout>
 
@@ -64,7 +64,7 @@
                         <Button android:id="@+id/btnTypeDena"
                             android:layout_width="0dp" android:layout_height="match_parent"
                             android:layout_weight="1" android:layout_marginEnd="6dp"
-                            android:text=" দেনা (আমি দেব)"
+                            android:text=" বাকি"
                             android:textSize="13sp" android:textStyle="bold"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
@@ -73,7 +73,7 @@
                         <Button android:id="@+id/btnTypePabona"
                             android:layout_width="0dp" android:layout_height="match_parent"
                             android:layout_weight="1" android:layout_marginStart="6dp"
-                            android:text=" পাওনা (আমি পাব)"
+                            android:text=" জমা"
                             android:textSize="13sp" android:textStyle="bold"
                             android:textAllCaps="false"
                             android:textColor="@color/jomaColor"
@@ -239,7 +239,7 @@
                         android:layout_marginBottom="10dp">
                         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text=" সর্বশেষ দেনা/পাওনা"
+                            android:text=" সর্বশেষ বাকি/জমা"
                             android:textSize="13sp" android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
                         <TextView android:id="@+id/tvViewAllKhataEntry"
@@ -256,7 +256,7 @@
                         android:layout_width="match_parent" android:layout_height="60dp"
                         android:gravity="center" android:visibility="gone">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:text="কোনো দেনা-পাওনা নেই"
+                            android:text="কোনো বাকি-জমা নেই"
                             android:textSize="13sp" android:textColor="@color/textSecondary"/>
                     </LinearLayout>
                 </LinearLayout>

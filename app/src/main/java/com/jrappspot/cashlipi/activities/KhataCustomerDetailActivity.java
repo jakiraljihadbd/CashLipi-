@@ -295,8 +295,8 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
                 rowDueDateReminder.setVisibility(View.GONE);
             }
             tvHeroSub.setText("মোট " + allRawEntries.size() + " টি লেনদেন  •  " + unpaidCount + " টি বাকি\n"
-                    + "মোট পাওনা " + DatabaseManager.formatAmount(totalGot)
-                    + "  •  মোট দেনা " + DatabaseManager.formatAmount(totalGave) + "\n"
+                    + "মোট জমা " + DatabaseManager.formatAmount(totalGot)
+                    + "  •  মোট বাকি " + DatabaseManager.formatAmount(totalGave) + "\n"
                     + "মোট পেলাম " + DatabaseManager.formatAmount(totalReceived)
                     + "  •  মোট দিলাম " + DatabaseManager.formatAmount(totalGiven));
         }
@@ -353,7 +353,7 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
             tableViewContainer.setVisibility(View.GONE);
             emptyKhataEntryState.setVisibility(View.VISIBLE);
             tvEmptyKhataEntryTitle.setText("এই ব্যক্তির সাথে এখনও কোনো লেনদেন যোগ করা হয়নি");
-            tvEmptyKhataEntrySub.setText("নিচের বাটনে চেপে প্রথম দেনা বা পাওনা যোগ করুন");
+            tvEmptyKhataEntrySub.setText("নিচের বাটনে চেপে প্রথম বাকি বা জমা যোগ করুন");
         } else if (filtered.isEmpty()) {
             rvKhataCustomerKhataEntry.setVisibility(View.GONE);
             tableViewContainer.setVisibility(View.GONE);
@@ -404,7 +404,7 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
 
             String note = e.getNote() != null && !e.getNote().isEmpty() ? e.getNote()
                     : (e.getCategory() != null ? e.getCategory() : "");
-            tvTitle.setText(note.isEmpty() ? (isDena ? "দেনা" : "পাওনা") : note);
+            tvTitle.setText(note.isEmpty() ? (isDena ? "বাকি" : "জমা") : note);
             tvDateTime.setText(DatabaseManager.formatDateDisplay(e.getDate()) + ", " + DatabaseManager.formatTimeDisplay(e.getTime()));
 
             tvDena.setText(isDena ? DatabaseManager.formatAmount(e.getAmount()) : "");
@@ -453,7 +453,7 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
             return;
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(customerName.getName()).append(" — দেনা-পাওনা বিবরণী\n");
+        sb.append(customerName.getName()).append(" — বাকি-জমার বিবরণী\n");
         sb.append("তৈরি: CashLipi অ্যাপ দিয়ে\n\n");
 
         double net = allRows.isEmpty() ? 0 : allRows.get(0).balanceAfter;
@@ -464,7 +464,7 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
         for (KhataEntryAdapter.Row row : allRows) {
             KhataEntry e = row.entry;
             sb.append(DatabaseManager.formatDateDisplay(e.getDate())).append(", ").append(DatabaseManager.formatTimeDisplay(e.getTime()))
-              .append(" — ").append(e.isBaki() ? "দেনা" : "পাওনা")
+              .append(" — ").append(e.isBaki() ? "বাকি" : "জমা")
               .append(" ৳").append(DatabaseManager.formatAmount(e.getAmount()));
             if (e.isPaid()) sb.append(" (").append(e.isBaki() ? "দিলাম" : "পেলাম").append(")");
             if (e.getNote() != null && !e.getNote().isEmpty()) sb.append(" — ").append(e.getNote());
@@ -473,7 +473,7 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT, customerName.getName() + " — দেনা-পাওনা বিবরণী");
+        intent.putExtra(Intent.EXTRA_SUBJECT, customerName.getName() + " — বাকি-জমার বিবরণী");
         intent.putExtra(Intent.EXTRA_TEXT, sb.toString());
         try {
             startActivity(Intent.createChooser(intent, "বিবরণী শেয়ার করুন"));
@@ -491,10 +491,11 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
         boolean isDena = "baki".equals(type);
         boolean supplier = customerName.isSupplier();
 
-        String defaultCat = isDena
-                ? (supplier ? KhataEntry.CAT_RECEIVE : KhataEntry.CAT_SALE)
-                : (supplier ? KhataEntry.CAT_GIVE : KhataEntry.CAT_PAYMENT);
-        final String[] selectedCat = {defaultCat};
+        // সহজ দুই-অপশন: গ্রাহক হলে বাকি/জমা, সাপ্লায়ার হলে অর্থগতভাবে গ্রহণ/প্রদান — কিন্তু UI-তে
+        // সবসময় শুধু দুইটা বড় বাটন (দেনা-পাওনার মতোই সহজ, জটিল ক্যাটাগরি চিপ নেই)।
+        String bakiCat = supplier ? KhataEntry.CAT_RECEIVE : KhataEntry.CAT_SALE;
+        String jomaCat = supplier ? KhataEntry.CAT_GIVE : KhataEntry.CAT_PAYMENT;
+        final String[] selectedCat = {isDena ? bakiCat : jomaCat};
 
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.PremiumBottomSheetDialog);
         View v = LayoutInflater.from(this).inflate(R.layout.dialog_add_khata_entry, null);
@@ -509,36 +510,28 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
         TextView tvTime = v.findViewById(R.id.tvSheetTime);
         Button btnSave = v.findViewById(R.id.btnSheetSave);
 
-        tvTitle.setText("লেনদেন যোগ করুন");
+        tvTitle.setText(isDena ? "বাকি যোগ করুন" : "জমা যোগ করুন");
         tvKhataCustomerChip.setText(customerName.getName());
 
-        // ৬টা ক্যাটাগরি চিপ — সিলেক্ট করা চিপটা রঙিন হয়ে থাকে, বাকিগুলো নিউট্রাল
-        java.util.Map<String, TextView> chips = new java.util.LinkedHashMap<>();
-        chips.put(KhataEntry.CAT_SALE, v.findViewById(R.id.chipCatSale));
-        chips.put(KhataEntry.CAT_PAYMENT, v.findViewById(R.id.chipCatPayment));
-        chips.put(KhataEntry.CAT_RECEIVE, v.findViewById(R.id.chipCatReceive));
-        chips.put(KhataEntry.CAT_GIVE, v.findViewById(R.id.chipCatGive));
-        chips.put(KhataEntry.CAT_ADVANCE, v.findViewById(R.id.chipCatAdvance));
-        chips.put(KhataEntry.CAT_BALANCE, v.findViewById(R.id.chipCatBalance));
+        // সহজ দুই-বাটন টগল — বাকি (লাল) বনাম জমা (সবুজ), বড় ও সহজে চাপার মতো
+        TextView chipBaki = v.findViewById(R.id.chipCatSale);
+        TextView chipJoma = v.findViewById(R.id.chipCatPayment);
+        chipBaki.setText("বাকি");
+        chipJoma.setText("জমা");
 
         Runnable[] refreshChipsHolder = new Runnable[1];
         Runnable refreshChips = () -> {
-            for (java.util.Map.Entry<String, TextView> e : chips.entrySet()) {
-                boolean sel = e.getKey().equals(selectedCat[0]);
-                boolean catIsBaki = "baki".equals(KhataEntry.typeForCategory(e.getKey()));
-                e.getValue().setBackgroundResource(sel
-                        ? (catIsBaki ? R.drawable.bg_type_active_khata : R.drawable.bg_type_active_khata_joma)
-                        : R.drawable.bg_dialog_field);
-                e.getValue().setTextColor(ContextCompat.getColor(this, sel ? R.color.white : R.color.textSecondary));
-            }
             boolean nowDena = "baki".equals(KhataEntry.typeForCategory(selectedCat[0]));
+            chipBaki.setBackgroundResource(nowDena ? R.drawable.bg_type_active_khata : R.drawable.bg_dialog_field);
+            chipBaki.setTextColor(ContextCompat.getColor(this, nowDena ? R.color.white : R.color.textSecondary));
+            chipJoma.setBackgroundResource(!nowDena ? R.drawable.bg_type_active_khata_joma : R.drawable.bg_dialog_field);
+            chipJoma.setTextColor(ContextCompat.getColor(this, !nowDena ? R.color.white : R.color.textSecondary));
             btnSave.setBackgroundResource(nowDena ? R.drawable.bg_type_active_khata : R.drawable.bg_type_active_khata_joma);
-            btnSave.setText(" সংরক্ষণ করুন — " + KhataEntry.categoryLabel(selectedCat[0]));
+            btnSave.setText(nowDena ? " বাকি সংরক্ষণ করুন" : " জমা সংরক্ষণ করুন");
         };
         refreshChipsHolder[0] = refreshChips;
-        for (java.util.Map.Entry<String, TextView> e : chips.entrySet()) {
-            e.getValue().setOnClickListener(x -> { selectedCat[0] = e.getKey(); refreshChipsHolder[0].run(); });
-        }
+        chipBaki.setOnClickListener(x -> { selectedCat[0] = bakiCat; refreshChipsHolder[0].run(); });
+        chipJoma.setOnClickListener(x -> { selectedCat[0] = jomaCat; refreshChipsHolder[0].run(); });
         refreshChips.run();
 
         AmountInputHelper.attach(this, etAmount);
@@ -728,7 +721,7 @@ public class KhataCustomerDetailActivity extends AppCompatActivity {
     private void confirmDelete() {
         new AlertDialog.Builder(this)
                 .setTitle("মুছে ফেলবেন?")
-                .setMessage(customerName.getName() + " কে দেনা-পাওনা তালিকা থেকে মুছে ফেলা হবে।")
+                .setMessage(customerName.getName() + " কে বাকির খাতা থেকে মুছে ফেলা হবে।")
                 .setPositiveButton("মুছুন", (dialog, which) -> {
                     int index = db.getKhataCustomerIndexById(personId);
                     db.deleteKhataCustomer(index);

@@ -254,4 +254,15 @@
     <color name="paymentItemSelectedBgGreen">#103823</color>
     <color name="paymentItemSelectedBgRed">#3A1715</color>
 
+    <!-- ── ব্যাকআপ কেন্দ্র (Backup) — Data/Format/Method সিলেকশন চিপ — ডার্ক মোড ওভাররাইড ──
+         আগে এই bk* টোকেনগুলো শুধু light mode-এ সংজ্ঞায়িত ছিল (সাদা কার্ড + গাঢ় টেক্সট),
+         dark mode-এ আনসিলেক্টেড চিপগুলো সাদা হয়ে গাঢ় ব্যাকগ্রাউন্ডে জ্বলজ্বল করত।
+         এখন গাঢ়, মিউটেড কার্ড টোন — বাকি পেজের সাথে সামঞ্জস্যপূর্ণ। -->
+    <color name="bkCardBg">#131C2E</color>
+    <color name="bkUnselectedBg">#1A2536</color>
+    <color name="bkUnselectedBorder">#2D3B52</color>
+    <color name="bkUnselectedIcon">#94A3B8</color>
+    <color name="bkTextPrimaryDeep">#F8FAFC</color>
+    <color name="bkTextSecondaryDeep">#CBD5E1</color>
+
 </resources>

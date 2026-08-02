@@ -128,7 +128,7 @@ public class KhataEntryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         KhataEntry e = row.entry;
         boolean isDena = e.isBaki();
 
-        h.tvRowType.setText(isDena ? " দেনা" : " পাওনা");
+        h.tvRowType.setText(isDena ? " বাকি" : " জমা");
         h.tvRowType.setTextColor(ContextCompat.getColor(ctx, isDena ? R.color.bakiColor : R.color.jomaColor));
 
         h.ivRowIcon.setImageResource(isDena ? R.drawable.emoji_book_red : R.drawable.emoji_book_green);

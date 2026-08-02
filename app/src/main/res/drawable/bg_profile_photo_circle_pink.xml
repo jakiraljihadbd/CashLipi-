@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- শুধু ProfileActivity-র ছবির জন্য — bg_profile_photo_circle.xml settings পেজেও
+     ব্যবহৃত হয় বলে সেটা অপরিবর্তিত রেখে এই আলাদা কপি বানানো হলো। -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="@color/profilePhotoBg"/>
+    <stroke android:width="3dp" android:color="@color/brandPink"/>
+</shape>

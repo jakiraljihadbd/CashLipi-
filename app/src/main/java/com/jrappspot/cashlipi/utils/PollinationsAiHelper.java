@@ -82,7 +82,10 @@ public final class PollinationsAiHelper {
         
         JSONObject sysMsg = new JSONObject();
         sysMsg.put("role", "system");
-        sysMsg.put("content", "You are a JSON generator. You MUST respond with ONLY valid JSON object, nothing else. No markdown, no explanations, no extra text. Just pure JSON.");
+        sysMsg.put("content", "You are a JSON generator. You MUST respond with ONLY valid JSON object, nothing else. "
+                + "No markdown, no explanations, no extra text. Just pure JSON. "
+                + "If the user's instructions ask for certain field VALUES to be written in Bengali (বাংলা), "
+                + "you must write those field values in Bengali script, not English, even though your instructions are in English.");
         
         JSONObject userMsg = new JSONObject();
         userMsg.put("role", "user");

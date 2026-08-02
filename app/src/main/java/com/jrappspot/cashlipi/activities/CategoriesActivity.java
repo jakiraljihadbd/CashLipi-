@@ -37,6 +37,7 @@ public class CategoriesActivity extends BaseActivity {
     private TextView btnTypeIncome, btnTypeExpense;
     private TextView tvCategoryCount, tvAddCategorySubtitle;
     private ImageView ivAddCategoryIcon;
+    private com.google.android.material.textfield.TextInputLayout tilNewCategory;
     private EditText etNewCategory;
     private Button btnAddCategory;
     private LinearLayout categoryContainer, emptyState;
@@ -61,6 +62,7 @@ public class CategoriesActivity extends BaseActivity {
         tvCategoryCount = findViewById(R.id.tvCategoryCount);
         tvAddCategorySubtitle = findViewById(R.id.tvAddCategorySubtitle);
         ivAddCategoryIcon = findViewById(R.id.ivAddCategoryIcon);
+        tilNewCategory = findViewById(R.id.tilNewCategory);
         etNewCategory = findViewById(R.id.etNewCategory);
         btnAddCategory = findViewById(R.id.btnAddCategory);
         categoryContainer = findViewById(R.id.categoryContainer);
@@ -107,12 +109,25 @@ public class CategoriesActivity extends BaseActivity {
         tvAddCategorySubtitle.setText(isIncome
                 ? "আয়ের একটি নতুন খাতের নাম লিখুন"
                 : "ব্যয়ের একটি নতুন খাতের নাম লিখুন");
-        etNewCategory.setHint(isIncome ? "যেমনঃ 🚕 রাইড শেয়ারিং আয়" : "যেমনঃ 🐾 পোষা প্রাণীর খরচ");
+
+        // আগে এখানে দুইভাবে হিন্ট দেখানো হতো (TextInputLayout-এর XML hint + EditText-এর runtime
+        // hint) — একই উদাহরণ দুইবার দেখা যেত, তাই এখন একটাই সহজ নির্দেশনা।
+        etNewCategory.setHint("আয় বা ব্যয় ক্যাটাগরি লিখুন");
 
         ivAddCategoryIcon.setBackgroundResource(isIncome
                 ? R.drawable.bg_icon_circle_income : R.drawable.bg_icon_circle_expense);
         btnAddCategory.setBackgroundResource(isIncome
                 ? R.drawable.bg_add_cat_btn_income : R.drawable.bg_add_cat_btn_expense);
+
+        // ইনপুট বক্স — সক্রিয় ট্যাব অনুযায়ী রং (সবুজ/লাল) নেয়, যাতে বাটন-আইকনের সাথে মিলে যায়
+        int accentColor = ContextCompat.getColor(this,
+                isIncome ? R.color.ieIncomeBright : R.color.ieExpenseBright);
+        android.content.res.ColorStateList accentTint = android.content.res.ColorStateList.valueOf(accentColor);
+        if (tilNewCategory != null) {
+            tilNewCategory.setBoxStrokeColor(accentColor);
+            tilNewCategory.setHintTextColor(accentTint);
+            tilNewCategory.setStartIconTintList(accentTint);
+        }
     }
 
     // ═══════════════════════════════════════════

@@ -303,17 +303,9 @@ public class AiChatActivity extends BaseActivity implements ChatAdapter.ActionLi
     }
 
     // ══════════════════════════════════════════════════════════════
-    //  Pollinations.ai ফ্রি টেক্সট API — কোনো API key লাগে না।
-    //  Endpoint: POST https://text.pollinations.ai/openai
-    //  (GET endpoint এর বদলে POST ব্যবহার করা হয়েছে, কারণ আমাদের
-    //  ডিটেইলড ফাইন্যান্সিয়াল context বড় হতে পারে — GET এ URL length
-    //  limit এ আটকাতে পারত। রেসপন্স OpenAI-কম্প্যাটিবল JSON ফরম্যাটে
-    //  আসে: choices[0].message.content)
-    //  মডেল বদলাতে চাইলে নিচের MODEL কনস্ট্যান্ট বদলাও, লিস্ট পাবে
-    //  https://text.pollinations.ai/models এ।
+    //  Pollinations.ai টেক্সট API — CashLipiAiHelper-এর মাধ্যমে কল হয়
+    //  (মাল্টি-কি ফলব্যাকসহ, ভয়েস-এন্ট্রি ফিচারের সাথে shared লজিক)
     // ══════════════════════════════════════════════════════════════
-    private static final String POLLINATIONS_MODEL = "openai";
-
     private String callAiApi(String context, String userMsg) throws Exception {
         String systemPrompt =
             "আপনি ক্যাশলিপি (CashLipi) অ্যাপের একজন বন্ধুত্বপূর্ণ ব্যক্তিগত আর্থিক সহায়ক AI। "
@@ -321,40 +313,11 @@ public class AiChatActivity extends BaseActivity implements ChatAdapter.ActionLi
             + "তথ্য (আয়-ব্যয়ের ক্যাটাগরি, সঞ্চয়, দেনা-পাওনার তালিকা) প্রয়োজন অনুযায়ী ব্যবহার করুন:\n\n"
             + context;
 
-        JSONObject body = new JSONObject();
-        body.put("model", POLLINATIONS_MODEL);
-        body.put("referrer", "cashlipi");
-        JSONArray msgs = new JSONArray();
-        msgs.put(new JSONObject().put("role", "system").put("content", systemPrompt));
-        msgs.put(new JSONObject().put("role", "user").put("content", userMsg));
-        body.put("messages", msgs);
-
-        HttpURLConnection conn = (HttpURLConnection) new URL("https://text.pollinations.ai/openai").openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
-        conn.setConnectTimeout(15000);
-        conn.setReadTimeout(45000);
-        try (OutputStream os = conn.getOutputStream()) {
-            os.write(body.toString().getBytes("UTF-8"));
+        try {
+            return com.jrappspot.cashlipi.utils.PollinationsAiHelper.callText(systemPrompt, userMsg);
+        } catch (Exception e) {
+            return "উত্তর পাওয়া যায়নি। একটু পর আবার চেষ্টা করুন।";
         }
-
-        int code = conn.getResponseCode();
-        InputStream is = code == 200 ? conn.getInputStream() : conn.getErrorStream();
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
-            String line;
-            while ((line = br.readLine()) != null) sb.append(line);
-        }
-        conn.disconnect();
-
-        if (code != 200) {
-            return "উত্তর পাওয়া যায়নি (কোড " + code + ")। একটু পর আবার চেষ্টা করুন।";
-        }
-        JSONObject resp = new JSONObject(sb.toString());
-        String result = resp.getJSONArray("choices")
-            .getJSONObject(0).getJSONObject("message").getString("content");
-        return result.trim();
     }
 
     // ══════════════════════════════════════════════════════════════

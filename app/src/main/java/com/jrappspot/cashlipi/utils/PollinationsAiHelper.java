@@ -13,101 +13,148 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Pollinations AI (https://pollinations.ai) — কোনো API key ছাড়াই ব্যবহারযোগ্য ফ্রি
- * openai-compatible টেক্সট এন্ডপয়েন্ট। CashLipi-এর AI ভয়েস-এন্ট্রি ও AI ক্যাটাগরি
- * জেনারেশন — দুটো ফিচারই এই একই হেল্পার ব্যবহার করে, যাতে নেটওয়ার্ক-কলিং লজিক একজায়গায়
- * কেন্দ্রীভূত থাকে (একবার ঠিক করলে সব জায়গায় কার্যকর হয়)।
+ * Pollinations AI (https://pollinations.ai) — CashLipi-এর সব AI ফিচার (ভয়েস-এন্ট্রি,
+ * AI ক্যাটাগরি জেনারেশন, AI চ্যাট) এই একই হেল্পার ব্যবহার করে, যাতে নেটওয়ার্ক-কলিং লজিক
+ * একজায়গায় কেন্দ্রীভূত থাকে (একবার ঠিক করলে সব জায়গায় কার্যকর হয়)।
  *
- * আগে GET রিকোয়েস্টে পুরো প্রম্পট URL-এ এনকোড করে পাঠানো হতো — সেই বাগ আগেই POST + JSON
- * body-তে সরিয়ে ঠিক করা হয়েছিল।
+ * ২০২৬ সাল থেকে Pollinations-এর পুরনো anonymous/no-key এন্ডপয়েন্ট (text.pollinations.ai)
+ * বন্ধ/অস্থিতিশীল হয়ে গেছে — এখন নতুন unified এন্ডপয়েন্ট (gen.pollinations.ai) ব্যবহার করতে হয়,
+ * এবং সব জেনারেশন রিকোয়েস্টে বাধ্যতামূলক Authorization: Bearer API key লাগে।
  *
- * এখন যে সমস্যাটা ঠিক করা হলো: Pollinations-এর অ্যানোনিমাস (কোনো referrer/token ছাড়া) টিয়ার
- * বর্তমানে খুবই কড়াকড়ি রেট-লিমিটেড (প্রতি ১৫ সেকেন্ডে ১টা রিকোয়েস্ট) এবং মাঝে মাঝে সাময়িক
- * সার্ভার এরর দেয় — আগের কোড এই পরিস্থিতিতে কোনো রিট্রাই ছাড়াই সাথে সাথে "AI বুঝতে পারেনি"
- * দেখিয়ে দিত, এমনকি একটা সামান্য সাময়িক গ্লিচ হলেও। এখন:
- *  ১) রিকোয়েস্টের সাথে একটা "referrer" পাঠানো হচ্ছে (Pollinations-এর অফিসিয়াল ডকুমেন্টেশন
- *     অনুযায়ী, এটা অ্যাপটাকে শনাক্ত করে এবং অ্যানোনিমাস রিকোয়েস্ট আরও নির্ভরযোগ্যভাবে
- *     প্রসেস হওয়ার সম্ভাবনা বাড়ায়)।
- *  ২) রেট-লিমিট (HTTP 429) বা সাময়িক সার্ভার এরর (5xx) হলে একবার শর্ট ব্যাকঅফের পর
- *     স্বয়ংক্রিয়ভাবে আবার চেষ্টা করা হয়, ব্যবহারকারীকে আবার বাটনে চাপতে হয় না।
- *  ৩) এরর মেসেজ এখন কারণ অনুযায়ী নির্দিষ্ট (রেট-লিমিট vs নেটওয়ার্ক vs পার্স-এরর), যাতে
- *     সমস্যাটা কী তা বোঝা সহজ হয় এবং ভবিষ্যতে ডিবাগ করা সহজ হয়।
+ * মাল্টি-কি ফলব্যাক: নিচে API_KEYS-এ একাধিক key রাখা আছে। একটা key ব্যর্থ হলে
+ * (401/402/403/429/5xx — অর্থাৎ ভুল key, ব্যালেন্স শেষ, পারমিশন নেই, রেট-লিমিট, বা সাময়িক
+ * সার্ভার সমস্যা) স্বয়ংক্রিয়ভাবে পরের key দিয়ে আবার চেষ্টা করা হয়। সব key ব্যর্থ হলে তবেই
+ * ব্যবহারকারীকে এরর দেখানো হয়।
+ *
+ * TODO: প্রোডাকশনে যাওয়ার আগে এই key গুলো BuildConfig/local.properties-এ সরিয়ে নেওয়া ভালো,
+ * যাতে সোর্স কোডে/APK-তে সরাসরি না থাকে। এখন টেস্টের জন্য সরাসরি বসানো হলো।
  */
 public final class PollinationsAiHelper {
 
     private static final String TAG = "CashLipiAI";
-    private static final String ENDPOINT = "https://text.pollinations.ai/openai";
-    // অ্যাপের নিজস্ব পরিচয় — anonymous রিকোয়েস্টকে চিহ্নিত করে, Pollinations-এর ডকুমেন্টেশনে
-    // সুপারিশকৃত পদ্ধতি (কোনো secret token ক্লায়েন্ট কোডে না রেখেই)।
-    private static final String REFERRER = "cashlipi.app";
-    private static final int MAX_ATTEMPTS = 2;
+    private static final String ENDPOINT = "https://gen.pollinations.ai/v1/chat/completions";
+    private static final String MODEL = "openai";  // gen.pollinations.ai-এর বর্তমান মডেল লিস্টে available
+
+    // একাধিক key — একটা fail করলে অটোমেটিক পরেরটা দিয়ে চেষ্টা করা হয়
+    private static final String[] API_KEYS = {
+            "sk_atzUprMYwV0kVXsTd4fw4wxUT1Arx2AH",
+            "sk_jo4MV2D0IBP75Nv7ojW8Zx0PDXCfsBu9",
+            "sk_z47kElJ8NwmRl3woCl1SSKJAl3AbrUi5",
+            "sk_iLGfassqbw1aNbYF4iBTmgrEVlOD0S6K",
+            "sk_wQJO5CBaCVAXmLymI86LhNfHqZN29W9K",
+    };
 
     private PollinationsAiHelper() {}
 
     /**
-     * একটি প্রম্পট পাঠিয়ে বিশুদ্ধ JSONObject উত্তর ফেরত দেয়। ব্যাকগ্রাউন্ড থ্রেড থেকে
+     * একটি প্রম্পট পাঠিয়ে বিশুদ্ধ JSONObject উত্তর ফেরত দেয় (AI ভয়েস-এন্ট্রি, ক্যাটাগরি
+     * জেনারেশন ইত্যাদির জন্য — কড়াভাবে JSON আউটপুট বাধ্য করা হয়)। ব্যাকগ্রাউন্ড থ্রেড থেকে
      * কল করতে হবে (নেটওয়ার্ক কল, main thread-এ কল করা যাবে না)।
      */
     public static JSONObject callJson(String prompt) throws Exception {
+        String jsonSystemPrompt = "You are a JSON generator. You MUST respond with ONLY valid JSON object, nothing else. "
+                + "No markdown, no explanations, no extra text. Just pure JSON. "
+                + "If the user's instructions ask for certain field VALUES to be written in Bengali (বাংলা), "
+                + "you must write those field values in Bengali script, not English, even though your instructions are in English.";
+
+        String raw = callWithKeyFallback(jsonSystemPrompt, prompt, 512, 0.3);
+        String content = extractContentFromResponse(raw);
+        if (content == null || content.isEmpty()) {
+            Log.e(TAG, "Failed to extract JSON from response: " + raw);
+            throw new IllegalStateException("AI উত্তর পার্স করতে ব্যর্থ");
+        }
+
+        content = content.replaceAll("(?s)```json\\s*", "").replaceAll("(?s)```\\s*", "").trim();
+        int start = content.indexOf('{');
+        int end = content.lastIndexOf('}');
+        if (start < 0 || end <= start) {
+            Log.e(TAG, "Could not find JSON object in: " + content);
+            throw new IllegalStateException("AI উত্তর বিশুদ্ধ JSON নয়");
+        }
+        String jsonStr = content.substring(start, end + 1);
+
+        try {
+            JSONObject result = new JSONObject(jsonStr);
+            Log.d(TAG, "✓ Successfully parsed JSON");
+            return result;
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to parse JSON: " + jsonStr, e);
+            throw new IllegalStateException("AI উত্তর বিশুদ্ধ JSON নয়", e);
+        }
+    }
+
+    /**
+     * সাধারণ চ্যাট/টেক্সট রিপ্লাই ফেরত দেয় (AI চ্যাট ফিচারের জন্য — মুক্ত ফরম্যাটে বাংলা
+     * উত্তর, JSON বাধ্য করা হয় না)। ব্যাকগ্রাউন্ড থ্রেড থেকে কল করতে হবে।
+     */
+    public static String callText(String systemPrompt, String userMsg) throws Exception {
+        String raw = callWithKeyFallback(systemPrompt, userMsg, 1024, 0.6);
+        String content = extractContentFromResponse(raw);
+        if (content == null || content.isEmpty()) {
+            throw new IllegalStateException("AI উত্তর পার্স করতে ব্যর্থ");
+        }
+        return content.trim();
+    }
+
+    /** প্রতিটা key ধরে ধরে চেষ্টা করে — একটাতে ব্যর্থ হলে পরেরটায় যায়। */
+    private static String callWithKeyFallback(String systemPrompt, String userMsg, int maxTokens, double temperature) throws Exception {
         Exception lastError = null;
-        for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-            try {
-                return callJsonOnce(prompt);
-            } catch (RateLimitedException e) {
-                lastError = e;
-                if (attempt < MAX_ATTEMPTS) {
-                    Log.w(TAG, "রেট-লিমিট হিট হয়েছে, ৪ সেকেন্ড পর আবার চেষ্টা করা হচ্ছে (attempt " + attempt + ")");
-                    Thread.sleep(4000);
-                }
-            } catch (RetryableServerException e) {
-                lastError = e;
-                if (attempt < MAX_ATTEMPTS) {
-                    Log.w(TAG, "সাময়িক সার্ভার এরর, ২ সেকেন্ড পর আবার চেষ্টা করা হচ্ছে (attempt " + attempt + ")");
-                    Thread.sleep(2000);
+        for (int i = 0; i < API_KEYS.length; i++) {
+            String key = API_KEYS[i];
+            for (int attempt = 1; attempt <= 2; attempt++) {
+                try {
+                    return callOnce(key, systemPrompt, userMsg, maxTokens, temperature);
+                } catch (RateLimitedException e) {
+                    lastError = e;
+                    if (attempt < 2) {
+                        Log.w(TAG, "Key #" + (i + 1) + " রেট-লিমিট হিট, ৪ সেকেন্ড পর আবার চেষ্টা");
+                        Thread.sleep(4000);
+                    } else {
+                        Log.w(TAG, "Key #" + (i + 1) + " রেট-লিমিটেড, পরের key-তে যাওয়া হচ্ছে");
+                    }
+                } catch (RetryableServerException e) {
+                    lastError = e;
+                    if (attempt < 2) {
+                        Log.w(TAG, "Key #" + (i + 1) + " সাময়িক সার্ভার এরর, ২ সেকেন্ড পর আবার চেষ্টা");
+                        Thread.sleep(2000);
+                    } else {
+                        Log.w(TAG, "Key #" + (i + 1) + " সার্ভার এরর অব্যাহত, পরের key-তে যাওয়া হচ্ছে");
+                    }
+                } catch (KeyRejectedException e) {
+                    lastError = e;
+                    Log.w(TAG, "Key #" + (i + 1) + " রিজেক্টেড (" + e.getMessage() + "), পরের key-তে যাওয়া হচ্ছে");
+                    break;
                 }
             }
         }
         if (lastError instanceof RateLimitedException) {
-            throw new IllegalStateException("AI সার্ভার এই মুহূর্তে ব্যস্ত (অনেক বেশি রিকোয়েস্ট), কিছুক্ষণ পর আবার চেষ্টা করুন", lastError);
+            throw new IllegalStateException("AI সার্ভার এই মুহূর্তে ব্যস্ত (সব key-তে রেট-লিমিট), কিছুক্ষণ পর আবার চেষ্টা করুন", lastError);
+        }
+        if (lastError instanceof KeyRejectedException) {
+            throw new IllegalStateException("সব AI key-তে সমস্যা (মেয়াদোত্তীর্ণ/ব্যালেন্স শেষ): " + lastError.getMessage(), lastError);
         }
         throw new IllegalStateException("AI সার্ভারে সাময়িক সমস্যা হচ্ছে, একটু পর আবার চেষ্টা করুন", lastError);
     }
 
-    private static JSONObject callJsonOnce(String prompt) throws Exception {
+    private static String callOnce(String apiKey, String systemPrompt, String userMsg, int maxTokens, double temperature) throws Exception {
         JSONObject body = new JSONObject();
-        body.put("model", "gpt-3.5-turbo");  // Pollinations-এ available model
-        body.put("referrer", REFERRER);
+        body.put("model", MODEL);
 
         JSONArray messages = new JSONArray();
-        
-        JSONObject sysMsg = new JSONObject();
-        sysMsg.put("role", "system");
-        sysMsg.put("content", "You are a JSON generator. You MUST respond with ONLY valid JSON object, nothing else. "
-                + "No markdown, no explanations, no extra text. Just pure JSON. "
-                + "If the user's instructions ask for certain field VALUES to be written in Bengali (বাংলা), "
-                + "you must write those field values in Bengali script, not English, even though your instructions are in English.");
-        
-        JSONObject userMsg = new JSONObject();
-        userMsg.put("role", "user");
-        userMsg.put("content", prompt);
-        
-        messages.put(sysMsg);
-        messages.put(userMsg);
+        messages.put(new JSONObject().put("role", "system").put("content", systemPrompt));
+        messages.put(new JSONObject().put("role", "user").put("content", userMsg));
         body.put("messages", messages);
-        body.put("max_tokens", 512);
-        body.put("temperature", 0.3);  // Lower temperature for consistent JSON
+        body.put("max_tokens", maxTokens);
+        body.put("temperature", temperature);
 
-        // Log the request
-        Log.d(TAG, "=== Sending Request to Pollinations ===");
-        Log.d(TAG, "Endpoint: " + ENDPOINT);
-        Log.d(TAG, "Body: " + body.toString());
+        Log.d(TAG, "=== Sending Request to Pollinations (" + ENDPOINT + ") ===");
 
-        URL url = new URL(ENDPOINT + "?referrer=" + REFERRER);
+        URL url = new URL(ENDPOINT);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
         conn.setRequestProperty("User-Agent", "CashLipi-Android/1.0");
-        conn.setRequestProperty("Referer", "https://" + REFERRER + "/");
+        conn.setRequestProperty("Authorization", "Bearer " + apiKey);
         conn.setDoOutput(true);
         conn.setConnectTimeout(25000);
         conn.setReadTimeout(45000);
@@ -122,7 +169,7 @@ public final class PollinationsAiHelper {
 
         int status = conn.getResponseCode();
         Log.d(TAG, "HTTP Status: " + status);
-        
+
         InputStreamReader streamReader = new InputStreamReader(
                 status >= 200 && status < 300 ? conn.getInputStream() : conn.getErrorStream(),
                 StandardCharsets.UTF_8);
@@ -133,12 +180,21 @@ public final class PollinationsAiHelper {
         br.close();
         String raw = sb.toString().trim();
 
-        Log.d(TAG, "=== Raw Response ===");
-        Log.d(TAG, raw);
-
         if (status == 429) {
             Log.e(TAG, "Rate Limited (HTTP 429)");
             throw new RateLimitedException("রেট-লিমিট হিট");
+        }
+        if (status == 401) {
+            Log.e(TAG, "Unauthorized (HTTP 401): " + raw);
+            throw new KeyRejectedException("key ভুল/মেয়াদোত্তীর্ণ (401)");
+        }
+        if (status == 402) {
+            Log.e(TAG, "Insufficient balance (HTTP 402): " + raw);
+            throw new KeyRejectedException("ব্যালেন্স শেষ (402)");
+        }
+        if (status == 403) {
+            Log.e(TAG, "Forbidden (HTTP 403): " + raw);
+            throw new KeyRejectedException("পারমিশন নেই (403)");
         }
         if (status >= 500 && status < 600) {
             Log.e(TAG, "Server Error (HTTP " + status + ")");
@@ -149,31 +205,11 @@ public final class PollinationsAiHelper {
             throw new IllegalStateException("AI সার্ভার এরর (" + status + ")");
         }
 
-        String content = extractJsonFromResponse(raw);
-        if (content == null || content.isEmpty()) {
-            Log.e(TAG, "Failed to extract JSON from response: " + raw);
-            throw new IllegalStateException("AI উত্তর পার্স করতে ব্যর্থ");
-        }
-
-        Log.d(TAG, "Extracted JSON: " + content);
-
-        try {
-            JSONObject result = new JSONObject(content);
-            Log.d(TAG, "✓ Successfully parsed JSON");
-            return result;
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to parse JSON: " + content, e);
-            throw new IllegalStateException("AI উত্তর বিশুদ্ধ JSON নয়", e);
-        }
+        return raw;
     }
 
-    /** OpenAI-compatible রেসপন্স থেকে JSON কন্টেন্ট এক্সট্র্যাক্ট করে */
-    private static String extractJsonFromResponse(String raw) {
-        Log.d(TAG, "--- Extracting JSON from response ---");
-        
-        String content = raw;
-        
-        // Try to extract from OpenAI format first
+    /** OpenAI-compatible রেসপন্স থেকে content স্ট্রিং এক্সট্র্যাক্ট করে */
+    private static String extractContentFromResponse(String raw) {
         try {
             JSONObject wrapper = new JSONObject(raw);
             JSONArray choices = wrapper.optJSONArray("choices");
@@ -182,41 +218,16 @@ public final class PollinationsAiHelper {
                 JSONObject message = choice.optJSONObject("message");
                 if (message != null) {
                     String extractedContent = message.optString("content", "");
-                    if (!extractedContent.isEmpty()) {
-                        Log.d(TAG, "Found content in OpenAI format: " + extractedContent.substring(0, Math.min(100, extractedContent.length())));
-                        content = extractedContent;
-                    }
+                    if (!extractedContent.isEmpty()) return extractedContent;
                 }
             }
         } catch (Exception e) {
-            Log.d(TAG, "Not OpenAI format, treating as raw JSON");
-            // Not OpenAI format, use raw
+            Log.d(TAG, "Not OpenAI wrapper format, treating raw response as content");
         }
-
-        if (content.isEmpty()) {
-            Log.e(TAG, "Empty content");
-            return null;
-        }
-
-        // Remove markdown fences
-        content = content.replaceAll("(?s)```json\\s*", "").replaceAll("(?s)```\\s*", "").trim();
-        Log.d(TAG, "After removing markdown: " + content.substring(0, Math.min(100, content.length())));
-        
-        // Extract JSON object { ... }
-        int start = content.indexOf('{');
-        int end = content.lastIndexOf('}');
-        
-        if (start >= 0 && end > start) {
-            String extracted = content.substring(start, end + 1);
-            Log.d(TAG, "Extracted JSON object: " + extracted.substring(0, Math.min(100, extracted.length())));
-            return extracted;
-        }
-        
-        Log.e(TAG, "Could not find JSON object in: " + content);
-        return null;
+        return raw;
     }
 
-    /** HTTP 429 — অ্যানোনিমাস রেট-লিমিট হিট হয়েছে, শর্ট ব্যাকঅফের পর রিট্রাই করার যোগ্য। */
+    /** HTTP 429 — রেট-লিমিট হিট হয়েছে, শর্ট ব্যাকঅফের পর রিট্রাই করার যোগ্য। */
     private static class RateLimitedException extends Exception {
         RateLimitedException(String message) { super(message); }
     }
@@ -224,5 +235,10 @@ public final class PollinationsAiHelper {
     /** HTTP 5xx — সাময়িক সার্ভার সমস্যা, রিট্রাই করার যোগ্য। */
     private static class RetryableServerException extends Exception {
         RetryableServerException(String message) { super(message); }
+    }
+
+    /** HTTP 401/402/403 — এই key দিয়ে কাজ হবে না, রিট্রাই না করে পরের key-তে যাওয়া উচিত। */
+    private static class KeyRejectedException extends Exception {
+        KeyRejectedException(String message) { super(message); }
     }
 }

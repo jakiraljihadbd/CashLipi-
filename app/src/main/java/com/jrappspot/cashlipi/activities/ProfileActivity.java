@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -662,12 +663,14 @@ public class ProfileActivity extends BaseActivity {
         iv.clearColorFilter();
 
         Object loadFrom;
+        String fallbackUrl = null; // size param ছাড়া fallback URL, safe error() chain-এর জন্য
         if (source.startsWith("http")) {
             //  FIX: Google photo URL-এ size parameter যুক্ত করি (নাহলে অনেক সময় লোড হয় না বা ছোট আসে)
             String sized = source;
             int pxSize = sizeDp * 3; // approx px for hi-dpi
             if (sized.contains("=s")) {
                 sized = sized.replaceAll("=s\\d+(-c)?", "=s" + pxSize + "-c");
+                fallbackUrl = source.replaceAll("=s\\d+(-c)?", "");
             } else {
                 sized = sized + "=s" + pxSize + "-c";
             }
@@ -676,25 +679,31 @@ public class ProfileActivity extends BaseActivity {
             loadFrom = new File(source);
         }
 
-        Glide.with(this)
+        // FIX (crash): আগে fallback load টা onLoadFailed callback-এর ভেতর থেকে সরাসরি .into(iv)
+        // কল করা হতো, যেটা Glide-এ নিষিদ্ধ ("You can't start or clear loads in
+        // RequestListener or Target callbacks") এবং প্রতিবার প্রোফাইল পেজে গেলে ক্র্যাশ করত।
+        // এখন Glide-এর নিজস্ব সুপারিশ অনুযায়ী .error(RequestBuilder) দিয়ে fallback চেইন করা হচ্ছে,
+        // যা Glide নিজেই নিরাপদভাবে মূল request-এর পরে হ্যান্ডেল করে।
+        RequestBuilder<android.graphics.drawable.Drawable> request = Glide.with(this)
             .load(loadFrom)
             .transform(new CircleCrop())
             .placeholder(android.R.drawable.ic_menu_myplaces)
-            .error(android.R.drawable.ic_menu_myplaces)
+            .error(android.R.drawable.ic_menu_myplaces);
+
+        if (fallbackUrl != null) {
+            RequestBuilder<android.graphics.drawable.Drawable> fallbackRequest = Glide.with(this)
+                .load(fallbackUrl)
+                .transform(new CircleCrop())
+                .placeholder(android.R.drawable.ic_menu_myplaces)
+                .error(android.R.drawable.ic_menu_myplaces);
+            request = request.error(fallbackRequest);
+        }
+
+        request
             .listener(new RequestListener<android.graphics.drawable.Drawable>() {
                 @Override
                 public boolean onLoadFailed(GlideException e, Object model, Target<android.graphics.drawable.Drawable> target, boolean isFirstResource) {
                     Log.e(TAG, " Profile photo load failed for: " + model, e);
-                    // Fallback চেষ্টা: size param ছাড়া আবার লোড করি (URL malformed হতে পারে)
-                    if (model instanceof String && ((String) model).contains("=s")) {
-                        String fallback = ((String) model).replaceAll("=s\\d+(-c)?", "");
-                        Glide.with(ProfileActivity.this)
-                            .load(fallback)
-                            .transform(new CircleCrop())
-                            .placeholder(android.R.drawable.ic_menu_myplaces)
-                            .error(android.R.drawable.ic_menu_myplaces)
-                            .into(iv);
-                    }
                     return false;
                 }
 

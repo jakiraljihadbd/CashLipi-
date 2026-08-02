@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Material 3 tonal container — income card. Flat fill + subtle hairline border. -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="@color/m3IncomeContainer"/>
-    <stroke android:width="1dp" android:color="#14000000"/>
-    <corners android:radius="16dp"/>
-</shape>
+<!-- FIX: আগে ফ্ল্যাট, ফিকে pastel সলিড কালার ছিল (m3IncomeContainer), যা লাইট মোডে
+     দেখতে আকর্ষণীয় লাগছিল না। এখন ডার্ক মোডের মতোই সমৃদ্ধ গ্র্যাডিয়েন্ট + গ্লস স্ট্রিপ,
+     শুধু লাইট থিমের জন্য একটু উজ্জ্বল টোনে। -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#10B981"
+                android:centerColor="#22B879"
+                android:endColor="#34D399"
+                android:angle="135"/>
+            <corners android:radius="24dp"/>
+        </shape>
+    </item>
+    <item android:bottom="90dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#26FFFFFF" android:endColor="#00FFFFFF" android:angle="270"/>
+            <corners android:topLeftRadius="24dp" android:topRightRadius="24dp"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="1dp" android:color="#1F000000"/>
+            <corners android:radius="24dp"/>
+        </shape>
+    </item>
+</layer-list>

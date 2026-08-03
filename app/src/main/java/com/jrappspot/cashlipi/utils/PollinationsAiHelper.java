@@ -35,8 +35,13 @@ public final class PollinationsAiHelper {
     private static final String ENDPOINT = "https://gen.pollinations.ai/v1/chat/completions";
     private static final String MODEL = "openai";  // gen.pollinations.ai-এর বর্তমান মডেল লিস্টে available
 
-    // একাধিক key — একটা fail করলে অটোমেটিক পরেরটা দিয়ে চেষ্টা করা হয়
+    // FIX: Pollinations-এ অনেক মডেল (এই "openai" সহ) সম্পূর্ণ ফ্রি/anonymous — কোনো
+    // Authorization key বা ব্যালেন্স ছাড়াই কাজ করে (রেট-লিমিট সাপেক্ষে)। আগে কোড সবসময়
+    // sk_ paid key পাঠাত, আর ওই key-গুলোর ব্যালেন্স শেষ হয়ে যাওয়ায় 402 পাচ্ছিল।
+    // এখন প্রথমে key ছাড়াই (anonymous, ফ্রি) চেষ্টা করা হয়; sk_ key-গুলো শুধু ব্যাকআপ —
+    // anonymous মোড রেট-লিমিটেড/ব্যর্থ হলে তখনই ব্যবহার হয়।
     private static final String[] API_KEYS = {
+            null,  // ফ্রি/anonymous — কোনো Authorization header ছাড়াই
             "sk_atzUprMYwV0kVXsTd4fw4wxUT1Arx2AH",
             "sk_jo4MV2D0IBP75Nv7ojW8Zx0PDXCfsBu9",
             "sk_z47kElJ8NwmRl3woCl1SSKJAl3AbrUi5",
@@ -96,33 +101,34 @@ public final class PollinationsAiHelper {
         return content.trim();
     }
 
-    /** প্রতিটা key ধরে ধরে চেষ্টা করে — একটাতে ব্যর্থ হলে পরেরটায় যায়। */
+    /** প্রতিটা key ধরে ধরে চেষ্টা করে (প্রথমে null = anonymous/ফ্রি) — একটাতে ব্যর্থ হলে পরেরটায় যায়। */
     private static String callWithKeyFallback(String systemPrompt, String userMsg, int maxTokens, double temperature) throws Exception {
         Exception lastError = null;
         for (int i = 0; i < API_KEYS.length; i++) {
             String key = API_KEYS[i];
+            String label = (key == null) ? "Anonymous (ফ্রি)" : ("Key #" + i);
             for (int attempt = 1; attempt <= 2; attempt++) {
                 try {
                     return callOnce(key, systemPrompt, userMsg, maxTokens, temperature);
                 } catch (RateLimitedException e) {
                     lastError = e;
                     if (attempt < 2) {
-                        Log.w(TAG, "Key #" + (i + 1) + " রেট-লিমিট হিট, ৪ সেকেন্ড পর আবার চেষ্টা");
+                        Log.w(TAG, label + " রেট-লিমিট হিট, ৪ সেকেন্ড পর আবার চেষ্টা");
                         Thread.sleep(4000);
                     } else {
-                        Log.w(TAG, "Key #" + (i + 1) + " রেট-লিমিটেড, পরের key-তে যাওয়া হচ্ছে");
+                        Log.w(TAG, label + " রেট-লিমিটেড, পরের key-তে যাওয়া হচ্ছে");
                     }
                 } catch (RetryableServerException e) {
                     lastError = e;
                     if (attempt < 2) {
-                        Log.w(TAG, "Key #" + (i + 1) + " সাময়িক সার্ভার এরর, ২ সেকেন্ড পর আবার চেষ্টা");
+                        Log.w(TAG, label + " সাময়িক সার্ভার এরর, ২ সেকেন্ড পর আবার চেষ্টা");
                         Thread.sleep(2000);
                     } else {
-                        Log.w(TAG, "Key #" + (i + 1) + " সার্ভার এরর অব্যাহত, পরের key-তে যাওয়া হচ্ছে");
+                        Log.w(TAG, label + " সার্ভার এরর অব্যাহত, পরের key-তে যাওয়া হচ্ছে");
                     }
                 } catch (KeyRejectedException e) {
                     lastError = e;
-                    Log.w(TAG, "Key #" + (i + 1) + " রিজেক্টেড (" + e.getMessage() + "), পরের key-তে যাওয়া হচ্ছে");
+                    Log.w(TAG, label + " রিজেক্টেড (" + e.getMessage() + "), পরের key-তে যাওয়া হচ্ছে");
                     break;
                 }
             }
@@ -154,7 +160,10 @@ public final class PollinationsAiHelper {
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
         conn.setRequestProperty("User-Agent", "CashLipi-Android/1.0");
-        conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+        // FIX: key null হলে (anonymous/ফ্রি চেষ্টা) Authorization header পাঠানো হয় না
+        if (apiKey != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+        }
         conn.setDoOutput(true);
         conn.setConnectTimeout(25000);
         conn.setReadTimeout(45000);

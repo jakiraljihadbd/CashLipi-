@@ -313,6 +313,9 @@
     <color name="dialogFieldBg">#F8FAFC</color>
     <color name="dialogFieldBorder">#E2E8F0</color>
 
+    <!-- Quick-amount pill chip text (readable in both light & dark) -->
+    <color name="quickPillText">#4F46E5</color>
+
     <!-- Expense extras -->
     <color name="expenseCardGradStart">#F87171</color>
     <color name="expenseCardGradMid">#EF4444</color>
@@ -741,6 +744,11 @@
     <color name="ieEditBlue">#1565C0</color>
     <color name="ieEditBlueLightBg">#E3F2FD</color>
     <color name="ieNoticeTextLight">#5B94D6</color>
+    <!-- সঞ্চয় পেজ — পিংক থিম (আয়-ব্যয়ের স্টাইলের সাথে মিল রেখে) -->
+    <color name="iePinkBright">#E2136E</color>
+    <color name="iePinkDeep">#B80F58</color>
+    <color name="iePinkLightBg">#FCE7F3</color>
+    <color name="iePinkText">#9D174D</color>
 
     <!-- ══════════════════════════════════════════════════════════
          Material 3 — Home screen tonal container roles (Light)

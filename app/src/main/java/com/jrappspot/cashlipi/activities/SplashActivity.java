@@ -147,6 +147,7 @@ public class SplashActivity extends BaseActivity {
                         Boolean forceUpdate = doc.getBoolean("forceUpdate");
                         String minVersion = doc.getString("minVersion");
                         String updateMsg = doc.getString("updateMessage");
+                        String apkUrl = doc.getString("apkUrl");
                         if (forceUpdate != null && forceUpdate && minVersion != null) {
                             String currentVersion = "1.0";
                             try {
@@ -154,13 +155,24 @@ public class SplashActivity extends BaseActivity {
                                     .getPackageInfo(getPackageName(), 0).versionName;
                             } catch (Exception ignored) {}
 
-                            if (!currentVersion.equals(minVersion)) {
-                                String msg = updateMsg != null ? updateMsg : "নতুন version পাওয়া গেছে। আপডেট করুন।";
-                                new AlertDialog.Builder(this)
+                            if (isVersionOlder(currentVersion, minVersion)) {
+                                String msg = updateMsg != null ? updateMsg : "নতুন version পাওয়া গেছে। এখনই আপডেট করুন।";
+                                String finalApkUrl = apkUrl != null ? apkUrl
+                                    : "https://github.com/jakiraljihadbd/cashlipi-/releases/latest";
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(this)
                                     .setTitle("🔄 আপডেট প্রয়োজন")
                                     .setMessage(msg)
-                                    .setPositiveButton("পরে", (d, w) -> checkBlockAndGoNext(db))
-                                    .setCancelable(false).show();
+                                    .setPositiveButton("এখনই আপডেট করুন", (d, w) -> {
+                                        Intent openLink = new Intent(Intent.ACTION_VIEW,
+                                            android.net.Uri.parse(finalApkUrl));
+                                        startActivity(openLink);
+                                        finishAffinity();
+                                    })
+                                    .setCancelable(false);
+                                AlertDialog dialog = builder.show();
+                                dialog.setOnKeyListener((d, keyCode, event) ->
+                                    keyCode == android.view.KeyEvent.KEYCODE_BACK);
                                 return;
                             }
                         }
@@ -198,6 +210,28 @@ public class SplashActivity extends BaseActivity {
                 .setInterpolator(new android.view.animation.DecelerateInterpolator())
                 .start(),
         delayMs);
+    }
+
+    /**
+     * "3.9" vs "3.10" এর মতো ভার্সন সংখ্যাগতভাবে সঠিকভাবে তুলনা করে
+     * (শুধু String.equals() ব্যবহার করলে ভুল ফলাফল আসতে পারে)
+     */
+    private boolean isVersionOlder(String current, String minRequired) {
+        try {
+            String[] curParts = current.replaceAll("[^0-9.]", "").split("\\.");
+            String[] minParts = minRequired.replaceAll("[^0-9.]", "").split("\\.");
+            int len = Math.max(curParts.length, minParts.length);
+            for (int i = 0; i < len; i++) {
+                int cur = i < curParts.length && !curParts[i].isEmpty() ? Integer.parseInt(curParts[i]) : 0;
+                int min = i < minParts.length && !minParts[i].isEmpty() ? Integer.parseInt(minParts[i]) : 0;
+                if (cur < min) return true;
+                if (cur > min) return false;
+            }
+            return false;
+        } catch (Exception e) {
+            /// Parse করতে সমস্যা হলে নিরাপদে ধরে নাও আপডেট দরকার নেই
+            return false;
+        }
     }
 
     private void checkBlockAndGoNext(DatabaseManager db) {

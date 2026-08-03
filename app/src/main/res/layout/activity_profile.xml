@@ -7,23 +7,17 @@
     android:background="@color/bgColor">
 
     <!-- ══════════════════════════════════════ -->
-    <!-- ── Header — ক্লিন, সলিড bKash-পিংক, কোনো ডেকোরেশন নেই ── -->
+    <!-- ── Header — চিকন, সোজা (কোনো curve/subtitle নেই), শুধু টাইটেল ── -->
     <!-- ══════════════════════════════════════ -->
     <LinearLayout
         android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/bg_header_profile_pink"
-        android:paddingTop="26dp" android:paddingBottom="30dp" android:paddingHorizontal="22dp">
+        android:orientation="horizontal" android:gravity="center_vertical"
+        android:background="@color/brandPink"
+        android:paddingVertical="16dp" android:paddingHorizontal="20dp">
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="প্রোফাইল"
-            android:textSize="25sp" android:textStyle="bold" android:textColor="@color/white"/>
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="আপনার অ্যাকাউন্ট, নিরাপত্তা ও তথ্য"
-            android:textSize="13sp" android:textColor="@color/white"
-            android:alpha="0.85"
-            android:layout_marginTop="4dp"/>
+            android:textSize="18sp" android:textStyle="bold" android:textColor="@color/white"/>
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -39,7 +33,6 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-24dp"
                 android:layout_marginBottom="14dp"
                 app:cardCornerRadius="20dp" app:cardElevation="3dp"
                 app:strokeWidth="0dp"
@@ -166,7 +159,16 @@
                             android:textSize="21sp" android:textStyle="bold"
                             android:textColor="@color/textPrimary"
                             android:gravity="center"
-                            android:layout_marginBottom="8dp"/>
+                            android:layout_marginBottom="4dp"/>
+
+                        <!-- ইমেইল — নামের ঠিক নিচে, শুধু দেখার জন্য -->
+                        <TextView android:id="@+id/tvDisplayEmail"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="13sp"
+                            android:textColor="@color/textSecondary"
+                            android:gravity="center"
+                            android:layout_marginBottom="10dp"/>
 
                         <TextView android:id="@+id/tvGoogleBadge"
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
@@ -184,8 +186,6 @@
                         <LinearLayout android:id="@+id/headerEditProfile"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="horizontal" android:gravity="center_vertical"
-                            android:clickable="true" android:focusable="true"
-                            android:background="?attr/selectableItemBackground"
                             android:layout_marginBottom="14dp">
 
                             <FrameLayout android:layout_width="34dp" android:layout_height="34dp"
@@ -194,31 +194,25 @@
                                     android:background="@drawable/shape_circle_solid"
                                     android:backgroundTint="@color/notePink"/>
                                 <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-                                    android:text="✏️" android:textSize="14sp" android:gravity="center"/>
+                                    android:text="👤" android:textSize="14sp" android:gravity="center"/>
                             </FrameLayout>
 
                             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
                                 android:layout_weight="1" android:orientation="vertical">
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="প্রোফাইল তথ্য সম্পাদনা"
+                                    android:text="প্রোফাইল তথ্য"
                                     android:textSize="14.5sp" android:textStyle="bold"
                                     android:textColor="@color/textPrimary"/>
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                    android:text="নাম, ইউজারনেম, নম্বর ও ঠিকানা পরিবর্তন করুন"
+                                    android:text="নাম, ইউজারনেম, নম্বর ও ঠিকানা"
                                     android:textSize="11sp" android:textColor="@color/textSecondary"/>
                             </LinearLayout>
-
-                            <TextView android:id="@+id/tvEditProfileChevron"
-                                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="✏️ এডিট করুন  ▾"
-                                android:textSize="12sp" android:textStyle="bold"
-                                android:textColor="@color/brandPink"/>
                         </LinearLayout>
 
                         <LinearLayout android:id="@+id/bodyEditProfile"
                             android:layout_width="match_parent" android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                         <!-- নাম — এডিট করা যাবে -->
                         <com.google.android.material.textfield.TextInputLayout
@@ -699,6 +693,32 @@
                         android:text="🟢 চালু আছে — প্রতিটি পরিবর্তন সাথে সাথে Drive-এ সেভ হবে"
                         android:textSize="11sp" android:textColor="@color/textSecondary"
                         android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- ── Logout ── -->
+            <!-- ══════════════════════════════════════ -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:layout_marginBottom="8dp"
+                app:cardCornerRadius="20dp" app:cardElevation="1dp"
+                app:strokeWidth="0dp"
+                app:cardBackgroundColor="@color/cardBg">
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:padding="18dp">
+
+                    <Button android:id="@+id/btnProfileLogout"
+                        android:layout_width="match_parent" android:layout_height="54dp"
+                        app:cornerRadius="16dp"
+                        app:backgroundTint="@color/expenseLight"
+                        app:icon="@drawable/ic_logout"
+                        app:iconTint="@color/expenseColor"
+                        app:iconGravity="textStart"
+                        android:text="লগ আউট"
+                        android:textStyle="bold" android:textSize="15sp"
+                        android:textColor="@color/expenseColor"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

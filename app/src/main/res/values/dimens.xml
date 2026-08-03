@@ -43,10 +43,10 @@
 
     <!-- Top Header + 7-icon Top Nav Bar (UI/Navigation upgrade) -->
     <dimen name="top_header_height">46dp</dimen>
-    <dimen name="top_nav_bar_height">58dp</dimen>
-    <dimen name="top_nav_icon_size">38dp</dimen>
-    <dimen name="top_nav_icon_size_large">40dp</dimen>
-    <dimen name="top_nav_icon_size_small">30dp</dimen>
+    <dimen name="top_nav_bar_height">62dp</dimen>
+    <dimen name="top_nav_icon_size">44dp</dimen>
+    <dimen name="top_nav_icon_size_large">48dp</dimen>
+    <dimen name="top_nav_icon_size_small">34dp</dimen>
     <dimen name="top_nav_indicator_width">18dp</dimen>
     <dimen name="top_nav_indicator_height">3dp</dimen>
 
@@ -85,7 +85,7 @@
     <dimen name="list_icon_size">44dp</dimen>
 
     <!-- Quick Amount -->
-    <dimen name="quick_btn_height">38dp</dimen>
+    <dimen name="quick_btn_height">42dp</dimen>
 
     <!-- Calculator -->
     <dimen name="calc_btn_height">64dp</dimen>

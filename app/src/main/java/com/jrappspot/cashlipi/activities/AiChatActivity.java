@@ -316,7 +316,14 @@ public class AiChatActivity extends BaseActivity implements ChatAdapter.ActionLi
         try {
             return com.jrappspot.cashlipi.utils.PollinationsAiHelper.callText(systemPrompt, userMsg);
         } catch (Exception e) {
-            return "উত্তর পাওয়া যায়নি। একটু পর আবার চেষ্টা করুন।";
+            // FIX: আগে আসল কারণ লুকিয়ে জেনেরিক মেসেজ দেখানো হতো, এখন PollinationsAiHelper-এর
+            // দেওয়া আসল কারণ (key মেয়াদোত্তীর্ণ/ব্যালেন্স শেষ/রেট-লিমিট ইত্যাদি) দেখানো হচ্ছে,
+            // যাতে বোঝা যায় সমস্যাটা কোথায় (AddTransactionActivity-র মতোই)।
+            String reason = e.getMessage();
+            if (reason == null || reason.isEmpty()) {
+                return "উত্তর পাওয়া যায়নি। একটু পর আবার চেষ্টা করুন।";
+            }
+            return "উত্তর পাওয়া যায়নি: " + reason;
         }
     }
 

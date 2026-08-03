@@ -846,9 +846,11 @@ public class DashboardActivity extends BaseActivity {
             closeFabMenu();
             return;
         }
+        View body = getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
+        FontUtils.applyToView(this, body);
+
         new AlertDialog.Builder(this, R.style.AppDialog)
-                .setTitle(" অ্যাপ বন্ধ করবেন?")
-                .setMessage("CashLipi ক্যাশলিপি থেকে বের হতে চান?")
+                .setView(body)
                 .setPositiveButton("হ্যাঁ", (d, w) -> finish())
                 .setNegativeButton("না", null)
                 .show();

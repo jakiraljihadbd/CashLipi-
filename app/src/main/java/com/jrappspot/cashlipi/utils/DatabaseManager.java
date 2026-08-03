@@ -1435,6 +1435,20 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * সাইন-ইন করা থাকলে Firebase অ্যাকাউন্টের আসল তৈরির তারিখ (realCreationMillis) দিয়ে
+     * join date রিকনসাইল করা হয় — নতুন ডিভাইসে লগইন করলে যেন "আজই যুক্ত হয়েছেন" না দেখায়,
+     * বরং আসল, রিয়েল অ্যাকাউন্ট-বয়স দেখায়।
+     */
+    public void ensureJoinDateSet(long realCreationMillis) {
+        long stored = prefs.getLong(KEY_JOIN_DATE_MILLIS, 0L);
+        if (realCreationMillis > 0 && (stored == 0L || realCreationMillis < stored)) {
+            prefs.edit().putLong(KEY_JOIN_DATE_MILLIS, realCreationMillis).apply();
+        } else {
+            ensureJoinDateSet();
+        }
+    }
+
     public long getJoinDateMillis() {
         return prefs.getLong(KEY_JOIN_DATE_MILLIS, 0L);
     }

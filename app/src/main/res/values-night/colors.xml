@@ -80,6 +80,9 @@
     <color name="dialogFieldBg">#1E293B</color>
     <color name="dialogFieldBorder">#334155</color>
 
+    <!-- Quick-amount pill chip text — lighter indigo so it reads on dark chips -->
+    <color name="quickPillText">#A5B4FC</color>
+
     <!-- ── Quick button ─────────────────────────────────────────────── -->
     <color name="quickBtnBg">#1E293B</color>
 

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- অ্যাপ থেকে বের হওয়ার কনফার্মেশন — প্রিমিয়াম ডিজাইন: গ্রেডিয়েন্ট আইকন ব্যাজ + টাইটেল + সাব-টেক্সট -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/cardBg"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="30dp"
+    android:paddingBottom="8dp"
+    android:gravity="center_horizontal">
+
+    <!-- আইকন ব্যাজ -->
+    <FrameLayout
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:background="@drawable/bg_icon_circle_primary">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_logout"
+            android:contentDescription="@null"/>
+    </FrameLayout>
+
+    <!-- টাইটেল -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="অ্যাপ বন্ধ করবেন?"
+        android:textColor="@color/textPrimary"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+
+    <!-- সাব-টেক্সট -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="আপনি কি &#8220;ক্যাশলিপি&#8221; থেকে বের হতে চান?"
+        android:textColor="@color/textSecondary"
+        android:textSize="14sp"
+        android:lineSpacingExtra="3dp"
+        android:gravity="center"/>
+
+</LinearLayout>

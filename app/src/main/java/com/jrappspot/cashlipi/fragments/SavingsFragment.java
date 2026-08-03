@@ -11,18 +11,21 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jrappspot.cashlipi.R;
 import com.jrappspot.cashlipi.activities.AddSavingsActivity;
 import com.jrappspot.cashlipi.adapters.TransactionListAdapter;
+import com.jrappspot.cashlipi.adapters.TransactionTableAdapter;
 import com.jrappspot.cashlipi.models.Transaction;
 import com.jrappspot.cashlipi.utils.DatabaseManager;
 import com.jrappspot.cashlipi.utils.DateFilterUtil;
@@ -32,25 +35,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * সঞ্চয় পেজ — SavingsListActivity-এর বিদ্যমান কনটেন্ট/ফাংশনালিটি হুবহু অক্ষত,
- * শুধু নতুন ৭-আইটেম নেভিগেশন কাঠামোয় সংযুক্ত করার জন্য Fragment রূপান্তর।
+ * সঞ্চয় পেজ — আয়-ব্যয় পেজের ভিজ্যুয়াল স্টাইলে (পিংক থিম) রিডিজাইন করা।
+ * আয়/ব্যয়ের মতো টাইপ-টগল নেই (দরকার নেই), উপরে শুধু চিকন এন্ট্রি-কাউন্ট স্ট্রিপ,
+ * তারপর মোট সঞ্চয়ের কমপ্যাক্ট কার্ড। নিচের বাকি অংশ (সার্চ, সর্ট, কার্ড/ছক ভিউ,
+ * ফিল্টার চিপস, লিস্ট, ফ্লোটিং অ্যাড বাটন) আয়-ব্যয়ের মতোই, শুধু রঙ পিংক।
  */
 public class SavingsFragment extends Fragment {
 
     private DatabaseManager db;
-    private RecyclerView rv;
+    private RecyclerView rv, rvTable;
+    private View tableContainer, tableHeader;
     private LinearLayout emptyState;
     private EditText etSearch;
     private TextView tvTotal, tvCount;
+    private TextView btnViewCard, btnViewTable;
     private List<Transaction> allList = new ArrayList<>();
     private List<Transaction> filteredList = new ArrayList<>();
     private String currentFilter = "all";
+    private String currentSort = "date_desc"; // date_desc | date_asc | amount_desc | amount_asc | name_asc
+    private String viewMode = "card"; // "card" | "table"
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                               @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_list_common, container, false);
+        return inflater.inflate(R.layout.fragment_savings, container, false);
     }
 
     @Override
@@ -58,18 +67,30 @@ public class SavingsFragment extends Fragment {
         super.onViewCreated(root, savedInstanceState);
         db = DatabaseManager.getInstance(requireContext());
         rv = root.findViewById(R.id.rvList);
+        rvTable = root.findViewById(R.id.rvTable);
+        tableContainer = root.findViewById(R.id.tableContainer);
+        tableHeader = root.findViewById(R.id.tableHeader);
         emptyState = root.findViewById(R.id.emptyState);
         etSearch = root.findViewById(R.id.etSearch);
         tvTotal = root.findViewById(R.id.tvSummaryTotal);
         tvCount = root.findViewById(R.id.tvSummaryCount);
+        btnViewCard = root.findViewById(R.id.btnViewCard);
+        btnViewTable = root.findViewById(R.id.btnViewTable);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        TextView tvHeader = root.findViewById(R.id.tvListHeader);
-        if (tvHeader != null) tvHeader.setText(" সঞ্চয় তালিকা");
-        View header = root.findViewById(R.id.listHeader);
-        if (header != null) header.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.bg_header_savings));
+        TextView tvColSource = tableHeader.findViewById(R.id.tvColSource);
+        if (tvColSource != null) tvColSource.setText("বিবরণ");
+        tableHeader.setBackgroundResource(R.drawable.bg_table_header_savings);
 
         setupFilterChips(root);
+
+        btnViewCard.setOnClickListener(v -> switchViewMode("card"));
+        btnViewTable.setOnClickListener(v -> switchViewMode("table"));
+        refreshViewModeUI();
+
+        ImageView btnSort = root.findViewById(R.id.btnSort);
+        if (btnSort != null) btnSort.setOnClickListener(v -> showSortMenu(btnSort));
+
         ImageView ivClearS = root.findViewById(R.id.ivClearSearch);
         etSearch.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
@@ -118,12 +139,67 @@ public class SavingsFragment extends Fragment {
             chip.setFocusable(true);
             boolean selected = key.equals(currentFilter);
             chip.setBackground(ContextCompat.getDrawable(requireContext(),
-                    selected ? R.drawable.bg_chip_selected : R.drawable.bg_chip_unselected));
+                    selected ? R.drawable.bg_chip_selected_pink : R.drawable.bg_chip_unselected));
             chip.setTextColor(selected ? ContextCompat.getColor(requireContext(), R.color.white)
                     : ContextCompat.getColor(requireContext(), R.color.chipUnselectedText));
             if (selected) chip.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.chip_scale));
             chip.setOnClickListener(v -> { currentFilter = key; setupFilterChips(root); applyFilter(); });
             chipRow.addView(chip);
+        }
+    }
+
+    private void switchViewMode(String mode) {
+        if (mode.equals(viewMode)) return;
+        viewMode = mode;
+        refreshViewModeUI();
+        applyFilter();
+    }
+
+    private void refreshViewModeUI() {
+        boolean isCard = "card".equals(viewMode);
+        btnViewCard.setBackground(ContextCompat.getDrawable(requireContext(),
+                isCard ? R.drawable.bg_chip_selected_pink : R.drawable.bg_chip_unselected));
+        btnViewCard.setTextColor(ContextCompat.getColor(requireContext(), isCard ? R.color.white : R.color.chipUnselectedText));
+        btnViewTable.setBackground(ContextCompat.getDrawable(requireContext(),
+                !isCard ? R.drawable.bg_chip_selected_pink : R.drawable.bg_chip_unselected));
+        btnViewTable.setTextColor(ContextCompat.getColor(requireContext(), !isCard ? R.color.white : R.color.chipUnselectedText));
+        rv.setVisibility(isCard ? View.VISIBLE : View.GONE);
+        tableContainer.setVisibility(isCard ? View.GONE : View.VISIBLE);
+    }
+
+    private void showSortMenu(View anchor) {
+        PopupMenu menu = new PopupMenu(requireContext(), anchor);
+        menu.getMenuInflater().inflate(R.menu.menu_sort_options, menu.getMenu());
+        menu.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.sortDateDesc) currentSort = "date_desc";
+            else if (id == R.id.sortDateAsc) currentSort = "date_asc";
+            else if (id == R.id.sortAmountDesc) currentSort = "amount_desc";
+            else if (id == R.id.sortAmountAsc) currentSort = "amount_asc";
+            else if (id == R.id.sortNameAsc) currentSort = "name_asc";
+            applyFilter();
+            return true;
+        });
+        menu.show();
+    }
+
+    private void sortFilteredList(List<Transaction> list) {
+        switch (currentSort) {
+            case "date_asc":
+                list.sort((a, b) -> (a.getDate() + a.getTime()).compareTo(b.getDate() + b.getTime()));
+                break;
+            case "amount_desc":
+                list.sort((a, b) -> Double.compare(b.getAmount(), a.getAmount()));
+                break;
+            case "amount_asc":
+                list.sort((a, b) -> Double.compare(a.getAmount(), b.getAmount()));
+                break;
+            case "name_asc":
+                list.sort((a, b) -> a.getDisplayTitle().compareToIgnoreCase(b.getDisplayTitle()));
+                break;
+            default: // date_desc
+                list.sort((a, b) -> (b.getDate() + b.getTime()).compareTo(a.getDate() + a.getTime()));
+                break;
         }
     }
 
@@ -135,20 +211,37 @@ public class SavingsFragment extends Fragment {
             if (!DateFilterUtil.matches(t.getDate(), currentFilter)) continue;
             filteredList.add(t);
         }
+        sortFilteredList(filteredList);
+
         double total = 0;
         for (Transaction t : filteredList) total += t.getAmount();
         tvTotal.setText(DatabaseManager.formatAmount(total));
         tvCount.setText(filteredList.size() + " টি এন্ট্রি");
+
         if (filteredList.isEmpty()) {
             rv.setVisibility(View.GONE);
+            tableContainer.setVisibility(View.GONE);
             emptyState.setVisibility(View.VISIBLE);
-        } else {
+            return;
+        }
+        emptyState.setVisibility(View.GONE);
+
+        if ("card".equals(viewMode)) {
             rv.setVisibility(View.VISIBLE);
-            emptyState.setVisibility(View.GONE);
-            rv.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.layout_animation_fall_down));
+            tableContainer.setVisibility(View.GONE);
             rv.setAdapter(new TransactionListAdapter(requireContext(), filteredList, "savings", (item, pos) ->
                     TransactionSheetHelper.showTransactionSheet(requireActivity(), db, "savings", item, this::loadData), null));
+            rv.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.layout_animation_fall_down));
             rv.scheduleLayoutAnimation();
+        } else {
+            rv.setVisibility(View.GONE);
+            tableContainer.setVisibility(View.VISIBLE);
+            if (rvTable.getLayoutManager() == null) {
+                rvTable.setLayoutManager(new LinearLayoutManager(requireContext()));
+                rvTable.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+            }
+            rvTable.setAdapter(new TransactionTableAdapter(requireContext(), filteredList, "savings", (item, pos) ->
+                    TransactionSheetHelper.showTransactionSheet(requireActivity(), db, "savings", item, this::loadData)));
         }
     }
 }

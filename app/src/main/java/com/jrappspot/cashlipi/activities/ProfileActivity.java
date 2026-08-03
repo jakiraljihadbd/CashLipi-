@@ -50,7 +50,7 @@ public class ProfileActivity extends BaseActivity {
 
     // Photo / name
     private ImageView ivProfilePhoto, ivGooglePhoto;
-    private TextView tvDisplayName, tvGoogleBadge, tvGoogleName, tvGoogleEmail, tvProfileInitials;
+    private TextView tvDisplayName, tvDisplayEmail, tvGoogleBadge, tvGoogleName, tvGoogleEmail, tvProfileInitials;
 
     // Sign-in options
     private View layoutPhoneSignedIn, layoutPhoneSignIn, btnPhoneEmailSignIn, btnPhoneEmailSignOut;
@@ -66,7 +66,6 @@ public class ProfileActivity extends BaseActivity {
     // Profile edit
     private TextInputEditText etProfileName, etUsername, etPhoneNumber, etEmail, etAddress;
     private View headerEditProfile, bodyEditProfile;
-    private TextView tvEditProfileChevron;
 
     // Hero (লগইন নেই / লগইন করা আছে — দুইটা অবস্থা)
     private View layoutHeroLoggedOut, layoutHeroLoggedIn;
@@ -113,6 +112,7 @@ public class ProfileActivity extends BaseActivity {
         ivProfilePhoto    = findViewById(R.id.ivProfilePhoto);
         ivGooglePhoto     = findViewById(R.id.ivGooglePhoto);
         tvDisplayName     = findViewById(R.id.tvDisplayName);
+        tvDisplayEmail    = findViewById(R.id.tvDisplayEmail);
         tvGoogleBadge     = findViewById(R.id.tvGoogleBadge);
         tvGoogleName      = findViewById(R.id.tvGoogleName);
         tvGoogleEmail     = findViewById(R.id.tvGoogleEmail);
@@ -143,7 +143,6 @@ public class ProfileActivity extends BaseActivity {
         etAddress      = findViewById(R.id.etAddress);
         headerEditProfile   = findViewById(R.id.headerEditProfile);
         bodyEditProfile     = findViewById(R.id.bodyEditProfile);
-        tvEditProfileChevron = findViewById(R.id.tvEditProfileChevron);
 
         layoutHeroLoggedOut = findViewById(R.id.layoutHeroLoggedOut);
         layoutHeroLoggedIn  = findViewById(R.id.layoutHeroLoggedIn);
@@ -249,8 +248,7 @@ public class ProfileActivity extends BaseActivity {
         View btnSave = findViewById(R.id.btnSaveName);
         if (btnSave != null) btnSave.setOnClickListener(v -> saveProfileFields());
 
-        // Edit Profile card খোলা/বন্ধ করার টগল
-        if (headerEditProfile != null) headerEditProfile.setOnClickListener(v -> toggleEditProfile());
+        // "প্রোফাইল তথ্য" এখন সবসময় visible — টগল/accordion আর নেই
 
         // ── Change password ──
         View btnChangePassword = findViewById(R.id.btnChangePassword);
@@ -258,6 +256,10 @@ public class ProfileActivity extends BaseActivity {
 
         // Change Password card খোলা/বন্ধ করার টগল
         if (headerChangePassword != null) headerChangePassword.setOnClickListener(v -> toggleChangePassword());
+
+        // ── লগ আউট (প্রোফাইল পেজের নিচের বাটন) ──
+        View btnLogout = findViewById(R.id.btnProfileLogout);
+        if (btnLogout != null) btnLogout.setOnClickListener(v -> confirmLogout());
 
         if (tvTogglePasswordVisibility != null) {
             tvTogglePasswordVisibility.setOnClickListener(v -> {
@@ -273,6 +275,27 @@ public class ProfileActivity extends BaseActivity {
                 tvTogglePasswordVisibility.setText(passwordsVisible ? "🙈  লুকান" : "👁  দেখান");
             });
         }
+    }
+
+    // ═══════════════════════════════════════════════════════
+    //  লগ আউট — Firebase + Google account clear, তারপর LoginActivity-তে
+    // ═══════════════════════════════════════════════════════
+    private void confirmLogout() {
+        View body = getLayoutInflater().inflate(R.layout.dialog_logout_confirm, null);
+        com.jrappspot.cashlipi.utils.FontUtils.applyToView(this, body);
+
+        new AlertDialog.Builder(this, R.style.AppDialog)
+            .setView(body)
+            .setPositiveButton("হ্যাঁ, লগ আউট", (d, w) -> {
+                FirebaseAuth.getInstance().signOut();
+                db.clearGoogleAccount();
+                Intent i = new Intent(this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
+            })
+            .setNegativeButton("বাতিল", null)
+            .show();
     }
 
     // ═══════════════════════════════════════════════════════
@@ -303,15 +326,6 @@ public class ProfileActivity extends BaseActivity {
     // ═══════════════════════════════════════════════════════
     //  Edit Profile / Change Password কার্ড খোলা-বন্ধ করার টগল
     // ═══════════════════════════════════════════════════════
-    private void toggleEditProfile() {
-        if (bodyEditProfile == null) return;
-        boolean expanding = bodyEditProfile.getVisibility() != View.VISIBLE;
-        bodyEditProfile.setVisibility(expanding ? View.VISIBLE : View.GONE);
-        if (tvEditProfileChevron != null) {
-            tvEditProfileChevron.setText(expanding ? "✏️ বন্ধ করুন  ▴" : "✏️ এডিট করুন  ▾");
-        }
-    }
-
     private void toggleChangePassword() {
         if (bodyChangePassword == null) return;
         boolean expanding = bodyChangePassword.getVisibility() != View.VISIBLE;
@@ -346,10 +360,6 @@ public class ProfileActivity extends BaseActivity {
 
         refreshUI();
         Toast.makeText(this, " প্রোফাইল তথ্য সেভ হয়েছে!", Toast.LENGTH_SHORT).show();
-
-        // সেভ হওয়ার পর ফর্মটা বন্ধ করে দিই — প্রোফাইল কার্ড আবার কম্প্যাক্ট দেখাবে
-        if (bodyEditProfile != null) bodyEditProfile.setVisibility(View.GONE);
-        if (tvEditProfileChevron != null) tvEditProfileChevron.setText("✏️ এডিট করুন  ▾");
     }
 
     // ═══════════════════════════════════════════════════════
@@ -544,9 +554,14 @@ public class ProfileActivity extends BaseActivity {
         // (মানে "@" আছে), নাহলে ফোন নম্বর ভুলবশত ইমেইল বক্সে দেখানো হয়ে যাবে।
         String googleEmail = db.getGoogleEmail();
         boolean googleEmailLooksValid = googleEmail != null && googleEmail.contains("@");
-        if (etEmail != null) etEmail.setText(!db.getUserEmail().isEmpty()
+        String resolvedEmail = !db.getUserEmail().isEmpty()
             ? db.getUserEmail()
-            : (googleEmailLooksValid ? googleEmail : ""));
+            : (googleEmailLooksValid ? googleEmail : "");
+        if (etEmail != null) etEmail.setText(resolvedEmail);
+        if (tvDisplayEmail != null) {
+            tvDisplayEmail.setText(resolvedEmail);
+            tvDisplayEmail.setVisibility(resolvedEmail.isEmpty() ? View.GONE : View.VISIBLE);
+        }
 
         // Google badge
         if (tvGoogleBadge != null)
@@ -581,7 +596,12 @@ public class ProfileActivity extends BaseActivity {
         if (layoutHeroLoggedIn  != null) layoutHeroLoggedIn.setVisibility(anySignedIn ? View.VISIBLE : View.GONE);
 
         if (anySignedIn) {
-            db.ensureJoinDateSet();
+            long realCreation = 0L;
+            com.google.firebase.auth.FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (fUser != null && fUser.getMetadata() != null) {
+                realCreation = fUser.getMetadata().getCreationTimestamp();
+            }
+            db.ensureJoinDateSet(realCreation);
             if (tvMembershipDuration != null)
                 tvMembershipDuration.setText("🎉 CashLipi সাথে আছেন " + db.getMembershipDurationText());
         }

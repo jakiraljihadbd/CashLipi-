@@ -74,15 +74,30 @@
                 </ViewFlipper>
             </FrameLayout>
 
-            <ImageButton
-                android:id="@+id/headerNotifBtn"
+            <FrameLayout
                 android:layout_width="46dp"
-                android:layout_height="46dp"
-                android:padding="6dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_bell_notification"
-                app:tint="#FFFFFF"
-                android:contentDescription="নোটিফিকেশন"/>
+                android:layout_height="46dp">
+
+                <ImageButton
+                    android:id="@+id/headerNotifBtn"
+                    android:layout_width="46dp"
+                    android:layout_height="46dp"
+                    android:padding="6dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_bell_notification"
+                    app:tint="#FFFFFF"
+                    android:contentDescription="নোটিফিকেশন"/>
+
+                <View
+                    android:id="@+id/headerNotifDot"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/bg_bell_badge_dot"
+                    android:visibility="gone"/>
+            </FrameLayout>
 
             <ImageButton
                 android:id="@+id/headerProfileBtn"

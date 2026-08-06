@@ -29,6 +29,8 @@ import com.jrappspot.cashlipi.utils.DatabaseManager;
 import com.jrappspot.cashlipi.utils.FirestoreSyncManager;
 import com.jrappspot.cashlipi.utils.FontUtils;
 import com.jrappspot.cashlipi.utils.NavBarStyler;
+import com.jrappspot.cashlipi.utils.NotificationStore;
+import com.jrappspot.cashlipi.models.AppNotification;
 
 import android.util.Log;
 
@@ -54,6 +56,7 @@ public class DashboardActivity extends BaseActivity {
 
     // ── টপ আইডেন্টিটি বার (হ্যামবার্গার/CashLipi টেক্সট/নোটিফিকেশন/প্রোফাইল) ──
     private ImageButton headerMenuBtn, headerNotifBtn, headerProfileBtn;
+    private View headerNotifDot;
     private ViewFlipper headerIdentityFlipper;
     private ViewFlipper headerAiFlipper;
     private final Handler aiAdviceHandler = new Handler(Looper.getMainLooper());
@@ -141,6 +144,7 @@ public class DashboardActivity extends BaseActivity {
         startAiAdviceAutoSlide();
         refreshDrawerHeader();
         refreshHeaderProfileIcon();
+        refreshNotifBadge();
 
         // AddTransactionActivity/AddLedgerActivity থেকে ফিরে এসে নির্দিষ্ট নেভ-পেজে যাওয়া
         if (pendingTargetPage >= 0) {
@@ -166,6 +170,7 @@ public class DashboardActivity extends BaseActivity {
     private void setupTopIdentityBar() {
         headerMenuBtn    = findViewById(R.id.headerMenuBtn);
         headerNotifBtn   = findViewById(R.id.headerNotifBtn);
+        headerNotifDot   = findViewById(R.id.headerNotifDot);
         headerProfileBtn = findViewById(R.id.headerProfileBtn);
         headerIdentityFlipper = findViewById(R.id.headerIdentityFlipper);
         headerAiFlipper       = findViewById(R.id.headerAiFlipper);
@@ -175,9 +180,12 @@ public class DashboardActivity extends BaseActivity {
             if (drawerLayout != null) drawerLayout.openDrawer(Gravity.START);
         });
 
-        // নোটিফিকেশন — আপাতত নতুন নোটিফিকেশন থাকলে জানাবে (অ্যাডমিন লিসেনার আলাদাভাবে ডায়ালগ দেখায়)
+        // নোটিফিকেশন — এখন অ্যাডমিন অ্যাপ থেকে পাঠানো সব নোটিফিকেশন/ঘোষণা/ফোর্স-আপডেট/নোটিশের
+        // ইতিহাস NotificationsActivity-তে কালারফুল কার্ড আকারে দেখা যাবে
         headerNotifBtn.setOnClickListener(v ->
-                Toast.makeText(this, "কোনো নতুন নোটিফিকেশন নেই", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, NotificationsActivity.class)));
+
+        refreshNotifBadge();
 
         // প্রোফাইল
         headerProfileBtn.setOnClickListener(v ->
@@ -856,6 +864,13 @@ public class DashboardActivity extends BaseActivity {
                 .show();
     }
 
+    // ── বেল আইকনের উপরে আনরিড ব্যাজ ডট দেখানো/লুকানো ──
+    private void refreshNotifBadge() {
+        if (headerNotifDot == null) return;
+        int unread = NotificationStore.getUnreadCount(this);
+        headerNotifDot.setVisibility(unread > 0 ? View.VISIBLE : View.GONE);
+    }
+
     // ── Firebase Sync ──────────────────────────────────
     // ── Admin Notification/Announcement Dialog (Image সহ) ──
     private void showAdminMessageDialog(String title, String body, String imageUrl) {
@@ -898,25 +913,39 @@ public class DashboardActivity extends BaseActivity {
     }
 
     private void setupAdminListeners() {
-        // Admin notification
+        // Admin notification — popup + বেল আইকনের ইতিহাসেও জমা থাকবে
         firestoreSync.listenForAdminNotifications((title, body, imageUrl) ->
-            runOnUiThread(() -> showAdminMessageDialog("🔔 " + title, body, imageUrl)));
+            runOnUiThread(() -> {
+                NotificationStore.add(this, AppNotification.TYPE_NOTIFICATION, title, body, imageUrl);
+                refreshNotifBadge();
+                showAdminMessageDialog("🔔 " + title, body, imageUrl);
+            }));
 
-        // Admin announcement (আলাদা icon দিয়ে distinguish করা)
+        // Admin announcement (আলাদা icon দিয়ে distinguish করা) — এটাও ইতিহাসে জমা থাকবে
         firestoreSync.listenForAnnouncements((title, body, imageUrl) ->
-            runOnUiThread(() -> showAdminMessageDialog("📣 " + title, body, imageUrl)));
+            runOnUiThread(() -> {
+                NotificationStore.add(this, AppNotification.TYPE_ANNOUNCEMENT, title, body, imageUrl);
+                refreshNotifBadge();
+                showAdminMessageDialog("📣 " + title, body, imageUrl);
+            }));
 
-        // Force update / Maintenance
+        // Force update / Maintenance / রিমোট নোটিশ — এসবও বেল আইকনের ইতিহাসে জমা থাকবে
         firestoreSync.listenForAppConfig((forceUpdate, maintenance,
                 latestVer, updateUrl, noticeEnabled, noticeTitle, noticeBody) ->
             runOnUiThread(() -> {
                 if (maintenance) {
+                    NotificationStore.add(this, AppNotification.TYPE_MAINTENANCE,
+                            "রক্ষণাবেক্ষণ চলছে", "অ্যাপটি সাময়িক বন্ধ। একটু পরে চেষ্টা করুন।", "");
+                    refreshNotifBadge();
                     new AlertDialog.Builder(this)
                         .setTitle("🔧 রক্ষণাবেক্ষণ চলছে")
                         .setMessage("অ্যাপটি সাময়িক বন্ধ। একটু পরে চেষ্টা করুন।")
                         .setPositiveButton("ঠিক আছে", (d, w) -> finish())
                         .setCancelable(false).show();
                 } else if (forceUpdate) {
+                    NotificationStore.add(this, AppNotification.TYPE_UPDATE,
+                            "আপডেট প্রয়োজন", "নতুন version পাওয়া গেছে। এখনই আপডেট করুন।", "");
+                    refreshNotifBadge();
                     new AlertDialog.Builder(this)
                         .setTitle("🚀 আপডেট প্রয়োজন")
                         .setMessage("নতুন version পাওয়া গেছে। এখনই আপডেট করুন।")
@@ -927,6 +956,8 @@ public class DashboardActivity extends BaseActivity {
                         })
                         .setCancelable(false).show();
                 } else if (noticeEnabled && noticeTitle != null && !noticeTitle.isEmpty()) {
+                    NotificationStore.add(this, AppNotification.TYPE_NOTICE, noticeTitle, noticeBody, "");
+                    refreshNotifBadge();
                     new AlertDialog.Builder(this)
                         .setTitle("ℹ️ " + noticeTitle)
                         .setMessage(noticeBody)

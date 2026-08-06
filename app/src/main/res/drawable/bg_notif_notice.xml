@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- নোটিশ নোটিফিকেশন কার্ড — ফ্ল্যাট সবুজ -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#12A454"/>
+    <corners android:radius="16dp"/>
+</shape>

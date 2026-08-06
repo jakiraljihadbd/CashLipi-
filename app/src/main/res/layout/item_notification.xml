@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  item_notification — নোটিফিকেশন লিস্টের প্রতিটা আইটেম।
+  টাইপ অনুযায়ী ফ্ল্যাট কালারফুল ফুল-উইডথ কার্ড (bg_notif_*), সাদা গ্লাস-সার্কেল ব্যাজে ইমোজি আইকন,
+  বোল্ড টাইটেল + বডি + রিলেটিভ টাইম, আনরিড হলে কোণে হলুদ ডট।
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginTop="10dp">
+
+    <FrameLayout
+        android:id="@+id/cardNotifRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_notif_notification"
+        android:elevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="14dp">
+
+            <FrameLayout
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_glass_white"
+                android:layout_marginEnd="12dp">
+                <TextView
+                    android:id="@+id/tvNotifIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="🔔"
+                    android:textSize="20sp"/>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvNotifTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="শিরোনাম"
+                    android:textSize="15.5sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:maxLines="2"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/tvNotifBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="বিস্তারিত বার্তা"
+                    android:textSize="13sp"
+                    android:textColor="#F0FFFFFF"
+                    android:alpha="0.92"
+                    android:maxLines="4"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/tvNotifTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="এখনই"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:alpha="0.78"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- আনরিড ডট — উপরে-ডান কোণে -->
+        <View
+            android:id="@+id/dotUnread"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_notif_unread_dot"
+            android:visibility="gone"/>
+    </FrameLayout>
+</FrameLayout>

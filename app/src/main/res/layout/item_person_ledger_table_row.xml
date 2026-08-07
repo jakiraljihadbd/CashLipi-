@@ -65,33 +65,65 @@
         android:layout_height="match_parent"
         android:background="@color/ledgerGridLine"/>
 
-    <TextView
-        android:id="@+id/tvTRowDena"
+    <!-- দেনা - অ্যামাউন্ট কলাম (হালকা প্যাটার্ন সহ) -->
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="10dp"
-        android:gravity="end|top"
-        android:textSize="12.5sp"
-        android:textStyle="bold"
-        android:textColor="@color/denaColor"/>
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tvTRowDena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="10dp"
+            android:gravity="end|top"
+            android:textSize="12.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/denaColor"/>
+
+        <!-- সূক্ষ্ম ডট প্যাটার্ন নিচে -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/dot_stripe_expense"
+            android:alpha="0.15"/>
+    </FrameLayout>
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="@color/ledgerGridLine"/>
 
-    <TextView
-        android:id="@+id/tvTRowPabona"
+    <!-- পাওনা - অ্যামাউন্ট কলাম (হালকা প্যাটার্ন সহ) -->
+    <FrameLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="10dp"
-        android:gravity="end|top"
-        android:textSize="12.5sp"
-        android:textStyle="bold"
-        android:textColor="@color/pabonaColor"/>
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tvTRowPabona"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="10dp"
+            android:gravity="end|top"
+            android:textSize="12.5sp"
+            android:textStyle="bold"
+            android:textColor="@color/pabonaColor"/>
+
+        <!-- সূক্ষ্ম ডট প্যাটার্ন নিচে -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/dot_stripe_income"
+            android:alpha="0.15"/>
+    </FrameLayout>
 
 </LinearLayout>

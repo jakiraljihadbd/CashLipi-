@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- সূক্ষ্ম ডট প্যাটার্ন - টাকার পরিমাণের নিচে ডেকোরেশন হিসেবে ব্যবহৃত হবে -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- বেস - স্বচ্ছ -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/transparent"/>
+        </shape>
+    </item>
+    
+    <!-- উপরের দিকে সূক্ষ্ম ডট লাইন -->
+    <item
+        android:top="4dp"
+        android:left="0dp"
+        android:right="0dp"
+        android:bottom="0dp">
+        <shape android:shape="line">
+            <stroke
+                android:color="@color/textSecondary"
+                android:width="0.5dp"
+                android:dashWidth="3dp"
+                android:dashGap="2dp"/>
+        </shape>
+    </item>
+</layer-list>

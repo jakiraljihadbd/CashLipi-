@@ -195,8 +195,8 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_nav_dena_pawna"
-                    app:tint="@color/white"
+                    android:src="@drawable/icon_dena_pawna_zakir"
+                    android:scaleType="fitCenter"
                     android:alpha="0.85"
                     android:layout_marginEnd="7dp"/>
 
@@ -466,32 +466,64 @@
                 android:layout_height="match_parent"
                 android:background="@color/ledgerGridLine"/>
 
-            <TextView
-                android:id="@+id/tvTableTotalDena"
+            <!-- মোট দেনা - হালকা ডেকোরেশন সহ -->
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingHorizontal="8dp"
-                android:gravity="end"
-                android:textSize="12.5sp"
-                android:textStyle="bold"
-                android:textColor="@color/denaColor"/>
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvTableTotalDena"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="10dp"
+                    android:gravity="end"
+                    android:textSize="12.5sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/denaColor"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/dot_stripe_expense"
+                    android:alpha="0.15"/>
+            </FrameLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:background="@color/ledgerGridLine"/>
 
-            <TextView
-                android:id="@+id/tvTableTotalPabona"
+            <!-- মোট পাওনা - হালকা ডেকোরেশন সহ -->
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingHorizontal="8dp"
-                android:gravity="end"
-                android:textSize="12.5sp"
-                android:textStyle="bold"
-                android:textColor="@color/pabonaColor"/>
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tvTableTotalPabona"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="10dp"
+                    android:gravity="end"
+                    android:textSize="12.5sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/pabonaColor"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/dot_stripe_income"
+                    android:alpha="0.15"/>
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -505,13 +537,18 @@
         android:gravity="center"
         android:paddingHorizontal="40dp">
 
-        <ImageView
-            android:id="@+id/ivEmptyLedger"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:src="@drawable/ic_nav_dena_pawna"
-            android:alpha="0.35"
-            android:layout_marginBottom="14dp"/>
+        <!-- বাংলা টেক্সট: দেনা পাওনা পেলাম দিলাম -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="দেনা পাওনা\nপেলাম দিলাম"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/denaColor"
+            android:alpha="0.25"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="sans-serif-medium"/>
 
         <TextView
             android:id="@+id/tvEmptyLedgerTitle"
@@ -532,6 +569,68 @@
             android:textSize="12.5sp"
             android:textColor="@color/textSecondary"
             android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- নোট সেকশন — লেনদেনের সাথে নোট রাখার জন্য -->
+    <LinearLayout
+        android:id="@+id/noteSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/cardBg"
+        android:marginHorizontal="12dp"
+        android:marginVertical="6dp"
+        android:padding="1dp"
+        android:visibility="gone">
+
+        <!-- নোট হেডার -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp"
+            android:background="@color/dialogFieldBg"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="📝 বিশেষ নোট"
+                android:textSize="12.5sp"
+                android:textStyle="bold"
+                android:textColor="@color/textPrimary"/>
+
+            <ImageView
+                android:id="@+id/btnAddNote"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:padding="4dp"
+                android:src="@drawable/ic_plus_plain"
+                app:tint="@color/textSecondary"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+
+        <!-- নোট কন্টেন্ট এরিয়া (স্ক্রোলেবল) -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:scrollbars="vertical">
+
+            <TextView
+                android:id="@+id/tvNoteContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="কোনো নোট নেই"
+                android:textSize="12.5sp"
+                android:textColor="@color/textSecondary"
+                android:lineSpacingExtra="2dp"
+                android:fontFamily="sans-serif"/>
+        </ScrollView>
     </LinearLayout>
 
     <!-- নিচে: পাওনা (+) / দেনা (-) -->

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ডেকোরেটিভ সাদা বক্র চেকমার্ক — আয়/ব্যয়/পাওনা/দেনা/সঞ্চয় কার্ডে একই সাইজে ব্যবহারের জন্য
+     (ডেমো রেফারেন্সের ব্যয় কার্ডের হাতে-আঁকা টিক চিহ্ন স্টাইল) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp" android:height="40dp"
+    android:viewportWidth="40" android:viewportHeight="40">
+    <path
+        android:pathData="M9,21 C13,25 16,28 18,30 C23,23 28,15 33,9"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"/>
+</vector>

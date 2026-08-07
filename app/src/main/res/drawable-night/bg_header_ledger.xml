@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark mode version of ledger header - darker purple/maroon -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#3A1F34"/>
+    <corners android:bottomLeftRadius="12dp" android:bottomRightRadius="12dp"/>
+</shape>

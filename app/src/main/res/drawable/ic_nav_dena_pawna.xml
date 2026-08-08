@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- দেনা-পাওনা — give/take curves + center coin + (+ / −) marks. -->
+<!-- দেনা-পাওনা — সাধারণ single-tone গ্লিফ ভার্সন (fab-menu ও add-sheet এ সাদা টিন্ট+রঙিন সার্কেল ব্যাজের
+     সাথে ব্যবহারের জন্য)। নিচের নেভ বারে এর বদলে ইউজারের আসল রেফারেন্স ছবি (ic_nav_dena_pawna_color) বসে। -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="26dp" android:height="26dp"
     android:viewportWidth="160" android:viewportHeight="160">

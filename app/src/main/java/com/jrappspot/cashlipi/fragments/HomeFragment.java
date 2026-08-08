@@ -165,8 +165,8 @@ public class HomeFragment extends Fragment {
         tvMainBalance.setTextColor(0xFFFFFFFF);
         applyBalanceVisibility();
 
-        tvTotalIncome.setText("+ " + DatabaseManager.formatAmount(income));
-        tvTotalExpense.setText("- " + DatabaseManager.formatAmount(expense));
+        tvTotalIncome.setText(DatabaseManager.formatAmount(income));
+        tvTotalExpense.setText(DatabaseManager.formatAmount(expense));
         tvTotalDena.setText(DatabaseManager.formatAmount(dena));
         tvTotalPabona.setText(DatabaseManager.formatAmount(pabona));
         tvTotalSavings.setText(DatabaseManager.formatAmount(savings));

@@ -158,7 +158,7 @@ public class PersonDetailActivity extends AppCompatActivity {
         btnShareStatement.setOnClickListener(v -> shareStatement());
         btnToggleView.setOnClickListener(v -> {
             viewMode = "card".equals(viewMode) ? "table" : "card";
-            btnToggleView.setImageResource("card".equals(viewMode) ? R.drawable.ic_view_grid : R.drawable.ic_nav_dena_pawna);
+            btnToggleView.setImageResource("card".equals(viewMode) ? R.drawable.ic_view_grid : R.drawable.ic_view_table);
             applyFiltersAndRender();
         });
         // PDF এক্সপোর্ট বাটন — আপাতত শুধু UI, ফাংশন পরে যোগ হবে

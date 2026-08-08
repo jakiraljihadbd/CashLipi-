@@ -517,9 +517,15 @@ public class DashboardActivity extends BaseActivity {
         });
     }
 
-    /** বর্তমান পেজের আইকন হাইলাইট করে, বাকি সবগুলো নিউট্রাল স্টাইলে রাখে। */
+    /** বর্তমান পেজের আইকন হাইলাইট করে, বাকি সবগুলো নিউট্রাল স্টাইলে রাখে।
+     *  আয়-ব্যয় ও দেনা-পাওনা আইকন দুটো রঙিন (ইউজারের রেফারেন্স ছবি অনুযায়ী) — এদের উপর
+     *  colorFilter বসালে সব রঙ একটা কালারে ফ্ল্যাট হয়ে যেত, তাই এই দুটোকে বাদ রাখা হলো। */
     private void updateNavSelection(int selectedPosition) {
         for (int i = 0; i < navIcons.length; i++) {
+            if (i == MainPagerAdapter.POSITION_INCOME_EXPENSE || i == MainPagerAdapter.POSITION_DENA_PAWNA) {
+                navIcons[i].clearColorFilter();
+                continue;
+            }
             boolean selected = (i == selectedPosition);
             navIcons[i].setColorFilter(ContextCompat.getColor(this,
                     selected ? R.color.topNavSelected : R.color.topNavUnselected));

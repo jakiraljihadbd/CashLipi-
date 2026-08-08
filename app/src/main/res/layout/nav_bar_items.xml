@@ -27,7 +27,9 @@
     <!-- ২. আয়-ব্যয় -->
     <LinearLayout android:id="@+id/navIncomeExpense" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavIncomeExpense" style="@style/TopNavIconStyle"
-            android:src="@drawable/ic_nav_income_expense"/>
+            android:layout_width="19dp" android:layout_height="19dp"
+            android:tint="@null"
+            android:src="@drawable/ic_nav_income_expense_color"/>
         <TextView android:id="@+id/labelNavIncomeExpense" style="@style/TopNavLabelStyle"
             android:text="@string/nav_label_income_expense"/>
         <View android:id="@+id/indicatorNavIncomeExpense" style="@style/TopNavIndicatorStyle"/>
@@ -36,7 +38,9 @@
     <!-- ৩. দেনা-পাওনা -->
     <LinearLayout android:id="@+id/navDenaPawna" style="@style/TopNavItemStyle">
         <ImageView android:id="@+id/iconNavDenaPawna" style="@style/TopNavIconStyle"
-            android:src="@drawable/ic_nav_dena_pawna"/>
+            android:layout_width="19dp" android:layout_height="19dp"
+            android:tint="@null"
+            android:src="@drawable/ic_nav_dena_pawna_color"/>
         <TextView android:id="@+id/labelNavDenaPawna" style="@style/TopNavLabelStyle"
             android:text="@string/nav_label_dena_pawna"/>
         <View android:id="@+id/indicatorNavDenaPawna" style="@style/TopNavIndicatorStyle"/>
